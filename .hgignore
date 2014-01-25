@@ -1,0 +1,8 @@
+.hgignore
+Release
+srvmgr.ncb
+postbuild/log.txt
+postbuild/patches/log.txt
+srvmgr.suo
+postbuild/release
+^.*\.user$

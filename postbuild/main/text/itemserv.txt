@@ -1,0 +1,603 @@
+Bad None Cloak
+Bad None Dress
+Bad None Robe
+Common Bronze Amulet
+Common Bronze Bracers
+Common Bronze Cuirass
+Common Bronze Helm
+Common Bronze Plate Boots
+Common Bronze Plate Bracers
+Common Bronze Plate Cuirass
+Common Bronze Plate Helm
+Common Bronze Scale Gauntlets
+Common Hard Leather Boots
+Common Hard Leather Bracers
+Common Hard Leather Gauntlets
+Common Hard Leather Helm
+Common Hard Leather Mail
+Common Iron Amulet
+Common Iron Bracers
+Common Iron Cuirass
+Common Iron Helm
+Common Iron Plate Boots
+Common Iron Plate Bracers
+Common Iron Plate Cuirass
+Common Iron Plate Helm
+Common Iron Scale Gauntlets
+Common Leather Boots
+Common Leather Bracers
+Common Leather Gauntlets
+Common Leather Helm
+Common Leather Mail
+Common None Cap
+Common None Cape
+Common None Cloak
+Common None Dress
+Common None Gloves
+Common None Hat
+Common None Low Hat
+Common None Robe
+Common None Shoes
+Elven Adamantium Amulet
+Elven Adamantium Chain Mail
+Elven Adamantium Full Helm
+Elven Adamantium Helm
+Elven Adamantium Ring
+Elven Gold Amulet
+Elven Meteoric Amulet
+Elven Meteoric Chain Mail
+Elven Meteoric Full Helm
+Elven Meteoric Helm
+Elven Meteoric Ring
+Elven Mithrill Amulet
+Elven Mithrill Chain Mail
+Elven Mithrill Full Helm
+Elven Mithrill Helm
+Elven Mithrill Ring
+Elven None Cap
+Elven None Cape
+Elven None Dress
+Elven None Gloves
+Elven None Hat
+Elven None Low Hat
+Elven None Shoes
+Good Gold Full Helm
+Good Gold Helm
+Good Gold Plate Cuirass
+Good Mithrill Cuirass
+Good Mithrill Full Helm
+Good None Cap
+Good None Cloak
+Good None Dress
+Rare Adamantium Amulet
+Rare Adamantium Bracers
+Rare Adamantium Chain Boots
+Rare Adamantium Chain Gauntlets
+Rare Adamantium Chain Helm
+Rare Adamantium Chain Mail
+Rare Adamantium Cuirass
+Rare Adamantium Full Helm
+Rare Adamantium Helm
+Rare Adamantium Plate Boots
+Rare Adamantium Plate Bracers
+Rare Adamantium Plate Cuirass
+Rare Adamantium Plate Helm
+Rare Adamantium Ring
+Rare Adamantium Scale Gauntlets
+Rare Adamantium Scale Mail
+Rare Hard Leather Boots
+Rare Mithrill Amulet
+Rare Mithrill Bracers
+Rare Mithrill Chain Boots
+Rare Mithrill Chain Gauntlets
+Rare Mithrill Chain Helm
+Rare Mithrill Chain Mail
+Rare Mithrill Cuirass
+Rare Mithrill Full Helm
+Rare Mithrill Helm
+Rare Mithrill Plate Boots
+Rare Mithrill Plate Bracers
+Rare Mithrill Plate Cuirass
+Rare Mithrill Plate Helm
+Rare Mithrill Ring
+Rare Mithrill Scale Gauntlets
+Rare Mithrill Scale Mail
+Rare None Cap
+Rare None Cape
+Rare None Cloak
+Rare None Dress
+Rare None Gloves
+Rare None Hat
+Rare None Low Hat
+Rare None Robe
+Rare None Shoes
+Rare Silver Amulet
+Rare Silver Ring
+Uncommon Bronze Bracers
+Uncommon Bronze Cuirass
+Uncommon Bronze Full Helm
+Uncommon Bronze Helm
+Uncommon Bronze Plate Boots
+Uncommon Bronze Plate Bracers
+Uncommon Bronze Plate Cuirass
+Uncommon Bronze Plate Helm
+Uncommon Bronze Scale Gauntlets
+Uncommon Bronze Scale Mail
+Uncommon Hard Leather Boots
+Uncommon Hard Leather Bracers
+Uncommon Hard Leather Gauntlets
+Uncommon Hard Leather Helm
+Uncommon Hard Leather Mail
+Uncommon Leather Boots
+Uncommon Leather Bracers
+Uncommon Leather Gauntlets
+Uncommon Leather Helm
+Uncommon Leather Mail
+Uncommon None Cap
+Uncommon None Cape
+Uncommon None Cloak
+Uncommon None Dress
+Uncommon None Gloves
+Uncommon None Hat
+Uncommon None Low Hat
+Uncommon None Robe
+Uncommon None Shoes
+Uncommon Silver Amulet
+Uncommon Silver Ring
+Uncommon Steel Bracers
+Uncommon Steel Chain Boots
+Uncommon Steel Chain Gauntlets
+Uncommon Steel Chain Helm
+Uncommon Steel Chain Mail
+Uncommon Steel Cuirass
+Uncommon Steel Full Helm
+Uncommon Steel Helm
+Uncommon Steel Plate Boots
+Uncommon Steel Plate Bracers
+Uncommon Steel Plate Cuirass
+Uncommon Steel Plate Helm
+Uncommon Steel Scale Gauntlets
+Uncommon Steel Scale Mail
+Very Rare Adamantium Amulet
+Very Rare Adamantium Cuirass
+Very Rare Adamantium Full Helm
+Very Rare Adamantium Helm
+Very Rare Adamantium Plate Boots
+Very Rare Adamantium Plate Bracers
+Very Rare Adamantium Plate Cuirass
+Very Rare Adamantium Plate Helm
+Very Rare Adamantium Ring
+Very Rare Adamantium Scale Gauntlets
+Very Rare Adamantium Scale Mail
+Very Rare Crystal Amulet
+Very Rare Crystal Cuirass
+Very Rare Crystal Plate Boots
+Very Rare Crystal Plate Bracers
+Very Rare Crystal Plate Cuirass
+Very Rare Crystal Plate Helm
+Very Rare Crystal Ring
+Very Rare Crystal Scale Gauntlets
+Very Rare Dragon Leather Boots
+Very Rare Dragon Leather Bracers
+Very Rare Dragon Leather Gauntlets
+Very Rare Dragon Leather Helm
+Very Rare Dragon Leather Mail
+Very Rare Gold Amulet
+Very Rare Gold Ring
+Very Rare Meteoric Amulet
+Very Rare Meteoric Cuirass
+Very Rare Meteoric Full Helm
+Very Rare Meteoric Helm
+Very Rare Meteoric Plate Boots
+Very Rare Meteoric Plate Bracers
+Very Rare Meteoric Plate Cuirass
+Very Rare Meteoric Plate Helm
+Very Rare Meteoric Ring
+Very Rare Meteoric Scale Gauntlets
+Very Rare Meteoric Scale Mail
+Very Rare None Cap
+Very Rare None Cape
+Very Rare None Dress
+Very Rare None Gloves
+Very Rare None Hat
+Very Rare None Low Hat
+Very Rare None Shoes
+Book Air
+Book Astral
+Book Earth
+Book Fire
+Book Water
+Potion Antipoison
+Potion Big Healing
+Potion Big Mana
+Potion Body
+Potion Fighter Bonus
+Potion Health Regeneration
+Potion Mage Bonus
+Potion Mana Regeneration
+Potion Medium Healing
+Potion Medium Mana
+Potion Mind
+Potion Reaction
+Potion Spirit
+Quest Amulet
+Quest Banner
+Quest Crown1
+Quest Crown12
+Quest Crown13
+Quest Documents
+Quest Head
+Quest Ingredient
+Quest Map
+Quest Meta1
+Quest Meta2
+Quest Meta3
+Quest Meta4
+Quest Ring
+Quest RuneA
+Quest RuneE
+Quest RuneF
+Quest RuneW
+Quest Stone
+Quest Treasure
+Scroll Acid Stream
+Scroll Bless
+Scroll Blizzard
+Scroll Control Spirit
+Scroll Curse
+Scroll Darkness
+Scroll Diamond Dust
+Scroll Drain Life
+Scroll Fire Arrow
+Scroll Fire Ball
+Scroll Fire Wall
+Scroll Haste
+Scroll Heal
+Scroll Ice Missile
+Scroll Invisibility
+Scroll Light-
+Scroll Lightning
+Scroll Poison Cloud
+Scroll Prismatic Spray
+Scroll Protection from Air
+Scroll Protection from Earth
+Scroll Protection from Fire
+Scroll Protection from Water
+Scroll Shield
+Scroll Slow
+Scroll Stone Curse
+Scroll Summon
+Scroll Teleport
+Scroll Wall of Earth
+SuperScroll Acid Stream
+SuperScroll Bless
+SuperScroll Blizzard
+SuperScroll Control Spirit
+SuperScroll Curse
+SuperScroll Darkness
+SuperScroll Diamond Dust
+SuperScroll Drain Life
+SuperScroll Fire Arrow
+SuperScroll Fire Ball
+SuperScroll Fire Wall
+SuperScroll Haste
+SuperScroll Heal
+SuperScroll Ice Missile
+SuperScroll Invisibility
+SuperScroll Light-
+SuperScroll Lightning
+SuperScroll Poison Cloud
+SuperScroll Prismatic Spray
+SuperScroll Protection from Air
+SuperScroll Protection from Earth
+SuperScroll Protection from Fire
+SuperScroll Protection from Water
+SuperScroll Shield
+SuperScroll Slow
+SuperScroll Stone Curse
+SuperScroll Summon
+SuperScroll Teleport
+SuperScroll Wall of Earth
+Bad Steel Large Shield
+Common Bronze Buckler
+Common Bronze Small Shield
+Common Hard Leather Large Shield
+Common Hard Leather Small Shield
+Common Iron Buckler
+Common Iron Small Shield
+Common Leather Large Shield
+Common Leather Small Shield
+Common Wood Large Shield
+Common Wood Small Shield
+Rare Adamantium Large Shield
+Rare Adamantium Tower Shield
+Rare Magic Wood Large Shield
+Rare Magic Wood Small Shield
+Rare Magic Wood Tower Shield
+Rare Mithrill Large Shield
+Rare Mithrill Small Shield
+Rare Mithrill Tower Shield
+Uncommon Bronze Small Shield
+Uncommon Bronze Tower Shield
+Uncommon Hard Leather Large Shield
+Uncommon Hard Leather Small Shield
+Uncommon Leather Large Shield
+Uncommon Leather Small Shield
+Uncommon Magic Wood Large Shield
+Uncommon Magic Wood Small Shield
+Uncommon Magic Wood Tower Shield
+Uncommon Steel Large Shield
+Uncommon Steel Small Shield
+Uncommon Steel Tower Shield
+Uncommon Wood Large Shield
+Uncommon Wood Small Shield
+Uncommon Wood Tower Shield
+Very Rare Adamantium Large Shield
+Very Rare Dragon Leather Large Shield
+Very Rare Dragon Leather Small Shield
+Bad Iron Axe
+Bad Steel Short Sword
+Bad Wood Shaman Staff
+Common Bronze Axe
+Common Bronze Dagger
+Common Bronze Lance
+Common Bronze Long Sword
+Common Bronze Mace
+Common Bronze Morning Star
+Common Bronze Pick Hammer
+Common Bronze Pike
+Common Bronze Short Sword
+Common Bronze Spiked Club
+Common Bronze Two Handed Axe
+Common Bronze Two Handed Sword
+Common Bronze War Hammer
+Common Iron Axe
+Common Iron Dagger
+Common Iron Lance
+Common Iron Long Sword
+Common Iron Mace
+Common Iron Morning Star
+Common Iron Pick Hammer
+Common Iron Pike
+Common Iron Short Sword
+Common Iron Spiked Club
+Common Iron Two Handed Axe
+Common Iron Two Handed Sword
+Common Iron War Hammer
+Common Wood Club
+Common Wood Crossbow
+Common Wood Long Bow
+Common Wood Shaman Staff
+Common Wood Short Bow
+Common Wood Staff
+Elven Adamantium Dagger
+Elven Adamantium Long Sword
+Elven Adamantium Short Sword
+Elven Adamantium Two Handed Sword
+Elven Magic Wood Long Bow
+Elven Magic Wood Short Bow
+Elven Magic Wood Staff
+Elven Meteoric Dagger
+Elven Meteoric Long Sword
+Elven Meteoric Short Sword
+Elven Meteoric Two Handed Sword
+Elven Mithrill Dagger
+Elven Mithrill Long Sword
+Elven Mithrill Short Sword
+Elven Mithrill Two Handed Sword
+Good Magic Wood Long Bow
+Good Magic Wood Staff
+Good Silver Two Handed Sword
+Good Steel Long Sword
+Good Wood Staff
+Rare Adamantium Axe
+Rare Adamantium Bastard Sword
+Rare Adamantium Crossbow
+Rare Adamantium Dagger
+Rare Adamantium Halberd
+Rare Adamantium Long Sword
+Rare Adamantium Mace
+Rare Adamantium Morning Star
+Rare Adamantium Pike
+Rare Adamantium Short Sword
+Rare Adamantium Two Handed Axe
+Rare Adamantium Two Handed Sword
+Rare Adamantium War Hammer
+Rare Magic Wood Long Bow
+Rare Magic Wood Shaman Staff
+Rare Magic Wood Short Bow
+Rare Mithrill Axe
+Rare Mithrill Bastard Sword
+Rare Mithrill Crossbow
+Rare Mithrill Dagger
+Rare Mithrill Halberd
+Rare Mithrill Long Sword
+Rare Mithrill Mace
+Rare Mithrill Morning Star
+Rare Mithrill Pike
+Rare Mithrill Short Sword
+Rare Mithrill Two Handed Axe
+Rare Mithrill Two Handed Sword
+Rare Mithrill War Hammer
+Rare Silver Dagger
+Uncommon Bronze Axe
+Uncommon Bronze Dagger
+Uncommon Bronze Long Sword
+Uncommon Bronze Mace
+Uncommon Bronze Morning Star
+Uncommon Bronze Pick Hammer
+Uncommon Bronze Pike
+Uncommon Bronze Short Sword
+Uncommon Bronze Spiked Club
+Uncommon Bronze Two Handed Axe
+Uncommon Bronze Two Handed Sword
+Uncommon Bronze War Hammer
+Uncommon Magic Wood Club
+Uncommon Magic Wood Long Bow
+Uncommon Magic Wood Shaman Staff
+Uncommon Magic Wood Short Bow
+Uncommon Magic Wood Staff
+Uncommon Steel Axe
+Uncommon Steel Bastard Sword
+Uncommon Steel Crossbow
+Uncommon Steel Dagger
+Uncommon Steel Halberd
+Uncommon Steel Long Sword
+Uncommon Steel Mace
+Uncommon Steel Morning Star
+Uncommon Steel Pick Hammer
+Uncommon Steel Pike
+Uncommon Steel Short Sword
+Uncommon Steel Spiked Club
+Uncommon Steel Two Handed Axe
+Uncommon Steel Two Handed Sword
+Uncommon Steel War Hammer
+Uncommon Wood Club
+Uncommon Wood Long Bow
+Uncommon Wood Shaman Staff
+Uncommon Wood Short Bow
+Uncommon Wood Staff
+Very Rare Adamantium Axe
+Very Rare Adamantium Crossbow
+Very Rare Adamantium Dagger
+Very Rare Adamantium Halberd
+Very Rare Adamantium Long Sword
+Very Rare Adamantium Pike
+Very Rare Adamantium Short Sword
+Very Rare Adamantium Two Handed Axe
+Very Rare Adamantium Two Handed Sword
+Very Rare Crystal Axe
+Very Rare Crystal Long Sword
+Very Rare Crystal Mace
+Very Rare Crystal Morning Star
+Very Rare Crystal Pike
+Very Rare Crystal Two Handed Axe
+Very Rare Crystal Two Handed Sword
+Very Rare Crystal War Hammer
+Very Rare Gold Dagger
+Very Rare Magic Wood Shaman Staff
+Very Rare Magic Wood Staff
+Very Rare Meteoric Axe
+Very Rare Meteoric Crossbow
+Very Rare Meteoric Dagger
+Very Rare Meteoric Halberd
+Very Rare Meteoric Long Sword
+Very Rare Meteoric Mace
+Very Rare Meteoric Morning Star
+Very Rare Meteoric Pike
+Very Rare Meteoric Short Sword
+Very Rare Meteoric Two Handed Axe
+Very Rare Meteoric Two Handed Sword
+Very Rare Meteoric War Hammer
+Elven Iron Ring
+Elven Iron Amulet
+Elven Iron Low Hat
+Elven Iron Dress
+Elven Iron Cloak
+Elven Iron Gloves
+Elven Iron Shoes
+Elven Bronze Ring
+Elven Bronze Amulet
+Elven Bronze Low Hat
+Elven Bronze Dress
+Elven Bronze Cloak
+Elven Bronze Gloves
+Elven Bronze Shoes
+Rare Gold Pike
+Rare Gold Large Shield
+Rare Gold Ring
+Rare Gold Amulet
+Rare Gold Chain Helm
+Rare Gold Scale Mail
+Rare Gold Plate Cuirass
+Rare Gold Plate Bracers
+Rare Gold Scale Gauntlets
+Rare Gold Plate Boots
+Very Rare Magic Wood Ring
+Very Rare Magic Wood Amulet
+Very Rare Magic Wood Low Hat
+Very Rare Magic Wood Dress
+Very Rare Magic Wood Cloak
+Very Rare Magic Wood Gloves
+Very Rare Magic Wood Shoes
+Elven Dragon Leather Ring
+Elven Dragon Leather Amulet
+Elven Dragon Leather Low Hat
+Elven Dragon Leather Dress
+Elven Dragon Leather Cloak
+Elven Dragon Leather Gloves
+Elven Dragon Leather Shoes
+Common Bone Pike
+Uncommon Bone Pike
+Rare Bone Pike
+Bad Bone Pike
+Good Bone Pike
+Common Bone Small Shield
+Uncommon Bone Small Shield
+Rare Bone Large Shield
+Bad Bone Small Shield
+Good Bone Large Shield
+Common Bone Ring
+Uncommon Bone Ring
+Rare Bone Ring
+Very Rare Bone Ring
+Elven Bone Ring
+Bad Bone Ring
+Good Bone Ring
+Common Bone Amulet
+Uncommon Bone Amulet
+Rare Bone Amulet
+Very Rare Bone Amulet
+Elven Bone Amulet
+Bad Bone Amulet
+Good Bone Amulet
+Common Bone Helm
+Uncommon Bone Helm
+Rare Bone Chain Helm
+Very Rare Bone Low Hat
+Elven Bone Low Hat
+Bad Bone Helm
+Good Bone Chain Helm
+Common Bone Chain Mail
+Uncommon Bone Chain Mail
+Rare Bone Scale Mail
+Very Rare Bone Dress
+Elven Bone Dress
+Bad Bone Chain Mail
+Good Bone Scale Mail
+Common Bone Cuirass
+Uncommon Bone Cuirass
+Rare Bone Plate Cuirass
+Very Rare Bone Cloak
+Elven Bone Cloak
+Bad Bone Cuirass
+Good Bone Plate Cuirass
+Common Bone Plate Bracers
+Uncommon Bone Plate Bracers
+Rare Bone Plate Bracers
+Bad Bone Plate Bracers
+Good Bone Plate Bracers
+Common Bone Chain Gauntlets
+Uncommon Bone Scale Gauntlets
+Rare Bone Scale Gauntlets
+Very Rare Bone Gloves
+Elven Bone Gloves
+Bad Bone Scale Gauntlets
+Good Bone Scale Gauntlets
+Common Bone Chain Boots
+Uncommon Bone Plate Boots
+Rare Bone Plate Boots
+Very Rare Bone Shoes
+Elven Bone Shoes
+Bad Bone Plate Boots
+Good Bone Plate Boots
+Elven Crystal Staff
+Elven Crystal Ring
+Elven Crystal Dress
+Elven Crystal Cloak
+Elven Crystal Shoes
+Elven Bone Halberd
+Elven Meteoric Halberd
+Elven Dragon Leather Large Shield
+Very Rare Crystal Large Shield
+Rare Steel Large Shield

@@ -1,0 +1,28 @@
+[BeginXCK]-----------------------------------
+[BeginCRK]-----------------------------------
+= cOMPARe-to-cRACk 3000 v0.08 alpha2 = (c)oded by Alexei Krasavin = 5-03-2001 =
+
+Differences between a2orig.exe & allods2.exe
+a2server.exe
+0012A7CA: 33 8B
+0012A7CB: D2 41
+0012A7CC: C1 0C
+0012A7CD: E2 8B
+0012A7CE: 02 8D
+0012A7CF: 8B 10
+0012A7D0: 41 FF
+0012A7D1: 0C FF
+0012A7D2: 8B FF
+0012A7D3: 8D 8A
+0012A7D4: 10 49
+0012A7D5: FF 6C
+0012A7D6: FF CD
+0012A7D7: FF 00
+0012A7D8: 8A CD
+0012A7D9: 49 00
+0012A7DA: 6C CD
+0012A7DB: 02 00
+0012A7DC: 0C 02
+0012A7DD: 10 08
+[EndCRK]-------------------------------------
+[EndXCK]-------------------------------------

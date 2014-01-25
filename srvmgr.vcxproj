@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="ver10|Win32">
+      <Configuration>ver10</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4E9F0332-7228-4E42-81F3-995607C259D2}</ProjectGuid>
+    <RootNamespace>srvmgr</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">
+    <ClCompile>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SRVMGR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Python27\include\</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies);python27.lib</AdditionalDependencies>
+      <OutputFile>$(ProjectDir)\postbuild\srvmgr.dll</OutputFile>
+      <ModuleDefinitionFile>srvmgr.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>false</GenerateMapFile>
+      <MapFileName>srvmgr.map</MapFileName>
+      <MapExports>false</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>$(OutDir)srvmgr.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>C:\Python27\libs\</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>start /d "$(ProjectDir)\postbuild" cmd /c "$(ProjectDir)\postbuild\srvmgr.bat"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="a2server_utils.cpp" />
+    <ClCompile Include="antiinvis.cpp" />
+    <ClCompile Include="asm_unit_info.cpp" />
+    <ClCompile Include="bugs.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="charcheck.cpp" />
+    <ClCompile Include="cheat_codes.cpp" />
+    <ClCompile Include="cheat_codes_new.cpp" />
+    <ClCompile Include="common_new.cpp" />
+    <ClCompile Include="config_new.cpp" />
+    <ClCompile Include="crash_filter.cpp" />
+    <ClCompile Include="crash_fixes.cpp" />
+    <ClCompile Include="crashes_new.cpp" />
+    <ClCompile Include="CRC_32.cpp" />
+    <ClCompile Include="ctl_handle.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="forbidden_items.cpp" />
+    <ClCompile Include="itemex.cpp" />
+    <ClCompile Include="pktmgr.cpp" />
+    <ClCompile Include="player_info.cpp" />
+    <ClCompile Include="protolayer_hat.cpp" />
+    <ClCompile Include="pvm2.cpp" />
+    <ClCompile Include="python.cpp" />
+    <ClCompile Include="scanrange.cpp" />
+    <ClCompile Include="scanrange_check.cpp" />
+    <ClCompile Include="shared.cpp" />
+    <ClCompile Include="srvmgr.cpp" />
+    <ClCompile Include="srvmgr_new.cpp" />
+    <ClCompile Include="unit_info.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="zxmgr.cpp" />
+    <ClCompile Include="lib\hat2.cpp" />
+    <ClCompile Include="lib\packet.cpp" />
+    <ClCompile Include="lib\ScanrangeCalc.cpp" />
+    <ClCompile Include="lib\serialize.cpp" />
+    <ClCompile Include="lib\socket.cpp" />
+    <ClCompile Include="lib\utils.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="charcheck.h" />
+    <ClInclude Include="cheat_codes_new.h" />
+    <ClInclude Include="config_new.h" />
+    <ClInclude Include="crash_filter.h" />
+    <ClInclude Include="CRC_32.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="forbidden_items.h" />
+    <ClInclude Include="itemex.h" />
+    <ClInclude Include="pktmgr.h" />
+    <ClInclude Include="player_info.h" />
+    <ClInclude Include="protolayer_hat.h" />
+    <ClInclude Include="pvm2.h" />
+    <ClInclude Include="python.h" />
+    <ClInclude Include="scanrange.h" />
+    <ClInclude Include="shared.h" />
+    <ClInclude Include="srvmgr.h" />
+    <ClInclude Include="srvmgr_new.h" />
+    <ClInclude Include="srvmgrdef.h" />
+    <ClInclude Include="syslib.h" />
+    <ClInclude Include="unit_info.h" />
+    <ClInclude Include="zxmgr.h" />
+    <ClInclude Include="lib\hat2.hpp" />
+    <ClInclude Include="lib\packet.hpp" />
+    <ClInclude Include="lib\ScanrangeCalc.hpp" />
+    <ClInclude Include="lib\serialize.hpp" />
+    <ClInclude Include="lib\socket.hpp" />
+    <ClInclude Include="lib\utils.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="postbuild\arena.txt" />
+    <None Include="ReadMe.txt" />
+    <None Include="postbuild\server.mp" />
+    <None Include="postbuild\srvlist.txt" />
+    <None Include="postbuild\srvmgr.bat" />
+    <None Include="srvmgr.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

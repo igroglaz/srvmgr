@@ -1,0 +1,4 @@
+rem SRV_CR11.xck
+SRV_ADM1.xck
+srv_dbg1.xck
+

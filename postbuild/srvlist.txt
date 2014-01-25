@@ -1,0 +1,13 @@
+SRV_CHT.xck
+SRV_CMP.xck
+SRV_DIV1.xck
+SRV_EX.xck
+SRV_GPF1.xck
+SRV_GPF2.xck
+SRV_GPF3.xck
+srv_gpf4.xck
+SRV_MAG.xck
+SRV_MAXP.xck
+SRV_POD.xck
+srv_pvm.xck
+rem SRV_UPD0.xck
