@@ -450,15 +450,14 @@ loc_590303:
 	}
 }
 
-#define MAX_SKILL 0x64 // 100
-
 void __declspec(naked) imp_Experience1()
 {
 	__asm
 	{
 		cmp		ecx, MAX_SKILL
 		jle		loc_530D55
-		mov		[ebp-0x38], MAX_SKILL
+		mov		ecx, MAX_SKILL
+		mov		[ebp-0x38], ecx
 		jmp		loc_530D66
 loc_530D55:
 		mov		[ebp-0x38], ecx
@@ -506,7 +505,8 @@ void __declspec(naked) imp_Experience4()
 		cmp		edx, MAX_SKILL
 		jle		loc_52CD41
 
-		mov		[ebp-0x158], MAX_SKILL
+		mov		edx, MAX_SKILL
+		mov		[ebp-0x158], edx
 		mov		edx, 0x0052CD5B
 		jmp		edx
 
@@ -523,7 +523,8 @@ void __declspec(naked) imp_Experience5()
 		cmp		eax, MAX_SKILL
 		jle		loc_531C63
 
-		mov		[ebp-0x88], MAX_SKILL
+		mov		eax, MAX_SKILL
+		mov		[ebp-0x88], eax
 		jmp		loc_531C77
 
 loc_531C63:
@@ -556,7 +557,8 @@ void __declspec(naked) imp_Experience6()
 		movsx	edx, word ptr [ecx+eax*2+0xA8]
 		cmp		edx, MAX_SKILL
 		jle		loc_531D1C
-		mov		[ebp-0x94], MAX_SKILL
+		mov		edx, MAX_SKILL
+		mov		[ebp-0x94], edx
 		mov		edx, 0x00531D30
 		jmp		edx
 
@@ -583,6 +585,8 @@ void __declspec(naked) imp_Experience7()
 
 void FixExperience(void* t_ptr)
 {
+	if(MAX_SKILL > 100) return;
+
 	unsigned long* exp = (unsigned long*)((char*)t_ptr + 0x20);
 	for(int i = 0; i < 5; i++)
 		if(exp[i] > 13779612) exp[i] = 13779612;
@@ -1246,24 +1250,108 @@ do_normal:
 	}
 }
 
+void _stdcall SetDiplomacyEx(byte* player1)
+{
+	if(!player1) return;
+
+	byte* player_iterator = *(byte**)(*(uint32_t*)(0x006CDB24)+4);
+	if(!player_iterator) return;
+
+	uint32_t rights = *(uint32_t*)(player1 + 0x14);
+	if((rights & GMF_ANY) != GMF_ANY)
+		rights = 0;
+	else rights &= 0xFFFFFF;
+
+	byte* Self = 0;
+
+	while(player_iterator)
+	{
+		byte* player = *(byte**)(player_iterator+8);
+		player_iterator = *(byte**)(player_iterator);
+		if(!player) break;
+
+		if(!*(uint32_t*)(player + 0x2C))
+			continue;
+
+		const char* name = *(const char**)(player + 0x18);
+		if(stricmp(name, "Self") == 0)
+		{
+			Self = player;
+			break;
+		}
+	}
+
+	if(!Self)
+		return; // error: no Self player
+
+	player_iterator = *(byte**)(*(uint32_t*)(0x006CDB24)+4);
+	while(player_iterator)
+	{
+		byte* player2 = *(byte**)(player_iterator+8);
+		player_iterator = *(byte**)(player_iterator);
+		if(!player2) break;
+		if(player2 == player1)
+			continue;
+
+		if(*(uint32_t*)(player2 + 0x2C))
+		{
+			if(rights & GMF_AI_ALLY) // расставляем всем мобам алю (если стоит флаг)
+			{
+				zxmgr::SetDiplomacy(player1, player2, 0x02);
+				zxmgr::SetDiplomacy(player2, player1, 0x02);
+			}
+			else // если флага не стоит, расставляем всем в соответствии с дипломатией игрока Self
+			{
+				zxmgr::SetDiplomacy(player1, player2, zxmgr::GetDiplomacy(Self, player2));
+				zxmgr::SetDiplomacy(player2, player1, zxmgr::GetDiplomacy(player2, Self));
+			}
+		}
+		else
+		{
+			// получаем флаги второго игрока
+			uint32_t rights2 = *(uint32_t*)(player2 + 0x14);
+			if((rights2 & GMF_ANY) != GMF_ANY)
+				rights2 = 0;
+			else rights2 &= 0xFFFFFF;
+
+			// если этот игрок имеет флаг автоали, или другой игрок имеет флаг автоали, проставить альянс
+			uint8_t dip1 = 0x00;
+			uint8_t dip2 = 0x00;
+
+			if((rights & GMF_PLAYERS_ALLY) || (rights2 & GMF_PLAYERS_ALLY))
+			{
+				dip1 |= 0x02;
+				dip2 |= 0x02;
+			}
+
+			if(rights2 & GMF_PLAYERS_VISION)
+				dip1 |= 0x10;
+
+			if(rights & GMF_PLAYERS_VISION)
+				dip2 |= 0x10;
+
+			zxmgr::SetDiplomacy(player1, player2, dip1);
+			zxmgr::SetDiplomacy(player2, player1, dip2);
+		}
+	}
+
+	zxmgr::SetDiplomacy(player1, player1, 0x12); // себе алю и вид
+}
+
 void __declspec(naked) imp_ExtDiplomacy()
 {
 	__asm
-	{ // 4FFF9D
-		push	0
-		push	[ebp+0x08]
-		call	ExtDiplomacy
+	{ // 4FFD18
+		push	esi
+		push	edi
 
-		mov		eax, 0x006D1648
-		cmp		dword ptr [eax], 2
-		jnz		loc_500212
-		push	ecx
-		mov		ecx, esp
-		mov		[ebp-0xB4], esp
-		mov		edx, 0x004FFFB3
-		jmp		edx
-loc_500212:
-		mov		edx, 0x00500212
+		push	[ebp+0x08]
+		call	SetDiplomacyEx
+
+		pop		edi
+		pop		esi
+
+		mov		edx, 0x004FFF9D
 		jmp		edx
 	}
 }
@@ -1356,3 +1444,29 @@ void __declspec(naked) imp_DropAll()
 		retn	0x0010
 	}
 }*/
+
+void __declspec(naked) imp_ScaleSoftcoreExperienceReward()
+{
+	__asm
+	{ // 5610B6
+		mov		eax, [ebp+0x08]
+		mov		[ebp-0x44], eax
+		mov		ecx, [ebp-0x3C]
+		movzx	edx, word ptr [ecx+0x42]
+
+		mov		eax, Config::ServerFlags
+		test	eax, SVF_SOFTCORE
+		jz		do_normal
+
+		imul	edx, 0x19
+		jmp		cont
+
+do_normal:
+		imul	edx, 0xFA
+
+cont:
+		mov		[ebp-0x4C], edx
+		mov		edx, 0x005610CE
+		jmp		edx
+	}
+}

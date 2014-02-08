@@ -141,3 +141,4 @@ imp_GMNoLevelUp		@147
 imp_ExtDiplomacy	@148
 imp_GMNoLevelDown	@149
 imp_DropAll			@150
+imp_ScaleSoftcoreExperienceReward @151

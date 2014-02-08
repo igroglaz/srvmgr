@@ -2337,22 +2337,36 @@ void __declspec(naked) test_if_valid_injection()
 	// or to: 004FE305 if too strong
 	__asm
 	{
+		jmp test_if_valid_injection_softcore
+
 		mov	edx, dword ptr [ebp - 0x30]
 		push	dword ptr [ebp + 0x14]
 		push	dword ptr [edx + 0x14]
 		push	dword ptr [edx + 0x10]
 		call	test_if_valid
 		test	eax, eax
-		jz	test_if_valid_injection_valid
+		jz	test_if_valid_injection_softcore
 
 		mov	ecx, 0x04FE305
 		jmp	ecx
 
 test_if_valid_injection_valid:
+
 		mov	edx, dword ptr [ebp - 0x30]
 		mov	eax, dword ptr [ebp - 0x360]
 		mov	ecx, 0x004FE2F3
 		jmp	ecx
+
+test_if_valid_injection_softcore:
+
+		mov	eax, Config::ServerFlags
+		and	eax, SVF_SOFTCORE
+		cmp	eax, SVF_SOFTCORE
+		jnz	test_if_valid_injection_valid
+
+		mov	edx, 0x004FE61D
+		jmp	edx
+
 	}
 }
 

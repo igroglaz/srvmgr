@@ -6,9 +6,11 @@
 #include <fstream>
 #include <algorithm>
 
+unsigned long MAX_SKILL = 100;
+
 uint32_t ParseLogFlags(std::string string)
 {
-if(CheckHex(string))
+	if(CheckHex(string))
     {
         return HexToInt(string);
     }
@@ -408,6 +410,11 @@ int ReadConfig(const char* filename)
                 else if(parameter == "serverflags")
                 {
                     Config::ServerFlags = ParseFlags(value);
+					if(Config::ServerFlags & SVF_SOFTCORE)
+					{
+						MAX_SKILL = 110;
+						Config::ServerCaps |= SVC_SOFTCORE;
+					}
                 }
                 else if(parameter == "maxpaletteallowed")
                 {
@@ -442,7 +449,8 @@ int ReadConfig(const char* filename)
                         else caps &= ~flag;
                     }
 
-                    Config::ServerCaps = caps;
+                    Config::ServerCaps &= SVC_SOFTCORE;
+					Config::ServerCaps |= caps & ~SVC_SOFTCORE;
                 }
 				else if(parameter == "controldirectory")
 				{

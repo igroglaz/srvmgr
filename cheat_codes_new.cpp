@@ -44,6 +44,8 @@ uint32_t ParseFlags(std::string string)
                 flag = SVF_ADVPVM;
 			else if(par == "nohealing")
 				flag = SVF_NOHEALING;
+			else if(par == "noobsrv")
+				flag = SVF_NOOBSRV;
 			else if(par == "softcore")
 				flag = SVF_SOFTCORE;
 			else if(par == "nodrop")
@@ -530,6 +532,17 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 {
                     if(!player || console) Printf("Mode is set to %08X (was: %08X).", Config::ServerFlags, old_mode);
                     else if(player) zxmgr::SendMessage(player, "mode is set to %08X (was: %08X)", Config::ServerFlags, old_mode);
+
+					if(Config::ServerFlags & SVF_SOFTCORE)
+					{
+						MAX_SKILL = 110;
+						Config::ServerCaps |= SVC_SOFTCORE;
+					}
+					else
+					{
+						MAX_SKILL = 100;
+						Config::ServerCaps &= ~SVC_SOFTCORE;
+					}
                 }
                 else
                 {

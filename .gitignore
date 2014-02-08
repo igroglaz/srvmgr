@@ -18,4 +18,4 @@ postbuild/log.txt
 postbuild/patches/log.txt
 srvmgr.suo
 postbuild/release
-^.*\.user$
+*.user

@@ -11,9 +11,10 @@
 #define SVF_ADVPVM	0x00000040
 #define SVF_ONEMAP	0x00000080
 #define SVF_NOHEALING 0x00000100
-#define SVF_SOFTCORE 0x00000200
-#define SVF_NODROP	0x000000400
-#define SVF_FNODROP	0x000000800
+#define SVF_NOOBSRV	0x00000200
+#define SVF_SOFTCORE 0x00000400
+#define SVF_NODROP	0x000000800
+#define SVF_FNODROP	0x000001000
 
 // GM command flags
 // note this list is NOT compatible with SrvMgr 1.x flags
@@ -49,8 +50,9 @@
 // Server capabilities
 #define SVC_DETAILED_INFO	0x00000001
 #define SVC_FIXED_MAPLIST	0x00000002
-#define SVC_SAVE_DATABASE	0x00000004
-#define SVC_ALL			0x00000007
+#define SVC_SAVE_DATABASE	0x00000008
+#define SVC_SOFTCORE		0x00000004
+#define SVC_ALL			0x0000000B
 
 // Server logging flags
 #define SVL_SAVES	0x00000001

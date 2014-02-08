@@ -1,4 +1,4 @@
-//1 1 4FE2ED
+1 1 4FE2ED
 0 2 5BB69C
 0 3 5BB6C0
 0 4 5BB6AE
@@ -68,8 +68,8 @@
 0 34 5073B6 /// disable sending private message to players not on the map
 //0 35 6081F0 /// exception handler
 0 36 51C901 /// admin invis
-//0 37 4FFD77 /// admin diplomacy: monsters_alliance
-//0 38 4FFEA6 /// admin diplomacy: players_alliance
+0 37 4FFD77 /// admin diplomacy: monsters_alliance
+0 38 4FFEA6 /// admin diplomacy: players_alliance
 //1 39 54DBB4 /// msgbox "amount > 1000"
 0 43 4F1D4A /// loading map bug
 0 44 50716D /// chat crash fix
@@ -171,8 +171,9 @@
 0 145 5055FD /// stop player from casting spells onto invisible unit
 0 146 54DDBA // item exclusion check
 0 147 530745 // imp_GMNoLevelUp
-0 148 4FFF9D /// ext diplomacy
+//0 148 4FFD18 /// ext diplomacy
 0 149 53126B // imp_GMNoLevelDown
 0 150 52DA11 // presumably drop all
+0 151 5610B6 // quest reward scaling
 ////////// 0: jmp, 1: call
 

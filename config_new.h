@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include "lib\utils.hpp"
 
+extern unsigned long MAX_SKILL;
+
 namespace Config
 {
     extern uint32_t ExceptionCount;
