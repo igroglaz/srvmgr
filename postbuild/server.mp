@@ -84,10 +84,10 @@
 0 58 51946B /// bug fix 0x0051946B
 //0 59 54D700 /// skip health potions
 0 60 53A5CB /// heal enemies
-//0 61 531278 /// death/respawn exp formulas
-//0 62 556A56 /// death/respawn exp formulas
-//0 63 557005 /// death/respawn exp formulas
-//0 64 556BE6 /// death/respawn exp formulas
+//0 61 531278 /// death/respawn exp formulas // player_respawned 
+0 62 556A56 /// death/respawn exp formulas // player_died 
+0 63 557005 /// death/respawn exp formulas // player_killed 
+//0 64 556BE6 /// death/respawn exp formulas // player_pkilled 
 0 65 50721C /// chat log
 0 66 5081DC /// dip change log
 0 67 5B56EF /// auto war log
@@ -134,13 +134,13 @@
 0 109 58FEA8 /// gm cast #3
 0 110 5902D9 /// gm cast #4
 
-//0 111 530D47 /// experience 110 #1
-//0 112 530AEA /// experience 110 #2
-//0 113 530918 /// experience 110 #3
-//0 114 52CD2D /// experience 110 #4
-//0 115 531C52 /// experience 110 #5
-//0 116 531D03 /// experience 110 #6
-//0 117 5610DC /// experience 110 #7
+0 111 530D47 /// experience 110 #1
+0 112 530AEA /// experience 110 #2
+0 113 530918 /// experience 110 #3
+0 114 52CD2D /// experience 110 #4
+0 115 531C52 /// experience 110 #5
+0 116 531D03 /// experience 110 #6
+0 117 5610DC /// experience 110 #7
 0 118 4F6888 /// fix experience overflow
 0 119 534AC1 /// fix money overflow
 //0 120 52E74A /// drop spells

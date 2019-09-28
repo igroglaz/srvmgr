@@ -70,8 +70,8 @@ char spirit[MAX_PATH];
 
 char perc_s[]="%s\n";
 
-double exp_death = 1.0;
-double exp_full = 0.9;
+double exp_death = 1; // 1.0
+double exp_full = 0.9; // 0.9
 
 const char * __stdcall get_player_name(void *pl)
 {
@@ -266,7 +266,9 @@ pri_skip:
 
 unsigned int _stdcall respawn_update_exp_cpp(unsigned int exp)
 {
-	return static_cast<unsigned int>(exp * (exp_full / exp_death));
+	exp = 0;
+		return static_cast<unsigned int>(exp);
+	//		return static_cast<unsigned int>(exp * (exp_full / exp_death));
 }
 
 void _declspec(naked) player_respawned()
@@ -282,7 +284,9 @@ void _declspec(naked) player_respawned()
 
 unsigned int _stdcall death_update_exp_cpp(unsigned int exp)
 {
-	return static_cast<unsigned int>(exp * exp_death);
+	exp = 0;
+	return static_cast<unsigned int>(exp);
+	// return static_cast<unsigned int>(exp * exp_death);
 }
 
 void _declspec(naked) death_update_exp(void *unit)

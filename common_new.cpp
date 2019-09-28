@@ -1413,7 +1413,8 @@ void __declspec(naked) imp_DropAll()
 		jnz		do_nodrop
 
 		test	edx, SVF_SOFTCORE
-		jnz		do_nodrop
+		jnz		do_normal
+		//jnz		do_nodrop
 
 		mov		ebx, dword ptr [eax+0x14]
 		and		ebx, GMF_ANY
@@ -1432,6 +1433,7 @@ do_nodrop:
 
 	}
 }
+
 /*
 void __declspec(naked) imp_DropAll()
 {
@@ -1443,8 +1445,8 @@ void __declspec(naked) imp_DropAll()
 		pop		ebp
 		retn	0x0010
 	}
-}*/
-
+}
+*/
 void __declspec(naked) imp_ScaleSoftcoreExperienceReward()
 {
 	__asm
