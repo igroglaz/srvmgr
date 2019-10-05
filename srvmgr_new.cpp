@@ -10,7 +10,7 @@
 #include "scanrange.h"
 #include "unit_info.h"
 #include "forbidden_items.h"
-#include "python.h"
+#include "python_a2.h"
 
 void ChangeWndTitle(const char* title)
 {

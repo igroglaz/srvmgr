@@ -5,6 +5,11 @@
 
 extern unsigned long MAX_SKILL;
 
+
+struct MainCharacterParameters {
+	uint8_t Body, Reaction, Mind, Spirit;
+};
+
 namespace Config
 {
     extern uint32_t ExceptionCount;
@@ -43,6 +48,17 @@ namespace Config
 	extern std::string ControlDirectory;
 
 	extern bool ExitingCleanly;
+
+    extern double DeathExpMult;
+    extern double KilledExpMult;
+    extern double PKExpMult;
+    extern double RespawnExpMult2;
+
+	extern MainCharacterParameters WarriorMaleMaxParameters;
+	extern MainCharacterParameters WarriorFemaleMaxParameters;
+	extern MainCharacterParameters MageMaleMaxParameters;
+	extern MainCharacterParameters MageFemaleMaxParameters;
+
 }
 
 int ReadConfig(const char* filename);
