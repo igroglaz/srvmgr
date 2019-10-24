@@ -8,6 +8,39 @@
 
 unsigned long MAX_SKILL = 100;
 
+namespace Config
+{    
+	std::string ChrBase;
+
+	uint32_t LogMode;
+    std::string LogFile;
+
+    uint32_t ServerID;
+	bool ServerStarted = false;
+    std::string CurrentMapName;
+    std::string CurrentMapTitle;
+
+    uint32_t ServerFlags = 0;
+    bool MapLoaded = false;
+    uint32_t ProtocolVersion;
+
+    std::string IPAddress;
+    std::string IPAddress2;
+    std::string HatAddress;
+
+    uint32_t ServerCaps = 0;
+    uint32_t GameMode = 0;
+
+    bool Suspended = false;
+    uint32_t OriginalTime = 0;
+
+	std::string ControlDirectory;
+    uint32_t MaxPlayers;
+
+	bool ExitingCleanly = false;
+}
+
+// Review and refactor this function
 uint32_t ParseLogFlags(std::string string)
 {
 	if(CheckHex(string))
@@ -92,459 +125,215 @@ void AppendMaplist(const char* filename, uint32_t duration)
     }
 }
 
-namespace Config
+// Splits the output of GetPrivateProfileString into keys and values pairs.
+// INPUT:
+//	A pointer to a buffer that contains the key name and value pairs.
+//	The buffer is filled with one or more null-terminated strings; the last string is followed by a second null character.
+//	Buffer example: ['k','e','y','=','v','a','l','u','e','\0','k','e','y','=','v','a','l','u','e','\0','\0']
+char* ReadKeyValuePair(char *buf, char *key, char *value)
 {
-    uint32_t ExceptionCount = 0;
-
-	std::string ChrBase = "chr";
-
-	uint32_t LogMode = SVL_ALL;
-    std::string LogFile = "server.log";
-
-    uint32_t ServerID = 0;
-	bool ServerStarted = false;
-    std::string CurrentMapName = "N/A";
-    std::string CurrentMapTitle = "N/A";
-
-    uint32_t ServerFlags = 0;
-    bool MapLoaded = false;
-    uint32_t ProtocolVersion = 7;
-
-    std::string IPAddress = "0.0.0.0";
-    uint16_t IPAddressP = 8001;
-
-    std::string IPAddress2 = "0.0.0.0";
-    uint16_t IPAddress2P = 8002;
-
-    std::string HatAddress = "127.0.0.1";
-    uint16_t HatAddressP = 7999;
-
-    uint32_t MaxPaletteAllowed = 16;
-
-    std::string SqlAddress = "127.0.0.1";
-    uint16_t SqlPort = 3306;
-    std::string SqlLogin = "root";
-    std::string SqlPassword = "";
-    std::string SqlDatabase = "logins";
-
-    uint32_t ServerCaps = 0;
-    uint32_t GameMode = 0;
-
-    bool Suspended = false;
-    uint32_t OriginalTime = 0;
-
-    std::vector<std::string> Includes;
-
-	std::string ControlDirectory = "ctl";
-
-    uint32_t MaxPlayers = 16;
-
-	bool ExitingCleanly = false;
+    unsigned long sz = strlen(buf);
+	if(sz == 0) return NULL;
+    while(*buf != '=') *key++ = *buf++;
+    *key = '\0';
+    ++buf;
+    while(*value++ = *buf++);	
+    return buf;
 }
 
 int ReadConfig(const char* filename)
-{
-    if(!Config::Includes.size()) // root config
-    {
-        // set defaults
-        SetCString((byte*)(0x006D15B0), "127.0.0.1:8001");     // IPAddress
-        SetCString((byte*)(0x006D15B4), "127.0.0.1:8002");     // IPAddress2
-        SetCString((byte*)(0x006D15B8), "127.0.0.1:7999");   // HatAddress
-        SetCString((byte*)(0x006D15BC), "chr");              // ChrBase
+{ 
+	char cLogFile[256];
+	GetPrivateProfileString("Settings", "LogFile", "srvmgr.log", cLogFile, sizeof(cLogFile), filename);
+    Config::LogFile = cLogFile;
+    Printf("[DEBUG] LogFile: %s",cLogFile);
+
+    Printf("[DEBUG] CONFIG FILE: %s", filename);
+    
+    char cLogMode[256];
+	GetPrivateProfileString("Settings", "LogMode", "SVL_ALL", cLogMode, sizeof(cLogMode), filename);
+	Printf("[DEBUG] LogMode: %s",cLogMode);
+    Config::LogMode = ParseLogFlags(cLogMode);
+
+    char cMaps[2048], cMapName[128], cMapDuration[4], *pMaps;
+	GetPrivateProfileSection("Maps", cMaps, sizeof(cMaps), filename);	
+	pMaps = cMaps;
+    while(pMaps = ReadKeyValuePair(pMaps, cMapName, cMapDuration))
+    {	
+		// Convert hours to minutes
+		std::string sMapDuration(cMapDuration);		
+		float fMapDuration = std::stof(sMapDuration)*60.0f;
+		Printf("[DEBUG] Map to load: %s Duration: %imin",cMapName,(uint32_t)fMapDuration);
+		// Add map to rotation list
+        AppendMaplist(cMapName, (uint32_t)fMapDuration);
     }
 
-    using namespace std;
-    ifstream f_cfg;
-    f_cfg.open(filename, ios::in);
-    if(!f_cfg.is_open()) return -1;
+    char cGameType[256];
+	GetPrivateProfileString("Settings", "GameType", "COOPERATIVE", cGameType, sizeof(cGameType), filename);
+	Printf("[DEBUG] GameType: %s",cGameType);
+    uint32_t uGameType;
+    if(0 == strcmp(cGameType,"COOPERATIVE"))
+        uGameType = GAMEMODE_COOPERATIVE;
+    else if(0 == strcmp(cGameType,"DEATHMATCH"))
+        uGameType = GAMEMODE_DEATHMATCH;
+    else if(0 == strcmp(cGameType,"TEAMPLAY"))
+        uGameType = GAMEMODE_TEAMPLAY;
+    else if(0 == strcmp(cGameType,"ARENA"))
+        uGameType = GAMEMODE_ARENA;        
+    else if(0 == strcmp(cGameType,"CTF"))
+        uGameType = GAMEMODE_CTF;
+    Printf("[DEBUG] GameMode Flag: %u",uGameType);
+    Config::GameMode = uGameType;
+    uGameType = uGameType == GAMEMODE_CTF ? GAMEMODE_ARENA : uGameType; // Review CTF logic
+    Printf("[DEBUG] GameMode Flag Adjusted: %u",uGameType);
+    *(uint32_t*)(ADDR_GAME_MODE) = uGameType;
+    
+    char cSrvAddress[256];
+    GetPrivateProfileString("Network", "IPAddress", "127.0.0.1:8001", cSrvAddress, sizeof(cSrvAddress), filename);
+    Printf("[DEBUG] IPAddress: %s",cSrvAddress);
+    SetCString((byte*)(ADDR_NETWORK_SRV_IP), cSrvAddress);
 
-    string line;
-    int32_t lnid = 0;
-    std::string section = "root";
+    char cSrvAddress2[256];
+    GetPrivateProfileString("Network", "IPAddress2", "127.0.0.1:8002", cSrvAddress2, sizeof(cSrvAddress2), filename);
+    Printf("[DEBUG] IPAddress2: %s",cSrvAddress2);
+    SetCString((byte*)(ADDR_NETWORK_SRV_IP_2), cSrvAddress2);
+    
+    char cHatAddress[256];
+    GetPrivateProfileString("Network", "HatAddress", "127.0.0.1:7999", cHatAddress, sizeof(cHatAddress), filename);
+    Printf("[DEBUG] HatAddress: %s",cHatAddress);
+    SetCString((byte*)(ADDR_NETWORK_HAT_IP), cHatAddress);
+    
+    int iProtocolVersion = GetPrivateProfileInt("Network", "ProtocolVersion", 20, filename);
+    iProtocolVersion = iProtocolVersion < 8 ? 8 : iProtocolVersion;
+    iProtocolVersion = iProtocolVersion > 20 ? 20 : iProtocolVersion;
+	Printf("[DEBUG] ProtocolVersion: %i",iProtocolVersion);
+    Config::ProtocolVersion = iProtocolVersion;
 
-    while(getline(f_cfg, line))
-    {
-        lnid++;
-        bool enc = false;
-        for(size_t i = 0; i < line.length(); i++)
-        {
-            if(line[i] == '"') enc = !enc;
-            if(enc) continue;
-            if(line[i] == '#' || line[i] == ';' ||
-                (line[i] == '/' && i != line.length()-1 && line[i+1] == '/'))
-            {
-                line.erase(i);
-                break;
-            }
-        }
+    int iGameSpeed = GetPrivateProfileInt("Settings", "GameSpeed", 5, filename);
+    iGameSpeed = (iGameSpeed < 0 || iGameSpeed > 8) ? 4 : iGameSpeed;
+	Printf("[DEBUG] GameSpeed: %i",iGameSpeed);
+    *(int32_t*)(ADDR_GAME_SPEED) = iGameSpeed;
+	
+    int iRepopDelay = GetPrivateProfileInt("Settings", "RepopDelay", 100, filename);
+    iRepopDelay = iRepopDelay < 20 ? 20 : iRepopDelay;
+    iRepopDelay = iRepopDelay > 500 ? 500 : iRepopDelay;
+	Printf("[DEBUG] RepopDelay: %i",iRepopDelay);
+    *(int32_t*)(ADDR_REPOP_DELAY) = iRepopDelay;
 
-        line = Trim(line);
-        if(!line.length()) continue;
+    int iServerID = GetPrivateProfileInt("Settings", "ServerID", 0, filename);
+	Printf("[DEBUG] ServerID: %i",iServerID);
+    *(uint32_t*)(ADDR_SRV_ID) = iServerID;
+    Config::ServerID = iServerID;
 
-        if(line[0] == '!')
-        {
-            if(line.find("!include ") == 0)
-            {
-                line.erase(0, 9);
-                line = Trim(line);
-                if(line[0] == '"')
-                {
-                    line.erase(0, 1);
-                    line.erase(line.length()-1, 1);
-                }
+    char cDescription[256];
+	GetPrivateProfileString("Settings", "Description", "pvm", cDescription, sizeof(cDescription), filename);
+	Printf("[DEBUG] Description: %s",cDescription);
+    SetCString((byte*)(ADDR_DESCRIPTION), cDescription);
+	
+    char cChrBase[256];
+	GetPrivateProfileString("Settings", "ChrBase", "chr", cChrBase, sizeof(cChrBase), filename);
+	Printf("[DEBUG] ChrBase: %s",cChrBase);
+    SetCString((byte*)(ADDR_CHR_BASE), cChrBase);
 
-                if(std::find(Config::Includes.begin(), Config::Includes.end(), line) == Config::Includes.end())
-                {
-                    Config::Includes.push_back(line);
-                    int32_t result = ReadConfig(line.c_str());
-                    if(result == -1)
-                        Printf("ReadConfig: file not found in \"%s\"!", line.c_str());
-                    else if(result > 0)
-                        Printf("ReadConfig: syntax error at \"%s\":%u!", line.c_str(), result);
-                }
-                else
-                {
-                    Printf("ReadConfig: recursive inclusion detected in \"%s\":%u.", filename, lnid);
-                }
-            }
-            continue;
-        }
+    char cControlDirectory[256];
+	GetPrivateProfileString("Settings", "ControlDirectory", "ctl", cControlDirectory, sizeof(cControlDirectory), filename);
+	Printf("[DEBUG] ControlDirectory: %s",cControlDirectory);
+    Config::ControlDirectory = cControlDirectory;
 
-        if(line[0] == '[')
-        {
-            line.erase(0, 1);
-            size_t whs = line.find_first_of(']');
-            if(whs == string::npos)
-            {
-                return lnid;
-            }
-            line.erase(whs);
-            section = ToLower(Trim(line));
+    int iSayRange = GetPrivateProfileInt("Settings", "SayRange", 512, filename);
+    iSayRange = iSayRange > 255 ? 255 : iSayRange;
+	Printf("[DEBUG] SayRange: %i",iSayRange);
+    *(uint32_t*)(ADDR_SAY_RANGE) = iSayRange;
 
-            if(section == "bannedips" ||
-               section == "bannedplayers" ||
-               section == "reporttowww") Printf("ReadConfig: obsolete section (%s)", section.c_str());
-            else if(section != "settings" &&
-                    section != "maps" &&
-                    section != "network" &&
-                    section != "mysql") return lnid;
-        }
-        else
-        {
-            std::string parameter, value;
-            size_t whd = line.find_first_of('=');
-            if(whd != string::npos)
-            {
-                parameter = line;
-                parameter.erase(whd);
-                value = line;
-                value.erase(0, whd+1);
-            }
-            else
-            {
-                value = "";
-                parameter = line;
-            }
+    int iShoutDelay = GetPrivateProfileInt("Settings", "ShoutDelay", 20, filename);
+    iShoutDelay = iShoutDelay < 0 ? 0 : iShoutDelay;
+	Printf("[DEBUG] ShoutDelay: %i",iShoutDelay);
+    *(int32_t*)(ADDR_SHOUT_DELAY) = iShoutDelay;
 
-            parameter = ToLower(Trim(parameter));
-            value = Trim(value);
-            if(value[0] == '"')
-            {
-                if(value[value.length()-1] != '"')
-                {
-                    return lnid;
-                }
+    int iMaxPlayers = GetPrivateProfileInt("Settings", "MaxPlayers", 16, filename);
+    iMaxPlayers = iMaxPlayers > 32 ? 32 : iMaxPlayers;
+	Printf("[DEBUG] MaxPlayers: %i",iMaxPlayers);
+    *(uint32_t*)(ADDR_MAX_PLAYERS) = iMaxPlayers;
+    Config::MaxPlayers = iMaxPlayers;
 
-                value.erase(0, 1);
-                value.erase(value.length()-1, 1);
-            }
+    int iLoginTimeout = GetPrivateProfileInt("Settings", "LoginTimeout", 300, filename);
+    iLoginTimeout = iLoginTimeout < 10 ? 10 : iLoginTimeout;
+    iLoginTimeout = iLoginTimeout > 300 ? 300 : iLoginTimeout;
+	Printf("[DEBUG] LoginTimeout: %i",iLoginTimeout);
+    *(int32_t*)(ADDR_LOGIN_TIMEOUT) = iLoginTimeout;
 
-            if(section == "settings")
-            {
-                if(parameter == "chrbase")
-                {
-                    if(value[value.length()-1] != '\\') value += '\\';
-					Config::ChrBase = value;
-                    SetCString((byte*)(0x006D15BC), value.c_str());
-                }
-                else if(parameter == "description")
-                {
-                    SetCString((byte*)(0x006D15C0), value.c_str());
-                }
-                else if(parameter == "repopdelay")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 20) val = 20;
-                    if(val > 500) val = 500;
-                    *(int32_t*)(0x006D15A0) = val;
-                }
-                else if(parameter == "gamespeed")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 0 || val > 8) val = 4;
-                    *(int32_t*)(0x006D15A8) = val;
-                }
-                else if(parameter == "logfile")
-                {
-                    Config::LogFile = value;
-                }
-				else if(parameter == "logmode")
-				{
-					Config::LogMode = ParseLogFlags(value);
-				}
-                else if(parameter == "serverid")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    uint32_t val = StrToInt(value);
-                    Config::ServerID = val;
-                    *(uint32_t*)(0x006D15C4) = val;
-                }
-                else if(parameter == "sayrange")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    uint32_t val = StrToInt(value);
-                    if(val > 255 || !val) val = 255;
-                    *(uint32_t*)(0x006D162C) = val;
-                }
-                else if(parameter == "shoutdelay")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 0) val = 0;
-                    *(int32_t*)(0x006D1630) = val;
-                }
-                else if(parameter == "maxplayers")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    uint32_t val = StrToInt(value);
-                    if(val > 32) val = 32;
-                    Config::MaxPlayers = val;
-                    *(uint32_t*)(0x006D163C) = val;
-                }
-                else if(parameter == "gametype" ||
-                        parameter == "gamemode")
-                {
-                    uint32_t gmode = 0;
-                    if(CheckInt(value))
-                    {
-                        uint32_t val = StrToInt(value);
-                        if(val > 3) return lnid;
-                        gmode = val;
-                    }
-                    else
-                    {
-                        value = ToLower(value);
-                        if(value == "cooperative")
-                            gmode = GAMEMODE_COOPERATIVE;
-                        else if(value == "deathmatch")
-                            gmode = GAMEMODE_DEATHMATCH;
-                        else if(value == "teamplay")
-                            gmode = GAMEMODE_TEAMPLAY;
-                        else if(value == "arena")
-                            gmode = GAMEMODE_ARENA;
-                        else if(value == "ctf")
-                            gmode = GAMEMODE_CTF;
-                        else return lnid;
-                    }
+    int iReconnectDelay = GetPrivateProfileInt("Settings", "ReconnectDelay", 0, filename);
+    iReconnectDelay = iReconnectDelay < 1 ? 0 : iReconnectDelay;
+	Printf("[DEBUG] ReconnectDelay: %i",iReconnectDelay);
+    *(int32_t*)(ARRD_RECONNECT_DELAY) = iReconnectDelay;
+    
+    int iShutdownDelay = GetPrivateProfileInt("Settings", "ShutdownDelay", 60, filename);
+    iShutdownDelay = (iShutdownDelay < 1 || iShutdownDelay > 60) ? 5 : iShutdownDelay; 
+	Printf("[DEBUG] ShutdownDelay: %i",iShutdownDelay);
+    *(int32_t*)(ARRD_SHUTDOWN_DELAY) = iShutdownDelay;
 
-                    Config::GameMode = gmode;
-                    if(gmode == GAMEMODE_CTF)
-                        *(uint32_t*)(0x006D1648) = GAMEMODE_ARENA; // для сервера это арена
-                    else *(uint32_t*)(0x006D1648) = gmode;
-                }
-                else if(parameter == "logintimeout")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 10) val = 10;
-                    if(val > 300) val = 300;
+    int iFragLimit = GetPrivateProfileInt("Settings", "FragLimit", 2147483647, filename);
+    iFragLimit = iFragLimit < 1 ? 2147483647 : iFragLimit;
+	Printf("[DEBUG] FragLimit: %i",iFragLimit);
+    *(int32_t*)(ADDR_FRAG_LIMIT) = iFragLimit;
+    
+    int iTimeLimit = GetPrivateProfileInt("Settings", "TimeLimit", 2147483647, filename);
+    iTimeLimit = iTimeLimit < 1 ? 2147483647 : iTimeLimit;
+	Printf("[DEBUG] TimeLimit: %i",iTimeLimit);
+    *(int32_t*)(ADDR_TIME_LIMIT) = iTimeLimit;
 
-                    *(int32_t*)(0x006D1640) = val;
-                }
-                else if(parameter == "reconnectdelay")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 1) val = 0;
-                    *(int32_t*)(0x006D1644) = val;
-                }
-                else if(parameter == "shutdowndelay")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 1 || val > 60)
-                        val = 5;
-                    *(int32_t*)(0x006D1658) = val;
-                }
-                else if(parameter == "fraglimit")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 1) val = 2147483647;
-                    *(int32_t*)(0x006D164C) = val;
-                }
-                else if(parameter == "arenatimelimit" ||
-                        parameter == "timelimit")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 1) val = 2147483647;
-                    *(int32_t*)(0x006D1660) = val;
-                }
-                else if(parameter == "scaledmaps")
-                {
-                    if(!CheckBool(value)) return lnid;
-                    bool bv = StrToBool(value);
-                    if(bv) *(uint32_t*)(0x006D1654) = 1;
-                }
-                else if(parameter == "treasureprobability")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 0) val = 0;
-                    if(val > 100) val = 100;
-                    *(int32_t*)(0x006D1664) = val;
-                }
-                else if(parameter == "serverflags")
-                {
-                    Config::ServerFlags = ParseFlags(value);
-					if(Config::ServerFlags & SVF_SOFTCORE)
-					{
-						MAX_SKILL = 110;
-						Config::ServerCaps |= SVC_SOFTCORE;
-					}
-                }
-                else if(parameter == "maxpaletteallowed")
-                {
-                    int32_t val = StrToInt(value);
-                    if(val < 0) val = 0;
-                    Config::MaxPaletteAllowed = val;
-                }
-                else if(parameter == "servercaps")
-                {
-                    value = Trim(ToLower(value));
-                    std::vector<std::string> svcap = Explode(value, "|");
-                    uint32_t caps = 0;
-                    for(std::vector<std::string>::iterator it = svcap.begin(); it != svcap.end(); ++it)
-                    {
-                        std::string& cap = (*it);
-                        if(!cap.length()) continue;
-                        uint32_t flag = 0;
-                        bool erase = false;
-                        if(cap[0] == '-')
-                        {
-                            erase = true;
-                            cap.erase(0, 1);
-                        }
+    int iScaledMaps = GetPrivateProfileInt("Settings", "ScaledMaps", 0, filename);
+    Printf("[DEBUG] ScaledMaps: %i",iScaledMaps);
+    *(uint32_t*)(ADDR_SCALED_MAPS) = iScaledMaps;
 
-                        if(cap == "all") flag = SVC_ALL;
-                        else if(cap == "detailed_info") flag = SVC_DETAILED_INFO;
-                        else if(cap == "fixed_maplist") flag = SVC_FIXED_MAPLIST;
-                        else if(cap == "save_database") flag = SVC_SAVE_DATABASE;
+    int iTreasureProbability = GetPrivateProfileInt("Settings", "TreasureProbability", 50, filename);
+    iTreasureProbability = iTreasureProbability < 0 ? 0 : iTreasureProbability;
+    iTreasureProbability = iTreasureProbability > 100 ? 100 : iTreasureProbability;
+	Printf("[DEBUG] TreasureProbability: %i",iTreasureProbability);
+    *(int32_t*)(ADDR_TREASURE_PROBABILITY) = iTreasureProbability;
 
-                        if(!flag) return lnid;
-                        if(!erase) caps |= flag;
-                        else caps &= ~flag;
-                    }
-
-                    Config::ServerCaps &= SVC_SOFTCORE;
-					Config::ServerCaps |= caps & ~SVC_SOFTCORE;
-                }
-				else if(parameter == "controldirectory")
-				{
-					Config::ControlDirectory = value;
-				}
-                else if(parameter == "flagscore" ||
-                        parameter == "protocol" ||
-                        parameter == "ipaddress" ||
-                        parameter == "ipaddress2" ||
-                        parameter == "save" ||
-                        parameter == "hataddress")
-                {
-                    Printf("ReadConfig: obsolete parameter (settings/%s)", parameter.c_str());
-                }
-            }
-            else if(section == "network")
-            {
-                if(parameter == "protocolversion")
-                {
-                    if(!CheckInt(value)) return lnid;
-                    int32_t val = StrToInt(value);
-                    if(val < 8) val = 8;
-                    if(val > 20) val = 20;
-                    Config::ProtocolVersion = val;
-                }
-                else if(parameter == "ipaddress" ||
-                        parameter == "ipaddress2" ||
-                        parameter == "hataddress")
-                {
-                    vector<string> ipd = Explode(value, ":");
-                    if(ipd.size() > 2) return lnid;
-                    if(!CheckIP(ipd[0])) return lnid;
-                    uint32_t port = 8001;
-                    if(ipd.size() == 2)
-                    {
-                        if(!CheckInt(ipd[1])) return lnid;
-                        port = StrToInt(ipd[1]);
-                        if(port > 65535) return lnid;
-                    }
-
-                    if(parameter == "ipaddress")
-                    {
-                        SetCString((byte*)(0x006D15B0), value.c_str());
-                        Config::IPAddress = ipd[0];
-                        Config::IPAddressP = port;
-                    }
-                    else if(parameter == "ipaddress2")
-                    {
-                        SetCString((byte*)(0x006D15B4), value.c_str());
-                        Config::IPAddress2 = ipd[0];
-                        Config::IPAddress2P = port;
-                    }
-                    else
-                    {
-                        SetCString((byte*)(0x006D15B8), value.c_str());
-                        Config::HatAddress = ipd[0];
-                        Config::HatAddressP = port;
-                    }
-                }
-            }
-            else if(section == "mysql")
-            {
-                if(parameter == "server")
-                {
-                    vector<string> ipd = Explode(value, ":");
-                    if(ipd.size() > 2) return lnid;
-                    if(!CheckIP(ipd[0])) return lnid;
-                    uint32_t port = 3306;
-                    Config::SqlAddress = ipd[0];
-                    Config::SqlPort = port;
-                }
-                else if(parameter == "login")
-                    Config::SqlLogin = value;
-                else if(parameter == "password")
-                    Config::SqlPassword = value;
-                else if(parameter == "database")
-                    Config::SqlDatabase = value;
-                else return lnid;
-            }
-            else if(section == "maps")
-            {
-                std::string m_filename = parameter;
-                uint32_t m_time = 2147483647;
-                if(value.length()) m_time = (uint32_t)(StrToFloat(value) * 60.0);
-                AppendMaplist(m_filename.c_str(), m_time);
-            }
-            else
-            {
-                Printf("ReadConfig: unknown parameter (%s/%s)", section.c_str(), parameter.c_str());
-            }
-        }
+    ///////////////////
+    // TO_REVIEW_START
+    //
+    char cServerFlags[256];
+	GetPrivateProfileString("Settings", "ServerFlags", NULL, cServerFlags, sizeof(cServerFlags), filename);
+	Printf("[DEBUG] ServerFlags: %s",cServerFlags);
+    Config::ServerFlags = ParseFlags(cServerFlags);
+    if(Config::ServerFlags & SVF_SOFTCORE) {
+        MAX_SKILL = 110;
+        Config::ServerCaps |= SVC_SOFTCORE;
     }
 
-    f_cfg.close();
+
+    char cServerCaps[256];
+	GetPrivateProfileString("Settings", "ServerCaps", NULL, cServerCaps, sizeof(cServerCaps), filename);
+	Printf("[DEBUG] ServerCaps: %s",cServerCaps);
+    std::vector<std::string> svcap = Explode(cServerCaps, "|");
+    uint32_t caps = 0;
+    for(std::vector<std::string>::iterator it = svcap.begin(); it != svcap.end(); ++it) {
+        std::string& cap = (*it);
+        if(!cap.length()) continue;
+        uint32_t flag = 0;
+        bool erase = false;
+        if(cap[0] == '-')
+        {
+            erase = true;
+            cap.erase(0, 1);
+        }
+
+        if(cap == "ALL") flag = SVC_ALL;
+        else if(cap == "DETAILED_INFO") flag = SVC_DETAILED_INFO;
+        else if(cap == "FIXED_MAPLIST") flag = SVC_FIXED_MAPLIST;
+        else if(cap == "SAVE_DATABASE") flag = SVC_SAVE_DATABASE;
+
+        if(!erase) caps |= flag;
+        else caps &= ~flag;
+    }
+    Config::ServerCaps &= SVC_SOFTCORE;
+    Config::ServerCaps |= caps & ~SVC_SOFTCORE;
+    //
+    // TO_REVIEW_END
+    ///////////////////
 
     return 0;
 }
