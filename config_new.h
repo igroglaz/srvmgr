@@ -5,6 +5,11 @@
 
 extern unsigned long MAX_SKILL;
 
+///////////////////////////////////////////////////////////////////////////////
+// These constants represents memory addresses for corresponding variables
+// Example: ADDR_NETWORK_HAT_IP
+//          refers to the memory address containing Hat's IP_ADDRESS:PORT
+//
 const int ADDR_NETWORK_SRV_IP = 0x006D15B0;
 const int ADDR_NETWORK_SRV_IP_2 = 0x006D15B4;
 const int ADDR_NETWORK_HAT_IP = 0x006D15B8;
@@ -25,34 +30,33 @@ const int ADDR_TIME_LIMIT = 0x006D1660;
 const int ADDR_SCALED_MAPS = 0x006D1654;
 const int ADDR_TREASURE_PROBABILITY = 0x006D1664;
 
-namespace Config
-{ 
-    extern uint32_t LogMode;
-    extern std::string LogFile;
+namespace Config {
+  extern uint32_t LogMode;
+  extern std::string LogFile;
 
-	extern std::string ChrBase;
+  extern std::string ChrBase;
 
-    extern uint32_t ServerID;
+  extern uint32_t ServerID;
 
-	extern bool ServerStarted;
+  extern bool ServerStarted;
 
-    extern std::string CurrentMapName;
-    extern std::string CurrentMapTitle;
+  extern std::string CurrentMapName;
+  extern std::string CurrentMapTitle;
 
-    extern uint32_t ServerFlags;
-    extern bool MapLoaded;
-    extern uint32_t ProtocolVersion;
+  extern uint32_t ServerFlags;
+  extern bool MapLoaded;
+  extern uint32_t ProtocolVersion;
 
-    extern uint32_t ServerCaps;
-    extern uint32_t GameMode;
+  extern uint32_t ServerCaps;
+  extern uint32_t GameMode;
 
-    extern bool Suspended;
-    extern uint32_t OriginalTime;
-    extern uint32_t MaxPlayers;
+  extern bool Suspended;
+  extern uint32_t OriginalTime;
+  extern uint32_t MaxPlayers;
 
-	extern std::string ControlDirectory;
+  extern std::string ControlDirectory;
 
-	extern bool ExitingCleanly;
-}
+  extern bool ExitingCleanly;
+} // namespace Config
 
-int ReadConfig(const char* filename);
+int ReadConfig(const char *filename);
