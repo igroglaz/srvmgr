@@ -2,6 +2,9 @@
 
 SET PATH=%PATH%;%CD%
 
+REM release folder should exists
+if not exist release mkdir release
+
 call log building a2server.exe
 if exist a2server.exe del /Q /F a2server.exe >nul
 
