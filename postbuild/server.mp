@@ -174,5 +174,7 @@
 0 149 53126B // imp_GMNoLevelDown
 0 150 52DA11 // presumably drop all
 0 151 5610B6 // quest reward scaling
+0 152 59C66E // load shop data from alm
+0 153 502C50 // enter custom shop instead of normal one
 ////////// 0: jmp, 1: call
 

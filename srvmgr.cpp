@@ -1500,8 +1500,8 @@ void _declspec(naked) enter_inn (void) {
 		movzx	eax, byte ptr [edx]
 		push	eax
 
-		mov	ecx, [ebp+8]
-		mov	ecx, [ecx + 0x0A]
+		mov	ecx, [ebp-0xAC]
+		mov	ecx, [ecx+0x08]
 		and	ecx, 0xFFFF
 		push	ecx
 
@@ -1576,8 +1576,8 @@ void _declspec(naked) enter_shop (void) {
 		movzx	eax, byte ptr [edx]
 		push	eax
 
-		mov	ecx, [ebp+8]
-		mov	ecx, [ecx + 0x0A]
+		mov	ecx, [ebp-0xA4]
+		mov	ecx, [ecx+0x08]
 		and	ecx, 0xFFFF
 		push	ecx
 

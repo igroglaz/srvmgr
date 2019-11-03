@@ -11,6 +11,7 @@
 #include "unit_info.h"
 #include "forbidden_items.h"
 #include "python_a2.h"
+#include "multiplayer_shop.h"
 
 void ChangeWndTitle(const char* title)
 {
@@ -60,6 +61,7 @@ void OnInitializeMap()
 void OnPreInitializeMap()
 {
 	// update UnitInfo
+	ClearShops();
 	UI_Reset();
 	Config::MapLoaded = false;
     ChangeWndTitle(Format("Server ID %u (loading map...)", Config::ServerID).c_str());
