@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
+    <None Include="postbuild\server.dis" />
     <None Include="ReadMe.txt" />
     <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />

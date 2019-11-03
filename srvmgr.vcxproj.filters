@@ -230,5 +230,8 @@
     <None Include="srvmgr.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="postbuild\server.dis">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
