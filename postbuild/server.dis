@@ -177,3 +177,4 @@ JMP    imp_DropAll                       52DA11 // presumably drop all
 JMP    imp_ScaleSoftcoreExperienceReward 5610B6 // quest reward scaling 
 JMP    imp_LoadShopData                  59C66E // load shop data from alm 
 JMP    imp_EnterCustomShop               502C50 // enter custom shop instead of normal one 
+JMP    imp_UpdateOnReturn                508E9D // backported from recent srvmgr. esoteric

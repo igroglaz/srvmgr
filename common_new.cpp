@@ -7,6 +7,7 @@
 #include "cheat_codes_new.h"
 #include "player_info.h"
 #include "srvmgr.h"
+#include "protolayer_hat.h"
 
 void __declspec(naked) imp_ServerStarted()
 {
@@ -1467,6 +1468,23 @@ do_normal:
 cont:
 		mov		[ebp-0x4C], edx
 		mov		edx, 0x005610CE
+		jmp		edx
+	}
+}
+
+void _stdcall UpdateOnReturn()
+{
+	NetCmd_UpdateInfo();
+}
+
+void __declspec(naked) imp_UpdateOnReturn()
+{
+	__asm
+	{ // 508E9D
+		mov		ecx, [ebp-0xB8]
+		mov		dword ptr [ecx+0x1FC], 0
+		call	UpdateOnReturn
+		mov		edx, 0x00508EAD
 		jmp		edx
 	}
 }

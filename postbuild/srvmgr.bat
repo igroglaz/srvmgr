@@ -46,5 +46,5 @@ move /Y world.res release >nul
 move /Y srvmgr.pdb release >nul
 
 call log done!
-pause
+rem pause
 exit

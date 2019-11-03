@@ -5,16 +5,20 @@
 #define SRVMGR_VER_LO 00
 
 // Server flags
-#define SVF_CLOSED	0x00000001
-#define SVF_PVM		0x00000002
-#define SVF_MUTED	0x00000004
-#define SVF_ADVPVM	0x00000040
-#define SVF_ONEMAP	0x00000080
-#define SVF_NOHEALING 0x00000100
-#define SVF_NOOBSRV	0x00000200
-#define SVF_SOFTCORE 0x00000400
-#define SVF_NODROP	0x000000800
-#define SVF_FNODROP	0x000001000
+#define SVF_CLOSED	        0x00000001
+#define SVF_PVM		        0x00000002
+#define SVF_MUTED	        0x00000004
+#define SVF_ADVPVM	        0x00000040
+#define SVF_ONEMAP	        0x00000080
+#define SVF_NOHEALING       0x00000100
+#define SVF_NOOBSRV	        0x00000200
+#define SVF_SOFTCORE        0x00000400
+#define SVF_NODROP	        0x00000800
+#define SVF_FNODROP	        0x00001000
+#define SVF_NOSAVING        0x00002000
+#define SVF_SANDBOX         0x00004000
+#define SVF_ENTERMAGE       0x00008000
+#define SVF_ENTERWARRIOR    0x00010000
 
 // GM command flags
 // note this list is NOT compatible with SrvMgr 1.x flags
@@ -43,9 +47,9 @@
 // Game modes
 #define GAMEMODE_COOPERATIVE	0
 #define GAMEMODE_DEATHMATCH	1
-#define GAMEMODE_TEAMPLAY	2
+#define GAMEMODE_SOFTCORE	2
 #define GAMEMODE_ARENA		3
-#define GAMEMODE_CTF		4
+#define GAMEMODE_SANDBOX	4
 
 // Server capabilities
 #define SVC_DETAILED_INFO	0x00000001

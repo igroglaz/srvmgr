@@ -34,24 +34,32 @@ uint32_t ParseFlags(std::string string)
                 par.erase(0, 1);
             }
 
-            if(par == "pvm")
-                flag = SVF_PVM;
-            else if(par == "muted")
-                flag = SVF_MUTED;
-            else if(par == "closed")
-                flag = SVF_CLOSED;
-            else if(par == "advanced_pvm")
-                flag = SVF_ADVPVM;
-			else if(par == "nohealing")
+			if (par == "pvm")
+				flag = SVF_PVM;
+			else if (par == "muted")
+				flag = SVF_MUTED;
+			else if (par == "closed")
+				flag = SVF_CLOSED;
+			else if (par == "advanced_pvm")
+				flag = SVF_ADVPVM;
+			else if (par == "nohealing")
 				flag = SVF_NOHEALING;
-			else if(par == "noobsrv")
+			else if (par == "noobsrv")
 				flag = SVF_NOOBSRV;
-			else if(par == "softcore")
+			else if (par == "softcore")
 				flag = SVF_SOFTCORE;
-			else if(par == "nodrop")
+			else if (par == "nodrop")
 				flag = SVF_NODROP;
-			else if(par == "fnodrop")
+			else if (par == "fnodrop")
 				flag = SVF_FNODROP;
+			else if (par == "nosaving")
+				flag = SVF_NOSAVING;
+			else if (par == "sandbox")
+				flag = SVF_SANDBOX;
+			else if (par == "entermage")
+				flag = SVF_ENTERMAGE;
+			else if (par == "enterwarrior")
+				flag = SVF_ENTERWARRIOR;
 
             if(!flag) continue;
             if(!erase) flags |= flag;

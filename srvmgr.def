@@ -144,4 +144,5 @@ imp_DropAll			@150
 imp_ScaleSoftcoreExperienceReward @151
 imp_LoadShopData	@152
 imp_EnterCustomShop @153
+imp_UpdateOnReturn	@154
 
