@@ -84,10 +84,10 @@
 0 58 51946B /// bug fix 0x0051946B
 //0 59 54D700 /// skip health potions
 0 60 53A5CB /// heal enemies
-0 61 531278 /// death/respawn exp formulas // player_respawned 
+//0 61 531278 /// death/respawn exp formulas // player_respawned 
 0 62 556A56 /// death/respawn exp formulas // player_died 
 0 63 557005 /// death/respawn exp formulas // player_killed 
-0 64 556BE6 /// death/respawn exp formulas // player_pkilled 
+//0 64 556BE6 /// death/respawn exp formulas // player_pkilled 
 0 65 50721C /// chat log
 0 66 5081DC /// dip change log
 0 67 5B56EF /// auto war log
@@ -133,6 +133,7 @@
 0 108 58FF96 /// gm cast #2
 0 109 58FEA8 /// gm cast #3
 0 110 5902D9 /// gm cast #4
+
 0 111 530D47 /// experience 110 #1
 0 112 530AEA /// experience 110 #2
 0 113 530918 /// experience 110 #3
@@ -174,7 +175,10 @@
 0 149 53126B // imp_GMNoLevelDown
 0 150 52DA11 // presumably drop all
 0 151 5610B6 // quest reward scaling
-0 152 59C66E // load shop data from alm
-0 153 502C50 // enter custom shop instead of normal one
+0 201 53973E // fix spell duration overflow
+0 206 53BF9C // fix spell duration overflow
+0 203 53C0E1 // fix spell duration overflow
+0 204 53C21E // fix spell duration overflow
+0 205 53C52A // fix spell duration overflow
 ////////// 0: jmp, 1: call
 
