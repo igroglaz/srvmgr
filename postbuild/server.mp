@@ -176,9 +176,9 @@
 0 150 52DA11 // presumably drop all
 0 151 5610B6 // quest reward scaling
 0 201 53973E // fix spell duration overflow
-0 206 53BF9C // fix spell duration overflow
-0 203 53C0E1 // fix spell duration overflow
-0 204 53C21E // fix spell duration overflow
-0 205 53C52A // fix spell duration overflow
+1 202 53BFA1 // fix spell duration overflow
+1 202 53C0E1 // fix spell duration overflow
+1 202 53C21E // fix spell duration overflow
+1 202 53C52A // fix spell duration overflow
 ////////// 0: jmp, 1: call
 

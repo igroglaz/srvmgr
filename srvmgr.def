@@ -142,9 +142,5 @@ imp_ExtDiplomacy	@148
 imp_GMNoLevelDown	@149
 imp_DropAll			@150
 imp_ScaleSoftcoreExperienceReward	@151
-fix_spell_duration_overflow_0053973E @201
-fix_spell_duration_overflow_0053BFA1 @202
-fix_spell_duration_overflow_0053C0E1 @203
-fix_spell_duration_overflow_0053C21E @204
-fix_spell_duration_overflow_0053C52A @205
-fix_spell_duration_overflow			 @206
+fix_spell_duration_overflow_0053973E	@201
+fix_spell_duration_overflow				@202

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="ver10|Win32">
       <Configuration>ver10</Configuration>
@@ -10,13 +10,11 @@
     <ProjectGuid>{4E9F0332-7228-4E42-81F3-995607C259D2}</ProjectGuid>
     <RootNamespace>srvmgr</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -28,7 +26,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">postbuild\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">Release\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
@@ -70,6 +68,9 @@
     <ClCompile Include="a2server_utils.cpp" />
     <ClCompile Include="antiinvis.cpp" />
     <ClCompile Include="asm_unit_info.cpp" />
+    <ClCompile Include="bugs.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="charcheck.cpp" />
     <ClCompile Include="cheat_codes.cpp" />
     <ClCompile Include="cheat_codes_new.cpp" />
@@ -83,7 +84,6 @@
     <ClCompile Include="File.cpp" />
     <ClCompile Include="forbidden_items.cpp" />
     <ClCompile Include="itemex.cpp" />
-    <ClCompile Include="multiplayer_shop.cpp" />
     <ClCompile Include="pktmgr.cpp" />
     <ClCompile Include="player_info.cpp" />
     <ClCompile Include="protolayer_hat.cpp" />
@@ -92,6 +92,7 @@
     <ClCompile Include="scanrange.cpp" />
     <ClCompile Include="scanrange_check.cpp" />
     <ClCompile Include="shared.cpp" />
+    <ClCompile Include="spell_duration_fix.cpp" />
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />
     <ClCompile Include="unit_info.cpp" />
@@ -116,7 +117,6 @@
     <ClInclude Include="File.h" />
     <ClInclude Include="forbidden_items.h" />
     <ClInclude Include="itemex.h" />
-    <ClInclude Include="multiplayer_shop.h" />
     <ClInclude Include="pktmgr.h" />
     <ClInclude Include="player_info.h" />
     <ClInclude Include="protolayer_hat.h" />
@@ -139,8 +139,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
-    <None Include="postbuild\server.dis" />
     <None Include="ReadMe.txt" />
+    <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat" />
     <None Include="srvmgr.def" />
