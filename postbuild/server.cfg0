@@ -1,0 +1,26 @@
+[Settings]
+
+DeathExpMult = 0.9
+KilledExpMult = 0.9
+PKExpMult = 0.9
+RespawnExpMult2 = 1
+
+WarriorMaleMaxBody = 52
+WarriorMaleMaxReaction = 50
+WarriorMaleMaxMind = 48
+WarriorMaleMaxSpirit = 46
+
+WarriorFemaleMaxBody = 50
+WarriorFemaleMaxReaction = 52
+WarriorFemaleMaxMind = 46
+WarriorFemaleMaxSpirit = 48
+
+MageMaleMaxBody = 48
+MageMaleMaxReaction = 46
+MageMaleMaxMind = 52
+MageMaleMaxSpirit = 50
+
+MageFemaleMaxBody = 46
+MageFemaleMaxReaction = 48
+MageFemaleMaxMind = 50
+MageFemaleMaxSpirit = 52

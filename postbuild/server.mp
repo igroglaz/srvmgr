@@ -84,10 +84,10 @@
 0 58 51946B /// bug fix 0x0051946B
 //0 59 54D700 /// skip health potions
 0 60 53A5CB /// heal enemies
-//0 61 531278 /// death/respawn exp formulas // player_respawned 
+0 61 531278 /// death/respawn exp formulas // player_respawned 
 0 62 556A56 /// death/respawn exp formulas // player_died 
 0 63 557005 /// death/respawn exp formulas // player_killed 
-//0 64 556BE6 /// death/respawn exp formulas // player_pkilled 
+0 64 556BE6 /// death/respawn exp formulas // player_pkilled 
 0 65 50721C /// chat log
 0 66 5081DC /// dip change log
 0 67 5B56EF /// auto war log
@@ -180,5 +180,10 @@
 1 202 53C0E1 // fix spell duration overflow
 1 202 53C21E // fix spell duration overflow
 1 202 53C52A // fix spell duration overflow
-////////// 0: jmp, 1: call
 
+0 301 531650 // set_warrior_male_max_parameters
+0 302 53166C // set_warrior_female_max_parameters
+0 303 531696 // set_mage_male_max_parameters
+0 304 5316B8 // set_mage_female_max_parameters
+
+////////// 0: jmp, 1: call

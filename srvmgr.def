@@ -141,4 +141,10 @@ imp_GMNoLevelUp		@147
 imp_ExtDiplomacy	@148
 imp_GMNoLevelDown	@149
 imp_DropAll			@150
-imp_ScaleSoftcoreExperienceReward @151
+imp_ScaleSoftcoreExperienceReward	@151
+fix_spell_duration_overflow_0053973E	@201
+fix_spell_duration_overflow				@202
+set_warrior_male_max_parameters			@301
+set_warrior_female_max_parameters		@302
+set_mage_male_max_parameters			@303
+set_mage_female_max_parameters			@304
