@@ -141,8 +141,4 @@ imp_GMNoLevelUp		@147
 imp_ExtDiplomacy	@148
 imp_GMNoLevelDown	@149
 imp_DropAll			@150
-imp_ScaleSoftcoreExperienceReward	@151
-set_warrior_male_max_parameters			@152
-set_warrior_female_max_parameters		@153
-set_mage_male_max_parameters			@154
-set_mage_female_max_parameters			@155
+imp_ScaleSoftcoreExperienceReward @151

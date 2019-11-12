@@ -1377,7 +1377,9 @@ do_normal:
 		mov		eax, [ebp-0x14]
 		mov		ecx, [ebp-0x34]
 		mov		eax, [ecx+eax*4+0x23C]
-		mov		ecx, 0x00531278
+		imul	eax, 9
+		cdq
+		mov		ecx, 0x0053127C
 		jmp		ecx
 	}
 }
