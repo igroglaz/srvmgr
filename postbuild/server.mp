@@ -185,5 +185,7 @@
 0 302 53166C // set_warrior_female_max_parameters
 0 303 531696 // set_mage_male_max_parameters
 0 304 5316B8 // set_mage_female_max_parameters
+1 305 5396D9 // fix stone curse duration calculation
+1 305 53C32E // fix stone curse duration calculation
 
 ////////// 0: jmp, 1: call

@@ -148,3 +148,4 @@ set_warrior_male_max_parameters			@301
 set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303
 set_mage_female_max_parameters			@304
+fix_StoneCurseDurationCalculation		@305
