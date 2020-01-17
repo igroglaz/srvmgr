@@ -7,6 +7,7 @@
 #include <algorithm>
 
 unsigned long MAX_SKILL = 100;
+unsigned long MAX_EXP_ON_SKILL = 13779612;
 
 uint32_t ParseLogFlags(std::string string)
 {
@@ -432,6 +433,7 @@ int ReadConfig(const char* filename)
 					if(Config::ServerFlags & SVF_SOFTCORE)
 					{
 						MAX_SKILL = 110;
+						MAX_EXP_ON_SKILL = 35742360;
 						Config::ServerCaps |= SVC_SOFTCORE;
 					}
                 }

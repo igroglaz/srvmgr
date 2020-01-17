@@ -4,6 +4,7 @@
 #include "lib\utils.hpp"
 
 extern unsigned long MAX_SKILL;
+extern unsigned long MAX_EXP_ON_SKILL;
 
 
 struct MainCharacterParameters {

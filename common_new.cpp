@@ -586,11 +586,11 @@ void __declspec(naked) imp_Experience7()
 
 void FixExperience(void* t_ptr)
 {
-	if(MAX_SKILL > 100) return;
+	//if(MAX_SKILL > 100) return;
 
 	unsigned long* exp = (unsigned long*)((char*)t_ptr + 0x20);
 	for(int i = 0; i < 5; i++)
-		if(exp[i] > 13779612) exp[i] = 13779612;
+		if(exp[i] > MAX_EXP_ON_SKILL) exp[i] = MAX_EXP_ON_SKILL;
 
 	unsigned long* mny = (unsigned long*)((char*)t_ptr + 0x10);
 	if(*mny > 2147483647) *mny = 2147483647;
