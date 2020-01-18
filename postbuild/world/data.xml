@@ -1801,7 +1801,7 @@
 			<name>Ring</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>50</price>
+			<price>150</price>
 			<weight>3</weight>
 			<slot>4</slot>
 			<attackType>-1</attackType>
@@ -1869,7 +1869,7 @@
 			<name>Amulet</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>100</price>
+			<price>300</price>
 			<weight>5</weight>
 			<slot>5</slot>
 			<attackType>-1</attackType>
@@ -1949,7 +1949,7 @@
 			<name>Hat</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>1600</price>
+			<price>3200</price>
 			<weight>25</weight>
 			<slot>6</slot>
 			<attackType>-1</attackType>
@@ -2409,7 +2409,7 @@
 			<name>Cape</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>1200</price>
+			<price>2400</price>
 			<weight>40</weight>
 			<slot>8</slot>
 			<attackType>-1</attackType>
@@ -2493,7 +2493,7 @@
 			<name>Dress</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>2000</price>
+			<price>4000</price>
 			<weight>60</weight>
 			<slot>7</slot>
 			<attackType>-1</attackType>
@@ -2965,7 +2965,7 @@
 			<name>Gloves</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>800</price>
+			<price>1600</price>
 			<weight>5</weight>
 			<slot>10</slot>
 			<attackType>-1</attackType>
@@ -3149,7 +3149,7 @@
 			<name>Shoes</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>1000</price>
+			<price>2000</price>
 			<weight>15</weight>
 			<slot>12</slot>
 			<attackType>-1</attackType>
@@ -3993,17 +3993,17 @@
 			<name>Two Handed Sword</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>800</price>
+			<price>700</price>
 			<weight>40</weight>
 			<slot>1</slot>
 			<attackType>1</attackType>
 			<physicalMin>41</physicalMin>
 			<physicalMax>82</physicalMax>
-			<toHit>3</toHit>
+			<toHit>0</toHit>
 			<defence>0</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>8</charge>
+			<charge>6</charge>
 			<relax>4</relax>
 			<twoHanded>2</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -4297,7 +4297,7 @@
 			<name>War Hammer</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>800</price>
+			<price>700</price>
 			<weight>70</weight>
 			<slot>1</slot>
 			<attackType>3</attackType>
@@ -4307,7 +4307,7 @@
 			<defence>0</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>8</charge>
+			<charge>6</charge>
 			<relax>4</relax>
 			<twoHanded>2</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -4459,11 +4459,11 @@
 			<attackType>4</attackType>
 			<physicalMin>28</physicalMin>
 			<physicalMax>56</physicalMax>
-			<toHit>1</toHit>
+			<toHit>8</toHit>
 			<defence>6</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>6</charge>
+			<charge>7</charge>
 			<relax>4</relax>
 			<twoHanded>-1</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -4519,11 +4519,11 @@
 			<attackType>4</attackType>
 			<physicalMin>29</physicalMin>
 			<physicalMax>58</physicalMax>
-			<toHit>0</toHit>
+			<toHit>8</toHit>
 			<defence>10</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>6</charge>
+			<charge>7</charge>
 			<relax>4</relax>
 			<twoHanded>-1</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -4563,11 +4563,11 @@
 			<attackType>4</attackType>
 			<physicalMin>36</physicalMin>
 			<physicalMax>71</physicalMax>
-			<toHit>0</toHit>
+			<toHit>8</toHit>
 			<defence>10</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>6</charge>
+			<charge>7</charge>
 			<relax>4</relax>
 			<twoHanded>-1</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -4653,7 +4653,7 @@
 			<name>Two Handed Axe</name>
 			<shape>0</shape>
 			<material>0</material>
-			<price>900</price>
+			<price>780</price>
 			<weight>60</weight>
 			<slot>1</slot>
 			<attackType>2</attackType>
@@ -4663,7 +4663,7 @@
 			<defence>0</defence>
 			<absorbtion>0</absorbtion>
 			<range>-1</range>
-			<charge>8</charge>
+			<charge>6</charge>
 			<relax>4</relax>
 			<twoHanded>2</twoHanded>
 			<suitableFor>1</suitableFor>
@@ -5131,15 +5131,15 @@
 		</item>
 		<item>
 			<name>Scroll Control Spirit</name>
-			<price>2500000</price>
+			<price>1500000</price>
 			<weight>1</weight>
 			<effect>castSpell=Control_Spirit:50</effect>
 		</item>
 		<item>
 			<name>Scroll Teleport</name>
-			<price>3000000</price>
+			<price>50000</price>
 			<weight>1</weight>
-			<effect>castSpell=Teleport:25</effect>
+			<effect>castSpell=Teleport:24</effect>
 		</item>
 		<item>
 			<name>Scroll Heal</name>
@@ -5293,27 +5293,27 @@
 		</item>
 		<item>
 			<name>SuperScroll Bless</name>
-			<price>500000</price>
+			<price>750000</price>
 			<weight>1</weight>
 			<effect>castSpell=Bless:100</effect>
 		</item>
 		<item>
 			<name>SuperScroll Haste</name>
-			<price>300000</price>
+			<price>450000</price>
 			<weight>1</weight>
 			<effect>castSpell=Haste:100</effect>
 		</item>
 		<item>
 			<name>SuperScroll Control Spirit</name>
-			<price>5000000</price>
+			<price>3000000</price>
 			<weight>1</weight>
 			<effect>castSpell=Control_Spirit:100</effect>
 		</item>
 		<item>
 			<name>SuperScroll Teleport</name>
-			<price>6000000</price>
+			<price>500000</price>
 			<weight>1</weight>
-			<effect>castSpell=Teleport:40</effect>
+			<effect>castSpell=Teleport:60</effect>
 		</item>
 		<item>
 			<name>SuperScroll Heal</name>
@@ -5323,7 +5323,7 @@
 		</item>
 		<item>
 			<name>SuperScroll Summon</name>
-			<price>3000000</price>
+			<price>2000000</price>
 			<weight>1</weight>
 			<effect>castSpell=Summon:100</effect>
 		</item>
@@ -6547,11 +6547,11 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>131</physicalMin>
-			<physicalMax>262</physicalMax>
+			<physicalMin>33</physicalMin>
+			<physicalMax>99</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>385</toHit>
-			<defence>340</defence>
+			<defence>300</defence>
 			<absorbtion>5</absorbtion>
 			<charge>7</charge>
 			<relax>3</relax>
@@ -6573,7 +6573,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>10</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>17364</experience>
+			<experience>573640</experience>
 			<treasureGold>60</treasureGold>
 			<treasureGoldMin>30870</treasureGoldMin>
 			<treasureGoldMax>81206</treasureGoldMax>
@@ -6887,11 +6887,11 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>98</physicalMin>
-			<physicalMax>197</physicalMax>
+			<physicalMin>25</physicalMin>
+			<physicalMax>75</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>390</toHit>
-			<defence>335</defence>
+			<defence>275</defence>
 			<absorbtion>5</absorbtion>
 			<charge>21</charge>
 			<relax>7</relax>
@@ -6913,7 +6913,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>8</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>20837</experience>
+			<experience>450837</experience>
 			<treasureGold>60</treasureGold>
 			<treasureGoldMin>30870</treasureGoldMin>
 			<treasureGoldMax>81206</treasureGoldMax>
@@ -7202,7 +7202,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>30</spellPower>
+			<spellPower>120</spellPower>
 			<serverId>611</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -7227,11 +7227,11 @@
 			<speed>19</speed>
 			<rotationSpeed>19</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>262</physicalMin>
-			<physicalMax>517</physicalMax>
+			<physicalMin>66</physicalMin>
+			<physicalMax>198</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>420</toHit>
-			<defence>360</defence>
+			<defence>310</defence>
 			<absorbtion>12</absorbtion>
 			<charge>11</charge>
 			<relax>4</relax>
@@ -7253,7 +7253,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>86822</experience>
+			<experience>996822</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>92610</treasureGoldMin>
 			<treasureGoldMax>243618</treasureGoldMax>
@@ -7270,7 +7270,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>120</spellPower>
 			<serverId>803</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -7567,11 +7567,11 @@
 			<speed>21</speed>
 			<rotationSpeed>21</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>197</physicalMin>
-			<physicalMax>393</physicalMax>
+			<physicalMin>49</physicalMin>
+			<physicalMax>147</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>425</toHit>
-			<defence>355</defence>
+			<defence>295</defence>
 			<absorbtion>12</absorbtion>
 			<charge>21</charge>
 			<relax>7</relax>
@@ -7593,7 +7593,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>121551</experience>
+			<experience>921551</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>92610</treasureGoldMin>
 			<treasureGoldMax>243618</treasureGoldMax>
@@ -7868,7 +7868,7 @@
 			<experience>173644</experience>
 			<treasureGold>90</treasureGold>
 			<treasureGoldMin>51450</treasureGoldMin>
-			<treasureGoldMax>225572</treasureGoldMax>
+			<treasureGoldMax>225472</treasureGoldMax>
 			<treasureItem>40</treasureItem>
 			<treasureItemMin>102900</treasureItemMin>
 			<treasureItemMax>451145</treasureItemMax>
@@ -7907,11 +7907,11 @@
 			<speed>18</speed>
 			<rotationSpeed>18</rotationSpeed>
 			<scanRange>7</scanRange>
-			<physicalMin>655</physicalMin>
-			<physicalMax>910</physicalMax>
+			<physicalMin>164</physicalMin>
+			<physicalMax>492</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>450</toHit>
-			<defence>380</defence>
+			<defence>310</defence>
 			<absorbtion>22</absorbtion>
 			<charge>12</charge>
 			<relax>6</relax>
@@ -7933,7 +7933,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>347288</experience>
+			<experience>1472880</experience>
 			<treasureGold>90</treasureGold>
 			<treasureGoldMin>154350</treasureGoldMin>
 			<treasureGoldMax>676717</treasureGoldMax>
@@ -8222,7 +8222,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>30</spellPower>
+			<spellPower>120</spellPower>
 			<serverId>623</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -8247,11 +8247,11 @@
 			<speed>11</speed>
 			<rotationSpeed>11</rotationSpeed>
 			<scanRange>6</scanRange>
-			<physicalMin>492</physicalMin>
-			<physicalMax>747</physicalMax>
+			<physicalMin>123</physicalMin>
+			<physicalMax>369</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>430</toHit>
-			<defence>410</defence>
+			<defence>330</defence>
 			<absorbtion>39</absorbtion>
 			<charge>10</charge>
 			<relax>6</relax>
@@ -8273,7 +8273,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>520931</experience>
+			<experience>1750931</experience>
 			<treasureGold>90</treasureGold>
 			<treasureGoldMin>617400</treasureGoldMin>
 			<treasureGoldMax>812060</treasureGoldMax>
@@ -8290,7 +8290,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>806</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -8523,7 +8523,7 @@
 			<physicalMax>16</physicalMax>
 			<attackType>3</attackType>
 			<toHit>320</toHit>
-			<defence>255</defence>
+			<defence>254</defence>
 			<absorbtion>5</absorbtion>
 			<charge>8</charge>
 			<relax>2</relax>
@@ -8587,11 +8587,11 @@
 			<speed>32</speed>
 			<rotationSpeed>32</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>33</physicalMin>
-			<physicalMax>131</physicalMax>
+			<physicalMin>16</physicalMin>
+			<physicalMax>48</physicalMax>
 			<attackType>3</attackType>
 			<toHit>420</toHit>
-			<defence>355</defence>
+			<defence>285</defence>
 			<absorbtion>5</absorbtion>
 			<charge>8</charge>
 			<relax>2</relax>
@@ -8613,7 +8613,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>4</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>26047</experience>
+			<experience>360477</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -8649,7 +8649,7 @@
 			<mind>30</mind>
 			<spirit>50</spirit>
 			<healthMax>50</healthMax>
-			<healthRegeneration>200</healthRegeneration>
+			<healthRegeneration>0</healthRegeneration>
 			<manaMax>0</manaMax>
 			<manaRegeneration>0</manaRegeneration>
 			<speed>10</speed>
@@ -8667,7 +8667,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -8735,7 +8735,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -8803,7 +8803,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -8871,7 +8871,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -8928,10 +8928,10 @@
 			<rotationSpeed>13</rotationSpeed>
 			<scanRange>8</scanRange>
 			<physicalMin>33</physicalMin>
-			<physicalMax>262</physicalMax>
+			<physicalMax>99</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>410</toHit>
-			<defence>360</defence>
+			<defence>280</defence>
 			<absorbtion>12</absorbtion>
 			<charge>8</charge>
 			<relax>4</relax>
@@ -8939,7 +8939,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -8953,7 +8953,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>7</seeInvisible>
-			<experience>34729</experience>
+			<experience>247299</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -8970,7 +8970,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>808</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -9267,11 +9267,11 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>98</physicalMin>
-			<physicalMax>164</physicalMax>
+			<physicalMin>20</physicalMin>
+			<physicalMax>60</physicalMax>
 			<attackType>3</attackType>
 			<toHit>400</toHit>
-			<defence>320</defence>
+			<defence>250</defence>
 			<absorbtion>5</absorbtion>
 			<charge>6</charge>
 			<relax>2</relax>
@@ -9293,7 +9293,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>3</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>24310</experience>
+			<experience>443100</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -9607,11 +9607,11 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>10</scanRange>
-			<physicalMin>98</physicalMin>
-			<physicalMax>197</physicalMax>
+			<physicalMin>25</physicalMin>
+			<physicalMax>75</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>410</toHit>
-			<defence>310</defence>
+			<defence>225</defence>
 			<absorbtion>5</absorbtion>
 			<charge>8</charge>
 			<relax>4</relax>
@@ -9633,7 +9633,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>5</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>10419</experience>
+			<experience>154190</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -9650,7 +9650,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>810</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -9947,11 +9947,11 @@
 			<speed>21</speed>
 			<rotationSpeed>21</rotationSpeed>
 			<scanRange>6</scanRange>
-			<physicalMin>33</physicalMin>
-			<physicalMax>164</physicalMax>
+			<physicalMin>20</physicalMin>
+			<physicalMax>60</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>370</toHit>
-			<defence>340</defence>
+			<defence>260</defence>
 			<absorbtion>5</absorbtion>
 			<charge>10</charge>
 			<relax>4</relax>
@@ -9973,7 +9973,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>4</seeInvisible>
-			<experience>6946</experience>
+			<experience>166946</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -10287,11 +10287,11 @@
 			<speed>11</speed>
 			<rotationSpeed>11</rotationSpeed>
 			<scanRange>7</scanRange>
-			<physicalMin>33</physicalMin>
-			<physicalMax>288</physicalMax>
+			<physicalMin>49</physicalMin>
+			<physicalMax>147</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>400</toHit>
-			<defence>390</defence>
+			<defence>300</defence>
 			<absorbtion>18</absorbtion>
 			<charge>8</charge>
 			<relax>4</relax>
@@ -10313,7 +10313,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>27783</experience>
+			<experience>277833</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -10330,7 +10330,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>812</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -10364,7 +10364,7 @@
 			<charge>10</charge>
 			<relax>4</relax>
 			<protectionFire>30</protectionFire>
-			<protectionWater>50</protectionWater>
+			<protectionWater>30</protectionWater>
 			<protectionAir>30</protectionAir>
 			<protectionEarth>60</protectionEarth>
 			<protectionAstral>30</protectionAstral>
@@ -10439,9 +10439,9 @@
 			<charge>10</charge>
 			<relax>4</relax>
 			<protectionFire>30</protectionFire>
-			<protectionWater>65</protectionWater>
+			<protectionWater>30</protectionWater>
 			<protectionAir>30</protectionAir>
-			<protectionEarth>60</protectionEarth>
+			<protectionEarth>65</protectionEarth>
 			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
@@ -10514,9 +10514,9 @@
 			<charge>10</charge>
 			<relax>4</relax>
 			<protectionFire>50</protectionFire>
-			<protectionWater>75</protectionWater>
+			<protectionWater>50</protectionWater>
 			<protectionAir>50</protectionAir>
-			<protectionEarth>60</protectionEarth>
+			<protectionEarth>75</protectionEarth>
 			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
@@ -10592,9 +10592,9 @@
 			<charge>10</charge>
 			<relax>4</relax>
 			<protectionFire>65</protectionFire>
-			<protectionWater>85</protectionWater>
+			<protectionWater>65</protectionWater>
 			<protectionAir>65</protectionAir>
-			<protectionEarth>65</protectionEarth>
+			<protectionEarth>85</protectionEarth>
 			<protectionAstral>50</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
@@ -10609,7 +10609,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>781397</experience>
+			<experience>501397</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>1029000</treasureGoldMin>
 			<treasureGoldMax>1804578</treasureGoldMax>
@@ -10644,7 +10644,7 @@
 			<skillFire>100</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Flame Thrower</equipItem1>
 			<equipItem2></equipItem2>
@@ -10663,18 +10663,18 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>12</scanRange>
-			<physicalMin>328</physicalMin>
-			<physicalMax>492</physicalMax>
+			<physicalMin>61</physicalMin>
+			<physicalMax>183</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>470</toHit>
-			<defence>370</defence>
+			<defence>300</defence>
 			<absorbtion>18</absorbtion>
 			<charge>10</charge>
 			<relax>4</relax>
 			<protectionFire>65</protectionFire>
-			<protectionWater>85</protectionWater>
+			<protectionWater>65</protectionWater>
 			<protectionAir>65</protectionAir>
-			<protectionEarth>65</protectionEarth>
+			<protectionEarth>85</protectionEarth>
 			<protectionAstral>50</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
@@ -10689,7 +10689,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>8</seeInvisible>
-			<experience>1562794</experience>
+			<experience>3562794</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>3087000</treasureGoldMin>
 			<treasureGoldMax>5413734</treasureGoldMax>
@@ -10721,10 +10721,10 @@
 				<item>Stone Curse</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillFire>254</skillFire>
+			<skillWater>254</skillWater>
+			<skillAir>254</skillAir>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Flame Thrower</equipItem1>
 			<equipItem2></equipItem2>
@@ -10743,11 +10743,11 @@
 			<speed>30</speed>
 			<rotationSpeed>30</rotationSpeed>
 			<scanRange>12</scanRange>
-			<physicalMin>82</physicalMin>
-			<physicalMax>164</physicalMax>
+			<physicalMin>27</physicalMin>
+			<physicalMax>81</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>370</toHit>
-			<defence>310</defence>
+			<defence>210</defence>
 			<absorbtion>39</absorbtion>
 			<charge>8</charge>
 			<relax>6</relax>
@@ -10769,7 +10769,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>10</seeInvisible>
-			<experience>1</experience>
+			<experience>5000000</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>5000000</treasureGoldMin>
 			<treasureGoldMax>9000000</treasureGoldMax>
@@ -11101,10 +11101,10 @@
 				<item>Stone Curse</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
+			<skillFire>254</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Fire_Arrow:35}</equipItem1>
 			<equipItem2></equipItem2>
@@ -11123,11 +11123,11 @@
 			<speed>17</speed>
 			<rotationSpeed>17</rotationSpeed>
 			<scanRange>9</scanRange>
-			<physicalMin>131</physicalMin>
-			<physicalMax>262</physicalMax>
+			<physicalMin>33</physicalMin>
+			<physicalMax>99</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>410</toHit>
-			<defence>350</defence>
+			<defence>275</defence>
 			<absorbtion>12</absorbtion>
 			<charge>9</charge>
 			<relax>15</relax>
@@ -11149,7 +11149,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>144366</experience>
+			<experience>444366</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>308700</treasureGoldMin>
 			<treasureGoldMax>541373</treasureGoldMax>
@@ -11179,10 +11179,10 @@
 				<item>Stone Curse</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
+			<skillFire>254</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Fire_Arrow:99}</equipItem1>
 			<equipItem2></equipItem2>
@@ -11195,7 +11195,7 @@
 			<mind>5</mind>
 			<spirit>10</spirit>
 			<healthMax>100</healthMax>
-			<healthRegeneration>100</healthRegeneration>
+			<healthRegeneration>0</healthRegeneration>
 			<manaMax>0</manaMax>
 			<manaRegeneration>0</manaRegeneration>
 			<speed>16</speed>
@@ -11213,7 +11213,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11281,7 +11281,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11349,7 +11349,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11417,7 +11417,7 @@
 			<protectionWater>90</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11473,11 +11473,11 @@
 			<speed>19</speed>
 			<rotationSpeed>19</rotationSpeed>
 			<scanRange>7</scanRange>
-			<physicalMin>197</physicalMin>
-			<physicalMax>393</physicalMax>
+			<physicalMin>49</physicalMin>
+			<physicalMax>147</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>410</toHit>
-			<defence>370</defence>
+			<defence>290</defence>
 			<absorbtion>18</absorbtion>
 			<charge>8</charge>
 			<relax>6</relax>
@@ -11485,7 +11485,7 @@
 			<protectionWater>90</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11499,7 +11499,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>144366</experience>
+			<experience>644366</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>30870</treasureGoldMin>
 			<treasureGoldMax>189481</treasureGoldMax>
@@ -11516,7 +11516,7 @@
 			<spellProbability2>1</spellProbability2>
 			<spell3>Shield</spell3>
 			<spellProbability3>3</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>815</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -11553,7 +11553,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11621,7 +11621,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11689,7 +11689,7 @@
 			<protectionWater>90</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11745,11 +11745,11 @@
 			<speed>18</speed>
 			<rotationSpeed>18</rotationSpeed>
 			<scanRange>6</scanRange>
-			<physicalMin>102</physicalMin>
-			<physicalMax>205</physicalMax>
+			<physicalMin>26</physicalMin>
+			<physicalMax>78</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>325</toHit>
-			<defence>290</defence>
+			<defence>225</defence>
 			<absorbtion>12</absorbtion>
 			<charge>8</charge>
 			<relax>16</relax>
@@ -11757,7 +11757,7 @@
 			<protectionWater>90</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>30</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>30</protectionBlade>
 			<protectionAxe>75</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -11771,7 +11771,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>26934</experience>
+			<experience>569934</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>30870</treasureGoldMin>
 			<treasureGoldMax>189481</treasureGoldMax>
@@ -11788,7 +11788,7 @@
 			<spellProbability2>1</spellProbability2>
 			<spell3>Shield</spell3>
 			<spellProbability3>3</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>816</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -11807,7 +11807,7 @@
 			<mind>5</mind>
 			<spirit>10</spirit>
 			<healthMax>80</healthMax>
-			<healthRegeneration>100</healthRegeneration>
+			<healthRegeneration>0</healthRegeneration>
 			<manaMax>0</manaMax>
 			<manaRegeneration>0</manaRegeneration>
 			<speed>20</speed>
@@ -11825,7 +11825,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -11893,7 +11893,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -11961,7 +11961,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12021,7 +12021,7 @@
 			<physicalMax>66</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>320</toHit>
-			<defence>255</defence>
+			<defence>254</defence>
 			<absorbtion>12</absorbtion>
 			<charge>8</charge>
 			<relax>6</relax>
@@ -12029,7 +12029,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12085,11 +12085,11 @@
 			<speed>23</speed>
 			<rotationSpeed>23</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>262</physicalMin>
-			<physicalMax>197</physicalMax>
+			<physicalMin>66</physicalMin>
+			<physicalMax>198</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>420</toHit>
-			<defence>355</defence>
+			<defence>295</defence>
 			<absorbtion>12</absorbtion>
 			<charge>8</charge>
 			<relax>6</relax>
@@ -12097,7 +12097,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12111,7 +12111,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>198504</experience>
+			<experience>798504</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>154350</treasureGoldMin>
 			<treasureGoldMax>297755</treasureGoldMax>
@@ -12128,7 +12128,7 @@
 			<spellProbability2>1</spellProbability2>
 			<spell3>Invisibility</spell3>
 			<spellProbability3>3</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>817</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -12165,7 +12165,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12233,7 +12233,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12301,7 +12301,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12369,7 +12369,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12425,11 +12425,11 @@
 			<speed>23</speed>
 			<rotationSpeed>23</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>197</physicalMin>
-			<physicalMax>393</physicalMax>
+			<physicalMin>49</physicalMin>
+			<physicalMax>147</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>425</toHit>
-			<defence>350</defence>
+			<defence>275</defence>
 			<absorbtion>12</absorbtion>
 			<charge>20</charge>
 			<relax>5</relax>
@@ -12437,7 +12437,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12451,7 +12451,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>216549</experience>
+			<experience>616549</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>154350</treasureGoldMin>
 			<treasureGoldMax>297755</treasureGoldMax>
@@ -12468,7 +12468,7 @@
 			<spellProbability2>1</spellProbability2>
 			<spell3>Invisibility</spell3>
 			<spellProbability3>3</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>818</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -12505,7 +12505,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12522,7 +12522,7 @@
 			<experience>1200</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>29400</treasureGoldMin>
-			<treasureGoldMax>59255</treasureGoldMax>
+			<treasureGoldMax>59254</treasureGoldMax>
 			<treasureItem>30</treasureItem>
 			<treasureItemMin>29400</treasureItemMin>
 			<treasureItemMax>80802</treasureItemMax>
@@ -12582,7 +12582,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12649,11 +12649,11 @@
 			<speed>17</speed>
 			<rotationSpeed>17</rotationSpeed>
 			<scanRange>10</scanRange>
-			<physicalMin>64</physicalMin>
-			<physicalMax>128</physicalMax>
+			<physicalMin>16</physicalMin>
+			<physicalMax>48</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>390</toHit>
-			<defence>370</defence>
+			<defence>300</defence>
 			<absorbtion>4</absorbtion>
 			<charge>8</charge>
 			<relax>6</relax>
@@ -12661,7 +12661,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>50</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>75</protectionBludgeon>
@@ -12675,7 +12675,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>8</seeInvisible>
-			<experience>16080</experience>
+			<experience>460800</experience>
 			<treasureGold>80</treasureGold>
 			<treasureGoldMin>617400</treasureGoldMin>
 			<treasureGoldMax>1191021</treasureGoldMax>
@@ -12703,12 +12703,12 @@
 				<item>Drain Life</item>
 				<item>Heal</item>
 				<item>Invisibility</item>
-				<item>Prismatic Spray</item>
+				<item>Poison Cloud</item>
 				<item>Shield</item>
 			</knownSpells>
 			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
+			<skillWater>254</skillWater>
+			<skillAir>254</skillAir>
 			<skillEarth>100</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1></equipItem1>
@@ -12740,7 +12740,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>30</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -13887,7 +13887,7 @@
 			<skillFire>100</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Ice_Missile:35}</equipItem1>
 			<equipItem2></equipItem2>
@@ -13963,7 +13963,7 @@
 			<skillFire>100</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Ice_Missile:35}</equipItem1>
 			<equipItem2></equipItem2>
@@ -14031,14 +14031,14 @@
 			<knownSpells>
 				<count>3</count>
 				<item_version>0</item_version>
-				<item>Blizzard</item>
+				<item>Poison Cloud</item>
 				<item>Heal</item>
-				<item>Shield</item>
+				<item>Blizzard</item>
 			</knownSpells>
 			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
+			<skillWater>254</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>100</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Ice_Missile:99}</equipItem1>
 			<equipItem2></equipItem2>
@@ -14106,15 +14106,15 @@
 			<knownSpells>
 				<count>4</count>
 				<item_version>0</item_version>
-				<item>Ice Missile</item>
+				<item>Poison Cloud</item>
 				<item>Heal</item>
-				<item>Shield</item>
+				<item>Blizzard</item>
 				<item>Stone Curse</item>
 			</knownSpells>
 			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
+			<skillWater>254</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Ice_Missile:99}</equipItem1>
 			<equipItem2></equipItem2>
@@ -14182,15 +14182,15 @@
 			<knownSpells>
 				<count>4</count>
 				<item_version>0</item_version>
-				<item>Poison Cloud</item>
+				<item>Blizzard</item>
 				<item>Heal</item>
-				<item>Shield</item>
+				<item>Poison Cloud</item>
 				<item>Stone Curse</item>
 			</knownSpells>
 			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
+			<skillWater>254</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Wood Shaman Staff {castSpell=Ice_Missile:99}</equipItem1>
 			<equipItem2></equipItem2>
@@ -15160,7 +15160,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>180458</experience>
+			<experience>480458</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>308700</treasureGoldMin>
 			<treasureGoldMax>1543500</treasureGoldMax>
@@ -15191,9 +15191,9 @@
 				<item>Shield</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
+			<skillFire>254</skillFire>
 			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
+			<skillAir>254</skillAir>
 			<skillEarth>100</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Good Wood Staff {castSpell=Drain_Life:99}</equipItem1>
@@ -15239,7 +15239,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>180458</experience>
+			<experience>480458</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>308700</treasureGoldMin>
 			<treasureGoldMax>1543500</treasureGoldMax>
@@ -15270,9 +15270,9 @@
 				<item>Shield</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
+			<skillFire>254</skillFire>
 			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
+			<skillAir>254</skillAir>
 			<skillEarth>100</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Good Wood Staff {castSpell=Drain_Life:99}</equipItem1>
@@ -15318,7 +15318,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>6</seeInvisible>
-			<experience>270687</experience>
+			<experience>770687</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>926100</treasureGoldMin>
 			<treasureGoldMax>4630500</treasureGoldMax>
@@ -15350,9 +15350,9 @@
 				<item>Shield</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
+			<skillFire>254</skillFire>
 			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
+			<skillAir>254</skillAir>
 			<skillEarth>100</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Good Wood Staff {castSpell=Drain_Life:99}</equipItem1>
@@ -15384,7 +15384,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -15459,7 +15459,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>100</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -15534,7 +15534,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -15610,7 +15610,7 @@
 			<protectionWater>100</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -16178,11 +16178,11 @@
 			<speed>19</speed>
 			<rotationSpeed>19</rotationSpeed>
 			<scanRange>10</scanRange>
-			<physicalMin>131</physicalMin>
-			<physicalMax>262</physicalMax>
+			<physicalMin>33</physicalMin>
+			<physicalMax>99</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>410</toHit>
-			<defence>340</defence>
+			<defence>275</defence>
 			<absorbtion>12</absorbtion>
 			<charge>6</charge>
 			<relax>6</relax>
@@ -16204,7 +16204,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>82</wimpy>
 			<seeInvisible>4</seeInvisible>
-			<experience>17364</experience>
+			<experience>273640</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -16221,7 +16221,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>826</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -16518,11 +16518,11 @@
 			<speed>27</speed>
 			<rotationSpeed>27</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>131</physicalMin>
-			<physicalMax>262</physicalMax>
+			<physicalMin>33</physicalMin>
+			<physicalMax>99</physicalMax>
 			<attackType>3</attackType>
 			<toHit>430</toHit>
-			<defence>340</defence>
+			<defence>265</defence>
 			<absorbtion>8</absorbtion>
 			<charge>2</charge>
 			<relax>4</relax>
@@ -16544,7 +16544,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>20</wimpy>
 			<seeInvisible>4</seeInvisible>
-			<experience>20837</experience>
+			<experience>308370</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -16561,7 +16561,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>827</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -16598,7 +16598,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
 			<protectionBludgeon>100</protectionBludgeon>
@@ -16674,7 +16674,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
 			<protectionBludgeon>100</protectionBludgeon>
@@ -16750,7 +16750,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
 			<protectionBludgeon>100</protectionBludgeon>
@@ -16819,7 +16819,7 @@
 			<physicalMax>41</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>320</toHit>
-			<defence>255</defence>
+			<defence>254</defence>
 			<absorbtion>15</absorbtion>
 			<charge>6</charge>
 			<relax>10</relax>
@@ -16827,7 +16827,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>50</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
 			<protectionBludgeon>100</protectionBludgeon>
@@ -16876,7 +16876,7 @@
 			<skillFire>100</skillFire>
 			<skillWater>100</skillWater>
 			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Sonic Beam</equipItem1>
 			<equipItem2></equipItem2>
@@ -16895,11 +16895,11 @@
 			<speed>23</speed>
 			<rotationSpeed>23</rotationSpeed>
 			<scanRange>10</scanRange>
-			<physicalMin>33</physicalMin>
-			<physicalMax>288</physicalMax>
+			<physicalMin>41</physicalMin>
+			<physicalMax>123</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>420</toHit>
-			<defence>355</defence>
+			<defence>285</defence>
 			<absorbtion>15</absorbtion>
 			<charge>6</charge>
 			<relax>10</relax>
@@ -16907,7 +16907,7 @@
 			<protectionWater>0</protectionWater>
 			<protectionAir>0</protectionAir>
 			<protectionEarth>0</protectionEarth>
-			<protectionAstral>0</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>100</protectionBlade>
 			<protectionAxe>100</protectionAxe>
 			<protectionBludgeon>100</protectionBludgeon>
@@ -16921,7 +16921,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>137</wimpy>
 			<seeInvisible>4</seeInvisible>
-			<experience>260466</experience>
+			<experience>1604666</experience>
 			<treasureGold>100</treasureGold>
 			<treasureGoldMin>617400</treasureGoldMin>
 			<treasureGoldMax>812060</treasureGoldMax>
@@ -16953,10 +16953,10 @@
 				<item>Stone Curse</item>
 				<item>Wall of Fire</item>
 			</knownSpells>
-			<skillFire>100</skillFire>
-			<skillWater>100</skillWater>
-			<skillAir>100</skillAir>
-			<skillEarth>255</skillEarth>
+			<skillFire>254</skillFire>
+			<skillWater>254</skillWater>
+			<skillAir>254</skillAir>
+			<skillEarth>254</skillEarth>
 			<skillAstral>100</skillAstral>
 			<equipItem1>Sonic Beam</equipItem1>
 			<equipItem2></equipItem2>
@@ -17247,11 +17247,11 @@
 			<speed>25</speed>
 			<rotationSpeed>25</rotationSpeed>
 			<scanRange>8</scanRange>
-			<physicalMin>262</physicalMin>
-			<physicalMax>517</physicalMax>
+			<physicalMin>66</physicalMin>
+			<physicalMax>198</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>420</toHit>
-			<defence>360</defence>
+			<defence>290</defence>
 			<absorbtion>18</absorbtion>
 			<charge>6</charge>
 			<relax>8</relax>
@@ -17273,7 +17273,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>41</wimpy>
 			<seeInvisible>4</seeInvisible>
-			<experience>86822</experience>
+			<experience>868222</experience>
 			<treasureGold>0</treasureGold>
 			<treasureGoldMin>0</treasureGoldMin>
 			<treasureGoldMax>0</treasureGoldMax>
@@ -17290,7 +17290,7 @@
 			<spellProbability2>-1</spellProbability2>
 			<spell3></spell3>
 			<spellProbability3>-1</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>829</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -18868,7 +18868,7 @@
 			<protectionWater>10</protectionWater>
 			<protectionAir>10</protectionAir>
 			<protectionEarth>50</protectionEarth>
-			<protectionAstral>10</protectionAstral>
+			<protectionAstral>30</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -18936,7 +18936,7 @@
 			<protectionWater>20</protectionWater>
 			<protectionAir>20</protectionAir>
 			<protectionEarth>65</protectionEarth>
-			<protectionAstral>20</protectionAstral>
+			<protectionAstral>40</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -19004,7 +19004,7 @@
 			<protectionWater>30</protectionWater>
 			<protectionAir>30</protectionAir>
 			<protectionEarth>80</protectionEarth>
-			<protectionAstral>30</protectionAstral>
+			<protectionAstral>50</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -19072,7 +19072,7 @@
 			<protectionWater>50</protectionWater>
 			<protectionAir>50</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>50</protectionAstral>
+			<protectionAstral>60</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -19103,7 +19103,7 @@
 			<spellProbability2>10</spellProbability2>
 			<spell3>Stone Curse</spell3>
 			<spellProbability3>5</spellProbability3>
-			<spellPower>100</spellPower>
+			<spellPower>120</spellPower>
 			<serverId>2377</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -19128,11 +19128,11 @@
 			<speed>20</speed>
 			<rotationSpeed>18</rotationSpeed>
 			<scanRange>9</scanRange>
-			<physicalMin>492</physicalMin>
-			<physicalMax>1148</physicalMax>
+			<physicalMin>164</physicalMin>
+			<physicalMax>492</physicalMax>
 			<attackType>-1</attackType>
 			<toHit>470</toHit>
-			<defence>390</defence>
+			<defence>333</defence>
 			<absorbtion>43</absorbtion>
 			<charge>12</charge>
 			<relax>6</relax>
@@ -19140,7 +19140,7 @@
 			<protectionWater>66</protectionWater>
 			<protectionAir>66</protectionAir>
 			<protectionEarth>100</protectionEarth>
-			<protectionAstral>66</protectionAstral>
+			<protectionAstral>70</protectionAstral>
 			<protectionBlade>0</protectionBlade>
 			<protectionAxe>0</protectionAxe>
 			<protectionBludgeon>0</protectionBludgeon>
@@ -19154,7 +19154,7 @@
 			<withdraw>0</withdraw>
 			<wimpy>0</wimpy>
 			<seeInvisible>1</seeInvisible>
-			<experience>490000</experience>
+			<experience>4900000</experience>
 			<treasureGold>95</treasureGold>
 			<treasureGoldMin>1000000</treasureGoldMin>
 			<treasureGoldMax>2000000</treasureGoldMax>
@@ -19171,7 +19171,7 @@
 			<spellProbability2>10</spellProbability2>
 			<spell3>Stone Curse</spell3>
 			<spellProbability3>5</spellProbability3>
-			<spellPower>255</spellPower>
+			<spellPower>254</spellPower>
 			<serverId>2378</serverId>
 			<knownSpellsAreEmpty>1</knownSpellsAreEmpty>
 			<skillFire>-1</skillFire>
@@ -45091,7 +45091,7 @@
 			<empty>0</empty>
 			<name>Fire Ball</name>
 			<level>10</level>
-			<manaCost>30</manaCost>
+			<manaCost>40</manaCost>
 			<sphere>1</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
@@ -45118,12 +45118,12 @@
 			<empty>0</empty>
 			<name>Wall of Fire</name>
 			<level>20</level>
-			<manaCost>60</manaCost>
+			<manaCost>100</manaCost>
 			<sphere>1</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>5</maxRange>
+			<maxRange>4</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>4</distribution>
 			<radius>2</radius>
@@ -45199,12 +45199,12 @@
 			<empty>0</empty>
 			<name>Poison Cloud</name>
 			<level>20</level>
-			<manaCost>60</manaCost>
+			<manaCost>100</manaCost>
 			<sphere>2</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>5</maxRange>
+			<maxRange>4</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>3</distribution>
 			<radius>2</radius>
@@ -45226,12 +45226,12 @@
 			<empty>0</empty>
 			<name>Blizzard</name>
 			<level>20</level>
-			<manaCost>180</manaCost>
+			<manaCost>240</manaCost>
 			<sphere>4</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>6</maxRange>
+			<maxRange>4</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>5</distribution>
 			<radius>4</radius>
@@ -45334,7 +45334,7 @@
 			<empty>0</empty>
 			<name>Prismatic Spray</name>
 			<level>20</level>
-			<manaCost>70</manaCost>
+			<manaCost>60</manaCost>
 			<sphere>3</sphere>
 			<item>0</item>
 			<spellTarget>1</spellTarget>
@@ -45496,12 +45496,12 @@
 			<empty>0</empty>
 			<name>Wall of Earth</name>
 			<level>20</level>
-			<manaCost>30</manaCost>
+			<manaCost>60</manaCost>
 			<sphere>4</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>6</maxRange>
+			<maxRange>3</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>4</distribution>
 			<radius>2</radius>
@@ -45590,7 +45590,7 @@
 			<areaDuration>0</areaDuration>
 			<areaFrequency>0</areaFrequency>
 			<unitApplyMethod>2</unitApplyMethod>
-			<duration>10</duration>
+			<duration>20</duration>
 			<frequency>0</frequency>
 			<damageMin>-1</damageMin>
 			<damageMax>-1</damageMax>
@@ -45617,7 +45617,7 @@
 			<areaDuration>0</areaDuration>
 			<areaFrequency>0</areaFrequency>
 			<unitApplyMethod>2</unitApplyMethod>
-			<duration>10</duration>
+			<duration>20</duration>
 			<frequency>0</frequency>
 			<damageMin>-1</damageMin>
 			<damageMax>-1</damageMax>
@@ -45636,7 +45636,7 @@
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>5</maxRange>
+			<maxRange>1</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>1</distribution>
 			<radius>0</radius>
@@ -45658,12 +45658,12 @@
 			<empty>0</empty>
 			<name>Teleport</name>
 			<level>20</level>
-			<manaCost>180</manaCost>
+			<manaCost>360</manaCost>
 			<sphere>5</sphere>
 			<item>0</item>
 			<spellTarget>2</spellTarget>
 			<deliverySystem>1</deliverySystem>
-			<maxRange>1</maxRange>
+			<maxRange>3073</maxRange>
 			<effectSpeed>0</effectSpeed>
 			<distribution>1</distribution>
 			<radius>0</radius>
@@ -45732,7 +45732,7 @@
 			<defensive>-1</defensive>
 			<skillOffset>0</skillOffset>
 			<scrollCost>2000</scrollCost>
-			<bookCost>75000000</bookCost>
+			<bookCost>25000000</bookCost>
 			<effect></effect>
 		</item>
 		<item>
