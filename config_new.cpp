@@ -151,6 +151,9 @@ namespace Config
 	MainCharacterParameters WarriorFemaleMaxParameters = { 50, 52, 46, 48 };
 	MainCharacterParameters MageMaleMaxParameters = { 48, 46, 52, 50 };
 	MainCharacterParameters MageFemaleMaxParameters = { 46, 48, 50, 52 };
+
+	extern uint32_t MinQuestReward = 250;
+	extern uint32_t MaxQuestReward = 16383000;
  
 }
 
@@ -555,6 +558,17 @@ int ReadConfig(const char* filename)
                 {
                     if(!CheckInt(value)) return lnid;
 					Config::MageFemaleMaxParameters.Spirit = ReadIntegerParameter(value,15,200);
+                }
+
+                else if(parameter == ToLower("MinQuestReward"))
+                {
+                    if(!CheckInt(value)) return lnid;
+					Config::MinQuestReward = ReadIntegerParameter(value,250,16383000);
+                }
+                else if(parameter == ToLower("MaxQuestReward"))
+                {
+                    if(!CheckInt(value)) return lnid;
+					Config::MaxQuestReward = ReadIntegerParameter(value,Config::MinQuestReward,16383000);
                 }
 
                 else if(parameter == "servercaps")

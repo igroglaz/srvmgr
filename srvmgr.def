@@ -149,3 +149,9 @@ set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303
 set_mage_female_max_parameters			@304
 fix_StoneCurseDurationCalculation		@305
+set_warrior_male_max_parameters_taking_potion		@306
+set_warrior_female_max_parameters_taking_potion		@307
+set_mage_male_max_parameters_taking_potion			@308
+set_mage_female_max_parameters_taking_potion		@309
+bound_quest_reward						@310
+

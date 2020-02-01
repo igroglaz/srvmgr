@@ -187,5 +187,10 @@
 0 304 5316B8 // set_mage_female_max_parameters
 1 305 5396D9 // fix stone curse duration calculation
 1 305 53C32E // fix stone curse duration calculation
+0 306 566149 // set_warrior_male_max_parameters_taking_potion
+0 307 56617A // set_warrior_female_max_parameters_taking_potion
+0 308 5661B6 // set_mage_male_max_parameters_taking_potion
+0 309 5661EA // set_mage_female_max_parameters_taking_potion
+0 310 565406 // bound_quest_reward
 
 ////////// 0: jmp, 1: call

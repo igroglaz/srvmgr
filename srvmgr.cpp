@@ -372,20 +372,50 @@ void _declspec(naked) player_pkilled()
 	}
 }
 
+///////////////////////////////////////////////
+// extend checking max player parameters
+
+void _declspec(naked) set_max_player_parameters()
+{
+	__asm
+	{
+		pop edx
+		mov al,[ecx]MainCharacterParameters.Spirit
+		mov ss:[ebp+edx],al
+		pop edx
+		mov al,[ecx]MainCharacterParameters.Mind
+		mov ss:[ebp+edx],al
+		pop edx
+		mov al,[ecx]MainCharacterParameters.Reaction
+		mov ss:[ebp+edx],al
+		pop edx
+		mov al,[ecx]MainCharacterParameters.Body
+		mov ss:[ebp+edx],al
+		retn
+	}
+}
+
+// using potions
+
+void _declspec(naked) set_max_player_parameters_for_use_potion()
+{
+	__asm
+	{
+		push 0x005316C8
+		push -0x20
+		push -0x0C
+		push -0x24
+		push -0x08
+		jmp set_max_player_parameters
+	}
+}
+
 void _declspec(naked) set_warrior_male_max_parameters()
 { // 00531650
 	__asm
 	{
-		mov	cl,Config::WarriorMaleMaxParameters.Body
-		mov	byte ptr [ebp-0x20], cl
-		mov	cl,Config::WarriorMaleMaxParameters.Reaction
-		mov	byte ptr [ebp-0x0C], cl
-		mov	cl,Config::WarriorMaleMaxParameters.Mind
-		mov	byte ptr [ebp-0x24], cl
-		mov	cl,Config::WarriorMaleMaxParameters.Spirit
-		mov	byte ptr [ebp-0x08], cl
-		mov	ecx, 0x005316C8
-		jmp	ecx
+		lea ecx,Config::WarriorMaleMaxParameters
+		jmp set_max_player_parameters_for_use_potion
 	}
 }
 
@@ -393,16 +423,8 @@ void _declspec(naked) set_warrior_female_max_parameters()
 { // 53166C
 	__asm
 	{
-		mov	cl,Config::WarriorFemaleMaxParameters.Body
-		mov	byte ptr [ebp-0x20], cl
-		mov	cl,Config::WarriorFemaleMaxParameters.Reaction
-		mov	byte ptr [ebp-0x0C], cl
-		mov	cl,Config::WarriorFemaleMaxParameters.Mind
-		mov	byte ptr [ebp-0x24], cl
-		mov	cl,Config::WarriorFemaleMaxParameters.Spirit
-		mov	byte ptr [ebp-0x08], cl
-		mov	ecx, 0x005316C8
-		jmp	ecx
+		lea ecx,Config::WarriorFemaleMaxParameters
+		jmp set_max_player_parameters_for_use_potion
 	}
 }
 
@@ -410,16 +432,8 @@ void _declspec(naked) set_mage_male_max_parameters()
 { // 531696
 	__asm
 	{
-		mov	cl,Config::MageMaleMaxParameters.Body
-		mov	byte ptr [ebp-0x20], cl
-		mov	cl,Config::MageMaleMaxParameters.Reaction
-		mov	byte ptr [ebp-0x0C], cl
-		mov	cl,Config::MageMaleMaxParameters.Mind
-		mov	byte ptr [ebp-0x24], cl
-		mov	cl,Config::MageMaleMaxParameters.Spirit
-		mov	byte ptr [ebp-0x08], cl
-		mov	ecx, 0x005316C8
-		jmp	ecx
+		lea ecx,Config::MageMaleMaxParameters
+		jmp set_max_player_parameters_for_use_potion
 	}
 }
 
@@ -427,18 +441,85 @@ void _declspec(naked) set_mage_female_max_parameters()
 { // 5316B8
 	__asm
 	{
-		mov	cl,Config::MageFemaleMaxParameters.Body
-		mov	byte ptr [ebp-0x20], cl
-		mov	cl,Config::MageFemaleMaxParameters.Reaction
-		mov	byte ptr [ebp-0x0C], cl
-		mov	cl,Config::MageFemaleMaxParameters.Mind
-		mov	byte ptr [ebp-0x24], cl
-		mov	cl,Config::MageFemaleMaxParameters.Spirit
-		mov	byte ptr [ebp-0x08], cl
-		mov	ecx, 0x005316C8
-		jmp	ecx
+		lea ecx,Config::MageFemaleMaxParameters
+		jmp set_max_player_parameters_for_use_potion
 	}
 }
+
+// taking potions
+
+void _declspec(naked) set_max_player_parameters_for_take_potion()
+{
+	__asm
+	{
+		push 0x00566206
+		push -0x110
+		push -0x104
+		push -0x114
+		push -0x100
+		jmp set_max_player_parameters
+	}
+}
+
+void _declspec(naked) set_warrior_male_max_parameters_taking_potion()
+{ // 566149
+	__asm
+	{
+		lea ecx,Config::WarriorMaleMaxParameters
+		jmp set_max_player_parameters_for_take_potion
+	}
+}
+
+void _declspec(naked) set_warrior_female_max_parameters_taking_potion()
+{ // 56617A
+	__asm
+	{
+		lea ecx,Config::WarriorFemaleMaxParameters
+		jmp set_max_player_parameters_for_take_potion
+	}
+}
+
+void _declspec(naked) set_mage_male_max_parameters_taking_potion()
+{ // 5661B6
+	__asm
+	{
+		lea ecx,Config::MageMaleMaxParameters
+		jmp set_max_player_parameters_for_take_potion
+	}
+}
+
+void _declspec(naked) set_mage_female_max_parameters_taking_potion()
+{ // 5661EA
+	__asm
+	{
+		lea ecx,Config::MageFemaleMaxParameters
+		jmp set_max_player_parameters_for_take_potion
+	}
+}
+
+///////////////////////////////////////////////
+// extend inns
+
+void _declspec(naked) bound_quest_reward()
+{ // 565406
+	__asm
+	{
+		mov		eax, [ebp-0x18]
+		cmp		eax, Config::MinQuestReward
+		jge		not_too_low
+		mov		eax, Config::MinQuestReward
+not_too_low:
+		cmp		eax, Config::MaxQuestReward
+		jle		not_too_high
+		mov		eax, Config::MaxQuestReward
+not_too_high:
+		mov		[ebp-0x18], eax
+		mov		edx, 0x00565426
+        jmp		edx
+	}
+}
+
+///////////////////////////////////////////////
 
 void _declspec(naked) heal_enemies()
 { // 0053A5CB
