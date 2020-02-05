@@ -30,9 +30,6 @@
     <ClCompile Include="asm_unit_info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bugs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="charcheck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -126,10 +123,7 @@
     <ClCompile Include="lib\utils.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="python.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="spell_duration_fix.cpp">
+    <ClCompile Include="multiplayer_shop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -212,20 +206,18 @@
     <ClInclude Include="lib\utils.hpp">
       <Filter>Header Files\lib</Filter>
     </ClInclude>
-    <ClInclude Include="python.h">
+    <ClInclude Include="multiplayer_shop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
     <None Include="ReadMe.txt" />
-    <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="srvmgr.def">
-      <Filter>Source Files</Filter>
-    </None>
+    <None Include="postbuild\server.dis" />
+    <None Include="srvmgr.def" />
   </ItemGroup>
 </Project>

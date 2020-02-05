@@ -121,10 +121,10 @@ JMP    imp_UpdateInfo                    51E289 /// server info to hat
 JMP    imp_NetLayer_FirstConnect         4F0BEF /// first connection to hat 
 JMP    imp_MapClosed                     4FE2D0 /// close map 
 //JMP  imp_PrismaticSprayStruc           5ADB16 /// prismatic spray from building 
-JMP    imp_ShopCrash1                    549C34 /// shop crash #1 
-JMP    imp_ShopCrash2                    53D3E3 /// shop crash #2 
-JMP    imp_ShopCrash3                    54749F /// shop crash #3 
-JMP    imp_ShopCrash4                    544E46 /// shop crash #4 
+//JMP    imp_ShopCrash1                    549C34 /// shop crash #1 
+//JMP    imp_ShopCrash2                    53D3E3 /// shop crash #2 
+//JMP    imp_ShopCrash3                    54749F /// shop crash #3 
+//JMP    imp_ShopCrash4                    544E46 /// shop crash #4 
 JMP    imp_ServerChat                    494F84 /// <server>: chat 
 JMP    imp_PIadd                         535B4A /// create playerInfo struct 
 JMP    imp_PIdel                         535439 /// delete playerInfo struct 

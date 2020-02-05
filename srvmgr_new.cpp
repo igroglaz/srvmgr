@@ -30,17 +30,11 @@ void OnInitializeServer()
     Config::MapLoaded = false;
 	Config::ServerStarted = true;
 
-	Python_Init();
-	Python_CallMethod("on_server_init");
     //if((Config::ServerCaps & SVC_SAVE_DATABASE) && !SQL_Init()) Quit();
 }
 
 void OnInitializeMap()
 {
-	if(Config::MapLoaded)
-		Python_CallMethod("on_map_quit");
-
-	Python_CallMethod("on_map_init");
     byte* map_data = *(byte**)(0x00642C2C);
     Config::CurrentMapName  = *(const char**)(map_data+0x90);
     Config::CurrentMapTitle = *(const char**)(map_data+0x1C8);
@@ -76,8 +70,6 @@ void OnInitializeMapError(const char* mapfile, const char* error)
 
 void OnServerClosed()
 {
-	Python_CallMethod("on_server_quit");
-	Python_Quit();
 	Config::ExitingCleanly = true;
     Config::MapLoaded = false;
     ChangeWndTitle(Format("Server ID %u (map not loaded)", Config::ServerID).c_str());
