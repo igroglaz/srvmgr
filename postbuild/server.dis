@@ -1,0 +1,201 @@
+EXECUTABLE a2server.exe
+MODULE srvmgr.dll
+
+CALL test_if_valid_injection 4FE2ED
+JMP recv0 5BB69C
+JMP send0 5BB6C0
+JMP accept0 5BB6AE
+JMP closesocket0 5BB6A8
+CALL verify_damage 50403F ////apvp, autogodmode
+CALL verify_damage 5040DA ////apvp, autogodmode
+CALL verify_damage 5048E6 ////apvp, autogodmode
+CALL setthreadp 522EA1 /// skip SetThreadPriority
+CALL testeaxifzero 4FB4EB /// bug_0000
+CALL testeaxifzero 519548 /// bug_0001
+CALL testeaxifzero 52A54F /// bug_0002
+CALL testeaxifzero 52A590 /// bug_0003
+CALL testeaxifzero 52A780 /// bug_0004
+CALL testeaxifzero 52B1EA /// bug_0005
+CALL testeaxifzero 52B3D6 /// bug_0006
+CALL testeaxifzero 532E06 /// bug_0007
+CALL testeaxifzero 5393A5 /// bug_0008
+CALL testeaxifzero 5393AE /// bug_0008 #2
+CALL testeaxifzero 539B52 /// bug_0009
+CALL testeaxifzero 539FFE /// bug_000A
+CALL testeaxifzero 53BF64 /// bug_000B
+CALL testeaxifzero 53C736 /// bug_000C
+CALL testeaxifzero 53C73F /// bug_000C #2
+CALL testeaxifzero 53C94B /// bug_000D 
+CALL testeaxifzero 53CA30 /// bug_000E
+CALL testeaxifzero 53CA39 /// bug_000E #2
+CALL testeaxifzero 53D3C2 /// bug_000F
+CALL testeaxifzero 5458BF /// bug_0010 
+CALL testeaxifzero 5488A1 /// bug_0011
+CALL testeaxifzero 54F67D /// bug_0012
+CALL testeaxifzero 550E61 /// bug_0013
+CALL testeaxifzero 5564ED /// bug_0014
+CALL testeaxifzero 557045 /// bug_0015
+CALL testeaxifzero 5573DA /// bug_0016
+CALL testeaxifzero 5644B2 /// bug_0017
+CALL testeaxifzero 58AAF4 /// bug_0018
+CALL testeaxifzero 59AD34 /// bug_0019
+CALL testeaxifzero 5A86C4 /// bug_001A
+CALL testeaxifzero 5B3E6A /// bug_001B
+CALL testeaxifzero 5B409F /// bug_001C
+CALL testeaxifzero 5B40CC /// bug_001D
+JMP map_exit 4F94C0 /// выход с карты, кик всех
+JMP kick_char 502DE5 /// kick
+JMP part_of_camp 534E87 /// автосохр. при кемпе
+JMP part_of_disconnect 534F4C /// автосохр. при дисконн
+JMP part_of_save_char 4EE563 /// save_char w log
+JMP part_of_save 4F62B1 /// part_of_save
+JMP max_players 4F7E32 /// max_players
+JMP cheat_codes 502D0B /// cheat_codes
+JMP public_chat 50759F /// public_chat disable option
+JMP private_chat 5073DD /// private_chat disable option
+JMP shout_chat 50775C /// shout_chat disable option
+JMP self_damage 5084F5 /// self_damage fix damage_by
+JMP part_of_kill 5569EF /// fix healthmax <= 0 bug
+JMP sub_5446C7 5446C7 /// fix shop bug
+JMP camp 50512E /// camp from building...
+JMP enter_b 505353 /// enter to building
+JMP cancel_camp 534B59 /// cancel camp
+JMP enter_shop 50623D /// camp from shop bug
+JMP enter_inn 5062FB /// camp from inn bug
+JMP left_shop 5065E5 /// left shop log
+JMP left_inn 5063B6 /// left inn log
+//JMP change_dip 508479 /// log dip_ch
+///JMP area_cast 5054FF /// log area_casts - недореализовано
+JMP public_chat_2 50764A /// disable sending public message to players not on the map
+JMP private_chat_2 507489 /// disable sending private group message to players not on the map
+JMP private_chat_3 5073B6 /// disable sending private message to players not on the map
+//JMP ;exc_handler 6081F0 /// exception handler
+JMP adm_invis 51C901 /// admin invis
+JMP adm_dip 4FFD77 /// admin diplomacy: monsters_alliance
+JMP adm_dip_2 4FFEA6 /// admin diplomacy: players_alliance
+//CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"
+JMP loading_map_bug 4F1D4A /// loading map bug
+JMP chat_crash_fix 50716D /// chat crash fix
+JMP packet_recvd 504ABC /// invalid packet crash fix
+JMP add_player_to_map 52C409 /// speed hack fix
+///JMP print_packet_info 505872 /// print packet info
+JMP redir_log 43A872 /// redir log
+JMP pkill_msg 556C0F /// pkill own
+//JMP zombie_gen 53B6D3 /// zombie_gen
+//JMP skeleton_gen 53B7EB /// skeleton_gen
+//JMP ghost_gen 53B910 /// ghost_gen
+JMP fix_0051946B 51946B /// bug fix 0x0051946B
+//JMP add_health_potions 54D700 /// skip health potions
+JMP heal_enemies 53A5CB /// heal enemies
+JMP player_respawned 531278 /// death/respawn exp formulas // player_respawned 
+JMP player_died 556A56 /// death/respawn exp formulas // player_died 
+JMP player_killed 557005 /// death/respawn exp formulas // player_killed 
+JMP player_pkilled 556BE6 /// death/respawn exp formulas // player_pkilled 
+JMP chat_log 50721C /// chat log
+JMP log_dip_change 5081DC /// dip change log
+JMP auto_war_1 5B56EF /// auto war log
+JMP auto_war_2 5B57C6 /// auto war log
+JMP load_config 482CCC /// config
+JMP server_closed 4F2FD3 /// server_closed (only_one_map)
+JMP player_respawned_init 53118A /// player_respawned_init
+JMP skip_returning_character_log 4F13F4 /// skip_returning_character_log
+JMP skip_updating_character_log 4F117E /// skip_updating_character_log
+//JMP unit_change_single_send 519346 /// unit_change_single_send
+//JMP broadcast_move_turn_attack_packet 51B99E /// move_turn_attack_packet
+//JMP effect_hang_gone_packet 51BDAD /// effect_hang_gone_packet
+//JMP unit_change_single_send_2 5196F4 /// ucss2
+//JMP effect_gone_1 53EF55 /// effect_gone 1
+//JMP effect_gone_2 53F118 /// effect_gone 2
+//JMP effect_packet_1 51BAC3 /// effect_packet_1
+//JMP effect_packet_2 51BBA7 /// effect_packet_2
+//JMP effect_packet_3 51BE21 /// effect_packet_3
+//JMP effect_packet_4 51BEB0 /// effect_packet_4
+JMP imp_ParseConfig 4F7188 /// parse config v2.0
+JMP imp_ServerStarted 4F09DB /// "Server started"
+JMP imp_LoadedMap 4F191D /// "Loaded map ..."
+JMP imp_LoadingMap 4F1471 /// loading map
+JMP imp_MapLoadError 59B969 /// map load error
+JMP imp_ServerClosed 4F2FC3 /// "Server closed"
+JMP imp_LocalMessageBox 5EB49E /// CWnd::MessageBox
+JMP imp_ServerTic 4FBB79 /// OnServerTic
+JMP imp_ShopError 54DBA1 /// "Shop error: amount > 1000"
+JMP imp_UpdateInfo 51E289 /// server info to hat
+JMP imp_NetLayer_FirstConnect 4F0BEF /// first connection to hat
+JMP imp_MapClosed 4FE2D0 /// close map
+//JMP imp_PrismaticSprayStruc 5ADB16 /// prismatic spray from building
+//JMP imp_ShopCrash1 549C34 /// shop crash #1
+//JMP imp_ShopCrash2 53D3E3 /// shop crash #2
+//JMP imp_ShopCrash3 54749F /// shop crash #3
+//JMP imp_ShopCrash4 544E46 /// shop crash #4
+JMP imp_ServerChat 494F84 /// <server>: chat
+JMP imp_PIadd 535B4A /// create playerInfo struct
+JMP imp_PIdel 535439 /// delete playerInfo struct
+JMP imp_CheckShield 506A53 /// shield bug disable
+JMP imp_ReturnFail 52C45E /// return to map fail: forced return
+JMP imp_OnCast1 58FF16 /// gm cast #1
+JMP imp_OnCast2 58FF96 /// gm cast #2
+JMP imp_OnCast3 58FEA8 /// gm cast #3
+JMP imp_OnCast4 5902D9 /// gm cast #4
+
+JMP imp_Experience1 530D47 /// experience 110 #1
+JMP imp_Experience2 530AEA /// experience 110 #2
+JMP imp_Experience3 530918 /// experience 110 #3
+JMP imp_Experience4 52CD2D /// experience 110 #4
+JMP imp_Experience5 531C52 /// experience 110 #5
+JMP imp_Experience6 531D03 /// experience 110 #6
+JMP imp_Experience7 5610DC /// experience 110 #7
+JMP imp_FixExperience 4F6888 /// fix experience overflow
+JMP imp_FixMoney 534AC1 /// fix money overflow
+//JMP imp_DropEverything 52E74A /// drop spells
+JMP imp_LogIP 4FF783 /// log IP ("has joined the game" message)
+//JMP imp_UICreate1 53232D /// human created
+//JMP imp_UICreate2 53239A /// human created
+//JMP imp_UIDelete1 57BBA0 /// human deleted
+//JMP imp_UICreate3 528AEF /// unit created
+//JMP imp_UICreate4 528C97 /// unit created
+//JMP imp_UICreate5 528E24 /// unit created
+//JMP imp_UICreate6 528FB7 /// unit created
+//JMP imp_UICreate7 529167 /// unit created
+//JMP imp_UIDelete2 57B860 /// unit deleted
+//JMP imp_UICreate8 52FF9E /// humanoid created
+//JMP imp_UICreate9 52FFF2 /// humanoid created
+//JMP imp_UIDelete3 57BB70 /// humanoid deleted
+//JMP imp_UseItems 505A0C /// intercept item packets
+JMP imp_CreateItemParameter 54F041 /// item creation: body=2 max
+JMP imp_CreateItemParameterCall1 54EBC9 /// item creation call #1
+JMP imp_CreateItemParameterCall2 54EC68 /// item creation call #2
+JMP imp_CreateItemParameterCall3 54ED35 /// item creation call #3
+//JMP imp_DamagePhysical 536B31
+JMP imp_UpgradeItem 5669A6 /// item upgrading
+JMP imp_LoadItem 4F52FA /// item loading (from a2c)
+JMP test_health 53FA2B // test
+JMP stop_unit_attack 505563 /// stop player from attacking invisible unit
+JMP stop_unit_cast 50564D /// stop player from casting scrolls onto invisible unit
+JMP stop_mage_cast 5055FD /// stop player from casting spells onto invisible unit
+JMP imp_CheckItemExclusion 54DDBA // item exclusion check
+JMP imp_GMNoLevelUp 530745 // imp_GMNoLevelUp
+//JMP imp_ExtDiplomacy 4FFD18 /// ext diplomacy
+JMP imp_GMNoLevelDown 53126B // imp_GMNoLevelDown
+JMP imp_DropAll 52DA11 // presumably drop all
+JMP imp_ScaleSoftcoreExperienceReward 5610B6 // quest reward scaling
+JMP imp_LoadShopData 59C66E // load shop data from alm
+JMP imp_EnterCustomShop 502C50 // enter custom shop instead of normal one
+JMP fix_spell_duration_overflow_0053973E 53973E // fix spell duration overflow
+CALL fix_spell_duration_overflow 53BFA1 // fix spell duration overflow
+CALL fix_spell_duration_overflow 53C0E1 // fix spell duration overflow
+CALL fix_spell_duration_overflow 53C21E // fix spell duration overflow
+CALL fix_spell_duration_overflow 53C52A // fix spell duration overflow
+
+JMP set_warrior_male_max_parameters 531650 // set_warrior_male_max_parameters
+JMP set_warrior_female_max_parameters 53166C // set_warrior_female_max_parameters
+JMP set_mage_male_max_parameters 531696 // set_mage_male_max_parameters
+JMP set_mage_female_max_parameters 5316B8 // set_mage_female_max_parameters
+CALL fix_StoneCurseDurationCalculation 5396D9 // fix stone curse duration calculation
+CALL fix_StoneCurseDurationCalculation 53C32E // fix stone curse duration calculation
+JMP set_warrior_male_max_parameters_taking_potion 566149 // set_warrior_male_max_parameters_taking_potion
+JMP set_warrior_female_max_parameters_taking_potion 56617A // set_warrior_female_max_parameters_taking_potion
+JMP set_mage_male_max_parameters_taking_potion 5661B6 // set_mage_male_max_parameters_taking_potion
+JMP set_mage_female_max_parameters_taking_potion 5661EA // set_mage_female_max_parameters_taking_potion
+JMP bound_quest_reward 565406 // bound_quest_reward
+
+///////// jmp, 1: call
