@@ -23,7 +23,8 @@ cd ..
 for /f %%A in (srvlist.txt) do call p patches\%%A a2server.exe
 
 call log adding srvmgr...
-add_dll a2server.exe srvmgr.dll server.mp >nul
+rem add_dll a2server.exe srvmgr.dll server.mp >nul
+DLLInject server.dis
 
 del /Q /F release\*.*
 move /Y a2server.exe release >nul

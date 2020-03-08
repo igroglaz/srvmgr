@@ -30,9 +30,6 @@
     <ClCompile Include="asm_unit_info.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bugs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="charcheck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -225,13 +222,11 @@
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
     <None Include="ReadMe.txt" />
-    <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="srvmgr.def">
-      <Filter>Source Files</Filter>
-    </None>
+    <None Include="postbuild\server.dis" />
+    <None Include="srvmgr.def" />
   </ItemGroup>
 </Project>

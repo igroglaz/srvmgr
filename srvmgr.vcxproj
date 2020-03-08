@@ -68,9 +68,6 @@
     <ClCompile Include="a2server_utils.cpp" />
     <ClCompile Include="antiinvis.cpp" />
     <ClCompile Include="asm_unit_info.cpp" />
-    <ClCompile Include="bugs.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="charcheck.cpp" />
     <ClCompile Include="cheat_codes.cpp" />
     <ClCompile Include="cheat_codes_new.cpp" />
@@ -141,8 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
+    <None Include="postbuild\server.dis" />
     <None Include="ReadMe.txt" />
-    <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat" />
     <None Include="srvmgr.def" />

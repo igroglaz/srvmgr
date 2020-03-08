@@ -363,18 +363,18 @@ int ReadConfig(const char* filename)
                             gmode = GAMEMODE_COOPERATIVE;
                         else if(value == "deathmatch")
                             gmode = GAMEMODE_DEATHMATCH;
-                        else if(value == "teamplay")
-                            gmode = GAMEMODE_TEAMPLAY;
+                        else if(value == "softcore")
+                            gmode = GAMEMODE_SOFTCORE;
                         else if(value == "arena")
                             gmode = GAMEMODE_ARENA;
-                        else if(value == "ctf")
-                            gmode = GAMEMODE_CTF;
+                        else if(value == "sandbox")
+                            gmode = GAMEMODE_SANDBOX;
                         else return lnid;
                     }
 
                     Config::GameMode = gmode;
-                    if(gmode == GAMEMODE_CTF)
-                        *(uint32_t*)(0x006D1648) = GAMEMODE_ARENA; // для сервера это арена
+                    if(gmode == GAMEMODE_SANDBOX || gmode == GAMEMODE_SOFTCORE)
+                        *(uint32_t*)(0x006D1648) = GAMEMODE_COOPERATIVE; // для сервера это кооп
                     else *(uint32_t*)(0x006D1648) = gmode;
                 }
                 else if(parameter == "logintimeout")
@@ -692,6 +692,15 @@ int ReadConfig(const char* filename)
             }
         }
     }
+
+	if (Config::GameMode == GAMEMODE_SOFTCORE)
+	{
+		Config::ServerFlags = Config::ServerFlags & ~(SVF_SANDBOX) | SVF_SOFTCORE;
+	}
+	else if (Config::GameMode == GAMEMODE_SANDBOX)
+	{
+		Config::ServerFlags = Config::ServerFlags & ~(SVF_SOFTCORE) | SVF_SANDBOX;
+	}
 
     f_cfg.close();
 
