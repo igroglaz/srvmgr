@@ -108,6 +108,8 @@ namespace Config
     std::string CurrentMapTitle = "N/A";
 
     uint32_t ServerFlags = 0;
+	float InventoryDropPropapility = 1;
+	float WearDropPropapility = 1;
     bool MapLoaded = false;
     uint32_t ProtocolVersion = 7;
 
@@ -160,6 +162,13 @@ namespace Config
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
 {
 	int32_t val = StrToInt(value);
+	if(val < MinValue) val = MinValue;
+	if(val > MaxValue) val = MaxValue;
+	return val;
+}
+float ReadFloatParameter(std::string value, float MinValue, float MaxValue)
+{
+	float val = StrToFloat(value);
 	if(val < MinValue) val = MinValue;
 	if(val > MaxValue) val = MaxValue;
 	return val;
@@ -570,7 +579,19 @@ int ReadConfig(const char* filename)
                     if(!CheckInt(value)) return lnid;
 					Config::MaxQuestReward = ReadIntegerParameter(value,Config::MinQuestReward,16383000);
                 }
-
+                else if(parameter == ToLower("InventoryDropPropapility"))
+                {
+					if(!CheckFloat(value)) return lnid;
+					Config::InventoryDropPropapility = ReadFloatParameter(value,0,1);
+					Printf("InventoryDropPropapility: %s %f", value.c_str(), Config::InventoryDropPropapility);
+                }
+                else if(parameter == ToLower("WearDropPropapility"))
+                {
+					if(!CheckFloat(value)) return lnid;
+					Config::WearDropPropapility = ReadFloatParameter(value,0,1);
+					Printf("InventoryDropPropapility: %s %f", value.c_str(), Config::WearDropPropapility);
+                }
+				
                 else if(parameter == "servercaps")
                 {
                     value = Trim(ToLower(value));

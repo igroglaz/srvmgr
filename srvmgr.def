@@ -144,6 +144,9 @@ imp_DropAll			@150
 imp_ScaleSoftcoreExperienceReward	@151
 fix_spell_duration_overflow_0053973E	@201
 fix_spell_duration_overflow				@202
+imp_drop_partially						@203
+imp_check_unit_dmg						@204
+imp_check_unit_man						@205
 set_warrior_male_max_parameters			@301
 set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303

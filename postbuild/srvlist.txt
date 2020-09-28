@@ -11,4 +11,5 @@ SRV_MAXP.xck
 SRV_POD.xck
 srv_pvm.xck
 rem SRV_UPD0.xck
+srv_drop.xck
 srv_range.fc

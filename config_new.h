@@ -55,6 +55,9 @@ namespace Config
     extern double PKExpMult;
     extern double RespawnExpMult2;
 
+	extern float InventoryDropPropapility;
+	extern float WearDropPropapility;
+
 	extern MainCharacterParameters WarriorMaleMaxParameters;
 	extern MainCharacterParameters WarriorFemaleMaxParameters;
 	extern MainCharacterParameters MageMaleMaxParameters;

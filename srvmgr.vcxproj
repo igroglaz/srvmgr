@@ -43,11 +43,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Python27\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies);python27.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)\postbuild\srvmgr.dll</OutputFile>
       <ModuleDefinitionFile>srvmgr.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -59,8 +58,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(OutDir)srvmgr.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Python27\libs\</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>start /d "$(ProjectDir)\postbuild" cmd /c "$(ProjectDir)\postbuild\srvmgr.bat"</Command>
@@ -70,9 +68,6 @@
     <ClCompile Include="a2server_utils.cpp" />
     <ClCompile Include="antiinvis.cpp" />
     <ClCompile Include="asm_unit_info.cpp" />
-    <ClCompile Include="bugs.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ver10|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="charcheck.cpp" />
     <ClCompile Include="cheat_codes.cpp" />
     <ClCompile Include="cheat_codes_new.cpp" />
@@ -86,16 +81,20 @@
     <ClCompile Include="File.cpp" />
     <ClCompile Include="forbidden_items.cpp" />
     <ClCompile Include="itemex.cpp" />
+    <ClCompile Include="multiplayer_shop.cpp" />
+    <ClCompile Include="partial_drop.cpp" />
     <ClCompile Include="pktmgr.cpp" />
     <ClCompile Include="player_info.cpp" />
     <ClCompile Include="protolayer_hat.cpp" />
     <ClCompile Include="pvm2.cpp" />
+    <ClCompile Include="python.cpp" />
     <ClCompile Include="scanrange.cpp" />
     <ClCompile Include="scanrange_check.cpp" />
     <ClCompile Include="shared.cpp" />
     <ClCompile Include="spell_duration_fix.cpp" />
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />
+    <ClCompile Include="this_call.cpp" />
     <ClCompile Include="unit_info.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="zxmgr.cpp" />
@@ -118,17 +117,21 @@
     <ClInclude Include="File.h" />
     <ClInclude Include="forbidden_items.h" />
     <ClInclude Include="itemex.h" />
+    <ClInclude Include="multiplayer_shop.h" />
     <ClInclude Include="pktmgr.h" />
     <ClInclude Include="player_info.h" />
     <ClInclude Include="protolayer_hat.h" />
     <ClInclude Include="pvm2.h" />
+    <ClInclude Include="python.h" />
     <ClInclude Include="scanrange.h" />
     <ClInclude Include="shared.h" />
     <ClInclude Include="srvmgr.h" />
     <ClInclude Include="srvmgr_new.h" />
     <ClInclude Include="srvmgrdef.h" />
     <ClInclude Include="syslib.h" />
+    <ClInclude Include="this_call.h" />
     <ClInclude Include="unit_info.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="zxmgr.h" />
     <ClInclude Include="lib\hat2.hpp" />
     <ClInclude Include="lib\packet.hpp" />
@@ -139,8 +142,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
+    <None Include="postbuild\server.dis" />
     <None Include="ReadMe.txt" />
-    <None Include="postbuild\server.mp" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat" />
     <None Include="srvmgr.def" />
