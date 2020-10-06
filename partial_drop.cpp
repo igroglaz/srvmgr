@@ -38,15 +38,6 @@ void a2insert(T_LINKEDLIST * list, T_INVENTORY_ITEM* item){
 
 T_INVENTORY_ITEM* a2remove(T_LINKEDLIST * list, int pos, int n){
 	return (T_INVENTORY_ITEM*)this_call(0x00552E42, (void*)list, (void*)pos, (void*)n);
-	//__asm{
-	//	mov		ecx, n
-	//	push	ecx
-	//	mov		ecx, pos
-	//	push	ecx
-	//	mov		ecx, list
-	//	mov		edx, 0x00552E42
-	//	call	edx
-	//}
 }
 
 T_INVENTORY_ITEM* unit_unwear_item(T_UNIT * unit, T_INVENTORY_ITEM* item){
@@ -168,23 +159,12 @@ void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_LINKEDLIST * item_list_dst,
 }
 
 int CopyInventoryToMap(T_UNIT *unit, T_LINKEDLIST *inventory, int a3, int a4){
-#define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
+	#define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
 	return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
-	//__asm{
-	//	mov		ecx, a4
-	//	push	ecx
-	//	mov		ecx, a3
-	//	push	ecx
-	//	mov		ecx, inventory
-	//	push	ecx
-	//	mov		ecx, unit	// this
-	//	mov		edx, FUNC_COPY_INVENTORY_TO_MAP
-	//	call    edx 
-	//}
 }
 const int T_UNIT_SKIP_MAN = 0x1102;
-const int T_UNIT_SKIP_DROP = 0xBA18;
-const int T_UNIT_SKIP_DMG = 0xA203;
+const int T_UNIT_SKIP_DROP = 0xBA38;
+const int T_UNIT_SKIP_DMG = 0xB203;
 bool __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec){
 	if(unit && unit->inventory && unit->inventory->size >= 1){
 		T_SRV_LINKED_NODE* node = unit->inventory->first_node;
