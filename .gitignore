@@ -19,3 +19,7 @@ postbuild/patches/log.txt
 srvmgr.suo
 postbuild/release
 *.user
+/srvmgr.sdf
+/srvmgr.opensdf
+/ipch/
+/postbuild/tmp_world/

@@ -26,7 +26,8 @@ call log adding srvmgr...
 rem add_dll a2server.exe srvmgr.dll server.mp >nul
 DLLInject server.dis
 
-del /Q /F release\*.*
+del /Q /F release
+mkdir release
 move /Y a2server.exe release >nul
 move /Y srvmgr.dll release >nul
 

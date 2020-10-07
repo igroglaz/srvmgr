@@ -123,9 +123,6 @@
     <ClCompile Include="lib\utils.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="python.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="spell_duration_fix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -217,9 +214,6 @@
     </ClInclude>
     <ClInclude Include="lib\utils.hpp">
       <Filter>Header Files\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="python.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="multiplayer_shop.h">
       <Filter>Header Files</Filter>

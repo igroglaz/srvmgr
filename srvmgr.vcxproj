@@ -43,10 +43,11 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Python27\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+	  </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies);python27.lib</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(ProjectDir)\postbuild\srvmgr.dll</OutputFile>
       <ModuleDefinitionFile>srvmgr.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -58,7 +59,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(OutDir)srvmgr.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Python27\libs\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+	  </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>start /d "$(ProjectDir)\postbuild" cmd /c "$(ProjectDir)\postbuild\srvmgr.bat"</Command>
@@ -87,7 +89,6 @@
     <ClCompile Include="player_info.cpp" />
     <ClCompile Include="protolayer_hat.cpp" />
     <ClCompile Include="pvm2.cpp" />
-    <ClCompile Include="python.cpp" />
     <ClCompile Include="scanrange.cpp" />
     <ClCompile Include="scanrange_check.cpp" />
     <ClCompile Include="shared.cpp" />
@@ -122,7 +123,6 @@
     <ClInclude Include="player_info.h" />
     <ClInclude Include="protolayer_hat.h" />
     <ClInclude Include="pvm2.h" />
-    <ClInclude Include="python.h" />
     <ClInclude Include="scanrange.h" />
     <ClInclude Include="shared.h" />
     <ClInclude Include="srvmgr.h" />
