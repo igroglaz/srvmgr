@@ -59,8 +59,9 @@
 #define SVC_ALL			0x0000000B
 
 // Server logging flags
-#define SVL_SAVES	0x00000001
-#define SVL_CAMPING	0x00000002
-#define SVL_BUILDINGS	0x00000004
-#define SVL_DIPLOMACY	0x00000008
-#define SVL_ALL		0x0000000F
+#define SVL_SAVES	        0x00000001
+#define SVL_CAMPING	        0x00000002
+#define SVL_BUILDINGS	    0x00000004
+#define SVL_DIPLOMACY	    0x00000008
+#define SVL_PARTIAL_DROP	0x00000010
+#define SVL_ALL		        0xFFFFFFFF

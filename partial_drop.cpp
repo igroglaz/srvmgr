@@ -4,6 +4,7 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 #include "this_call.h"
+#include "srvmgrdef.h"
 
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
 
@@ -186,6 +187,9 @@ bool isPlayerUnit(T_UNIT* unit){
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
+	if(Config::LogMode | SVL_PARTIAL_DROP){
+		Printf("Start drop_partially function");
+	}
 	if(unit && unit->inventory && (unit->inventory->size > 0 || unit_has_weared_items(unit))){
 		if(nonStandardUnit(unit, T_UNIT_SKIP_DROP)){
 			return;
@@ -200,6 +204,9 @@ void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 			CopyInventoryToMap(unit, unit->inventory, a3, a4);
 			unit->inventory = create_new_item_list();
 		}
+	}
+	if(Config::LogMode | SVL_PARTIAL_DROP){
+		Printf("Finish drop_partially function");
 	}
 }
 
