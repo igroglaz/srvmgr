@@ -96,7 +96,7 @@
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />
     <ClCompile Include="this_call.cpp" />
-    <ClCompile Include="quest_roll.cpp" />
+    <ClCompile Include="quests.cpp" />
     <ClCompile Include="unit_info.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="zxmgr.cpp" />

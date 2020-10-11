@@ -135,7 +135,7 @@
     <ClCompile Include="this_call.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="quest_roll.cpp">
+    <ClCompile Include="quests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
