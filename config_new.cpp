@@ -305,14 +305,8 @@ int ReadConfig(const char* filename)
                 }
 				else if(parameter == ToLower("QuestRollInterval"))
 				{
-					Printf("Start Config::QuestRollInterval \n");
 					if(!CheckInt(value)) return lnid;
 					Config::QuestRollInterval = ReadIntegerParameter(value,1,0xFF);
-					#define QUEST_ROLL_INTERVAL_ADDR = 0x00567E82;
-					//memset((void*) 0x00567E82, Config::QuestRollInterval, 1);
-					//unsigned char *interval = (unsigned char *)0x00567E82;
-					//*interval = Config::QuestRollInterval;
-					Printf("Change quest roll interval to %d, %d \n", Config::QuestRollInterval);
 				}
                 else if(parameter == "description")
                 {
