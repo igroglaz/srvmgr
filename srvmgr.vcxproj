@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>
-	  </AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -60,7 +60,7 @@
       <ImportLibrary>$(OutDir)srvmgr.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>
-	  </AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>start /d "$(ProjectDir)\postbuild" cmd /c "$(ProjectDir)\postbuild\srvmgr.bat"</Command>
@@ -96,6 +96,7 @@
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />
     <ClCompile Include="this_call.cpp" />
+    <ClCompile Include="quest_roll.cpp" />
     <ClCompile Include="unit_info.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="zxmgr.cpp" />

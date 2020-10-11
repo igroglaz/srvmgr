@@ -147,6 +147,7 @@ fix_spell_duration_overflow				@202
 imp_drop_partially						@203
 imp_check_unit_dmg						@204
 imp_check_unit_man						@205
+imp_inn_quest_roll_interval				@206
 set_warrior_male_max_parameters			@301
 set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303

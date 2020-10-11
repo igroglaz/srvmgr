@@ -135,6 +135,9 @@
     <ClCompile Include="this_call.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="quest_roll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">

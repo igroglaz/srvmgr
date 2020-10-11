@@ -43,10 +43,10 @@ CALL testeaxifzero 5A86C4 /// bug_001A
 CALL testeaxifzero 5B3E6A /// bug_001B
 CALL testeaxifzero 5B409F /// bug_001C
 CALL testeaxifzero 5B40CC /// bug_001D
-JMP map_exit 4F94C0 /// выход с карты, кик всех
+JMP map_exit 4F94C0 /// пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 JMP kick_char 502DE5 /// kick
-JMP part_of_camp 534E87 /// автосохр. при кемпе
-JMP part_of_disconnect 534F4C /// автосохр. при дисконн
+JMP part_of_camp 534E87 /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+JMP part_of_disconnect 534F4C /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 JMP part_of_save_char 4EE563 /// save_char w log
 JMP part_of_save 4F62B1 /// part_of_save
 JMP max_players 4F7E32 /// max_players
@@ -65,7 +65,7 @@ JMP enter_inn 5062FB /// camp from inn bug
 JMP left_shop 5065E5 /// left shop log
 JMP left_inn 5063B6 /// left inn log
 //JMP change_dip 508479 /// log dip_ch
-///JMP area_cast 5054FF /// log area_casts - недореализовано
+///JMP area_cast 5054FF /// log area_casts - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 JMP public_chat_2 50764A /// disable sending public message to players not on the map
 JMP private_chat_2 507489 /// disable sending private group message to players not on the map
 JMP private_chat_3 5073B6 /// disable sending private message to players not on the map
@@ -190,6 +190,8 @@ CALL imp_drop_partially 0052E264 // implement partial drop after death
 CALL imp_drop_partially 0052DEEF // implement partial drop after death
 CALL imp_check_unit_dmg 0053693C
 CALL imp_check_unit_man 005399A9
+
+CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
 
 JMP set_warrior_male_max_parameters 531650 // set_warrior_male_max_parameters
 JMP set_warrior_female_max_parameters 53166C // set_warrior_female_max_parameters

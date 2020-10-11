@@ -66,6 +66,8 @@ namespace Config
 	extern uint32_t MinQuestReward;
 	extern uint32_t MaxQuestReward;
 
+	extern uint32_t QuestRollInterval;
+
 }
 
 int ReadConfig(const char* filename);

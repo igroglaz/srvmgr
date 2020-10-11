@@ -158,6 +158,8 @@ namespace Config
 
 	extern uint32_t MinQuestReward = 250;
 	extern uint32_t MaxQuestReward = 16383000;
+
+	uint32_t QuestRollInterval  = 0x78;
  
 }
 
@@ -301,6 +303,17 @@ int ReadConfig(const char* filename)
 					Config::ChrBase = value;
                     SetCString((byte*)(0x006D15BC), value.c_str());
                 }
+				else if(parameter == ToLower("QuestRollInterval"))
+				{
+					Printf("Start Config::QuestRollInterval \n");
+					if(!CheckInt(value)) return lnid;
+					Config::QuestRollInterval = ReadIntegerParameter(value,1,0xFF);
+					#define QUEST_ROLL_INTERVAL_ADDR = 0x00567E82;
+					//memset((void*) 0x00567E82, Config::QuestRollInterval, 1);
+					//unsigned char *interval = (unsigned char *)0x00567E82;
+					//*interval = Config::QuestRollInterval;
+					Printf("Change quest roll interval to %d, %d \n", Config::QuestRollInterval);
+				}
                 else if(parameter == "description")
                 {
                     SetCString((byte*)(0x006D15C0), value.c_str());
