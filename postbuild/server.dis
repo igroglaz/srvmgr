@@ -188,8 +188,9 @@ CALL fix_spell_duration_overflow 53C52A // fix spell duration overflow
 
 CALL imp_drop_partially 0052E264 // implement partial drop after death
 CALL imp_drop_partially 0052DEEF // implement partial drop after death
-CALL imp_check_unit_dmg 0053693C
+CALL imp_check_unit_dmg 00504067
 CALL imp_check_unit_man 005399A9
+CALL imp_regen 00556401 6
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
 

@@ -100,7 +100,8 @@ struct __declspec(align(4)) T_UNIT
   T_LINKEDLIST *inventory;
   _BYTE gap4[20];
   _WORD word94;
-  _BYTE gap5[32];
+  _WORD word96;
+  _BYTE gap5[30];
   _BYTE byteB6;
   _BYTE gap6[121];
   _DWORD exp;

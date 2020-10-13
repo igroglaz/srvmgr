@@ -4,7 +4,6 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 #include "this_call.h"
-#include "srvmgrdef.h"
 
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
 
@@ -78,12 +77,15 @@ int getDropNum(int num, float probability){
 		}
 		return dropN;
 }
-void __stdcall drop_rnd_items(T_LINKEDLIST * item_list_src, T_LINKEDLIST * item_list_dst, float probability)
+void __stdcall drop_rnd_items(T_LINKEDLIST * item_list_src, T_LINKEDLIST * item_list_dst, float probability, int stopItemId)
 {
 	T_SRV_LINKED_NODE* src_current = item_list_src->last_node;
 	int ind = item_list_src->size-1;
 	std::vector<IndNum> to_remove;
 	while(src_current != NULL){
+		if(src_current->value->id == stopItemId){
+            break;
+        }
 		int dropN = getDropNum(src_current->value->amount, probability);
 		if(dropN > 0){
 			IndNum item;
@@ -164,7 +166,8 @@ int CopyInventoryToMap(T_UNIT *unit, T_LINKEDLIST *inventory, int a3, int a4){
 	return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
 }
 const int T_UNIT_SKIP_MAN = 0x1102;
-const int T_UNIT_SKIP_DROP = 0xBA38;
+const int T_UNIT_SKIP_DRP = 0xBA38;
+const int T_UNIT_SKIP_DRP_BAR = 0xF625;
 const int T_UNIT_SKIP_DMG = 0xB203;
 bool __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec){
 	if(unit && unit->inventory && unit->inventory->size >= 1){
@@ -187,26 +190,21 @@ bool isPlayerUnit(T_UNIT* unit){
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
-	if(Config::LogMode | SVL_PARTIAL_DROP){
-		Printf("Start drop_partially function");
-	}
 	if(unit && unit->inventory && (unit->inventory->size > 0 || unit_has_weared_items(unit))){
-		if(nonStandardUnit(unit, T_UNIT_SKIP_DROP)){
-			return;
-		}
 		if(isPlayerUnit(unit)){
 			T_LINKEDLIST* bag = create_new_item_list();
-			drop_rnd_items(unit->inventory, bag, Config::InventoryDropPropapility);
-			drop_rnd_weared_items(unit, bag, Config::WearDropPropapility);
+			if(nonStandardUnit(unit, T_UNIT_SKIP_DRP)){
+                drop_rnd_items(unit->inventory, bag, Config::InventoryDropPropapility, T_UNIT_SKIP_DRP_BAR);
+		    }else{
+                drop_rnd_items(unit->inventory, bag, Config::InventoryDropPropapility, 0);
+                drop_rnd_weared_items(unit, bag, Config::WearDropPropapility);
+			}
 			CopyInventoryToMap(unit, bag, a3, a4);
 		}else{
 			// If this is a monster, we drop all items like it's done in original a2
 			CopyInventoryToMap(unit, unit->inventory, a3, a4);
 			unit->inventory = create_new_item_list();
 		}
-	}
-	if(Config::LogMode | SVL_PARTIAL_DROP){
-		Printf("Finish drop_partially function");
 	}
 }
 
@@ -227,25 +225,7 @@ ret_point:
 		ret		0xC
     }
 }
-int __stdcall check_unit_dmg(T_UNIT *unit, int a2, int a3){
-	if(nonStandardUnit(unit, T_UNIT_SKIP_DMG)){
-		return 0;
-	}
-	int res;
-	__asm{
-		mov		edx, a3
-		push	edx
-		mov		edx, a2
-		push	edx
-		mov		ecx, unit
-		mov		edx, unit
-		mov		edx, [edx]
-		mov		edx, [edx + 0x54]
-		call	edx
-		mov		res, eax
-	}
-	return res;
-}
+
 int __stdcall imp_check_unit_man(){
 	__asm{
 		push	eax	// store for future
@@ -262,20 +242,71 @@ std_case:
 special_case:
 	}
 }
+int __stdcall calc_dmg(T_UNIT *p1, T_UNIT *p2, int damage){
+	if(p2 && nonStandardUnit(p2, T_UNIT_SKIP_DMG)){
+		T_UNIT *unit = p2;
+		int lvl = 15*unit->word96/100;
+		    if(unit->word94 - damage < lvl){
+                return unit->word94 - lvl;
+	        }
+	}
+	return damage;
+}
 
 int __declspec(naked) imp_check_unit_dmg()
 { // 0053693C
     __asm
     {
-        mov     eax, [ebp+8]
-        push    eax
-        mov     ecx, [ebp-4]
-        push    ecx
-        mov     ecx, [ebp+0Ch]
-		push	ecx
-		call	check_unit_dmg
-		mov     [ebp-0xC], eax
-ret_point:
-		ret		0x8
+        push	edx
+		push	eax
+		push	[ebp - 0x3C]
+		push	[ebp + 0xC]
+		call	calc_dmg
+		pop		edx
+		ret
+    }
+}
+
+void __stdcall update_unit_ui_wrapper(T_UNIT *unit, int a){
+    __asm{
+    mov     edx, a
+    push    edx
+    mov     edx, unit
+    push    edx
+    mov     ecx, 0x006C3A08
+    mov     edx, 0x51C601
+    call    edx
+    }
+}
+
+void __stdcall imp_regen_internal(T_UNIT *unit)
+{
+	if(unit->word94 < unit->word96){
+        if(nonStandardUnit(unit, T_UNIT_SKIP_DMG)){
+            int old_hp = unit->word94;
+            int pcnt = (100*unit->word94/unit->word96);
+            int y = 10 - pcnt/5;
+            if(y < 0)
+                y=0;
+            unit->word94 += y;
+            if(unit->word94>unit->word96){
+                unit->word94 = unit->word96;
+            }
+            update_unit_ui_wrapper(unit, 1);
+        }
+	}
+}
+
+int __declspec(naked) imp_regen()
+{ // 00556401
+    __asm
+    {
+		push [ebp - 0x18]
+		call imp_regen_internal
+
+		mov ecx,[ebp-0x18]
+		xor edx,edx
+		mov dx,[ecx+0x000001A4]
+		ret
     }
 }

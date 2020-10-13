@@ -39,8 +39,6 @@ uint32_t ParseLogFlags(std::string string)
                 flag = SVL_SAVES;
             else if(par == "dimplomacy")
                 flag = SVL_DIPLOMACY;
-            else if(par == "partial_drop")
-                flag = SVL_PARTIAL_DROP;
 			else if(par == "all")
 				flag = SVL_ALL;
 
