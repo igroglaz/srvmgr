@@ -80,6 +80,7 @@
     <ClCompile Include="crashes_new.cpp" />
     <ClCompile Include="CRC_32.cpp" />
     <ClCompile Include="ctl_handle.cpp" />
+    <ClCompile Include="distance_bug.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="forbidden_items.cpp" />
     <ClCompile Include="itemex.cpp" />

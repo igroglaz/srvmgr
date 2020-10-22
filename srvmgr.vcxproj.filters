@@ -138,6 +138,9 @@
     <ClCompile Include="quests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="distance_bug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">

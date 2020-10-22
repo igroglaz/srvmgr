@@ -194,6 +194,8 @@ CALL imp_regen 00556401 6
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
 
+CALL imp_distance_bug_fix 005AAA8D // Fix staff distance bug
+
 JMP set_warrior_male_max_parameters 531650 // set_warrior_male_max_parameters
 JMP set_warrior_female_max_parameters 53166C // set_warrior_female_max_parameters
 JMP set_mage_male_max_parameters 531696 // set_mage_male_max_parameters
