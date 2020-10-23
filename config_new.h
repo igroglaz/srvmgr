@@ -55,8 +55,8 @@ namespace Config
     extern double PKExpMult;
     extern double RespawnExpMult2;
 
-	extern float InventoryDropPropapility;
-	extern float WearDropPropapility;
+	extern float InventoryDropProbability;
+	extern float WearDropProbability;
 
 	extern MainCharacterParameters WarriorMaleMaxParameters;
 	extern MainCharacterParameters WarriorFemaleMaxParameters;
@@ -67,6 +67,7 @@ namespace Config
 	extern uint32_t MaxQuestReward;
 
 	extern uint32_t QuestRollInterval;
+	extern float mage_pvp_dmg_factor;
 
 }
 

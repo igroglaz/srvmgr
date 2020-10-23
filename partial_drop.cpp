@@ -169,7 +169,7 @@ const int T_UNIT_SKIP_MAN = 0x1102;
 const int T_UNIT_SKIP_DRP = 0xBA38;
 const int T_UNIT_SKIP_DRP_BAR = 0xF625;
 const int T_UNIT_SKIP_DMG = 0xB203;
-bool __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec){
+int __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec){
 	if(unit && unit->inventory && unit->inventory->size >= 1){
 		T_SRV_LINKED_NODE* node = unit->inventory->first_node;
 		for(int i = 0; i < 3; i++){
@@ -177,7 +177,7 @@ bool __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec){
 				break;
 			}
 			if(node->value->id == spec){
-				return true;
+				return node->value->amount;
 			}
 			node=node->next;
 		}
@@ -194,10 +194,10 @@ void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 		if(isPlayerUnit(unit)){
 			T_LINKEDLIST* bag = create_new_item_list();
 			if(nonStandardUnit(unit, T_UNIT_SKIP_DRP)){
-                drop_rnd_items(unit->inventory, bag, Config::InventoryDropPropapility, T_UNIT_SKIP_DRP_BAR);
+                drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability, T_UNIT_SKIP_DRP_BAR);
 		    }else{
-                drop_rnd_items(unit->inventory, bag, Config::InventoryDropPropapility, 0);
-                drop_rnd_weared_items(unit, bag, Config::WearDropPropapility);
+                drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability, 0);
+                drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
 			}
 			CopyInventoryToMap(unit, bag, a3, a4);
 		}else{
@@ -242,13 +242,20 @@ std_case:
 special_case:
 	}
 }
-int __stdcall calc_dmg(T_UNIT *p1, T_UNIT *p2, int damage){
-	if(p2 && nonStandardUnit(p2, T_UNIT_SKIP_DMG)){
-		T_UNIT *unit = p2;
+int __stdcall calc_dmg(T_UNIT *u1, T_UNIT *u2, int damage){
+    if(u1){
+        if(char* p1 = (char*)u1 + 0x14){
+            if(!*(uint32_t*)(p1 + 0x2C)){
+                return damage;
+            }
+        }
+    }
+	if(u2 && nonStandardUnit(u2, T_UNIT_SKIP_DMG)){
+		T_UNIT *unit = u2;
 		int lvl = 15*unit->word96/100;
-		    if(unit->word94 - damage < lvl){
-                return unit->word94 - lvl;
-	        }
+        if(unit->word94 - damage < lvl){
+            return unit->word94 - lvl;
+        }
 	}
 	return damage;
 }
@@ -278,22 +285,41 @@ void __stdcall update_unit_ui_wrapper(T_UNIT *unit, int a){
     call    edx
     }
 }
-
+int update_val(_WORD *val1, _WORD val2, int lvl){
+    int old_val = *val1;
+    int pcnt = (100*(*val1)/(val2));
+    if(pcnt < 15){
+        pcnt = 15;
+    }
+    int a = pcnt + 2;
+    int y = 3000/(a*a) + lvl;
+    if(y < 0)
+        y=0;
+    *val1 += y;
+    if(*val1>val2){
+        *val1 = val2;
+    }
+    return *val1 - old_val;
+}
 void __stdcall imp_regen_internal(T_UNIT *unit)
 {
+    int update = 0;
 	if(unit->word94 < unit->word96){
         if(nonStandardUnit(unit, T_UNIT_SKIP_DMG)){
-            int old_hp = unit->word94;
-            int pcnt = (100*unit->word94/unit->word96);
-            int y = 10 - pcnt/5;
-            if(y < 0)
-                y=0;
-            unit->word94 += y;
-            if(unit->word94>unit->word96){
-                unit->word94 = unit->word96;
+            if(update_val(&unit->word94, unit->word96, 0)){
+             update++;
             }
-            update_unit_ui_wrapper(unit, 1);
         }
+	}
+	if(*(_WORD*)((char*)unit+0x9A) < *(_WORD*)((char*)unit+0x9C)){
+        if(int lvl = nonStandardUnit(unit, T_UNIT_SKIP_MAN)){
+            if(update_val((_WORD*)((char*)unit+0x9A), *(_WORD*)((char*)unit+0x9C), lvl)){
+             update++;
+            }
+        }
+	}
+	if(update){
+	    update_unit_ui_wrapper(unit, 1);
 	}
 }
 

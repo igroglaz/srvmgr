@@ -37,7 +37,7 @@ uint32_t ParseLogFlags(std::string string)
                 flag = SVL_BUILDINGS;
             else if(par == "saves")
                 flag = SVL_SAVES;
-            else if(par == "dimplomacy")
+            else if(par == "diplomacy")
                 flag = SVL_DIPLOMACY;
 			else if(par == "all")
 				flag = SVL_ALL;
@@ -108,8 +108,8 @@ namespace Config
     std::string CurrentMapTitle = "N/A";
 
     uint32_t ServerFlags = 0;
-	float InventoryDropPropapility = 1;
-	float WearDropPropapility = 1;
+	float InventoryDropProbability = 1;
+	float WearDropProbability = 1;
     bool MapLoaded = false;
     uint32_t ProtocolVersion = 7;
 
@@ -158,6 +158,8 @@ namespace Config
 	extern uint32_t MaxQuestReward = 16383000;
 
 	uint32_t QuestRollInterval  = 0x78;
+
+	float mage_pvp_dmg_factor = 1;
  
 }
 
@@ -305,6 +307,12 @@ int ReadConfig(const char* filename)
 				{
 					if(!CheckInt(value)) return lnid;
 					Config::QuestRollInterval = ReadIntegerParameter(value,1,0xFF);
+				}
+				else if(parameter == ToLower("MagePvpDmgFactor"))
+				{
+					if(!CheckFloat(value)) return lnid;
+					Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
+					Printf("MagePvpDmgFactor: %s %f", value.c_str(), Config::mage_pvp_dmg_factor);
 				}
                 else if(parameter == "description")
                 {
@@ -586,17 +594,15 @@ int ReadConfig(const char* filename)
                     if(!CheckInt(value)) return lnid;
 					Config::MaxQuestReward = ReadIntegerParameter(value,Config::MinQuestReward,16383000);
                 }
-                else if(parameter == ToLower("InventoryDropPropapility"))
+                else if(parameter == ToLower("InventoryDropProbability"))
                 {
 					if(!CheckFloat(value)) return lnid;
-					Config::InventoryDropPropapility = ReadFloatParameter(value,0,1);
-					Printf("InventoryDropPropapility: %s %f", value.c_str(), Config::InventoryDropPropapility);
+					Config::InventoryDropProbability = ReadFloatParameter(value,0,1);
                 }
-                else if(parameter == ToLower("WearDropPropapility"))
+                else if(parameter == ToLower("WearDropProbability"))
                 {
 					if(!CheckFloat(value)) return lnid;
-					Config::WearDropPropapility = ReadFloatParameter(value,0,1);
-					Printf("InventoryDropPropapility: %s %f", value.c_str(), Config::WearDropPropapility);
+					Config::WearDropProbability = ReadFloatParameter(value,0,1);
                 }
 				
                 else if(parameter == "servercaps")
