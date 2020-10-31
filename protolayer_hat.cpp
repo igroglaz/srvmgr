@@ -262,6 +262,14 @@ bool Net_HatProcess()
 			zxmgr::SendMessage(NULL, message.c_str());
 			break;
 		}
+		case 0x64: // screenshot information
+		{
+			std::string login = pack.ReadString();
+			uint32_t uid = pack.ReadUInt32();
+			uint8_t done = pack.ReadUInt8();
+			std::string url = pack.ReadString();
+
+		}
 		case 0x65: // mute player packet
 		{
 			std::string login = pack.ReadString();
