@@ -1,3 +1,4 @@
+#include <ctime>
 #include "protolayer_hat.h"
 #include "config_new.h"
 #include "srvmgrdef.h"
@@ -5,6 +6,7 @@
 #include "syslib.h"
 #include "zxmgr.h"
 #include "srvmgr.h"
+#include "player_info.h"
 
 namespace NetHat
 {
@@ -255,11 +257,28 @@ bool Net_HatProcess()
 		switch(packet_id)
 		{
 		case 0x63: // broadcast from hat
+		{
+			std::string message = pack.ReadString();
+			zxmgr::SendMessage(NULL, message.c_str());
+			break;
+		}
+		case 0x65: // mute player packet
+		{
+			std::string login = pack.ReadString();
+			time_t unmutedate = pack.ReadUInt32();
+			struct tm parsedTime;
+			localtime_s(&parsedTime, &unmutedate);
+			byte* player = zxmgr::FindByLogin(login.c_str());
+			std::vector<byte*> players = zxmgr::GetPlayers();
+			Player* pi = PI_Get(player);
+			if (pi)
 			{
-				std::string message = pack.ReadString();
-				zxmgr::SendMessage(NULL, message.c_str());
-				break;
+				pi->UnmuteDate = unmutedate;
+				Printf("Player %s (login %s) should be muted until %02d.%02d.%04d %02d:%02d:%02d.",
+					*(const char**)(player + 0x18), login.c_str(), parsedTime.tm_mday, parsedTime.tm_mon + 1, parsedTime.tm_year + 1900, parsedTime.tm_hour, parsedTime.tm_min, parsedTime.tm_sec);
 			}
+			break;
+		}
 		default: break;
 		}
 	}

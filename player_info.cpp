@@ -36,6 +36,7 @@ void PI_Clear(Player& struc)
 	struc.SetSpells = 0;
 	struc.LastSpells = 0;
 	struc.SpellSetter = NULL;
+	struc.UnmuteDate = 0;
 }
 
 void PI_Create(byte* player)

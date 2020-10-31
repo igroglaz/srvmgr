@@ -21,6 +21,8 @@ struct Player
 	byte CastSpell[0x14];
 	std::vector<byte*> SavedItems;
 
+	uint32_t UnmuteDate;
+
 	uint32_t Vision[256][256];
 };
 

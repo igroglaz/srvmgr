@@ -17,6 +17,7 @@
 #include "lib\utils.hpp"
 #include "lib\packet.hpp"
 #include "srvmgr_new.h"
+#include "player_info.h"
 
 /// CDECL нет очистки стека функцией
 /// STDCALL есть
@@ -1858,10 +1859,21 @@ sub_5446C7_done:
 	}
 }
 
-
+bool _stdcall CheckPlayerMuted(byte* player)
+{
+	Player* pi = PI_Get(player);
+	if (pi->UnmuteDate != 0 && time(NULL) < pi->UnmuteDate)
+		return true;
+	return false;
+}
 
 void _declspec(naked) public_chat(void) {////50759F  TESTED100%
 	__asm {/// реализация запрета чата
+		push [ebp-0x104]
+		call CheckPlayerMuted
+		test al, al
+		jnz do_mute
+
 		mov	eax, dword ptr [Config::ServerFlags]
 		test	eax, SVF_MUTED
 		jz	public_chat_norm
@@ -1872,6 +1884,7 @@ void _declspec(naked) public_chat(void) {////50759F  TESTED100%
 		cmp	edx, GMF_ANY
 		jz	public_chat_norm ///флаг admin
 
+do_mute:
 		mov	edx, 0x507897
 		jmp	edx
 
@@ -1965,6 +1978,11 @@ pr_c_3_ex: /// отправляем
 
 void _declspec(naked) private_chat(void) {////005073DD  TESTED100%
 	__asm {
+		push [ebp - 0x104]
+		call CheckPlayerMuted
+		test al, al
+		jnz do_mute
+
 		mov	eax, dword ptr [Config::ServerFlags]
 		test	eax, SVF_MUTED
 		jz	private_chat_norm
@@ -1975,6 +1993,7 @@ void _declspec(naked) private_chat(void) {////005073DD  TESTED100%
 		cmp	edx, GMF_ANY
 		jz	private_chat_norm ///флаг admin
 
+do_mute:
 		mov	edx, 0x507897
 		jmp	edx
 
@@ -1994,6 +2013,11 @@ private_chat_norm:
 
 void _declspec(naked) shout_chat(void) {////0050775C  TESTED100%
 	__asm {
+		push [ebp - 0x104]
+		call CheckPlayerMuted
+		test al, al
+		jnz do_mute
+
 		mov	eax, dword ptr [Config::ServerFlags]
 		test	eax, SVF_MUTED
 		jz	shout_chat_norm
@@ -2004,6 +2028,7 @@ void _declspec(naked) shout_chat(void) {////0050775C  TESTED100%
 		cmp	edx, GMF_ANY
 		jz	shout_chat_norm ///флаг admin
 
+do_mute:
 		mov	edx, 0x507897
 		jmp	edx
 

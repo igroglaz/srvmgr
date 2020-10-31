@@ -199,23 +199,23 @@ void __declspec(naked) imp_PIadd()
 {
 	__asm
 	{
-		mov		eax, [ebp+0x08]
+		// check if result is successful -- player is accepted and created.
+		// this happens basically at "player ... logged in as ..."
 		test	eax, eax
-		jz		pia_skip
-		movzx	ebx, word ptr [eax+4]
-		cmp		ebx, 0x10
-		jb		pia_skip
-		cmp		ebx, 0x20
-		ja		pia_skip
-		
-		push	eax
+		jnz		just_return
+
+		push	[ebp-0x30]
 		call	PI_Create
 		add		esp, 4
+		xor		eax, eax
 
-pia_skip:
+just_return:
+		mov		ecx, [ebp-0x0C]
+		mov		fs:[0], ecx
+		pop		esi
 		mov		esp, ebp
 		pop		ebp
-		retn	0x0004
+		retn	0x001C
 	}
 }
 

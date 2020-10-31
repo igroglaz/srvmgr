@@ -204,7 +204,7 @@ namespace zxmgr
 			byte* player = (*it);
 			if(!player) continue;
 			if(*(uint32_t*)(player + 0x2C)) continue; // AI check
-			const char* pl_login = (const char*)(player + 0x0A78);
+			const char* pl_login = *(const char**)(player + 0x0A78);
 			if(!strcmp(pl_login, login)) return player;
 		}
 
