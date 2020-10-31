@@ -2,6 +2,7 @@
 
 #include "syslib.h"
 #include <vector>
+#include "lib/packet.hpp"
 
 struct Player
 {
@@ -24,6 +25,9 @@ struct Player
 	uint32_t UnmuteDate;
 
 	uint32_t Vision[256][256];
+
+	//
+	std::vector<Packet> EnqueuedPackets;
 };
 
 extern Player Players[32];

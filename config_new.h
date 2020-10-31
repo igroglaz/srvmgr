@@ -75,6 +75,16 @@ namespace Config
 	extern bool AllowOnlyOneQuest_KillNMonsters;
 	extern bool AllowOnlyOneQuest_KillTheMonster;
 	extern bool AllowOnlyOneQuest_KillTheGroup;
+
+    extern std::string IPAddress;
+    extern uint16_t IPAddressP;
+
+    extern std::string IPAddress2;
+    extern uint16_t IPAddress2P;
+
+    extern std::string HatAddress;
+    extern uint16_t HatAddressP;
+
 }
 
 int ReadConfig(const char* filename);

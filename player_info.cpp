@@ -3,6 +3,7 @@
 #include "lib\utils.hpp"
 #include "forbidden_items.h"
 #include "srvmgr.h"
+#include "screenshots.h"
 
 Player Players[32];
 
@@ -37,6 +38,7 @@ void PI_Clear(Player& struc)
 	struc.LastSpells = 0;
 	struc.SpellSetter = NULL;
 	struc.UnmuteDate = 0;
+	struc.EnqueuedPackets.clear();
 }
 
 void PI_Create(byte* player)
@@ -114,6 +116,7 @@ void PI_Delete(byte* player)
 	//if(update && unit) zxmgr::SaveCharacter(player);
 
 	PI_Clear(Players[p_id-1]);
+	ClientScreenshot_DropPlayer(player);
 }
 
 Player* PI_Get(byte* player)

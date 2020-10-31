@@ -16,8 +16,10 @@
 
 #include "lib\utils.hpp"
 #include "lib\packet.hpp"
+#include "lib\socket.hpp"
 #include "srvmgr_new.h"
 #include "player_info.h"
+#include "zxmgr.h"
 
 /// CDECL нет очистки стека функцией
 /// STDCALL есть
@@ -2414,6 +2416,21 @@ int PASCAL send0(SOCKET s, const char *buf, int len, int flags) {
 		r -= size + 8;
 	} while (r);
 	delete bb;*/
+	// first send our packet if any
+	// find player by socket
+	std::vector<byte*> players = zxmgr::GetPlayers();
+	for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		byte* player = (*it);
+		if (zxmgr::GetSocket(player) != s) continue;
+		Player* pi = PI_Get(player);
+		for (std::vector<Packet>::iterator jt = pi->EnqueuedPackets.begin(); jt != pi->EnqueuedPackets.end(); ++jt)
+		{
+			Packet& cmd = (*jt);
+			SOCK_SendPacket(s, cmd, 0, true);
+		}
+		pi->EnqueuedPackets.clear();
+	}
 	return send(s, buf, len, flags);
 }
 

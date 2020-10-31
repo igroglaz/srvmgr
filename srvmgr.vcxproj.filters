@@ -123,10 +123,13 @@
     <ClCompile Include="lib\utils.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="spell_duration_fix.cpp">
+    <ClCompile Include="multiplayer_shop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="multiplayer_shop.cpp">
+    <ClCompile Include="screenshots.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spell_duration_fix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="partial_drop.cpp">
@@ -231,6 +234,9 @@
       <Filter>Header Files\lib</Filter>
     </ClInclude>
     <ClInclude Include="multiplayer_shop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="screenshots.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">

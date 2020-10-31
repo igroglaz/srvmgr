@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "scanrange.h"
+#include "screenshots.h"
 
 uint32_t ParseFlags(std::string string)
 {
@@ -656,14 +657,45 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 			zxmgr::SendMessage(NULL, "%04x", *(uint16_t*)(item+0x40));
 			goto ex;
 		}
-		else if(rawcmd == "#uh")
+		else if(rawcmd == "#screenshot")
 		{
-			if(!player) goto ex;
-			SOCKET ps = zxmgr::GetSocket(player);
 
-			Packet testp;
-			testp.WriteUInt32(0xBADFACE1);
-			SOCK_SendPacket(ps, testp, 0, true);
+            command.erase(0, 11);
+            command = TrimLeft(command);
+            byte* target = zxmgr::FindByNickname(command.c_str());
+            if (!target)
+            {
+                if (player) zxmgr::SendMessage(player, "screenshot: Player %s not found", command.c_str());
+                else Printf("screenshot: Player %s not found", command.c_str());
+                goto ex;
+            }
+
+            Player* p = PI_Get(target);
+            if (!p)
+            {
+                if (player) zxmgr::SendMessage(player, "screenshot: Player %s has no playerinfo!", *(const char**)(target + 0x18));
+                else Printf("screenshot: Player %s has no playerinfo!", *(const char**)(target + 0x18));
+                goto ex;
+            }
+
+			SOCKET ps = zxmgr::GetSocket(target);
+            if (!ps)
+            {
+                if (player) zxmgr::SendMessage(player, "screenshot: Player %s has no socket (AI or disconnected?)", *(const char**)(target + 0x18));
+                else Printf("screenshot: Player %s has no socket (AI or disconnected?)", *(const char**)(target + 0x18));
+                goto ex;
+            }
+
+            uint32_t uid = ClientScreenshot_Enqueue(player, target);
+			Packet cmd;
+            cmd.WriteUInt8(0x01);
+            cmd.WriteString(*(const char**)(target + 0x0A78));
+            cmd.WriteUInt32(uid);
+            p->EnqueuedPackets.push_back(cmd);
+
+            if (player) zxmgr::SendMessage(player, "screenshot: Request sent to player %s", *(const char**)(target + 0x18), uid);
+            else Printf("screenshot: Request sent to player %s", *(const char**)(target + 0x18), uid);
+
 			goto ex;
 		}
     }

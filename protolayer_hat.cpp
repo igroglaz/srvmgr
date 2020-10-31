@@ -7,6 +7,7 @@
 #include "zxmgr.h"
 #include "srvmgr.h"
 #include "player_info.h"
+#include "screenshots.h"
 
 namespace NetHat
 {
@@ -265,10 +266,48 @@ bool Net_HatProcess()
 		case 0x64: // screenshot information
 		{
 			std::string login = pack.ReadString();
+			pack.ReadUInt8(); // ????
 			uint32_t uid = pack.ReadUInt32();
-			uint8_t done = pack.ReadUInt8();
+			bool done = pack.ReadUInt8() != 0;
 			std::string url = pack.ReadString();
-
+			ClientScreenshot* cs = ClientScreenshot_FindByUID(uid);
+			// means the server crashed, and we are receiving screenshot info from earlier time
+			if (!cs)
+			{
+				if (done)
+				{
+					if (!!url.size())
+						Printf("screenshot: %s: Comeback transmission succeeded (saved to %s).", login.c_str(), url.c_str());
+					else Printf("screenshot: %s: Comeback transmission failed.", login.c_str());
+				}
+				else Printf("screenshot: %s: Comeback transmission initiated.", login.c_str());
+			}
+			else
+			{
+				if (cs->SourcePlayer)
+				{
+					if (done)
+					{
+						if (!!url.size())
+							zxmgr::SendMessage(cs->SourcePlayer, "screenshot: %s: Transmission succeeded (saved to %s).", login.c_str(), url.c_str());
+						else zxmgr::SendMessage(cs->SourcePlayer, "screenshot: %s: Transmission succeeded (saved to %s).", login.c_str(), url.c_str());
+					}
+					else zxmgr::SendMessage(cs->SourcePlayer, "screenshot: %s: Transmission initiated.", login.c_str());
+				}
+				else
+				{
+					if (done)
+					{
+						if (!!url.size())
+							Printf("screenshot: %s: Transmission succeeded (saved to %s).", login.c_str(), url.c_str());
+						else Printf("screenshot: %s: Transmission succeeded (saved to %s).", login.c_str(), url.c_str());
+					}
+					else Printf("screenshot: %s: Transmission initiated.", login.c_str());
+				}
+			}
+			if (done)
+				ClientScreenshot_Drop(uid);
+			break;
 		}
 		case 0x65: // mute player packet
 		{
