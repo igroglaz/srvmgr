@@ -43,6 +43,8 @@
 #define GMF_PLAYERS_ALLY	0x3F010000	// auto-ally with players
 #define GMF_MAXDAMAGE		0x3F020000	// max. damage (32767)
 #define GMF_CMD_SCREENSHOT	0x3F040000	// #screenshot
+#define GMF_NOCLIP			0x3F080000  // noclip (permanent)
+#define GMF_UNITS_NOCLIP	0x3F100000  // all owned units are noclip (does not work!)
 
 // Game modes
 #define GAMEMODE_COOPERATIVE	0

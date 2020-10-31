@@ -442,6 +442,8 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 for(uint32_t i = 0; i < count; i++)
                 {
 					byte* unit = zxmgr::Summon(player, command.c_str(), *(byte**)(0x00642C2C), false, NULL);
+                    /*if (rights & GMF_UNITS_NOCLIP)
+                        zxmgr::MakeUnitNoClip(unit);*/
                     //byte* unit = Map::CreateUnitForEx(player, command.c_str(), false);
                     //zxmgr::SendMessage(NULL, "what: %02X\n", *(uint8_t*)(*(byte**)(unit + 0x1C4) + 0x78));
                     //Unit::SetSpells(unit);
@@ -657,8 +659,12 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 			zxmgr::SendMessage(NULL, "%04x", *(uint16_t*)(item+0x40));
 			goto ex;
 		}
-		else if(rawcmd == "#screenshot")
-		{
+    }
+
+    if (rights & GMF_CMD_SCREENSHOT)
+    {
+        if (rawcmd == "#screenshot")
+        {
 
             command.erase(0, 11);
             command = TrimLeft(command);
@@ -678,7 +684,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 goto ex;
             }
 
-			SOCKET ps = zxmgr::GetSocket(target);
+            SOCKET ps = zxmgr::GetSocket(target);
             if (!ps)
             {
                 if (player) zxmgr::SendMessage(player, "screenshot: Player %s has no socket (AI or disconnected?)", *(const char**)(target + 0x18));
@@ -687,7 +693,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             }
 
             uint32_t uid = ClientScreenshot_Enqueue(player, target);
-			Packet cmd;
+            Packet cmd;
             cmd.WriteUInt8(0x01);
             cmd.WriteString(*(const char**)(target + 0x0A78));
             cmd.WriteUInt32(uid);
@@ -696,8 +702,8 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             if (player) zxmgr::SendMessage(player, "screenshot: Request sent to player %s", *(const char**)(target + 0x18), uid);
             else Printf("screenshot: Request sent to player %s", *(const char**)(target + 0x18), uid);
 
-			goto ex;
-		}
+            goto ex;
+        }
     }
 
     if(rights & GMF_CMD_CREATE)

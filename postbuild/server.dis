@@ -178,9 +178,8 @@ JMP imp_DropAll 52DA11 // presumably drop all
 JMP imp_ScaleSoftcoreExperienceReward 5610B6 // quest reward scaling
 JMP imp_LoadShopData 59C66E // load shop data from alm
 JMP imp_EnterCustomShop 502C50 // enter custom shop instead of normal one
-
-// JMP imp_UpdateOnReturn 508E9D // required so that fresh list of players is sent to hat, when we remove a player.
-// MIGHT BE BROKEN, check comments in the code!
+// JMP imp_UpdateOnReturn 508E9D // required so that fresh list of players is sent to hat, when we remove a player. MIGHT BE BROKEN, check comments in the code!
+JMP imp_GMNoClip  5070EC // makes GM walk everywhere
 
 JMP fix_spell_duration_overflow_0053973E 53973E // fix spell duration overflow
 CALL fix_spell_duration_overflow 53BFA1 // fix spell duration overflow

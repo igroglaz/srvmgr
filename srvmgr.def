@@ -145,6 +145,7 @@ imp_ScaleSoftcoreExperienceReward	@151
 imp_LoadShopData	@152
 imp_EnterCustomShop @153
 imp_UpdateOnReturn	@154
+imp_GMNoClip		@155
 fix_spell_duration_overflow_0053973E		@201
 fix_spell_duration_overflow					@202
 imp_drop_partially							@203

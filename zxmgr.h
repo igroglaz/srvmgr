@@ -50,6 +50,9 @@ namespace zxmgr
 	void MorphUnit(unsigned long unit, unsigned long kind);
 	void UpdateUnit(byte* unit, byte* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4);
 
+	int GetUnitSize(byte* unit);
+	void MakeUnitNoClip(byte* unit);
+
 	void CreateSack(const char* itemname, unsigned long x, unsigned long y, unsigned long money);
 
 	void _stdcall GMLog(const char* format, ...);

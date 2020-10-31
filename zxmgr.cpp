@@ -593,6 +593,52 @@ namespace zxmgr
 		}
 	}
 
+	int __declspec(naked) GetUnitSize(byte* unit)
+	{
+		__asm
+		{
+			push	ebp
+			mov		ebp, esp
+			mov		ecx, [ebp+0x08]
+			mov		edx, [ecx]
+			call	[edx+0x1C]
+			and		eax, 0xFF
+			mov		esp, ebp
+			pop		ebp
+			retn
+		}
+	}
+
+	void MakeUnitNoClip(byte* unit)
+	{
+		*(byte**)(*(byte**)(unit + 0x1C0) + 5) = 0;
+		byte* phys = *(byte**)(unit + 0x10);
+		int x = phys[0];
+		int y = phys[1];
+		// clear unit radius
+		byte* someTable = *(byte**)(0x006B16A8);
+		*(byte**)(*(byte**)(unit + 0x10) + 8) = someTable;
+		int unitSize = zxmgr::GetUnitSize(unit);
+		// вот тут я не помню что имел в виду. отреверсено из старого-нового сервера
+		if (someTable)
+		{
+			for (int i = x; i < x + unitSize; i++)
+			{
+				if (i >= 0 && i <= 255)
+				{
+					for (int j = y; j < y + unitSize; j++)
+					{
+						if (j >= 0 && j <= 255)
+						{
+							*(byte**)(someTable + ((j + 0x100) << 8) + i) = 0;
+							*(byte**)(someTable + ((j + 0x200) << 8) + i) = 0;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void __declspec(naked) CreateSack(const char* itemname, unsigned long x, unsigned long y, unsigned long money)
 	{
 		__asm

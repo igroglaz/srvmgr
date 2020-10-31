@@ -1500,3 +1500,25 @@ void __declspec(naked) imp_UpdateOnReturn()
 		jmp		edx
 	}
 }
+
+void _stdcall CheckPlayerNoClip(byte* player)
+{
+	byte* unit = *(byte**)(player + 0x38);
+	if ((*(uint32_t*)(player + 0x14) & GMF_NOCLIP) == GMF_NOCLIP)
+	{
+		zxmgr::MakeUnitNoClip(unit);
+	}
+
+	zxmgr::UpdateUnit(unit, *(byte**)(unit + 0x14), 0xFFFFFFFF, 0xFFB, 0, 0);
+}
+
+void __declspec(naked) imp_GMNoClip()
+{
+	__asm
+	{
+		push	[ebp-0xFC]
+		call	CheckPlayerNoClip
+		mov		edx, 0x00507112
+		jmp		edx
+	}
+}
