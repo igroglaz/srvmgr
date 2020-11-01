@@ -927,10 +927,53 @@ ex:
 
 //#define _DAMAGE_DEBUG
 
+uint32_t GetDamageBonus(byte* unit)
+{
+    if (!unit) return 0;
+
+    uint32_t retval = 0;
+
+    byte* pack = *(byte**)(unit + 0x7C);
+    if (!pack) return 0;
+
+    // on body
+    for (uint32_t i = 1; i <= 12; i++)
+    {
+        byte* item = NULL;
+        if (i == 1) item = *(byte**)(unit + 0x74);
+        else if (i == 2) item = *(byte**)(unit + 0x78);
+        else item = *(byte**)(unit + 4 * i + 0x208);
+        if (!item) continue;
+        // iterate item stats
+        byte* parms = *(byte**)(item + 0x28);
+        while (parms)
+        {
+            byte* parm = *(byte**)(parms + 8);
+            if (parm)
+            {
+                uint32_t prm1 = *(uint8_t*)(parm + 0x3C);
+                uint32_t val1 = *(uint16_t*)(parm + 0x40);
+                uint32_t val2 = *(uint16_t*)(parm + 0x42);
+                if (prm1 == 26)
+                    retval += val1;
+            }
+            parms = *(byte**)(parms + 4);
+        }
+    }
+
+    return retval;
+}
+
 int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
 {
     if(damage < 0) return 0;
     if(unit2 && (*(uint8_t*)(unit2 + 0x4C) & 8)) return 0;
+
+    // calculate damage bonus
+    uint32_t damage_bonus = GetDamageBonus(unit1);
+    if (damage_bonus && damage > 0)
+        damage = double(damage) * (double(damage_bonus) / 100 + 1.0);
+
     int32_t retval = damage;
 
     byte* player1 = NULL;
