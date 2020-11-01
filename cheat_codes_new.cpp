@@ -930,6 +930,10 @@ ex:
 uint32_t GetDamageBonus(byte* unit)
 {
     if (!unit) return 0;
+    // check if this is human
+    uint32_t vtable_id = *(uint32_t*)unit;
+    if (vtable_id != 0x0060F0C8)
+        return 0;
 
     uint32_t retval = 0;
 
