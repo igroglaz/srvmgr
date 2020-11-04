@@ -141,6 +141,9 @@
     <ClCompile Include="distance_bug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">

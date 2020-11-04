@@ -160,6 +160,7 @@ namespace Config
 	uint32_t QuestRollInterval  = 0x78;
 
 	float mage_pvp_dmg_factor = 1;
+	float shop_potions_factor = 1;
  
 }
 
@@ -312,6 +313,11 @@ int ReadConfig(const char* filename)
 				{
 					if(!CheckFloat(value)) return lnid;
 					Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
+				}
+				else if(parameter == ToLower("ShopPotionsFactor"))
+				{
+					if(!CheckFloat(value)) return lnid;
+					Config::shop_potions_factor = ReadFloatParameter(value,0,100);
 				}
                 else if(parameter == "description")
                 {
