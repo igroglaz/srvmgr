@@ -244,8 +244,8 @@ special_case:
 }
 int __stdcall calc_dmg(T_UNIT *u1, T_UNIT *u2, int damage){
     if(u1){
-        if(char* p1 = (char*)u1 + 0x14){
-            if(!*(uint32_t*)(p1 + 0x2C)){
+        if(char* p1 = *(char**)((char*)u1 + 0x14)){
+            if(p1 && !*(uint32_t*)(p1 + 0x2C)){
                 return damage;
             }
         }
@@ -305,17 +305,15 @@ void __stdcall imp_regen_internal(T_UNIT *unit)
 {
     int update = 0;
 	if(unit->word94 < unit->word96){
-        if(nonStandardUnit(unit, T_UNIT_SKIP_DMG)){
-            if(update_val(&unit->word94, unit->word96, 0)){
+        if(int lvl = nonStandardUnit(unit, T_UNIT_SKIP_DMG)){
+            if(update_val(&unit->word94, unit->word96, lvl)){
              update++;
             }
         }
 	}
 	if(*(_WORD*)((char*)unit+0x9A) < *(_WORD*)((char*)unit+0x9C)){
         if(int lvl = nonStandardUnit(unit, T_UNIT_SKIP_MAN)){
-            if(update_val((_WORD*)((char*)unit+0x9A), *(_WORD*)((char*)unit+0x9C), lvl)){
-             update++;
-            }
+            update_val((_WORD*)((char*)unit+0x9A), *(_WORD*)((char*)unit+0x9C), lvl);
         }
 	}
 	if(update){

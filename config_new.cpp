@@ -312,7 +312,6 @@ int ReadConfig(const char* filename)
 				{
 					if(!CheckFloat(value)) return lnid;
 					Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
-					Printf("MagePvpDmgFactor: %s %f", value.c_str(), Config::mage_pvp_dmg_factor);
 				}
                 else if(parameter == "description")
                 {
