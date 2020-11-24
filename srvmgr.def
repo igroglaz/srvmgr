@@ -151,6 +151,7 @@ imp_inn_quest_roll_interval				@206
 imp_regen                               @207
 imp_distance_bug_fix				    @208
 imp_increase_potions_in_shops   	    @209
+imp_inn_item_upgrade_failed   	        @210
 set_warrior_male_max_parameters			@301
 set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303
