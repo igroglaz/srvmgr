@@ -144,6 +144,9 @@
     <ClCompile Include="shops.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="map_rotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">

@@ -84,6 +84,7 @@
     <ClCompile Include="File.cpp" />
     <ClCompile Include="forbidden_items.cpp" />
     <ClCompile Include="itemex.cpp" />
+    <ClCompile Include="map_rotation.cpp" />
     <ClCompile Include="multiplayer_shop.cpp" />
     <ClCompile Include="partial_drop.cpp" />
     <ClCompile Include="pktmgr.cpp" />

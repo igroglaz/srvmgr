@@ -69,6 +69,7 @@ namespace Config
 	extern uint32_t QuestRollInterval;
 	extern float mage_pvp_dmg_factor;
 	extern float shop_potions_factor;
+	extern bool server_rotate_maps;
 }
 
 int ReadConfig(const char* filename);

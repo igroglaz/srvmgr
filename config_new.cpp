@@ -161,7 +161,7 @@ namespace Config
 
 	float mage_pvp_dmg_factor = 1;
 	float shop_potions_factor = 1;
- 
+	bool server_rotate_maps = true;
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
@@ -318,6 +318,11 @@ int ReadConfig(const char* filename)
 				{
 					if(!CheckFloat(value)) return lnid;
 					Config::shop_potions_factor = ReadFloatParameter(value,0,100);
+				}
+				else if(parameter == ToLower("ServerRotateMaps"))
+				{
+					if(!CheckBool(value)) return lnid;
+					Config::server_rotate_maps = StrToBool(value);
 				}
                 else if(parameter == "description")
                 {

@@ -204,6 +204,8 @@ CALL imp_increase_potions_in_shops 0054DAFC  // increase number of potions in sh
 
 CALL imp_inn_item_upgrade_failed 0056154E 149 // handles a situation when player upgrades an item in the inn, but does not have the original item on. 149 NOPs to override till 005615E9
 
+CAll imp_reset_map_counter 0048AB79 4 // checks if it needs to exit after the last map
+
 JMP set_warrior_male_max_parameters 531650 // set_warrior_male_max_parameters
 JMP set_warrior_female_max_parameters 53166C // set_warrior_female_max_parameters
 JMP set_mage_male_max_parameters 531696 // set_mage_male_max_parameters
