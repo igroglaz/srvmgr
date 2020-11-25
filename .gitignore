@@ -23,3 +23,5 @@ postbuild/release
 /srvmgr.opensdf
 /ipch/
 /postbuild/tmp_world/
+postbuild/world/data.xml
+postbuild/_data/world.res
