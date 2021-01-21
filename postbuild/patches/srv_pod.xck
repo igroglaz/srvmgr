@@ -1,6 +1,6 @@
 [BeginXCK]-----------------------------------
 [BeginCRK]-----------------------------------
-= cOMPARe-to-cRACk 3000 v0.08 alpha2 = (c)oded by Alexei Krasavin = 5-03-2001 =
+Upd2021_01_21 - Start skills changed to 0 (at 0010048E)
 
 Differences between a2orig.exe & allods2.exe
 a2server.exe
@@ -136,7 +136,7 @@ a2server.exe
 0010048B: E8 1C
 0010048C: 8B 90
 0010048D: 10 6A
-0010048E: 8B 14
+0010048E: 8B 00
 0010048F: 4D 52
 00100490: E8 8B
 00100491: FF 4D

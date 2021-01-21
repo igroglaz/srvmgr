@@ -14,3 +14,6 @@ rem SRV_UPD0.xck
 srv_drop.xck
 srv_quest_no_mail.xck
 srv_range.fc
+turn_off_random_bag.xck
+quest_availability.xck
+group_kill_reward.xck
