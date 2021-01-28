@@ -17,3 +17,4 @@ srv_range.fc
 turn_off_random_bag.xck
 quest_availability.xck
 group_kill_reward.xck
+quest_kill_N_mobs.xck
