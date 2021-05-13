@@ -513,85 +513,85 @@ int ReadConfig(const char* filename)
                 else if(parameter == ToLower("WarriorMaleMaxBody"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Body = ReadIntegerParameter(value,15,200);
+					Config::WarriorMaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorMaleMaxReaction"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Reaction = ReadIntegerParameter(value,15,200);
+					Config::WarriorMaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorMaleMaxMind"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Mind = ReadIntegerParameter(value,15,200);
+					Config::WarriorMaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorMaleMaxSpirit"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Spirit = ReadIntegerParameter(value,15,200);
+					Config::WarriorMaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
                 }
  
                 else if(parameter == ToLower("WarriorFemaleMaxBody"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Body = ReadIntegerParameter(value,15,200);
+					Config::WarriorFemaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorFemaleMaxReaction"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Reaction = ReadIntegerParameter(value,15,200);
+					Config::WarriorFemaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorFemaleMaxMind"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Mind = ReadIntegerParameter(value,15,200);
+					Config::WarriorFemaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("WarriorFemaleMaxSpirit"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Spirit = ReadIntegerParameter(value,15,200);
+					Config::WarriorFemaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
                 }
  
                 else if(parameter == ToLower("MageMaleMaxBody"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Body = ReadIntegerParameter(value,15,200);
+					Config::MageMaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageMaleMaxReaction"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Reaction = ReadIntegerParameter(value,15,200);
+					Config::MageMaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageMaleMaxMind"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Mind = ReadIntegerParameter(value,15,200);
+					Config::MageMaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageMaleMaxSpirit"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Spirit = ReadIntegerParameter(value,15,200);
+					Config::MageMaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
                 }
  
                 else if(parameter == ToLower("MageFemaleMaxBody"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Body = ReadIntegerParameter(value,15,200);
+					Config::MageFemaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageFemaleMaxReaction"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Reaction = ReadIntegerParameter(value,15,200);
+					Config::MageFemaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageFemaleMaxMind"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Mind = ReadIntegerParameter(value,15,200);
+					Config::MageFemaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
                 }
                 else if(parameter == ToLower("MageFemaleMaxSpirit"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Spirit = ReadIntegerParameter(value,15,200);
+					Config::MageFemaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
                 }
 
                 else if(parameter == ToLower("MinQuestReward"))
