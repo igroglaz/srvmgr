@@ -149,10 +149,10 @@ namespace Config
     double PKExpMult		= 1;
     double RespawnExpMult2	= 0.9;
 
-	MainCharacterParameters WarriorMaleMaxParameters = { 52, 50, 48, 46 };
-	MainCharacterParameters WarriorFemaleMaxParameters = { 50, 52, 46, 48 };
-	MainCharacterParameters MageMaleMaxParameters = { 48, 46, 52, 50 };
-	MainCharacterParameters MageFemaleMaxParameters = { 46, 48, 50, 52 };
+	MainCharacterParameters WarriorMaleMaxParameters = { 52, 50, 48, 46, 100, 100, 100, 100, 100};
+	MainCharacterParameters WarriorFemaleMaxParameters = { 50, 52, 46, 48, 100, 100, 100, 100, 100};
+	MainCharacterParameters MageMaleMaxParameters = { 48, 46, 52, 50, 100, 100, 100, 100, 100};
+	MainCharacterParameters MageFemaleMaxParameters = { 46, 48, 50, 52, 100, 100, 100, 100, 100};
 
 	extern uint32_t MinQuestReward = 250;
 	extern uint32_t MaxQuestReward = 16383000;
@@ -508,92 +508,41 @@ int ReadConfig(const char* filename)
                     if(val < 0) val = 0;
                     if(val > 1) val = 1;
                     Config::RespawnExpMult2 = val;
-                }
+				}
+				else if(parameter.rfind(ToLower("CharParams."), 0) == 0){
+					//string.rfind is used as .startsWith()
+					const char delim = '.';
 
-                else if(parameter == ToLower("WarriorMaleMaxBody"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorMaleMaxReaction"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorMaleMaxMind"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorMaleMaxSpirit"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorMaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
-                }
- 
-                else if(parameter == ToLower("WarriorFemaleMaxBody"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorFemaleMaxReaction"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorFemaleMaxMind"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("WarriorFemaleMaxSpirit"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::WarriorFemaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
-                }
- 
-                else if(parameter == ToLower("MageMaleMaxBody"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageMaleMaxReaction"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageMaleMaxMind"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageMaleMaxSpirit"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageMaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
-                }
- 
-                else if(parameter == ToLower("MageFemaleMaxBody"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Body = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageFemaleMaxReaction"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Reaction = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageFemaleMaxMind"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Mind = ReadIntegerParameter(value,1,200);
-                }
-                else if(parameter == ToLower("MageFemaleMaxSpirit"))
-                {
-                    if(!CheckInt(value)) return lnid;
-					Config::MageFemaleMaxParameters.Spirit = ReadIntegerParameter(value,1,200);
-                }
+					std::vector<std::string> out;
+					tokenize(parameter, delim, out);
+					int statValue = ReadIntegerParameter(value,1,200);
+					if(out.size() ==3){
+						std::string clazz = out[1];
+						std::string stat = out[2];
+						Printf("Parsing '%s' '%s' '%s' = %d", parameter.c_str(), clazz.c_str(), stat.c_str(), statValue);
+						MainCharacterParameters *params = NULL;
+						if(clazz == ToLower("WarriorMale"))             params = &Config::WarriorMaleMaxParameters;
+						else if (clazz == ToLower("WarriorFemale"))     params = &Config::WarriorFemaleMaxParameters;
+						else if (clazz == ToLower("MageMale"))          params = &Config::MageMaleMaxParameters;
+						else if (clazz == ToLower("MageFemale"))        params = &Config::MageFemaleMaxParameters;
+						else {
+						    Printf("Error while reading '%s' part of '%s' config", clazz.c_str(), parameter.c_str());
+						}
 
+						if(stat == ToLower("MaxBody"))                  params->Body = statValue;
+						else if (stat == ToLower("MaxReaction"))        params->Reaction = statValue;
+						else if (stat == ToLower("MaxMind"))            params->Mind = statValue;
+						else if (stat == ToLower("MaxSpirit"))          params->Spirit = statValue;
+						else if (stat == ToLower("MaxResistFire"))      params->ResistFire = statValue;
+						else if (stat == ToLower("MaxResistWater"))     params->ResistWater = statValue;
+						else if (stat == ToLower("MaxResistAir"))       params->ResistAir = statValue;
+						else if (stat == ToLower("MaxResistEarth"))     params->ResistEarth = statValue;
+						else if (stat == ToLower("MaxResistAstral"))    params->ResistAstral = statValue;
+						else {
+						    Printf("Error while reading '%s' part of '%s' config", stat.c_str(), parameter.c_str());
+						}
+					}
+                }
                 else if(parameter == ToLower("MinQuestReward"))
                 {
                     if(!CheckInt(value)) return lnid;

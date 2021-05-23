@@ -206,6 +206,8 @@ CALL imp_inn_item_upgrade_failed 0056154E 149 // handles a situation when player
 
 CAll imp_reset_map_counter 0048AB79 4 // checks if it needs to exit after the last map
 
+CALL imp_limit_magic_resist_wrapper 00532243 2 // limits magic resistance per class
+
 JMP set_warrior_male_max_parameters 531650 // set_warrior_male_max_parameters
 JMP set_warrior_female_max_parameters 53166C // set_warrior_female_max_parameters
 JMP set_mage_male_max_parameters 531696 // set_mage_male_max_parameters

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 // string-related
 std::string Format(const std::string format, ...);
@@ -38,5 +39,5 @@ struct DirectoryEntry
 
 void _stdcall Printf(const char* format, ...);
 std::vector<std::string> ParseSpaceDelimited(std::string message, bool comments = false);
-
+void tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
 #endif // UTILS_HPP_INCLUDED

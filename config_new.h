@@ -9,6 +9,7 @@ extern unsigned long MAX_EXP_ON_SKILL;
 
 struct MainCharacterParameters {
 	uint8_t Body, Reaction, Mind, Spirit;
+	uint8_t ResistFire, ResistWater, ResistAir, ResistEarth, ResistAstral;
 };
 
 namespace Config

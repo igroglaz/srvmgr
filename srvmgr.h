@@ -19,6 +19,7 @@
 
 
 #include <string>
+#include <vector>
 
 typedef VOID FAR* PVOID; 
 

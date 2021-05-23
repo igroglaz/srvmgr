@@ -3,6 +3,10 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
 
 extern Encoding encoding;
 
