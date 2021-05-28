@@ -193,6 +193,10 @@ CALL imp_regen 00556401 6
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
 
+CALL remove_existing_n_monters_quests_wrapper 0056289E 9 //Prevent inns to give a quest on the same monster if a player already has it
+CALL remove_existing_monster_quests_wrapper 00562E10 9 //Prevent inns to give a quest on the same monster if a player already has it
+CALL remove_existing_group_quests_wrapper 00563355 9 //Prevent inns to give a quest on the same monster if a player already has it
+
 CALL imp_distance_bug_fix 005AAA8D // Fix staff distance bug
 
 CALL imp_increase_potions_in_shops 0054D6BF // increase number of potions in shops

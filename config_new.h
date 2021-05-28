@@ -71,6 +71,10 @@ namespace Config
 	extern float mage_pvp_dmg_factor;
 	extern float shop_potions_factor;
 	extern bool server_rotate_maps;
+
+	extern bool AllowOnlyOneQuest_KillNMonsters;
+	extern bool AllowOnlyOneQuest_KillTheMonster;
+	extern bool AllowOnlyOneQuest_KillTheGroup;
 }
 
 int ReadConfig(const char* filename);

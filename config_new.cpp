@@ -162,6 +162,12 @@ namespace Config
 	float mage_pvp_dmg_factor = 1;
 	float shop_potions_factor = 1;
 	bool server_rotate_maps = true;
+
+    // If these settings are set to true, it will forbid a player from taking several quests for the same monster, group or monster type.
+	bool AllowOnlyOneQuest_KillNMonsters = false;
+	bool AllowOnlyOneQuest_KillTheMonster = false;
+	bool AllowOnlyOneQuest_KillTheGroup = false;
+
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
@@ -563,7 +569,21 @@ int ReadConfig(const char* filename)
 					if(!CheckFloat(value)) return lnid;
 					Config::WearDropProbability = ReadFloatParameter(value,0,1);
                 }
-				
+				else if(parameter == ToLower("AllowOnlyOneQuest_KillNMonsters"))
+				{
+					if(!CheckBool(value)) return lnid;
+					Config::AllowOnlyOneQuest_KillNMonsters = StrToBool(value);
+				}
+				else if(parameter == ToLower("AllowOnlyOneQuest_KillTheMonster"))
+				{
+					if(!CheckBool(value)) return lnid;
+					Config::AllowOnlyOneQuest_KillTheMonster = StrToBool(value);
+				}
+				else if(parameter == ToLower("AllowOnlyOneQuest_KillTheGroup"))
+				{
+					if(!CheckBool(value)) return lnid;
+					Config::AllowOnlyOneQuest_KillTheGroup = StrToBool(value);
+				}
                 else if(parameter == "servercaps")
                 {
                     value = Trim(ToLower(value));

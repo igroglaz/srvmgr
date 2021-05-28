@@ -3,6 +3,12 @@
 #define _WORD __int16
 #define _BYTE char
 
+struct T_ID
+{
+  _WORD id;
+  _WORD type;
+};
+
 struct T_INVENTORY_ITEM
 {
   _DWORD dword0;
@@ -47,14 +53,14 @@ struct __declspec(align(4)) T_LINKEDLIST
   int maxInd;
   _DWORD dword20;
 };
-struct __declspec(align(4)) T_UNKNOWN_STRUCT_1{
+struct __declspec(align(4)) T_PLAYER_1{
 
 };
 struct T_UNIT;
-struct  T_UNKNOWN_STRUCT
+struct  T_PLAYER
 {
     _BYTE gap0[4];
-    _WORD word4;
+    T_ID id_ext;
     _BYTE gap1[18];
     _DWORD dword18;
     _BYTE gap2[8];
@@ -82,10 +88,11 @@ struct  T_UNKNOWN_STRUCT
 struct __declspec(align(4)) T_UNIT
 {
   void *clazz;
-  _BYTE gap0[10];
+  T_ID id_ext;
+  _BYTE gap0[6];
   _WORD wordE;
   _DWORD position;
-  T_UNKNOWN_STRUCT *unknown_struct;
+  T_PLAYER *unknown_struct;
   _BYTE gap1[12];
   int *pint24;
   _DWORD dword28;
