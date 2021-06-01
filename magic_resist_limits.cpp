@@ -6,39 +6,30 @@ int getLimit(T_UNIT* unit, int magic_ind){
 	bool warrior = (unit->unit_attrs & 4) ==0;
 	bool female = unit->wordE == 34 || unit->wordE == 36;
 
-	MainCharacterParameters &params = Config::WarriorMaleMaxParameters;
-	if(warrior && !female){
-	    params = Config::WarriorMaleMaxParameters;
-	}else if(female & warrior){
-	    params = Config::WarriorFemaleMaxParameters;
-	}else if(!female && !warrior){
-	    params = Config::MageMaleMaxParameters;
-	}else if(female && !warrior){
-	    params = Config::MageFemaleMaxParameters;
-	}
-	else{
-	    log_format("getLimit->Error\n");
-	}
+	MainCharacterParameters* params = NULL;
 	if(female){
 		if(warrior){
-			params = Config::WarriorFemaleMaxParameters;
+			params = &Config::WarriorFemaleMaxParameters;
 		}else{
-			params = Config::MageFemaleMaxParameters;
+			params = &Config::MageFemaleMaxParameters;
 		}
 	}else{
 		if(warrior){
-			params = Config::WarriorMaleMaxParameters;
+			params = &Config::WarriorMaleMaxParameters;
 		}else{
-			params = Config::MageMaleMaxParameters;
+			params = &Config::MageMaleMaxParameters;
 		}
 	}
-	switch(magic_ind){
-		case 1: return params.ResistFire;
-		case 2: return params.ResistWater;
-		case 3: return params.ResistAir;
-		case 4: return params.ResistEarth;
-		case 5: return params.ResistAstral;
+	if(params){
+		switch(magic_ind){
+			case 1: return params->ResistFire;
+			case 2: return params->ResistWater;
+			case 3: return params->ResistAir;
+			case 4: return params->ResistEarth;
+			case 5: return params->ResistAstral;
+		}
 	}
+	log_format("[ERR] getLimit(%X, %d){params=%X}->Error\n", unit, magic_ind, params);
 	return 100;
 }
 
