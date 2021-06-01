@@ -61,7 +61,7 @@ struct  T_PLAYER
 {
     _BYTE gap0[4];
     T_ID id_ext;
-    _BYTE gap1[18];
+    _BYTE gap1[16];
     _DWORD dword18;
     _BYTE gap2[8];
     _DWORD dword24;
