@@ -5421,7 +5421,7 @@
 			<name>Potion Fighter Bonus</name>
 			<price>100</price>
 			<weight>3</weight>
-			<effect>body=+1</effect>
+			<effect>body=+1, spirit=+1</effect>
 		</item>
 		<item>
 			<name>Potion Mage Bonus</name>

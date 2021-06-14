@@ -5415,13 +5415,13 @@
 			<name>Potion Big Mana</name>
 			<price>100000000</price>
 			<weight>3</weight>
-			<effect>body=+1, reaction=+1, mind=+1, spirit=+1</effect>
+			<effect>body=+1, reaction=+1, mind=+1</effect>
 		</item>
 		<item>
 			<name>Potion Fighter Bonus</name>
 			<price>100</price>
 			<weight>3</weight>
-			<effect>mana=+1</effect>
+			<effect>spirit=+1</effect>
 		</item>
 		<item>
 			<name>Potion Mage Bonus</name>
