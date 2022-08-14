@@ -1448,18 +1448,23 @@ void __declspec(naked) imp_DropAll()
 */
 void __declspec(naked) imp_ScaleSoftcoreExperienceReward()
 {
-	__asm
+	__asm                                   // to get into RoM2 coding, check "x86 Assembly" manual :) Some tips:
 	{ // 5610B6
-		mov		eax, [ebp+0x08]
+		mov		eax, [ebp+0x08]             //	moves contents from source to destination (destination <- source)		 
 		mov		[ebp-0x44], eax
 		mov		ecx, [ebp-0x3C]
-		movzx	edx, word ptr [ecx+0x42]
+		movzx	edx, word ptr [ecx+0x42]    // 'mov' works only when source and destination are the same.
+                                            // ...if they are not the same, 'movzx' will suppose that dest is bigger than source,
+                                            // so "higher" bits will become zero (btw, for signed values use: movsx).
 
 		mov		eax, Config::ServerFlags
-		test	eax, SVF_SOFTCORE
-		jz		do_normal
+		test	eax, SVF_SOFTCORE           // & command. Changes STATUS register which based on operation which was performed.
+                                            // in our case: ZF flag (while AND put result to 1st operand).
+                                            // if the result is zero it sets ZF = 1, otherwise it sets ZF = 0.
+		jz		do_normal                   // jump if zero - perform action if ZF == 0
 
-		imul	edx, 0x19
+//		imul	edx, 0x19  // vanilla value.. as Tangar's Hat don't use SOFTCORE - all above explanation is for education purposes..
+		imul	edx, 0xFA  // ..cause we use Softcore (110 skill) value everywhere ;)
 		jmp		cont
 
 do_normal:
