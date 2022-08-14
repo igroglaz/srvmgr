@@ -6,8 +6,8 @@
 #include <fstream>
 #include <algorithm>
 
-unsigned long MAX_SKILL = 100;
-unsigned long MAX_EXP_ON_SKILL = 13779612;
+unsigned long MAX_SKILL = 110;              // Vanilla (V): 100; we use SOFTCORE values by default
+unsigned long MAX_EXP_ON_SKILL = 35742360;  // V: 13779612;
 
 uint32_t ParseLogFlags(std::string string)
 {
