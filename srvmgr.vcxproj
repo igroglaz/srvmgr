@@ -149,7 +149,6 @@
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
     <None Include="postbuild\server.dis" />
-    <None Include="ReadMe.txt" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat" />
     <None Include="srvmgr.def" />

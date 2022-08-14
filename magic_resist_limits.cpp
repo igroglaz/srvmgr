@@ -2,26 +2,32 @@
 #include "utils.h"
 #include "config_new.h"
 
-int getLimit(T_UNIT* unit, int magic_ind){
-	bool warrior = (unit->unit_attrs & 4) ==0;
+int getLimit(T_UNIT* unit, int magic_ind)
+{
+	bool warrior = (unit->unit_attrs & 4) == 0;
 	bool female = unit->wordE == 34 || unit->wordE == 36;
 
 	MainCharacterParameters* params = NULL;
-	if(female){
-		if(warrior){
+
+	if (female)
+	{
+		if (warrior)
 			params = &Config::WarriorFemaleMaxParameters;
-		}else{
+		else
 			params = &Config::MageFemaleMaxParameters;
-		}
-	}else{
-		if(warrior){
-			params = &Config::WarriorMaleMaxParameters;
-		}else{
-			params = &Config::MageMaleMaxParameters;
-		}
 	}
-	if(params){
-		switch(magic_ind){
+	else
+	{
+		if (warrior)
+			params = &Config::WarriorMaleMaxParameters;
+		else
+			params = &Config::MageMaleMaxParameters;
+	}
+
+	if (params)
+	{
+		switch (magic_ind)
+		{
 			case 1: return params->ResistFire;
 			case 2: return params->ResistWater;
 			case 3: return params->ResistAir;

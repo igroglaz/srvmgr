@@ -2594,7 +2594,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
 		strcpy(config, "server.cfg");
 		strcpy(ctl_dir, ".\\non-existent");
 
-		///////////// считываем из командной строки имя файла с конфигом
+		///////////// read from command prompt: name of config file
 		char *cmd;
 		cmd = GetCommandLine();
 //		MessageBox(0, cmd, 0, 0);

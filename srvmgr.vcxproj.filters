@@ -242,7 +242,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
-    <None Include="ReadMe.txt" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat">
       <Filter>Source Files</Filter>
