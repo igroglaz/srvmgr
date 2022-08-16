@@ -176,7 +176,7 @@ JMP imp_CheckItemExclusion 54DDBA // item exclusion check
 JMP imp_GMNoLevelUp 530745 // imp_GMNoLevelUp
 //JMP imp_ExtDiplomacy 4FFD18 /// ext diplomacy
 JMP imp_GMNoLevelDown 53126B // imp_GMNoLevelDown
-//JMP imp_DropAll 52DA11 // presumably drop all
+JMP imp_DropAll 52DA11 // presumably drop all
 JMP imp_ScaleSoftcoreExperienceReward 5610B6 // quest reward scaling
 JMP imp_LoadShopData 59C66E // load shop data from alm
 JMP imp_EnterCustomShop 502C50 // enter custom shop instead of normal one
@@ -186,10 +186,11 @@ CALL fix_spell_duration_overflow 53C0E1 // fix spell duration overflow
 CALL fix_spell_duration_overflow 53C21E // fix spell duration overflow
 CALL fix_spell_duration_overflow 53C52A // fix spell duration overflow
 
-CALL imp_drop_partially 0052E264 // implement partial drop after death
-CALL imp_drop_partially 0052DEEF // implement partial drop after death
+//CALL imp_drop_partially 0052E264 // implement partial drop after death 
+//CALL imp_drop_partially 0052DEEF // implement partial drop after death -- // sometimes worn items do not drop after death even with 100% chance...
+                                                                            // so I comment it out for now and we will use oldschool imp_DropAll 52DA11
 CALL imp_check_unit_dmg 00504067
-CALL imp_regen 00556401 6
+//CALL imp_regen 00556401 6 // used for cheating (with leather shield)
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
 

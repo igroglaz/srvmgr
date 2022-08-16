@@ -1,6 +1,6 @@
 [BeginXCK]-----------------------------------
 [BeginCRK]-----------------------------------
-= cOMPARe-to-cRACk 3000 v0.08 alpha2 = (c)oded by Alexei Krasavin = 5-03-2001 =
+added by Serg.Bloim in c181548deb1364119d39ed9f10727e254e379631 (partial drop) . donno what is exactly xcked there, so turn it off for now, as we don't use partial drop atm due to the bug
 
 Differences between a2orig.exe & allods2.exe
 a2server.exe
