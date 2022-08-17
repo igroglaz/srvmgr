@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\multiplayer_shop.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\pktmgr.cpp"
 				>
 			</File>
@@ -312,6 +316,10 @@
 			</File>
 			<File
 				RelativePath=".\itemex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\multiplayer_shop.h"
 				>
 			</File>
 			<File

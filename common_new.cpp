@@ -1476,20 +1476,3 @@ cont:
 		jmp		edx
 	}
 }
-
-void _stdcall UpdateOnReturn()
-{
-	NetCmd_UpdateInfo();
-}
-
-void __declspec(naked) imp_UpdateOnReturn()
-{
-	__asm
-	{ // 508E9D
-		mov		ecx, [ebp-0xB8]
-		mov		dword ptr [ecx+0x1FC], 0
-		call	UpdateOnReturn
-		mov		edx, 0x00508EAD
-		jmp		edx
-	}
-}
