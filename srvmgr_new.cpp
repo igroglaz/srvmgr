@@ -11,7 +11,6 @@
 #include "unit_info.h"
 #include "forbidden_items.h"
 #include "multiplayer_shop.h"
-#include "python.h"
 
 void ChangeWndTitle(const char* title)
 {
