@@ -1378,7 +1378,16 @@ do_normal:
 		mov		eax, [ebp-0x14]
 		mov		ecx, [ebp-0x34]
 		mov		eax, [ecx+eax*4+0x23C]
+//////////////////////////////////////////
+/*
+ZZYZX repo got there:
+		imul	eax, 9
+		cdq
+		mov		ecx, 0x0053127C
+But we change it cause of custom exp penatly (commit ebfcb85) to:
+*/        
 		mov		ecx, 0x00531278
+//////////////////////////////////////////
 		jmp		ecx
 	}
 }
