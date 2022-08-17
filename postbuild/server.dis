@@ -43,10 +43,10 @@ CALL testeaxifzero 5A86C4 /// bug_001A
 CALL testeaxifzero 5B3E6A /// bug_001B
 CALL testeaxifzero 5B409F /// bug_001C
 CALL testeaxifzero 5B40CC /// bug_001D
-JMP map_exit 4F94C0 /// ����� � �����, ��� ����
+JMP map_exit 4F94C0 /// exit from map, kick everyone
 JMP kick_char 502DE5 /// kick
-JMP part_of_camp 534E87 /// ��������. ��� �����
-JMP part_of_disconnect 534F4C /// ��������. ��� �������
+JMP part_of_camp 534E87 /// autosave upon camping
+JMP part_of_disconnect 534F4C /// autosave when disconnect
 JMP part_of_save_char 4EE563 /// save_char w log
 JMP part_of_save 4F62B1 /// part_of_save
 JMP max_players 4F7E32 /// max_players
@@ -65,7 +65,6 @@ JMP enter_inn 5062FB /// camp from inn bug
 JMP left_shop 5065E5 /// left shop log
 JMP left_inn 5063B6 /// left inn log
 //JMP change_dip 508479 /// log dip_ch
-///JMP area_cast 5054FF /// log area_casts - ���������������
 JMP public_chat_2 50764A /// disable sending public message to players not on the map
 JMP private_chat_2 507489 /// disable sending private group message to players not on the map
 JMP private_chat_3 5073B6 /// disable sending private message to players not on the map
@@ -73,7 +72,6 @@ JMP private_chat_3 5073B6 /// disable sending private message to players not on 
 JMP adm_invis 51C901 /// admin invis
 JMP adm_dip 4FFD77 /// admin diplomacy: monsters_alliance
 JMP adm_dip_2 4FFEA6 /// admin diplomacy: players_alliance
-//CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"
 JMP loading_map_bug 4F1D4A /// loading map bug
 JMP chat_crash_fix 50716D /// chat crash fix
 JMP packet_recvd 504ABC /// invalid packet crash fix
@@ -128,7 +126,7 @@ JMP imp_MapClosed 4FE2D0 /// close map
 //JMP imp_ShopCrash3 54749F /// shop crash #3
 //JMP imp_ShopCrash4 544E46 /// shop crash #4
 JMP imp_ServerChat 494F84 /// <server>: chat
-JMP imp_PIadd 535B4A /// create playerInfo struct
+JMP imp_PIadd 4FF418 /// create playerInfo struct
 JMP imp_PIdel 535439 /// delete playerInfo struct
 JMP imp_CheckShield 506A53 /// shield bug disable
 JMP imp_ReturnFail 52C45E /// return to map fail: forced return
@@ -180,6 +178,10 @@ JMP imp_DropAll 52DA11 // presumably drop all
 JMP imp_ScaleSoftcoreExperienceReward 5610B6 // quest reward scaling
 JMP imp_LoadShopData 59C66E // load shop data from alm
 JMP imp_EnterCustomShop 502C50 // enter custom shop instead of normal one
+
+// JMP imp_UpdateOnReturn 508E9D // required so that fresh list of players is sent to hat, when we remove a player.
+// MIGHT BE BROKEN, check comments in the code!
+
 JMP fix_spell_duration_overflow_0053973E 53973E // fix spell duration overflow
 CALL fix_spell_duration_overflow 53BFA1 // fix spell duration overflow
 CALL fix_spell_duration_overflow 53C0E1 // fix spell duration overflow
@@ -226,3 +228,8 @@ JMP set_mage_female_max_parameters_taking_potion 5661EA // set_mage_female_max_p
 JMP bound_quest_reward 565406 // bound_quest_reward
 
 ///////// jmp, 1: call
+
+
+// stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
+//JMP area_cast 5054FF /// log area_casts - ���������������
+//CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"

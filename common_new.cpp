@@ -1476,3 +1476,27 @@ cont:
 		jmp		edx
 	}
 }
+
+
+// this is a function which sends hat information about character just before exiting server
+// ZZYZX said that he isn't sure that it's necessary and that it works...
+// It might glitch status or servers can start crushing and become broken:
+// with Windows exception, so auto-start won't work..
+// ..because when server crushed (by any other reason), it sends characters to hat,
+// goes till UpdateOnSave and crashes again, this time with a standard window
+void _stdcall UpdateOnReturn()
+{
+	NetCmd_UpdateInfo();
+}
+
+void __declspec(naked) imp_UpdateOnReturn()
+{
+	__asm
+	{ // 508E9D
+		mov		ecx, [ebp-0xB8]
+		mov		dword ptr [ecx+0x1FC], 0
+		call	UpdateOnReturn
+		mov		edx, 0x00508EAD
+		jmp		edx
+	}
+}
