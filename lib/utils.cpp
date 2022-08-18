@@ -230,6 +230,9 @@ float StrToFloat(const string& what)
 	return retval;
 }
 
+// take each char from (hopefully) numeric string and
+// check that each character's is ASCII from 48 (0d) to 57 (9d)
+// (size_t - unsigned type not less than 16)
 bool CheckInt(const string& what)
 {
 	for(size_t i = 0; i < what.length(); i++)

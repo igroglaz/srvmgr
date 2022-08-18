@@ -160,6 +160,7 @@ namespace Config
 	uint32_t QuestRollInterval  = 0x78;
 
 	float mage_pvp_dmg_factor = 1;
+	int16_t max_pvp_dmg = 100;
 	float shop_potions_factor = 1;
 	bool server_rotate_maps = true;
 
@@ -319,6 +320,12 @@ int ReadConfig(const char* filename)
 				{
 					if(!CheckFloat(value)) return lnid;
 					Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
+				}
+				else if(parameter == ToLower("MaxPvpDmg"))
+				{
+					if(!CheckInt(value)) return lnid;
+                                          // value, int32_t MinValue, int32_t MaxValue
+					Config::max_pvp_dmg = ReadIntegerParameter(value,1,500);
 				}
 				else if(parameter == ToLower("ShopPotionsFactor"))
 				{
