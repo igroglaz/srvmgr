@@ -709,8 +709,8 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             {
                 for (int32_t j = start_y; j <= start_y+count_y; j++)
                 {
-                    if (i < 8 || i > p_mapwidth-8 ||
-                        j < 8 || j > p_mapheight-8) continue;
+                    if (i < 8 || i > p_mapwidth - 8 ||
+                        j < 8 || j > p_mapheight - 8) continue;
                     zxmgr::CastPointEffect(unit, i, j, what);
                 }
             }

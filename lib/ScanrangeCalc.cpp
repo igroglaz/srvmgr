@@ -14,9 +14,9 @@ void CScanrangeCalc::InitializeTables()
     memset(pTablesCost, 0, sizeof(pTablesCost));
     memset(pTablesOffset, 0, sizeof(pTablesOffset));
 
-    for(int32_t i = 0; i <= 20; ++i)
+    for (int32_t i = 0; i <= 20; ++i)
     {
-        for(int32_t j = 0; j <= 20; ++j)
+        for (int32_t j = 0; j <= 20; ++j)
         {
             if (j >= (i / 2))
             {
@@ -56,7 +56,7 @@ void CScanrangeCalc::InitializeTables()
             }
 
             int32_t v4;
-            if(i > j) v4 = i;
+            if (i > j) v4 = i;
             else v4 = j;
 
             int16_t v1 = (int16_t)(sqrt(double(j*j + i*i)) * (double)ulScanShifted / (double)v4);

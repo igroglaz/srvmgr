@@ -53,12 +53,13 @@ bool NetCmd_Shutdown()
 
 bool NetCmd_UpdateInfo()
 {
-    if(Config::ServerCaps & SVC_DETAILED_INFO)
+    if (Config::ServerCaps & SVC_DETAILED_INFO)
     {
         Packet pack;
         pack.WriteUInt8(0x12);
         // базовая информация
-        if(NetHat::Info.PlayerCount == 0xFF && NetHat::Info.MapLevel == 0xFF && NetHat::Info.GameMode == 0xFF && NetHat::Info.MapSize == 0xFF) // shutdown
+        if (NetHat::Info.PlayerCount == 0xFF && NetHat::Info.MapLevel == 0xFF &&
+            NetHat::Info.GameMode == 0xFF && NetHat::Info.MapSize == 0xFF) // shutdown
         {
             return NetCmd_Shutdown();
         }
@@ -70,29 +71,29 @@ bool NetCmd_UpdateInfo()
             uint32_t p_mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000);
             uint32_t p_mapheight = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004);
             uint32_t p_maptime = *(uint32_t*)(*(uint32_t*)(0x00642C2C) + 0x254) / 1000;
-            pack.WriteUInt32(p_mapwidth - 16); // Map Width
+            pack.WriteUInt32(p_mapwidth - 16);  // Map Width
             pack.WriteUInt32(p_mapheight - 16); // Map Height (может быть != Map Width)
-            pack.WriteUInt32(p_maptime); // Map Time
+            pack.WriteUInt32(p_maptime);        // Map Time
             pack.WriteUInt32(Config::ServerFlags);
 
             std::vector<byte*> tmp_players_Z = zxmgr::GetPlayers();
             std::vector<byte*> tmp_players;
             // удаляем AI-игроков
-            for(std::vector<byte*>::iterator it = tmp_players_Z.begin(); it != tmp_players_Z.end(); ++it)
+            for (std::vector<byte*>::iterator it = tmp_players_Z.begin(); it != tmp_players_Z.end(); ++it)
             {
                 byte* player = (*it);
-                if(!*(uint32_t*)(player + 0x2C)) // NOT AI
+                if (!*(uint32_t*)(player + 0x2C)) // NOT AI
                     tmp_players.push_back(player);
             }
 
             pack.WriteUInt32(tmp_players.size());
-            for(std::vector<byte*>::iterator it = tmp_players.begin(); it != tmp_players.end(); ++it)
+            for (std::vector<byte*>::iterator it = tmp_players.begin(); it != tmp_players.end(); ++it)
             {
                 byte* player = (*it);
 
                 const char* player_nickname = *(const char**)(player + 0x18);
                 const char* player_login = "artificial";
-                if(!*(uint32_t*)(player + 0x2C))
+                if (!*(uint32_t*)(player + 0x2C))
                     player_login = *(const char**)(player + 0xA78);
                 uint32_t player_id1 = *(uint32_t*)(player + 0x10);
                 uint32_t player_id2 = *(uint32_t*)(player + 0x14);
@@ -103,13 +104,13 @@ bool NetCmd_UpdateInfo()
                 byte* vd = zxmgr::GetNetworkStruct(player);
                 bool player_connected = (vd);
                 pack.WriteUInt8(player_connected);
-                if(*(uint32_t*)(player + 0x2C) || !player_connected) // AI or disconnected
+                if (*(uint32_t*)(player + 0x2C) || !player_connected) // AI or disconnected
                 {
                     pack.WriteString("");
                 }
                 else
                 {
-                    if(vd)
+                    if (vd)
                     {
                         const char* vd_ip = (const char*)(vd + 8);
                         //pack << std::string(vd_ip);
@@ -125,15 +126,15 @@ bool NetCmd_UpdateInfo()
             mask += "*";
             WIN32_FIND_DATA fd;
             HANDLE h = FindFirstFileA(mask.c_str(), &fd);
-            if(h != INVALID_HANDLE_VALUE)
+            if (h != INVALID_HANDLE_VALUE)
             {
                 bool found = true;
-                while(found)
+                while (found)
                 {
                     std::string login = std::string(fd.cFileName);
                     found = (FindNextFileA(h, &fd) != 0);
                     
-                    if(login.find(".") != std::string::npos)
+                    if (login.find(".") != std::string::npos)
                         continue;
 
                     logins.push_back(login);
@@ -143,7 +144,7 @@ bool NetCmd_UpdateInfo()
             FindClose(h);
 
             pack.WriteUInt32(logins.size());
-            for(std::vector<std::string>::iterator it = logins.begin(); it != logins.end(); ++it)
+            for (std::vector<std::string>::iterator it = logins.begin(); it != logins.end(); ++it)
             {
                 std::string& login = (*it);
                 pack.WriteString(login);
@@ -194,7 +195,7 @@ void _stdcall Net_HatPrepare()
 
     std::vector<std::string> ipd = Explode(dadr, ":");
     NetHat::ControlAddr = ipd[0];
-    if(ipd.size() == 2)
+    if (ipd.size() == 2)
         NetHat::ControlPort = StrToInt(ipd[1]) + 1000;
 
     char* stadd = *(char**)(0x006D15B8);
@@ -202,7 +203,7 @@ void _stdcall Net_HatPrepare()
 
     ipd = Explode(dadd, ":");
     NetHat::HatAddr = ipd[0];
-    if(ipd.size() == 2)
+    if (ipd.size() == 2)
         NetHat::HatPort = StrToInt(ipd[1]);
 
     NetHat::ShuttingDown = false;
@@ -211,11 +212,11 @@ void _stdcall Net_HatPrepare()
 
 bool Net_HatInit()
 {
-    if(NetHat::ControlPort == 0 && !NetHat::ControlAddr.length()) return false;
-    if(NetHat::ShuttingDown) return false;
+    if (NetHat::ControlPort == 0 && !NetHat::ControlAddr.length()) return false;
+    if (NetHat::ShuttingDown) return false;
 
     NetHat::Socket = SOCK_Connect(NetHat::HatAddr, NetHat::HatPort, NetHat::ControlAddr, NetHat::ControlPort);
-    if(NetHat::Socket == SERR_NOTCREATED)
+    if (NetHat::Socket == SERR_NOTCREATED)
     {
         Net_HatShutdown();
         //Printf("Warning: control connection to hat failed.");
@@ -227,7 +228,7 @@ bool Net_HatInit()
     // number of milliseconds from the moment when system was started
     NetHat::LastUpdate = GetTickCount();
 
-    if(!NetCmd_HatAuth())
+    if (!NetCmd_HatAuth())
     {
         Net_HatShutdown();
         Printf("Warning: control connection to hat failed (disconnected).");
@@ -241,23 +242,23 @@ bool Net_HatInit()
 
 bool Net_HatProcess()
 {
-    if(NetHat::ShuttingDown) return false;
-    if(!NetHat::Connected) return false;
-    if(!NetHat::Receiver.Receive(Config::ProtocolVersion)) return false;
+    if (NetHat::ShuttingDown) return false;
+    if (!NetHat::Connected) return false;
+    if (!NetHat::Receiver.Receive(Config::ProtocolVersion)) return false;
 
     // number of milliseconds from the moment when system was started - Nethat..
-    if(GetTickCount() - NetHat::LastUpdate > 15000 && NetHat::HaveInfo)
+    if (GetTickCount() - NetHat::LastUpdate > 15000 && NetHat::HaveInfo)
     {
-        if(!NetCmd_UpdateInfo()) NetHat::Connected = false;
+        if (!NetCmd_UpdateInfo()) NetHat::Connected = false;
         NetHat::LastUpdate = GetTickCount();
     }
 
     Packet pack;
-    while(NetHat::Receiver.GetPacket(pack))
+    while (NetHat::Receiver.GetPacket(pack))
     {
         uint8_t packet_id = pack.ReadUInt8();
 
-        switch(packet_id)
+        switch (packet_id)
         {
         case 0x63: // broadcast from hat
         {
@@ -337,8 +338,8 @@ bool Net_HatProcess()
 
 void Net_HatShutdown()
 {
-    if(NetHat::Connected && !NetHat::Socket) return;
-    if(NetHat::Socket) SOCK_Destroy(NetHat::Socket);
+    if (NetHat::Connected && !NetHat::Socket) return;
+    if (NetHat::Socket) SOCK_Destroy(NetHat::Socket);
     NetHat::Socket = NULL;
     NetHat::Connected = false;
 }
@@ -362,9 +363,9 @@ void __declspec(naked) imp_NetLayer_FirstConnect()
 
 void Net_RegularProc()
 {
-    if(NetHat::ControlPort != 0 && NetHat::ControlAddr.length() && !NetHat::ShuttingDown)
+    if (NetHat::ControlPort != 0 && NetHat::ControlAddr.length() && !NetHat::ShuttingDown)
     {
-        if(!Net_HatProcess() && (GetTickCount()-NetHat::LastReconnect > 5000))
+        if (!Net_HatProcess() && (GetTickCount()-NetHat::LastReconnect > 5000))
         {
             Net_HatShutdown();
             Net_HatInit(); // reconnect
@@ -377,7 +378,7 @@ void Net_RegularProc()
 
 void _stdcall imp2_UpdateInfo()
 {
-    if(!NetCmd_UpdateInfo()) NetHat::Connected = false;
+    if (!NetCmd_UpdateInfo()) NetHat::Connected = false;
 }
 
 void _stdcall imp_UpdateInfo(unsigned char a_pcount, const char* a_name, unsigned char a_level, unsigned char a_type, unsigned char a_size)
@@ -389,12 +390,12 @@ void _stdcall imp_UpdateInfo(unsigned char a_pcount, const char* a_name, unsigne
     NetHat::Info.MapSize = a_size;
     NetHat::HaveInfo = true;
 
-    if(!NetCmd_UpdateInfo()) NetHat::Connected = false;
+    if (!NetCmd_UpdateInfo()) NetHat::Connected = false;
 }
 
 void _stdcall imp2_ServerClosed()
 {
-    if(!NetCmd_Shutdown()) NetHat::Connected = false;
+    if (!NetCmd_Shutdown()) NetHat::Connected = false;
 }
 
 /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! [/CONNECTION IMPORTS ] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ///

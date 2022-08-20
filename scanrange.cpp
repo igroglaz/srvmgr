@@ -8,20 +8,27 @@ CScanrangeCalc Scanrange;
 bool Scanrange_Initialized = false;
 byte* Scanrange_Player = NULL;
 
+// are coordinates on the map valid.. regular case up to 240, but
+// in come cases got there not pure coords, but calculatuins, eg:
+// (x - 20) + x, (y - 20) + y
 bool srvmgr_CheckValid(int16_t x, int16_t y)
 {
-    uint32_t mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000);
+    // max size of the map is 240 (255, but cause of borders -(8+8))
+    uint32_t mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000); // get value from ALM
     uint32_t mapheight = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004);
-    return (x >= 7 && y >= 7 &&
-        x <= mapwidth-7 &&
-        y <= mapheight-7);
+
+    return (x >= 7 && y >= 7 && // non-valid for values less than 6 (see map editor 'corners')
+        x <= mapwidth - 7 &&
+        y <= mapheight - 7);
 }
 
+
+// get relief from coordinates (up to 240, 240)
 uint8_t srvmgr_GetHeight(int16_t x, int16_t y)
 {
     if (!srvmgr_CheckValid(x, y)) return 0;
-    uint8_t* mapheights = (uint8_t*)(*(byte**)(0x006B16A8) + 0x944F4);
-    return *(mapheights+y*256+x);
+    uint8_t* mapheights = (uint8_t*)(*(byte**)(0x006B16A8) + 0x944F4); // value from ALM
+    return *(mapheights + y * 256 + x);
 }
 
 void SR_UpdateUnit(byte* unit)
@@ -54,6 +61,7 @@ void SR_UpdateUnit(byte* unit)
 
             if (!dCalc)
             {
+                // unit_x, unit_y - it's uint8_t values (up to 255), which we send to 32b 'baskets'
                 Scanrange.CalculateVision(unit_x, unit_y, unit_vision, &srvmgr_GetHeight, &srvmgr_CheckValid);
                 dCalc = true;
             }
