@@ -118,7 +118,7 @@ loc1_50303D:                 // CODE XREF: sub_50301F+30j
         mov    ecx, 0x642C2C
         mov    ecx, [ecx]
         mov    edx, 0x4EE028
-        call    edx //// принудительное сохранение
+        call    edx //// РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ
 loc_skip:
         lea    ecx, [ebp-0x08]
         mov    edx, 0x496E20
@@ -142,11 +142,11 @@ void _declspec(naked) map_exit(void)
         mov    ebp, esp
         push    ecx
         mov    [ebp-0x04], ecx
-        mov    ecx, 0x06D1648 ///тип игры
+        mov    ecx, 0x06D1648 ///С‚РёРї РёРіСЂС‹
         cmp    dword ptr [ecx], 1 
         jz    loc_4F94D9
         cmp    dword ptr [ecx], 2
-        jnz    loc_4F94E5    // обычная
+        jnz    loc_4F94E5    // РѕР±С‹С‡РЅР°СЏ
 
 loc_4F94D9:                 // CODE XREF: sub_4F94C0+Ej
         push    0
@@ -184,7 +184,7 @@ void _declspec(naked) kick_char(void)
         mov    ecx, 0x642C2C
         mov    ecx, [ecx]
         mov    edx, 0x4EE028
-        call    edx //// принудительное сохранение
+        call    edx //// РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ
         mov    eax, [ebp+0x08] 
         xor    ecx, ecx
         mov    cx, [eax+4]
@@ -239,7 +239,7 @@ loc_502E48:
         mov ecx, 0x642C2C
         mov ecx, [ecx]
         mov edx, 0x4EE028
-        call edx //// принудительное сохранение
+        call edx //// РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ
         mov eax, [ebp+0x08] 
         xor ecx, ecx
         mov cx, [eax+4]
@@ -255,12 +255,12 @@ loc_502E48:
         mov edx, 0x51800F
         call edx
 
-        /// уведомление "Игрок был выкикан с сервера 
+        /// СѓРІРµРґРѕРјР»РµРЅРёРµ "РРіСЂРѕРє Р±С‹Р» РІС‹РєРёРєР°РЅ СЃ СЃРµСЂРІРµСЂР° 
         mov eax, [ebp+0x08]
         mov eax, [eax+14h]
         shr eax, 18h
         cmp al, 3Fh
-        jnz k_c_c ///не админ, продолжаем
+        jnz k_c_c ///РЅРµ Р°РґРјРёРЅ, РїСЂРѕРґРѕР»Р¶Р°РµРј
         mov eax, [edx+14h]
         test eax, 0x800 /// 
         jz k_c_c
@@ -272,7 +272,7 @@ loc_502E48:
         mov ecx, 0x6C3A08
         mov edx, 0x51D49B
         call edx 
-        /// уведомление "Игрок был выкикан с сервера 
+        /// СѓРІРµРґРѕРјР»РµРЅРёРµ "РРіСЂРѕРє Р±С‹Р» РІС‹РєРёРєР°РЅ СЃ СЃРµСЂРІРµСЂР° 
         k_c_s:
         mov ecx, 0x0642C2C
         mov ecx, [ecx]
@@ -328,7 +328,7 @@ void _declspec(naked) kick_by_name_2()  /// doesnt work :(((
 
         mov [ebp-0x0c], eax // unit (?)
         //mov eax, [eax + 0x14] // player
-        mov eax, [eax + 0x0A78] // вроде как имя логина
+        mov eax, [eax + 0x0A78] // РІСЂРѕРґРµ РєР°Рє РёРјСЏ Р»РѕРіРёРЅР°
         push eax
         mov eax, [ebp+0x08]
         push eax

@@ -110,20 +110,20 @@ namespace zxmgr
             mov        edx, 0x0051800F
             call edx
 
-            // сообщение в чате про кик
+            // СЃРѕРѕР±С‰РµРЅРёРµ РІ С‡Р°С‚Рµ РїСЂРѕ РєРёРє
             cmp        [ebp+0x0C], 1
             jz        skip_message
             mov        eax, [ebp+0x08]
             mov        eax, [eax+0x14]
             and        eax, 0x3F000800
             cmp        eax, 0x3F000800
-            jz        skip_message // невидимый, и кика соотв. видеть не должны
+            jz        skip_message // РЅРµРІРёРґРёРјС‹Р№, Рё РєРёРєР° СЃРѕРѕС‚РІ. РІРёРґРµС‚СЊ РЅРµ РґРѕР»Р¶РЅС‹
             mov        eax, [ebp+0x08]
             push    eax
             mov        ecx, 0x006C3A08
             mov        edx, 0x0051D49B
             call    edx
-            // "Игрок был выкикан с сервера" (c) ленд
+            // "В»РіСЂРѕРє Р±С‹Р» РІС‹РєРёРєР°РЅ СЃ СЃРµСЂРІРµСЂР°" (c) Р»РµРЅРґ
         skip_message:
             mov        ecx, 0x00642C2C
             mov        ecx, [ecx]
@@ -227,7 +227,7 @@ namespace zxmgr
         }
     }
 
-    void _stdcall KillAll(byte* pptr, bool ai_only) // ВНИМАНИЕ! в отличие от оригинального #killall, убивает ВСЕХ за исключением кастера.
+    void _stdcall KillAll(byte* pptr, bool ai_only) // В¬РЊВ»С›СРЊВ»в‰€! РІ РѕС‚Р»РёС‡РёРµ РѕС‚ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕРіРѕ #killall, СѓР±РёРІР°РµС‚ В¬вЂ”в‰€вЂ™ Р·Р° РёСЃРєР»СЋС‡РµРЅРёРµРј РєР°СЃС‚РµСЂР°.
     {
         std::vector<byte*> units = GetUnits();
         for(std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
@@ -313,7 +313,7 @@ namespace zxmgr
         }
     }
 
-    // добавить денег игроку
+    // РґРѕР±Р°РІРёС‚СЊ РґРµРЅРµРі РёРіСЂРѕРєСѓ
     void __declspec(naked) GiveMoney(byte* pptr, unsigned long count, unsigned long flags)
     {
         __asm
@@ -331,7 +331,7 @@ namespace zxmgr
         }
     }
 
-    // 51CEFB - я так понял, обновление (изменение) информации об игроке
+    // 51CEFB - В¤ С‚Р°Рє РїРѕРЅВ¤Р», РѕР±РЅРѕРІР»РµРЅРёРµ (РёР·РјРµРЅРµРЅРёРµ) РёРЅС„РѕСЂРјР°С†РёРё РѕР± РёРіСЂРѕРєРµ
     void __declspec(naked) UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, byte* player)
     {
         __asm
@@ -619,7 +619,7 @@ namespace zxmgr
         byte* someTable = *(byte**)(0x006B16A8);
         *(byte**)(*(byte**)(unit + 0x10) + 8) = someTable;
         int unitSize = zxmgr::GetUnitSize(unit);
-        // вот тут я не помню что имел в виду. отреверсено из старого-нового сервера
+        // РІРѕС‚ С‚СѓС‚ В¤ РЅРµ РїРѕРјРЅСЋ С‡С‚Рѕ РёРјРµР» РІ РІРёРґСѓ. РѕС‚СЂРµРІРµСЂСЃРµРЅРѕ РёР· СЃС‚Р°СЂРѕРіРѕ-РЅРѕРІРѕРіРѕ СЃРµСЂРІРµСЂР°
         if (someTable)
         {
             for (int i = x; i < x + unitSize; i++)

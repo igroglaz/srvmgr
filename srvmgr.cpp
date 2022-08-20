@@ -21,8 +21,8 @@
 #include "player_info.h"
 #include "zxmgr.h"
 
-/// CDECL нет очистки стека функцией
-/// STDCALL есть
+/// CDECL РЅРµС‚ РѕС‡РёСЃС‚РєРё СЃС‚РµРєР° С„СѓРЅРєС†РёРµР№
+/// STDCALL РµСЃС‚СЊ
 
 char alog_vis[] = " id: 0x%.4X; (%d, %d)[%d] - vision=%d.%d\n";
 char camp1[] = "Player %s tried to camp from building.";
@@ -536,7 +536,7 @@ void _declspec(naked) heal_enemies()
 void _declspec(naked) add_health_potions()
 { // 0054D700
     __asm
-    { // пропустить добавление зельев
+    { // РїСЂРѕРїСѓСЃС‚РёС‚СЊ РґРѕР±Р°РІР»РµРЅРёРµ Р·РµР»СЊРµРІ
         mov    edx, 0x54D8AC
         jmp    edx
     }
@@ -969,9 +969,9 @@ l_503051:                 // CODE XREF: sub_50301F+20j
     }
 }
 
-// 1) TODO: где-то пролезают координаты
-// +2) TODO: при визибле - форсировать отправку поординат и угла посылать
-// 3) посылать 6B, 6D как?
+// 1) TODO: РіРґРµ-С‚Рѕ РїСЂРѕР»РµР·Р°СЋС‚ РєРѕРѕСЂРґРёРЅР°С‚С‹
+// +2) TODO: РїСЂРё РІРёР·РёР±Р»Рµ - С„РѕСЂСЃРёСЂРѕРІР°С‚СЊ РѕС‚РїСЂР°РІРєСѓ РїРѕРѕСЂРґРёРЅР°С‚ Рё СѓРіР»Р° РїРѕСЃС‹Р»Р°С‚СЊ
+// 3) РїРѕСЃС‹Р»Р°С‚СЊ 6B, 6D РєР°Рє?
 // 1c0 : 71 (.text:0051C5E1) , ...
 
 void __declspec(naked) unit_change_single_send()
@@ -1132,7 +1132,7 @@ void _declspec(naked) packet_recvd()
         call    check_sig_c_s
         test    eax,eax
         jnz    pr_ex
-        // РТЙЭХЮЙН ЗБДБ
+        // вЂ“вЂњвЂ¦РЃвЂ™С‘вЂ¦РЊ В«Р…Ж’Р…
 
         mov    ecx, [ebp+8]
         xor    eax,eax
@@ -1282,7 +1282,7 @@ void _declspec(naked) adm_dip(void) {
         mov    eax, [edx+14h]
         shr    eax, 18h
         cmp    al, 3Fh
-        jnz    a_d_c ///не админ, продолжаем
+        jnz    a_d_c ///РЅРµ Р°РґРјРёРЅ, РїСЂРѕРґРѕР»Р¶Р°РµРј
         mov    eax, [edx+14h]
         test    eax, 0x4000 /// monsters_alliance
         jz    a_d_c
@@ -1324,15 +1324,15 @@ void _declspec(naked) adm_dip_2(void) {
         //  movsx edx, word ptr [edx + 4]
         //  movsx ecx, word ptr [ecx + 4]
           cmp ecx, edx
-          jz a_d_2_n_a_2 /// себе - вид
+          jz a_d_2_n_a_2 /// СЃРµР±Рµ - РІРёРґ
     /*__asm {//004FFEA6
         mov    edx, [ebp+0x08] // player
         cmp    edx, dword ptr [ebp-54]
-        jz    a_d_2_n_a_2 /// себе - вид*/
+        jz    a_d_2_n_a_2 /// СЃРµР±Рµ - РІРёРґ*/
         mov    eax, [edx+14h]
         shr    eax, 18h
         cmp    al, 3Fh
-        jnz    a_d_2_n_a /// не админ
+        jnz    a_d_2_n_a /// РЅРµ Р°РґРјРёРЅ
         mov    eax, [edx+14h]
         test    eax, 0x10000 /// players_alliance
         jz    a_d_2_n_a
@@ -1343,7 +1343,7 @@ a_d_2_n_a:
         mov    eax, [edx+14h]
         shr    eax, 18h
         cmp    al, 3Fh
-        jnz    a_d_2_n_a_2 /// не админ
+        jnz    a_d_2_n_a_2 /// РЅРµ Р°РґРјРёРЅ
         mov    eax, [edx+14h]
         test    eax, 0x10000 /// players_alliance
         jz    a_d_2_n_a_2
@@ -1550,7 +1550,7 @@ void _declspec(naked) enter_inn (void) {
         mov    ecx, [ebp-0x0A8]
 //        mov    edx, [ecx+38h]
         cmp    word ptr [ecx+94h], 0
-        jle    e_i_skip //// если не жив
+        jle    e_i_skip //// РµСЃР»Рё РЅРµ Р¶РёРІ
 
         mov    ecx, [ebp-0x0A8]
         mov    edx, 0x52C813
@@ -1625,7 +1625,7 @@ void _declspec(naked) enter_shop (void) {
         mov    ecx, [ebp-0x0A0]
 //        mov    edx, [ecx+38h]
         cmp    word ptr [ecx+94h], 0
-        jle    e_s_skip //// если не жив
+        jle    e_s_skip //// РµСЃР»Рё РЅРµ Р¶РёРІ
 
         mov    ecx, [ebp-0x0A0]
         mov    edx, 0x52C813
@@ -1679,7 +1679,7 @@ e_s_sk:
         push    edx
         mov    ecx, [ebp-0x0A4]
         mov    edx, 0x544655
-        call    edx  //// здесь вылет про одновременном входе выходе в лавку 2-х и более человек
+        call    edx  //// Р·РґРµСЃСЊ РІС‹Р»РµС‚ РїСЂРѕ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕРј РІС…РѕРґРµ РІС‹С…РѕРґРµ РІ Р»Р°РІРєСѓ 2-С… Рё Р±РѕР»РµРµ С‡РµР»РѕРІРµРє
         mov    ecx, [ebp-0x0A0]
         test    ecx, ecx
         jz    e_s_skip
@@ -1733,7 +1733,7 @@ loc_50411E:                 // CODE XREF: sub_504A96+6C2j
         jnz    loc_50412F
         mov    ecx, [ebp-0x014]
         mov    edx, 0x534B17
-        call    edx ///// кемпинг
+        call    edx ///// РєРµРјРїРёРЅРі
 
         mov        eax, [Config::LogMode]
         test    eax, SVL_CAMPING
@@ -1784,7 +1784,7 @@ loc_50515D:                 // CODE XREF: sub_504A96:loc_50412Fj
     }
 }
 
-void _declspec(naked) sub_5446C7(void) { /// перетаскивание вещи с прилавка себe
+void _declspec(naked) sub_5446C7(void) { /// РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРµ РІРµС‰Рё СЃ РїСЂРёР»Р°РІРєР° СЃРµР±e
     __asm { /// 005446C7 
         // ecx shop
         // [ebp + 0x08] player
@@ -1801,7 +1801,7 @@ void _declspec(naked) sub_5446C7(void) { /// перетаскивание вещи с прилавка себe
         mov    eax, [ebp+0x08]
         push    eax
         mov    edx, 0x547468
-        call    edx  //// получить список вещей прилавка
+        call    edx  //// РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РІРµС‰РµР№ РїСЂРёР»Р°РІРєР°
         lea    ecx, [eax + 0x078]
 
         mov    eax, [ecx + 4]
@@ -1822,7 +1822,7 @@ sub_5446C7_start:
         jnz    sub_5446C7_next
         
         cmp    dword ptr [edx + 0x14], 0
-        jz    sub_5446C7_ret0 /// магазинная вещь
+        jz    sub_5446C7_ret0 /// РјР°РіР°Р·РёРЅРЅР°В¤ РІРµС‰СЊ
 
         jmp    sub_5446C7_done
 
@@ -1870,7 +1870,7 @@ bool _stdcall CheckPlayerMuted(byte* player)
 }
 
 void _declspec(naked) public_chat(void) {////50759F  TESTED100%
-    __asm {/// реализация запрета чата
+    __asm {/// СЂРµР°Р»РёР·Р°С†РёВ¤ Р·Р°РїСЂРµС‚Р° С‡Р°С‚Р°
         push [ebp-0x104]
         call CheckPlayerMuted
         test al, al
@@ -1884,7 +1884,7 @@ void _declspec(naked) public_chat(void) {////50759F  TESTED100%
         mov    edx, [ecx+0x14]
         and    edx, GMF_ANY
         cmp    edx, GMF_ANY
-        jz    public_chat_norm ///флаг admin
+        jz    public_chat_norm ///С„Р»Р°Рі admin
 
 do_mute:
         mov    edx, 0x507897
@@ -1913,7 +1913,7 @@ void _declspec(naked) public_chat_2(void) {////0050764A
 
         mov    dl, [eax+0x4C]
         test    dl, 8 
-        jz    p_c_2_ex //// персонаж на карте, разрешаем
+        jz    p_c_2_ex //// РїРµСЂСЃРѕРЅР°Р¶ РЅР° РєР°СЂС‚Рµ, СЂР°Р·СЂРµС€Р°РµРј
 
 p_c_2_sk:
         mov    edx, 0x5076EC /// skip, AI player
@@ -1935,7 +1935,7 @@ void _declspec(naked) private_chat_2(void) {////00507489
 
         mov    dl, [eax+0x4C]
         test    dl, 8 
-        jz    pr_c_2_ex //// персонаж на карте, разрешаем
+        jz    pr_c_2_ex //// РїРµСЂСЃРѕРЅР°Р¶ РЅР° РєР°СЂС‚Рµ, СЂР°Р·СЂРµС€Р°РµРј
 
 pr_c_2_sk:
         mov    edx, 0x50752F 
@@ -1965,12 +1965,12 @@ void _declspec(naked) private_chat_3(void) {////005073B6
 
         mov    dl, [eax+0x4C]
         test    dl, 8 
-        jz    pr_c_3_ex //// персонаж на карте, разрешаем
+        jz    pr_c_3_ex //// РїРµСЂСЃРѕРЅР°Р¶ РЅР° РєР°СЂС‚Рµ, СЂР°Р·СЂРµС€Р°РµРј
 
-pr_c_3_sk: /// не отправляем
+pr_c_3_sk: /// РЅРµ РѕС‚РїСЂР°РІР»В¤РµРј
         mov    edx, 0x5073D8 
                 jmp    edx                
-pr_c_3_ex: /// отправляем
+pr_c_3_ex: /// РѕС‚РїСЂР°РІР»В¤РµРј
         mov    ecx, [ebp-0x052C]
         mov    edx, 0x5073BC
         jmp    edx
@@ -1993,7 +1993,7 @@ void _declspec(naked) private_chat(void) {////005073DD  TESTED100%
         mov    edx, [ecx+0x14]
         and    edx, GMF_ANY
         cmp    edx, GMF_ANY
-        jz    private_chat_norm ///флаг admin
+        jz    private_chat_norm ///С„Р»Р°Рі admin
 
 do_mute:
         mov    edx, 0x507897
@@ -2028,7 +2028,7 @@ void _declspec(naked) shout_chat(void) {////0050775C  TESTED100%
         mov    edx, [ecx+0x14]
         and    edx, GMF_ANY
         cmp    edx, GMF_ANY
-        jz    shout_chat_norm ///флаг admin
+        jz    shout_chat_norm ///С„Р»Р°Рі admin
 
 do_mute:
         mov    edx, 0x507897
@@ -2229,8 +2229,8 @@ void _declspec(naked) part_of_disconnect2(void) {////!!!!!
 void _declspec(naked) part_of_disconnect(void) {////!!!!!
     __asm {///00534F4C
 //        mov    eax, 0x0642C2C//////////////////////?????
-//        mov    eax, [eax]/////////////////////////????? раскомментировать, если не мешает дюпу
-//        cmp    dword ptr [eax+74h], 0/////////////отключена проверка во имя сохранения во время 5-мин. дисконнекта
+//        mov    eax, [eax]/////////////////////////????? СЂР°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ, РµСЃР»Рё РЅРµ РјРµС€Р°РµС‚ РґСЋРїСѓ
+//        cmp    dword ptr [eax+74h], 0/////////////РѕС‚РєР»СЋС‡РµРЅР° РїСЂРѕРІРµСЂРєР° РІРѕ РёРјВ¤ СЃРѕС…СЂР°РЅРµРЅРёВ¤ РІРѕ РІСЂРµРјВ¤ 5-РјРёРЅ. РґРёСЃРєРѕРЅРЅРµРєС‚Р°
 //        jz    loc_534F82
         mov    ecx, [ebp-0x010]
         cmp    dword ptr [ecx+38h], 0
@@ -2264,7 +2264,7 @@ void _declspec(naked) part_of_camp(void) {
         mov    ecx, 0x642C2C
         mov    ecx, [ecx]
         mov    edx, 0x4EE028
-        call    edx //// принудительное сохранение
+        call    edx //// РїСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ
         mov    ecx, [ebp-0x010]
         mov    edx, 0x534778
         call    edx
@@ -2288,7 +2288,7 @@ void _declspec(naked) part_of_camp(void) {
 
 #include "cheat_codes_new.h"
 
-int _declspec(naked) verify_damage(int p1, int p2, int damage) {/// p2 - кого бьем, p1 - кто бьет
+int _declspec(naked) verify_damage(int p1, int p2, int damage) {/// p2 - РєРѕРіРѕ Р±СЊРµРј, p1 - РєС‚Рѕ Р±СЊРµС‚
     _asm{
         //////// TESTED100%, CDECL
         push    ebp
@@ -2307,7 +2307,7 @@ int _declspec(naked) verify_damage(int p1, int p2, int damage) {/// p2 - кого бь
 }
 
 void setthreadp(void) {
-    __asm { /// не повышаем приоритет
+    __asm { /// РЅРµ РїРѕРІС‹С€Р°РµРј РїСЂРёРѕСЂРёС‚РµС‚
         /// STDCALL, TESTED100% ;-)
         retn    8
     }
@@ -2323,7 +2323,7 @@ void _declspec(naked) testeaxifzero(void) {
         jnz    ok111
         call    upd_all
         lea    esi, bugs
-        mov    eax, [esp] // адрес возврата
+        mov    eax, [esp] // Р°РґСЂРµСЃ РІРѕР·РІСЂР°С‚Р°
 st111:        cmp    dword ptr [esi], 0
         jz    ok1112 // not found
         cmp    [esi], eax

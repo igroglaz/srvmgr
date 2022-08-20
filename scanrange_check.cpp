@@ -149,7 +149,7 @@ area_cast_ex:
     } ///0050550D
 }
 
-void _declspec(naked) vision_of_all_2(void) { ///// возвращает 1, если точка видна, 0, если нет
+void _declspec(naked) vision_of_all_2(void) { ///// РІРѕР·РІСЂР°С‰Р°РµС‚ 1, РµСЃР»Рё С‚РѕС‡РєР° РІРёРґРЅР°, 0, РµСЃР»Рё РЅРµС‚
     __asm {
         push    ebp
         mov    ebp, esp
@@ -296,7 +296,7 @@ loc_55619B:                 // CODE XREF: sub_5560D2+87j
     }
 }
 
-void _declspec(naked) vision_of_all(void) { ///// распечатка вида всех игроков
+void _declspec(naked) vision_of_all(void) { ///// СЂР°СЃРїРµС‡Р°С‚РєР° РІРёРґР° РІСЃРµС… РёРіСЂРѕРєРѕРІ
     __asm {///TESTED100%  
         push    ebp
         mov    ebp, esp
@@ -343,7 +343,7 @@ loc_50303D:                 // CODE XREF: sub_50301F+30j
         add    eax, ecx
         movzx    eax, byte ptr [eax]
         test    eax, 0x10
-        jz    skip_vis /// только если стоит вид
+        jz    skip_vis /// С‚РѕР»СЊРєРѕ РµСЃР»Рё СЃС‚РѕРёС‚ РІРёРґ
 
         mov    eax, [ebp-0x0C]
         movsx    ecx, word ptr [eax+0x04]

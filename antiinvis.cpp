@@ -40,7 +40,7 @@ void __declspec(naked) stop_unit_attack() // fixes attack on invisible units
         push    [eax+0x0A78] // attacker login
         push    offset aAttackInvisible
         call    log_format // log cheater
-        // в бан всех читоров
+        // РІ Р±Р°РЅ РІСЃРµС… С‡РёС‚РѕСЂРѕРІ
         cmp        byte ptr [block_invis], 0
         jz        continue_cmd
         mov        edx, 0x0050864E // exit from sub
@@ -95,7 +95,7 @@ void __declspec(naked) stop_unit_cast() // fixes spellcasting onto invisible uni
         push    [eax+0x0A78] // attacker login
         push    offset aCastInvisible
         call    log_format // log cheater
-        // в бан всех читоров
+        // РІ Р±Р°РЅ РІСЃРµС… С‡РёС‚РѕСЂРѕРІ
         cmp        byte ptr [block_invis], 0
         jz        continue_cmd
         mov        edx, 0x0050864E // exit from sub
@@ -148,7 +148,7 @@ void __declspec(naked) stop_mage_cast() // fixes spellcasting onto invisible uni
         push    [eax+0x0A78] // attacker login
         push    offset aAttackInvisible
         call    log_format // log cheater
-        // в бан всех читоров
+        // РІ Р±Р°РЅ РІСЃРµС… С‡РёС‚РѕСЂРѕРІ
         cmp        byte ptr [block_invis], 0
         jz        continue_cmd
         mov        edx, 0x0050864E // exit from sub

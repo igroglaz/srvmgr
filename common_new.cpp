@@ -977,7 +977,7 @@ void __declspec(naked) imp_CreateItemParameterCall3()
     }
 }
 
-// ниваловский хак для пауков:
+// РЅРёРІР°Р»РѕРІСЃРєРёР№ С…Р°Рє РґР»СЏ РїР°СѓРєРѕРІ:
 // Spider.5: damage: Administrator ZZYZX -> 131-131 -> Monsters;
 // min.damage = (131 & 0x7F) * 15
 // max.damage = 131 * 15
@@ -1296,12 +1296,12 @@ void _stdcall SetDiplomacyEx(byte* player1)
 
         if(*(uint32_t*)(player2 + 0x2C))
         {
-            if(rights & GMF_AI_ALLY) // расставляем всем мобам алю (если стоит флаг)
+            if(rights & GMF_AI_ALLY) // СЂР°СЃСЃС‚Р°РІР»СЏРµРј РІСЃРµРј РјРѕР±Р°Рј Р°Р»СЋ (РµСЃР»Рё СЃС‚РѕРёС‚ С„Р»Р°Рі)
             {
                 zxmgr::SetDiplomacy(player1, player2, 0x02);
                 zxmgr::SetDiplomacy(player2, player1, 0x02);
             }
-            else // если флага не стоит, расставляем всем в соответствии с дипломатией игрока Self
+            else // РµСЃР»Рё С„Р»Р°РіР° РЅРµ СЃС‚РѕРёС‚, СЂР°СЃСЃС‚Р°РІР»СЏРµРј РІСЃРµРј РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ РґРёРїР»РѕРјР°С‚РёРµР№ РёРіСЂРѕРєР° Self
             {
                 zxmgr::SetDiplomacy(player1, player2, zxmgr::GetDiplomacy(Self, player2));
                 zxmgr::SetDiplomacy(player2, player1, zxmgr::GetDiplomacy(player2, Self));
@@ -1309,13 +1309,13 @@ void _stdcall SetDiplomacyEx(byte* player1)
         }
         else
         {
-            // получаем флаги второго игрока
+            // РїРѕР»СѓС‡Р°РµРј С„Р»Р°РіРё РІС‚РѕСЂРѕРіРѕ РёРіСЂРѕРєР°
             uint32_t rights2 = *(uint32_t*)(player2 + 0x14);
             if((rights2 & GMF_ANY) != GMF_ANY)
                 rights2 = 0;
             else rights2 &= 0xFFFFFF;
 
-            // если этот игрок имеет флаг автоали, или другой игрок имеет флаг автоали, проставить альянс
+            // РµСЃР»Рё СЌС‚РѕС‚ РёРіСЂРѕРє РёРјРµРµС‚ С„Р»Р°Рі Р°РІС‚РѕР°Р»Рё, РёР»Рё РґСЂСѓРіРѕР№ РёРіСЂРѕРє РёРјРµРµС‚ С„Р»Р°Рі Р°РІС‚РѕР°Р»Рё, РїСЂРѕСЃС‚Р°РІРёС‚СЊ Р°Р»СЊСЏРЅСЃ
             uint8_t dip1 = 0x00;
             uint8_t dip2 = 0x00;
 
@@ -1336,7 +1336,7 @@ void _stdcall SetDiplomacyEx(byte* player1)
         }
     }
 
-    zxmgr::SetDiplomacy(player1, player1, 0x12); // себе алю и вид
+    zxmgr::SetDiplomacy(player1, player1, 0x12); // СЃРµР±Рµ Р°Р»СЋ Рё РІРёРґ
 }
 
 void __declspec(naked) imp_ExtDiplomacy()
