@@ -146,10 +146,10 @@ namespace zxmgr
     void _stdcall KickAllSilent(byte* pptr)
     {
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* player = (*it);
-            if(player && player != pptr && !*(uint32_t*)(player + 0x2C))
+            if (player && player != pptr && !*(uint32_t*)(player + 0x2C))
                 Kick(player, true);
         }
     }
@@ -157,10 +157,10 @@ namespace zxmgr
     void _stdcall KickAll(byte* pptr)
     {
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* player = (*it);
-            if(player && player != pptr && !*(uint32_t*)(player + 0x2C))
+            if (player && player != pptr && !*(uint32_t*)(player + 0x2C))
                 Kick(player, false);
         }
     }
@@ -168,29 +168,29 @@ namespace zxmgr
     byte* _stdcall FindByNickname(const char* nickname)
     {
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* player = (*it);
-            if(!player) continue;
+            if (!player) continue;
             const char* pl_name = *(const char**)(player + 0x18);
             std::string pl_nickname = pl_name;
-            if(*(uint32_t*)(player + 0x2C))
+            if (*(uint32_t*)(player + 0x2C))
             {
                 // convert to cp-866
-                for(size_t i = 0; i < pl_nickname.length(); i++)
+                for (size_t i = 0; i < pl_nickname.length(); i++)
                 {
                     uint8_t ch = pl_nickname[i];
-                    if(ch == 0xA8) ch = 0xF0;
-                    else if(ch == 0xB8) ch = 0xF1;
-                    else if(ch >= 0xC0 && ch <= 0xEF)
+                    if (ch == 0xA8) ch = 0xF0;
+                    else if (ch == 0xB8) ch = 0xF1;
+                    else if (ch >= 0xC0 && ch <= 0xEF)
                         ch -= 0x40;
-                    else if(ch >= 0xF0 && ch <= 0xFF)
+                    else if (ch >= 0xF0 && ch <= 0xFF)
                         ch -= 0x10;
                     pl_nickname[i] = ch;
                 }
             }
 
-            if(pl_nickname == nickname) return player;
+            if (pl_nickname == nickname) return player;
         }
 
         return 0;
@@ -199,13 +199,13 @@ namespace zxmgr
     byte* _stdcall FindByLogin(const char* login)
     {
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* player = (*it);
-            if(!player) continue;
-            if(*(uint32_t*)(player + 0x2C)) continue; // AI check
+            if (!player) continue;
+            if (*(uint32_t*)(player + 0x2C)) continue; // AI check
             const char* pl_login = *(const char**)(player + 0x0A78);
-            if(!strcmp(pl_login, login)) return player;
+            if (!strcmp(pl_login, login)) return player;
         }
 
         return 0;
@@ -214,12 +214,12 @@ namespace zxmgr
     void _stdcall Kill(byte* pptr, byte* caster)
     {
         std::vector<byte*> units = GetUnits(pptr);
-        for(std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
         {
             byte* unit = (*it);
-            if(!unit) continue;
-            if(*(byte**)(unit + 0x14) != pptr) continue;
-            if(caster && unit == *(byte**)(caster + 0x38)) continue;
+            if (!unit) continue;
+            if (*(byte**)(unit + 0x14) != pptr) continue;
+            if (caster && unit == *(byte**)(caster + 0x38)) continue;
 
             *(byte**)(unit + 0x40) = NULL; // damage_by
             *(int16_t*)(unit + 0x94) = -50;
@@ -230,12 +230,12 @@ namespace zxmgr
     void _stdcall KillAll(byte* pptr, bool ai_only) // ¬Ќ»ћјЌ»≈! в отличие от оригинального #killall, убивает ¬—≈’ за исключением кастера.
     {
         std::vector<byte*> units = GetUnits();
-        for(std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
         {
             byte* unit = (*it);
-            if(!unit) continue;
-            if(pptr && unit == *(byte**)(pptr + 0x38)) continue;
-            if(ai_only && *(byte**)(unit + 0x14) &&
+            if (!unit) continue;
+            if (pptr && unit == *(byte**)(pptr + 0x38)) continue;
+            if (ai_only && *(byte**)(unit + 0x14) &&
                 !*(uint32_t*)(*(byte**)(unit + 0x14) + 0x2C)) continue;
 
             *(byte**)(unit + 0x40) = NULL; // damage_by
@@ -353,13 +353,13 @@ namespace zxmgr
 
     void __stdcall Own(byte* to, byte* from)
     {
-        if(!from || !to) return;
+        if (!from || !to) return;
         std::vector<byte*> units = GetUnits(from);
-        for(std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
         {
             byte* unit = (*it);
-            if(!unit) continue;
-            if(unit == *(byte**)(*(byte**)(unit + 0x14) + 0x38)) continue;
+            if (!unit) continue;
+            if (unit == *(byte**)(*(byte**)(unit + 0x14) + 0x38)) continue;
 
             *(byte**)(unit + 0x14) = to;
             UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
@@ -723,13 +723,13 @@ namespace zxmgr
         va_end(va);
 
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* plr = (*it);
-            if(!plr) continue;
+            if (!plr) continue;
 
             uint32_t rights = *(uint32_t*)(plr + 0x14);
-            if(CHECK_FLAG(rights, GMF_ANY)) zxmgr::SendMessageRaw(plr, line);
+            if (CHECK_FLAG(rights, GMF_ANY)) zxmgr::SendMessageRaw(plr, line);
         }
 
         delete[] line;
@@ -985,7 +985,7 @@ ret_0:
 
     byte* ConstructItemN(const char* definition)
     {
-        if(!definition) return NULL;
+        if (!definition) return NULL;
         return ConstructItem(definition);
     }
 
@@ -1074,12 +1074,12 @@ ret_0:
     byte* _stdcall FindByID(uint16_t id)
     {
         std::vector<byte*> players = GetPlayers();
-        for(std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
             byte* player = (*it);
-            if(!player) continue;
+            if (!player) continue;
 
-            if(*(uint16_t*)(player + 4) == id)
+            if (*(uint16_t*)(player + 4) == id)
                 return player;
         }
 
@@ -1088,7 +1088,7 @@ ret_0:
 
     bool ReturnUnit(byte* unit)
     {
-        if(!unit) return false;
+        if (!unit) return false;
         bool retval = false;
         __asm
         {
@@ -1103,7 +1103,7 @@ ret_0:
 
     void CreateSpellbook(byte* unit)
     {
-        if(!unit) return;
+        if (!unit) return;
         byte* spbk = NULL;
         __asm
         {
@@ -1114,7 +1114,7 @@ ret_0:
             mov        spbk, eax
         }
 
-        if(spbk)
+        if (spbk)
         {
             *(uint32_t*)(spbk) = 0x0060EC30;
             *(uint32_t*)(spbk + 0x04) = 0x0060EC48;
@@ -1129,9 +1129,9 @@ ret_0:
 
     void DeleteSpellbook(byte* unit)
     {
-        if(!unit) return;
+        if (!unit) return;
         byte* spbk = *(byte**)(unit + 0x140);
-        if(!spbk) return;
+        if (!spbk) return;
 
         __asm
         {
@@ -1146,9 +1146,9 @@ ret_0:
 
     uint32_t GetSpells(byte* unit)
     {
-        if(!unit) return 0;
+        if (!unit) return 0;
         byte* spbk = *(byte**)(unit + 0x140);
-        if(!spbk) return 0;
+        if (!spbk) return 0;
 
         uint32_t spells = 0;
         __asm
@@ -1164,12 +1164,12 @@ ret_0:
 
     void SetSpells(byte* unit, uint32_t spells)
     {
-        if(!unit) return;
+        if (!unit) return;
         DeleteSpellbook(unit);
         CreateSpellbook(unit);
-        for(int i = 1; i <= 29; i++)
+        for (int i = 1; i <= 29; i++)
         {
-            if((1 << i) & spells)
+            if ((1 << i) & spells)
             {
                 byte* spell = NULL;
                 __asm
@@ -1180,7 +1180,7 @@ ret_0:
                     add        esp, 4
                     mov        spell, eax
                 }
-                if(!spell) continue;
+                if (!spell) continue;
 
                 __asm
                 {
@@ -1203,9 +1203,9 @@ ret_0:
     void CastPointEffect(byte* from, uint8_t to_x, uint8_t to_y, uint8_t spell)
     {
         byte* ppf = *(byte**)(from + 0x14);
-        if(!ppf) return;
+        if (!ppf) return;
         Player* pi = PI_Get(ppf);
-        if(!pi) return;
+        if (!pi) return;
 
         byte* cspell = pi->CastSpell;
 
@@ -1228,15 +1228,19 @@ ret_0:
 
     uint8_t GetDiplomacy(byte* player1, byte* player2)
     {
-        return *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) + 0xA8C4 + *(uint16_t*)(player2 + 0x04));
+        return *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) +
+               0xA8C4 + *(uint16_t*)(player2 + 0x04));
     }
 
     void SetDiplomacy(byte* player1, byte* player2, uint8_t diplomacy)
     {
-        if(*(uint32_t*)(player1+0x2C) && (diplomacy & 0x10)) // vision won't work for AI players
+        if (*(uint32_t*)(player1+0x2C) && (diplomacy & 0x10)) // vision won't work for AI players
             diplomacy &= ~0x10;
-        *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) + 0xA8C4 + *(uint16_t*)(player2 + 0x04)) = diplomacy;
-        if(!*(uint32_t*)(player1+0x2C) && !*(uint32_t*)(player2+0x2C) && (diplomacy & 0x10))
+
+        *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) + 0xA8C4 +
+        *(uint16_t*)(player2 + 0x04)) = diplomacy;
+
+        if (!*(uint32_t*)(player1+0x2C) && !*(uint32_t*)(player2+0x2C) && (diplomacy & 0x10))
         {
             // i don't know how's this related
             *(uint32_t*)(player2+0x32) |= *(uint32_t*)(player1+0x30); // update player2 to player1
@@ -1301,14 +1305,14 @@ ret_0:
         uint32_t structs = *(uint32_t*)(mainStruc + 0x5A4);
         int16_t p_id = -1;
         byte* p_netstruc = NULL;
-        for(uint32_t i = 0; i < structs; i++)
+        for (uint32_t i = 0; i < structs; i++)
         {
             byte* pstruc = *(byte**)(mainStruc + 0x57C) + i * 0x274;
-            if(!pstruc) continue;
+            if (!pstruc) continue;
             p_netstruc = *(byte**)(pstruc + 0x10);
-            if(!p_netstruc) continue;
+            if (!p_netstruc) continue;
 
-            if(*(uint16_t*)(p_netstruc + 0x108) == player_id)
+            if (*(uint16_t*)(p_netstruc + 0x108) == player_id)
                 return *(SOCKET*)(pstruc + 8);
         }
 
@@ -1317,7 +1321,7 @@ ret_0:
 
     SOCKET GetSocket(byte* player)
     {
-        if(!player) return 0;
+        if (!player) return 0;
         return GetSocket(*(uint16_t*)(player+0x04));
     }
 }

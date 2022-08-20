@@ -129,8 +129,8 @@ void SR_DumpToFile(byte* player)
     {
         for (uint32_t x = 0; x < 256; x++)
         {
-            if (ticks_count - (pi->Vision[x][y]) <= 3000)
-                log_format2("\x7F");
+            if (ticks_count - (pi->Vision[x][y]) <= 3000) // uint32_t Vision[256][256];
+                log_format2("\x7F"); // ASCII 127 (delete)
             else log_format2(" ");
         }
         log_format2("\n");

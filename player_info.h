@@ -24,7 +24,7 @@ struct Player
 
     uint32_t UnmuteDate;
 
-    uint32_t Vision[256][256];
+    uint32_t Vision[256][256]; // used in scanrange
 
     //
     std::vector<Packet> EnqueuedPackets;

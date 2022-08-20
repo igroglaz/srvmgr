@@ -112,7 +112,7 @@ l_own_u_loop:
         test    ecx, ecx
         jz    l_own_u_exit
         mov    eax, [ecx + 0x14]
-        cmp    eax, [ebp - 4] // если это юнит жертвы
+        cmp    eax, [ebp - 4]     // если это юнит жертвы
         jnz    l_own_u_loop
         cmp    ecx, [eax + 0x38]  // проверка на главного персонажа - его не овнить
         jz    l_own_u_loop
@@ -203,7 +203,7 @@ sk_rights:
         push    [ebp+0x0C]
         push    [ebp+0x08]
         push    ecx
-        call    RunCommand
+        call    RunCommand      // this function is in another file: cheat_codes_new.cpp
         add        esp, 0x14
 
         mov        esp, ebp
@@ -223,13 +223,13 @@ void __stdcall cheat_say(const char *nick, const char *command)
         sub    esp, 4
         mov    ecx, esp
         push    dword ptr [command]
-        mov    edx, 0x005DD8F8 // CString::CString()
+        mov    edx, 0x005DD8F8      // CString::CString()
         call    edx
         mov    eax, [eax]
 
         push    eax
         push    dword ptr [nick]    // name (arg_0)
-        call    get_player_by_name    // get player by name
+        call    get_player_by_name  // get player by name
         test    eax, eax
         jz    cs_skip
         push    eax
@@ -283,9 +283,9 @@ void _declspec(naked) cheat_codes_unsafe(void)
         call    edx
         mov    [ebp-0x010], eax
 
-        jmp    lu_ready /// могут все игроки
+        jmp    lu_ready  /// могут все игроки
 lu_afterready:
-        jmp    lu_test // только админы
+        jmp    lu_test   // только админы
 lu_test:                 // CODE XREF: sub_502D0B+53j
         jmp    lu_kick
 lu_afterkick:
@@ -300,17 +300,17 @@ lu_aftermodify:                 // CODE XREF: sub_502D0B+9EBj
         jmp    lu_summon
 lu_aftersummon:                 // CODE XREF: sub_502D0B+FAFj
         jmp    lu_killall
-lu_afterkillall:                 // CODE XREF: sub_502D0B+1163j
+lu_afterkillall:                // CODE XREF: sub_502D0B+1163j
         jmp    lu_kill
-lu_afterkill:                 // CODE XREF: sub_502D0B+14D0j
+lu_afterkill:                   // CODE XREF: sub_502D0B+14D0j
         jmp    lu_pickupall
-lu_afterpickupall:                 // CODE XREF: sub_502D0B+160Ej
+lu_afterpickupall:              // CODE XREF: sub_502D0B+160Ej
         jmp    lu_showmap
-lu_aftershowmap:                 // CODE XREF: sub_502D0B+1AA7j
+lu_aftershowmap:                // CODE XREF: sub_502D0B+1AA7j
         jmp    lu_hidemap
-lu_afterhidemap:                 // CODE XREF: sub_502D0B+1B3Fj
+lu_afterhidemap:                // CODE XREF: sub_502D0B+1B3Fj
         jmp    lu_info
-lu_afterinfo:            // CODE XREF: sub_502D0B+1B3Fj
+lu_afterinfo:                   // CODE XREF: sub_502D0B+1B3Fj
         jmp    lu_entermode
 lu_afterenter_mode:
         jmp    lu_own
@@ -322,7 +322,7 @@ lu_aftersummon_for:
         jmp    locu_5049B2
 lu_ready:
         mov    ecx, 0x63B124
-        push    ecx    // "#ready"
+        push    ecx         // "#ready"
         lea    ecx, [ebp+0Ch]
         mov    edx, 0x5DA123
         call    edx
@@ -376,7 +376,7 @@ locu_5031EF:
 
 
 ////////////////
-lu_kick:                 // CODE XREF: sub_502D0B+290j
+lu_kick:                        // CODE XREF: sub_502D0B+290j
         push    0x63B0BC // "#kick "
         lea    ecx, [ebp+0Ch]
         mov    edx, 0x5DA123
@@ -419,10 +419,10 @@ lu_kick:                 // CODE XREF: sub_502D0B+290j
 //        mov    edx, 0x502DE5
         call    kick_char
         jmp    locu_502E54
-locu_502E54:                 // CODE XREF: sub_502D0B+D8j
+locu_502E54:                    // CODE XREF: sub_502D0B+D8j
         jmp    locu_5049B2
 ///////////////
-lu_kickme:                 // CODE XREF: sub_502D0B+290j
+lu_kickme:                      // CODE XREF: sub_502D0B+290j
         push    offset akickme
         lea    ecx, [ebp+0Ch]
         mov    edx, 0x5DA123
@@ -434,9 +434,12 @@ lu_kickme:                 // CODE XREF: sub_502D0B+290j
 //        mov    edx, 0x502DE5
         call    kick_char
         jmp    locu_5049B2
+
 //////////////////////////////////////////////
-lu_locate:                 // CODE XREF: sub_502D0B+29Dj
-        push    0x63B0C4 // "#locate "
+
+                                // CODE XREF: sub_502D0B+29Dj
+lu_locate:                      
+        push    0x63B0C4        // "#locate "
         lea    ecx, [ebp+0x0C]
         mov    edx, 0x5DA123
         call    edx
@@ -530,19 +533,21 @@ lu_locate:                 // CODE XREF: sub_502D0B+29Dj
         lea    ecx, [ebp-0x01C]
         mov    edx, 0x5DD88A
         call    edx
-locu_502F7F:                 // CODE XREF: sub_502D0B+1DAj
-                        // sub_502D0B+1E7j ...
+locu_502F7F:                    // CODE XREF: sub_502D0B+1DAj
+                                // sub_502D0B+1E7j ...
         jmp    locu_5049B2
+        
 //////////////////////////
-lu_create:                 // CODE XREF: sub_502D0B+2ACj
-        push    0x63B148 // "#create "
+
+lu_create:                      // CODE XREF: sub_502D0B+2ACj
+        push    0x63B148        // "#create "
         lea    ecx, [ebp+0x0C]
         mov    edx, 0x5DA123
         call    edx
         test    eax, eax
         jnz    lu_aftercreate
         jmp    locu_503424
-locu_503424:                 // CODE XREF: sub_502D0B+6C7j
+locu_503424:                    // CODE XREF: sub_502D0B+6C7j
         push    8
         lea    eax, [ebp-0x0B4]
         push    eax
@@ -572,7 +577,7 @@ locu_503424:                 // CODE XREF: sub_502D0B+6C7j
         test    edx, edx
         jle    locu_5034D3
         jmp    locu_5034BF
-locu_5034BF:                 // CODE XREF: sub_502D0B+79Cj
+locu_5034BF:                    // CODE XREF: sub_502D0B+79Cj
         mov    [ebp-0x04], 0FFFFFFFFh
         lea    ecx, [ebp+0x0C]
         mov    edx, 0x5DD88A
@@ -580,16 +585,16 @@ locu_5034BF:                 // CODE XREF: sub_502D0B+79Cj
         jmp    locu_5049C1
 // ---------------------------------------------------------------------------
 
-locu_5034D3:                 // CODE XREF: sub_502D0B+776j
+locu_5034D3:                    // CODE XREF: sub_502D0B+776j
         lea    edx, [ebp+0x0C]
         push    edx
         mov    edx, 0x5049D1
         call    edx
         add    esp, 4
         mov    [ebp-0x030], eax
-        push    0x63B154 // "Gold"
+        push    0x63B154        // "Gold"
         mov    eax, [ebp+0x0C]
-        push    eax        // char *
+        push    eax             // char *
         mov    edx, 0x5C0AB0
         call    edx
         add    esp, 8
@@ -603,7 +608,7 @@ locu_5034D3:                 // CODE XREF: sub_502D0B+776j
         mov    edx, 0x534AC1
         call    edx
         jmp    locu_50354C
-locu_50354C:                 // CODE XREF: sub_502D0B+829j
+locu_50354C:                    // CODE XREF: sub_502D0B+829j
         mov    [ebp-0x04], 0FFFFFFFFh
         lea    ecx, [ebp+0x0C]
         mov    edx, 0x5DD88A
@@ -611,7 +616,7 @@ locu_50354C:                 // CODE XREF: sub_502D0B+829j
         jmp    locu_5049C1
 // ---------------------------------------------------------------------------
 
-locu_503560:                 // CODE XREF: sub_502D0B+7F5j
+locu_503560:                    // CODE XREF: sub_502D0B+7F5j
         lea    ecx, [ebp+0x0C]
         push    ecx
         mov    ecx, 0x6D0668
@@ -685,11 +690,13 @@ locu_50361E:                 // CODE XREF: sub_502D0B+87Aj
 locu_5036A4:                 // CODE XREF: sub_502D0B+981j
         jmp    locu_5036E2
 locu_5036E2:                 // CODE XREF: sub_502D0B:locu_5036A4j
-                        // sub_502D0B+9BFj
+                             // sub_502D0B+9BFj
         jmp    locu_5049B2
+
 ///////////////////////////////////////////////////
-lu_modify:                 // CODE XREF: sub_502D0B+2BBj
-        push    0x63B15C // "#modify "
+
+lu_modify:                      // CODE XREF: sub_502D0B+2BBj
+        push    0x63B15C        // "#modify "
         lea    ecx, [ebp+0x0C]
         mov    edx, 0x5DA123
         call    edx
