@@ -303,7 +303,7 @@ void ReturnFailProc(byte* unit)
 	if(!pi) return;
 
 	pi->ShouldReturn = true;
-	pi->LastReturn = GetTickCount();
+	pi->LastReturn = GetTickCount(); // number of milliseconds from the moment when system was started
 
 	Printf("Warning: unit of player %s couldn't return to map.", *(const char**)(player + 0x18));
 }

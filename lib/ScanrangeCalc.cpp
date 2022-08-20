@@ -70,6 +70,11 @@ void CScanrangeCalc::InitializeTables()
     pTablesCost[20][20] = 0;
 }
 
+
+// Character ScanRange
+// x, y - character (?) coords
+// height_origin - relief (?)
+// height_cell - relief (?)
 bool CScanrangeCalc::SetCell(uint8_t x, uint8_t y, uint8_t height_origin, uint8_t height_cell)
 {
     int16_t vision_previous = pTablesVision[x+pTablesOffset[x][y][0]][y+pTablesOffset[x][y][1]];
@@ -79,6 +84,12 @@ bool CScanrangeCalc::SetCell(uint8_t x, uint8_t y, uint8_t height_origin, uint8_
     return (pTablesVision[x][y] >= 0);
 }
 
+
+// Character ScanRange Calculation
+// x, y - character (?) coords
+// scanrange - character vision
+// GetHeight - relief (?)
+// CheckValid - can we cast there or not
 void CScanrangeCalc::CalculateVision(int32_t x, int32_t y, uint16_t scanrange, uint8_t (*func_GetHeight)(int16_t,int16_t), bool (*func_CheckValid)(int16_t,int16_t))
 {
     memset(pTablesVision, 0, sizeof(pTablesVision));
@@ -93,7 +104,7 @@ void CScanrangeCalc::CalculateVision(int32_t x, int32_t y, uint16_t scanrange, u
     int32_t genY = y - 20;
     uint8_t ht_origin = func_GetHeight(x, y);
 
-	uint32_t result = 0;
+    uint32_t result = 0;
     pTablesVision[20][20] = vision2;
     for(int32_t i = 1; i < 20; i++)
     {
@@ -116,6 +127,6 @@ void CScanrangeCalc::CalculateVision(int32_t x, int32_t y, uint16_t scanrange, u
                 fdisp = true;
         }
 
-		if(!fdisp) break;
+        if(!fdisp) break;
     }
 }

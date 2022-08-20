@@ -370,11 +370,15 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
         }
         else if (rawcmd == "#scan")
         {
+            Printf("#scan command entered.\n");
             if (!player) goto ex;
+            Printf("#scan performed. player found.\n");
             byte* unit = *(byte**)(player + 0x38);
             if (!unit) goto ex;
+            Printf("check for unit OK.. getting dump\n");         
 
             SR_DumpToFile(player);
+            Printf("dump finished\n");         
             goto ex;
         }
     }

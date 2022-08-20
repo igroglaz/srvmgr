@@ -224,6 +224,7 @@ bool Net_HatInit()
 
 	NetHat::Connected = true;
 	NetHat::Receiver.Connect(NetHat::Socket);
+    // number of milliseconds from the moment when system was started
 	NetHat::LastUpdate = GetTickCount();
 
 	if(!NetCmd_HatAuth())
@@ -244,6 +245,7 @@ bool Net_HatProcess()
 	if(!NetHat::Connected) return false;
 	if(!NetHat::Receiver.Receive(Config::ProtocolVersion)) return false;
 
+    // number of milliseconds from the moment when system was started - Nethat..
 	if(GetTickCount() - NetHat::LastUpdate > 15000 && NetHat::HaveInfo)
 	{
 		if(!NetCmd_UpdateInfo()) NetHat::Connected = false;

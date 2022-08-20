@@ -817,6 +817,7 @@ namespace zxmgr
 
 	unsigned long _stdcall GetTicks()
 	{
+        // number of milliseconds from the moment when system was started - Players[i].LastReturn...
 		return GetTickCount();
 	}
 

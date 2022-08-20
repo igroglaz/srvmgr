@@ -96,6 +96,7 @@ void OnServerTic()
 
 		byte* unit = *(byte**)(Players[i].Class + 0x38);
 
+        // number of milliseconds from the moment when system was started - Players[i].LastReturn...
 		if(Players[i].ShouldReturn && GetTickCount()-Players[i].LastReturn > 5000) // every 5 seconds
 		{
 			if(zxmgr::ReturnUnit(*(byte**)(Players[i].Class + 0x38)))
