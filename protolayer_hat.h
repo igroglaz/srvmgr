@@ -11,28 +11,28 @@ void Net_HatShutdown();
 
 namespace NetHat
 {
-	extern std::string HatAddr;
-	extern uint16_t HatPort;
-	extern std::string ControlAddr;
-	extern uint16_t ControlPort;
-	extern SOCKET Socket;
-	extern bool Connected;
-	extern uint32_t LastReconnect;
-	extern PacketReceiver Receiver;
-	extern uint32_t ServerCaps;
-	extern bool HaveInfo;
-	struct ServerInfo
-	{
-		unsigned long PlayerCount;
-		unsigned long MapLevel;
-		std::string MapName;
-		unsigned long GameMode;
-		unsigned long MapSize;
+    extern std::string HatAddr;
+    extern uint16_t HatPort;
+    extern std::string ControlAddr;
+    extern uint16_t ControlPort;
+    extern SOCKET Socket;
+    extern bool Connected;
+    extern uint32_t LastReconnect;
+    extern PacketReceiver Receiver;
+    extern uint32_t ServerCaps;
+    extern bool HaveInfo;
+    struct ServerInfo
+    {
+        unsigned long PlayerCount;
+        unsigned long MapLevel;
+        std::string MapName;
+        unsigned long GameMode;
+        unsigned long MapSize;
 
-	};
-	extern ServerInfo Info;
-	extern bool ShuttingDown;
-	extern uint32_t LastUpdate;
+    };
+    extern ServerInfo Info;
+    extern bool ShuttingDown;
+    extern uint32_t LastUpdate;
 }
 
 bool NetCmd_UpdateInfo();

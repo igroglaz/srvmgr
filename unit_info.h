@@ -9,12 +9,12 @@
 
 struct Unit
 {
-	uint32_t Type;
-	bool Invalid;
-	byte* Class;
+    uint32_t Type;
+    bool Invalid;
+    byte* Class;
 
-	uint32_t VisibleFlags;
-	uint32_t VisibleFlagsLast;
+    uint32_t VisibleFlags;
+    uint32_t VisibleFlagsLast;
 };
 
 extern std::vector<Unit> Units;

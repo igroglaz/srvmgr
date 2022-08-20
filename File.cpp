@@ -24,8 +24,8 @@ bool FileArchive::Open(std::string filename, std::string directory)
     str.read((char*)&fat_offset, 4);
     str.read((char*)&fat_size, 4);
 
-	str.seekg(fat_offset);
-	size_t pos = str.tellg();
+    str.seekg(fat_offset);
+    size_t pos = str.tellg();
     if(pos != (size_t)fat_offset)
         return false;
 
@@ -138,12 +138,12 @@ File::File()
 bool File::Open(std::string filename)
 {
     filename = TruncateSlashes(FixSlashes(filename));
-	if(filename.find("patch/") == std::string::npos)
-	{
-		bool ffo = Open("patch/"+filename);
-		if(ffo) return true;
-		Close();
-	}
+    if(filename.find("patch/") == std::string::npos)
+    {
+        bool ffo = Open("patch/"+filename);
+        if(ffo) return true;
+        Close();
+    }
 
     myStream.open(filename.c_str(), std::ios::in | std::ios::binary);
 

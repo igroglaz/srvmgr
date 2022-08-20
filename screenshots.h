@@ -4,10 +4,10 @@
 
 struct ClientScreenshot
 {
-	byte* SourcePlayer;
-	byte* TargetPlayer;
-	uint32_t RequestedAt;
-	uint32_t UID;
+    byte* SourcePlayer;
+    byte* TargetPlayer;
+    uint32_t RequestedAt;
+    uint32_t UID;
 };
 
 uint32_t ClientScreenshot_Enqueue(byte* gm, byte* target);

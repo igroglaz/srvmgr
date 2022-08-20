@@ -11,7 +11,7 @@ unsigned long MAX_EXP_ON_SKILL = 35742360;  // V: 13779612;
 
 uint32_t ParseLogFlags(std::string string)
 {
-	if(CheckHex(string))
+    if(CheckHex(string))
     {
         return HexToInt(string);
     }
@@ -39,8 +39,8 @@ uint32_t ParseLogFlags(std::string string)
                 flag = SVL_SAVES;
             else if(par == "diplomacy")
                 flag = SVL_DIPLOMACY;
-			else if(par == "all")
-				flag = SVL_ALL;
+            else if(par == "all")
+                flag = SVL_ALL;
 
             if(!flag) continue;
             if(!erase) flags |= flag;
@@ -97,19 +97,19 @@ namespace Config
 {
     uint32_t ExceptionCount = 0;
 
-	std::string ChrBase = "chr";
+    std::string ChrBase = "chr";
 
-	uint32_t LogMode = SVL_ALL;
+    uint32_t LogMode = SVL_ALL;
     std::string LogFile = "server.log";
 
     uint32_t ServerID = 0;
-	bool ServerStarted = false;
+    bool ServerStarted = false;
     std::string CurrentMapName = "N/A";
     std::string CurrentMapTitle = "N/A";
 
     uint32_t ServerFlags = 0;
-	float InventoryDropProbability = 1;
-	float WearDropProbability = 1;
+    float InventoryDropProbability = 1;
+    float WearDropProbability = 1;
     bool MapLoaded = false;
     uint32_t ProtocolVersion = 7;
 
@@ -138,52 +138,52 @@ namespace Config
 
     std::vector<std::string> Includes;
 
-	std::string ControlDirectory = "ctl";
+    std::string ControlDirectory = "ctl";
 
     uint32_t MaxPlayers = 16;
 
-	bool ExitingCleanly = false;
+    bool ExitingCleanly = false;
 
-    double DeathExpMult		= 1;
-    double KilledExpMult	= 1;
-    double PKExpMult		= 1;
-    double RespawnExpMult2	= 0.9;
+    double DeathExpMult        = 1;
+    double KilledExpMult    = 1;
+    double PKExpMult        = 1;
+    double RespawnExpMult2    = 0.9;
 
-	MainCharacterParameters WarriorMaleMaxParameters = { 52, 50, 48, 46, 100, 100, 100, 100, 100};
-	MainCharacterParameters WarriorFemaleMaxParameters = { 50, 52, 46, 48, 100, 100, 100, 100, 100};
-	MainCharacterParameters MageMaleMaxParameters = { 48, 46, 52, 50, 100, 100, 100, 100, 100};
-	MainCharacterParameters MageFemaleMaxParameters = { 46, 48, 50, 52, 100, 100, 100, 100, 100};
+    MainCharacterParameters WarriorMaleMaxParameters = { 52, 50, 48, 46, 100, 100, 100, 100, 100};
+    MainCharacterParameters WarriorFemaleMaxParameters = { 50, 52, 46, 48, 100, 100, 100, 100, 100};
+    MainCharacterParameters MageMaleMaxParameters = { 48, 46, 52, 50, 100, 100, 100, 100, 100};
+    MainCharacterParameters MageFemaleMaxParameters = { 46, 48, 50, 52, 100, 100, 100, 100, 100};
 
-	extern uint32_t MinQuestReward = 250;
-	extern uint32_t MaxQuestReward = 16383000;
+    extern uint32_t MinQuestReward = 250;
+    extern uint32_t MaxQuestReward = 16383000;
 
-	uint32_t QuestRollInterval  = 0x78;
+    uint32_t QuestRollInterval  = 0x78;
 
-	float mage_pvp_dmg_factor = 1;
-	int16_t max_pvp_dmg = 100;
-	float shop_potions_factor = 1;
-	bool server_rotate_maps = true;
+    float mage_pvp_dmg_factor = 1;
+    int16_t max_pvp_dmg = 100;
+    float shop_potions_factor = 1;
+    bool server_rotate_maps = true;
 
     // If these settings are set to true, it will forbid a player from taking several quests for the same monster, group or monster type.
-	bool AllowOnlyOneQuest_KillNMonsters = false;
-	bool AllowOnlyOneQuest_KillTheMonster = false;
-	bool AllowOnlyOneQuest_KillTheGroup = false;
+    bool AllowOnlyOneQuest_KillNMonsters = false;
+    bool AllowOnlyOneQuest_KillTheMonster = false;
+    bool AllowOnlyOneQuest_KillTheGroup = false;
 
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
 {
-	int32_t val = StrToInt(value);
-	if(val < MinValue) val = MinValue;
-	if(val > MaxValue) val = MaxValue;
-	return val;
+    int32_t val = StrToInt(value);
+    if(val < MinValue) val = MinValue;
+    if(val > MaxValue) val = MaxValue;
+    return val;
 }
 float ReadFloatParameter(std::string value, float MinValue, float MaxValue)
 {
-	float val = StrToFloat(value);
-	if(val < MinValue) val = MinValue;
-	if(val > MaxValue) val = MaxValue;
-	return val;
+    float val = StrToFloat(value);
+    if(val < MinValue) val = MinValue;
+    if(val > MaxValue) val = MaxValue;
+    return val;
 }
 
 int ReadConfig(const char* filename)
@@ -308,35 +308,35 @@ int ReadConfig(const char* filename)
                 if(parameter == "chrbase")
                 {
                     if(value[value.length()-1] != '\\') value += '\\';
-					Config::ChrBase = value;
+                    Config::ChrBase = value;
                     SetCString((byte*)(0x006D15BC), value.c_str());
                 }
-				else if(parameter == ToLower("QuestRollInterval"))
-				{
-					if(!CheckInt(value)) return lnid;
-					Config::QuestRollInterval = ReadIntegerParameter(value,1,0xFF);
-				}
-				else if(parameter == ToLower("MagePvpDmgFactor"))
-				{
-					if(!CheckFloat(value)) return lnid;
-					Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
-				}
-				else if(parameter == ToLower("MaxPvpDmg"))
-				{
-					if(!CheckInt(value)) return lnid;
+                else if(parameter == ToLower("QuestRollInterval"))
+                {
+                    if(!CheckInt(value)) return lnid;
+                    Config::QuestRollInterval = ReadIntegerParameter(value,1,0xFF);
+                }
+                else if(parameter == ToLower("MagePvpDmgFactor"))
+                {
+                    if(!CheckFloat(value)) return lnid;
+                    Config::mage_pvp_dmg_factor = ReadFloatParameter(value,0,100);
+                }
+                else if(parameter == ToLower("MaxPvpDmg"))
+                {
+                    if(!CheckInt(value)) return lnid;
                                           // value, int32_t MinValue, int32_t MaxValue
-					Config::max_pvp_dmg = ReadIntegerParameter(value,1,500);
-				}
-				else if(parameter == ToLower("ShopPotionsFactor"))
-				{
-					if(!CheckFloat(value)) return lnid;
-					Config::shop_potions_factor = ReadFloatParameter(value,0,100);
-				}
-				else if(parameter == ToLower("ServerRotateMaps"))
-				{
-					if(!CheckBool(value)) return lnid;
-					Config::server_rotate_maps = StrToBool(value);
-				}
+                    Config::max_pvp_dmg = ReadIntegerParameter(value,1,500);
+                }
+                else if(parameter == ToLower("ShopPotionsFactor"))
+                {
+                    if(!CheckFloat(value)) return lnid;
+                    Config::shop_potions_factor = ReadFloatParameter(value,0,100);
+                }
+                else if(parameter == ToLower("ServerRotateMaps"))
+                {
+                    if(!CheckBool(value)) return lnid;
+                    Config::server_rotate_maps = StrToBool(value);
+                }
                 else if(parameter == "description")
                 {
                     SetCString((byte*)(0x006D15C0), value.c_str());
@@ -360,10 +360,10 @@ int ReadConfig(const char* filename)
                 {
                     Config::LogFile = value;
                 }
-				else if(parameter == "logmode")
-				{
-					Config::LogMode = ParseLogFlags(value);
-				}
+                else if(parameter == "logmode")
+                {
+                    Config::LogMode = ParseLogFlags(value);
+                }
                 else if(parameter == "serverid")
                 {
                     if(!CheckInt(value)) return lnid;
@@ -480,12 +480,12 @@ int ReadConfig(const char* filename)
                 else if(parameter == "serverflags")
                 {
                     Config::ServerFlags = ParseFlags(value);
-					if(Config::ServerFlags & SVF_SOFTCORE)
-					{
-						MAX_SKILL = 110;
-						MAX_EXP_ON_SKILL = 35742360;
-						Config::ServerCaps |= SVC_SOFTCORE;
-					}
+                    if(Config::ServerFlags & SVF_SOFTCORE)
+                    {
+                        MAX_SKILL = 110;
+                        MAX_EXP_ON_SKILL = 35742360;
+                        Config::ServerCaps |= SVC_SOFTCORE;
+                    }
                 }
                 else if(parameter == "maxpaletteallowed")
                 {
@@ -521,76 +521,76 @@ int ReadConfig(const char* filename)
                     if(val < 0) val = 0;
                     if(val > 1) val = 1;
                     Config::RespawnExpMult2 = val;
-				}
-				else if(parameter.rfind(ToLower("CharParams."), 0) == 0){
-					//string.rfind is used as .startsWith()
-					const char delim = '.';
+                }
+                else if(parameter.rfind(ToLower("CharParams."), 0) == 0){
+                    //string.rfind is used as .startsWith()
+                    const char delim = '.';
 
-					std::vector<std::string> out;
-					tokenize(parameter, delim, out);
-					int statValue = ReadIntegerParameter(value,1,200);
-					if(out.size() ==3){
-						std::string clazz = out[1];
-						std::string stat = out[2];
-						Printf("Parsing '%s' '%s' '%s' = %d", parameter.c_str(), clazz.c_str(), stat.c_str(), statValue);
-						MainCharacterParameters *params = NULL;
-						if(clazz == ToLower("WarriorMale"))             params = &Config::WarriorMaleMaxParameters;
-						else if (clazz == ToLower("WarriorFemale"))     params = &Config::WarriorFemaleMaxParameters;
-						else if (clazz == ToLower("MageMale"))          params = &Config::MageMaleMaxParameters;
-						else if (clazz == ToLower("MageFemale"))        params = &Config::MageFemaleMaxParameters;
-						else {
-						    Printf("Error while reading '%s' part of '%s' config", clazz.c_str(), parameter.c_str());
-						}
+                    std::vector<std::string> out;
+                    tokenize(parameter, delim, out);
+                    int statValue = ReadIntegerParameter(value,1,200);
+                    if(out.size() ==3){
+                        std::string clazz = out[1];
+                        std::string stat = out[2];
+                        Printf("Parsing '%s' '%s' '%s' = %d", parameter.c_str(), clazz.c_str(), stat.c_str(), statValue);
+                        MainCharacterParameters *params = NULL;
+                        if(clazz == ToLower("WarriorMale"))             params = &Config::WarriorMaleMaxParameters;
+                        else if (clazz == ToLower("WarriorFemale"))     params = &Config::WarriorFemaleMaxParameters;
+                        else if (clazz == ToLower("MageMale"))          params = &Config::MageMaleMaxParameters;
+                        else if (clazz == ToLower("MageFemale"))        params = &Config::MageFemaleMaxParameters;
+                        else {
+                            Printf("Error while reading '%s' part of '%s' config", clazz.c_str(), parameter.c_str());
+                        }
 
-						if(stat == ToLower("MaxBody"))                  params->Body = statValue;
-						else if (stat == ToLower("MaxReaction"))        params->Reaction = statValue;
-						else if (stat == ToLower("MaxMind"))            params->Mind = statValue;
-						else if (stat == ToLower("MaxSpirit"))          params->Spirit = statValue;
-						else if (stat == ToLower("MaxResistFire"))      params->ResistFire = statValue;
-						else if (stat == ToLower("MaxResistWater"))     params->ResistWater = statValue;
-						else if (stat == ToLower("MaxResistAir"))       params->ResistAir = statValue;
-						else if (stat == ToLower("MaxResistEarth"))     params->ResistEarth = statValue;
-						else if (stat == ToLower("MaxResistAstral"))    params->ResistAstral = statValue;
-						else {
-						    Printf("Error while reading '%s' part of '%s' config", stat.c_str(), parameter.c_str());
-						}
-					}
+                        if(stat == ToLower("MaxBody"))                  params->Body = statValue;
+                        else if (stat == ToLower("MaxReaction"))        params->Reaction = statValue;
+                        else if (stat == ToLower("MaxMind"))            params->Mind = statValue;
+                        else if (stat == ToLower("MaxSpirit"))          params->Spirit = statValue;
+                        else if (stat == ToLower("MaxResistFire"))      params->ResistFire = statValue;
+                        else if (stat == ToLower("MaxResistWater"))     params->ResistWater = statValue;
+                        else if (stat == ToLower("MaxResistAir"))       params->ResistAir = statValue;
+                        else if (stat == ToLower("MaxResistEarth"))     params->ResistEarth = statValue;
+                        else if (stat == ToLower("MaxResistAstral"))    params->ResistAstral = statValue;
+                        else {
+                            Printf("Error while reading '%s' part of '%s' config", stat.c_str(), parameter.c_str());
+                        }
+                    }
                 }
                 else if(parameter == ToLower("MinQuestReward"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MinQuestReward = ReadIntegerParameter(value,250,16383000);
+                    Config::MinQuestReward = ReadIntegerParameter(value,250,16383000);
                 }
                 else if(parameter == ToLower("MaxQuestReward"))
                 {
                     if(!CheckInt(value)) return lnid;
-					Config::MaxQuestReward = ReadIntegerParameter(value,Config::MinQuestReward,16383000);
+                    Config::MaxQuestReward = ReadIntegerParameter(value,Config::MinQuestReward,16383000);
                 }
                 else if(parameter == ToLower("InventoryDropProbability"))
                 {
-					if(!CheckFloat(value)) return lnid;
-					Config::InventoryDropProbability = ReadFloatParameter(value,0,1);
+                    if(!CheckFloat(value)) return lnid;
+                    Config::InventoryDropProbability = ReadFloatParameter(value,0,1);
                 }
                 else if(parameter == ToLower("WearDropProbability"))
                 {
-					if(!CheckFloat(value)) return lnid;
-					Config::WearDropProbability = ReadFloatParameter(value,0,1);
+                    if(!CheckFloat(value)) return lnid;
+                    Config::WearDropProbability = ReadFloatParameter(value,0,1);
                 }
-				else if(parameter == ToLower("AllowOnlyOneQuest_KillNMonsters"))
-				{
-					if(!CheckBool(value)) return lnid;
-					Config::AllowOnlyOneQuest_KillNMonsters = StrToBool(value);
-				}
-				else if(parameter == ToLower("AllowOnlyOneQuest_KillTheMonster"))
-				{
-					if(!CheckBool(value)) return lnid;
-					Config::AllowOnlyOneQuest_KillTheMonster = StrToBool(value);
-				}
-				else if(parameter == ToLower("AllowOnlyOneQuest_KillTheGroup"))
-				{
-					if(!CheckBool(value)) return lnid;
-					Config::AllowOnlyOneQuest_KillTheGroup = StrToBool(value);
-				}
+                else if(parameter == ToLower("AllowOnlyOneQuest_KillNMonsters"))
+                {
+                    if(!CheckBool(value)) return lnid;
+                    Config::AllowOnlyOneQuest_KillNMonsters = StrToBool(value);
+                }
+                else if(parameter == ToLower("AllowOnlyOneQuest_KillTheMonster"))
+                {
+                    if(!CheckBool(value)) return lnid;
+                    Config::AllowOnlyOneQuest_KillTheMonster = StrToBool(value);
+                }
+                else if(parameter == ToLower("AllowOnlyOneQuest_KillTheGroup"))
+                {
+                    if(!CheckBool(value)) return lnid;
+                    Config::AllowOnlyOneQuest_KillTheGroup = StrToBool(value);
+                }
                 else if(parameter == "servercaps")
                 {
                     value = Trim(ToLower(value));
@@ -619,12 +619,12 @@ int ReadConfig(const char* filename)
                     }
 
                     Config::ServerCaps &= SVC_SOFTCORE;
-					Config::ServerCaps |= caps & ~SVC_SOFTCORE;
+                    Config::ServerCaps |= caps & ~SVC_SOFTCORE;
                 }
-				else if(parameter == "controldirectory")
-				{
-					Config::ControlDirectory = value;
-				}
+                else if(parameter == "controldirectory")
+                {
+                    Config::ControlDirectory = value;
+                }
                 else if(parameter == "flagscore" ||
                         parameter == "protocol" ||
                         parameter == "ipaddress" ||
@@ -713,14 +713,14 @@ int ReadConfig(const char* filename)
         }
     }
 
-	if (Config::GameMode == GAMEMODE_SOFTCORE)
-	{
-		Config::ServerFlags = Config::ServerFlags & ~(SVF_SANDBOX) | SVF_SOFTCORE;
-	}
-	else if (Config::GameMode == GAMEMODE_SANDBOX)
-	{
-		Config::ServerFlags = Config::ServerFlags & ~(SVF_SOFTCORE) | SVF_SANDBOX;
-	}
+    if (Config::GameMode == GAMEMODE_SOFTCORE)
+    {
+        Config::ServerFlags = Config::ServerFlags & ~(SVF_SANDBOX) | SVF_SOFTCORE;
+    }
+    else if (Config::GameMode == GAMEMODE_SANDBOX)
+    {
+        Config::ServerFlags = Config::ServerFlags & ~(SVF_SOFTCORE) | SVF_SANDBOX;
+    }
 
     f_cfg.close();
 

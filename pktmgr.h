@@ -5,5 +5,5 @@
 
 namespace pktmgr
 {
-	uint32_t SendPacket(byte* player, Packet& pack);
+    uint32_t SendPacket(byte* player, Packet& pack);
 }

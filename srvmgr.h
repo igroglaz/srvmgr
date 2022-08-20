@@ -43,7 +43,7 @@ void __stdcall set_mode_2(char*s);
 #ifndef type_mydata
 #define type_mydata
 typedef struct _MyData{
-	HINSTANCE hModule;
+    HINSTANCE hModule;
 } MYDATA, *PMYDATA;
 #endif
 

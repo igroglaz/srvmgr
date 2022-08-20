@@ -8,8 +8,8 @@ extern unsigned long MAX_EXP_ON_SKILL;
 
 
 struct MainCharacterParameters {
-	uint8_t Body, Reaction, Mind, Spirit;
-	uint8_t ResistFire, ResistWater, ResistAir, ResistEarth, ResistAstral;
+    uint8_t Body, Reaction, Mind, Spirit;
+    uint8_t ResistFire, ResistWater, ResistAir, ResistEarth, ResistAstral;
 };
 
 namespace Config
@@ -19,11 +19,11 @@ namespace Config
     extern uint32_t LogMode;
     extern std::string LogFile;
 
-	extern std::string ChrBase;
+    extern std::string ChrBase;
 
     extern uint32_t ServerID;
 
-	extern bool ServerStarted;
+    extern bool ServerStarted;
 
     extern std::string CurrentMapName;
     extern std::string CurrentMapTitle;
@@ -47,35 +47,35 @@ namespace Config
     extern uint32_t OriginalTime;
     extern uint32_t MaxPlayers;
 
-	extern std::string ControlDirectory;
+    extern std::string ControlDirectory;
 
-	extern bool ExitingCleanly;
+    extern bool ExitingCleanly;
 
     extern double DeathExpMult;
     extern double KilledExpMult;
     extern double PKExpMult;
     extern double RespawnExpMult2;
 
-	extern float InventoryDropProbability;
-	extern float WearDropProbability;
+    extern float InventoryDropProbability;
+    extern float WearDropProbability;
 
-	extern MainCharacterParameters WarriorMaleMaxParameters;
-	extern MainCharacterParameters WarriorFemaleMaxParameters;
-	extern MainCharacterParameters MageMaleMaxParameters;
-	extern MainCharacterParameters MageFemaleMaxParameters;
+    extern MainCharacterParameters WarriorMaleMaxParameters;
+    extern MainCharacterParameters WarriorFemaleMaxParameters;
+    extern MainCharacterParameters MageMaleMaxParameters;
+    extern MainCharacterParameters MageFemaleMaxParameters;
 
-	extern uint32_t MinQuestReward;
-	extern uint32_t MaxQuestReward;
+    extern uint32_t MinQuestReward;
+    extern uint32_t MaxQuestReward;
 
-	extern uint32_t QuestRollInterval;
-	extern float mage_pvp_dmg_factor;
-	extern int16_t max_pvp_dmg;
-	extern float shop_potions_factor;
-	extern bool server_rotate_maps;
+    extern uint32_t QuestRollInterval;
+    extern float mage_pvp_dmg_factor;
+    extern int16_t max_pvp_dmg;
+    extern float shop_potions_factor;
+    extern bool server_rotate_maps;
 
-	extern bool AllowOnlyOneQuest_KillNMonsters;
-	extern bool AllowOnlyOneQuest_KillTheMonster;
-	extern bool AllowOnlyOneQuest_KillTheGroup;
+    extern bool AllowOnlyOneQuest_KillNMonsters;
+    extern bool AllowOnlyOneQuest_KillTheMonster;
+    extern bool AllowOnlyOneQuest_KillTheGroup;
 
     extern std::string IPAddress;
     extern uint16_t IPAddressP;

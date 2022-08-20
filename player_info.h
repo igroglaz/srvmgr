@@ -6,28 +6,28 @@
 
 struct Player
 {
-	bool Exists;
-	byte* Class;
-	
-	bool Casted;
-	bool ShouldReturn;
-	uint32_t LastReturn;
-	bool GodMode;
-	byte* GodSetter;
+    bool Exists;
+    byte* Class;
+    
+    bool Casted;
+    bool ShouldReturn;
+    uint32_t LastReturn;
+    bool GodMode;
+    byte* GodSetter;
 
-	int8_t SetSpells;
-	uint32_t LastSpells;
-	byte* SpellSetter;
+    int8_t SetSpells;
+    uint32_t LastSpells;
+    byte* SpellSetter;
 
-	byte CastSpell[0x14];
-	std::vector<byte*> SavedItems;
+    byte CastSpell[0x14];
+    std::vector<byte*> SavedItems;
 
-	uint32_t UnmuteDate;
+    uint32_t UnmuteDate;
 
-	uint32_t Vision[256][256];
+    uint32_t Vision[256][256];
 
-	//
-	std::vector<Packet> EnqueuedPackets;
+    //
+    std::vector<Packet> EnqueuedPackets;
 };
 
 extern Player Players[32];
