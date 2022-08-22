@@ -2573,10 +2573,11 @@ test_if_valid_injection_valid:
 test_if_valid_injection_softcore:
 
         mov    eax, Config::ServerFlags
-        and    eax, SVF_SOFTCORE
-        cmp    eax, SVF_SOFTCORE
-        jnz    test_if_valid_injection_valid
-
+        and    eax, SVF_SOFTCORE             // logical &
+        cmp    eax, SVF_SOFTCORE             // ZF = 1 if equal
+        jnz    test_if_valid_injection_valid // if (ZF != 0) jump... -- so if SOFTCORE: jump
+                                             // if we change it to 'jz' it will allow enter low-lvl maps at
+                                             // any mode, not only softcore (but not high-tier with low skills)
         mov    edx, 0x004FE61D
         jmp    edx
 
