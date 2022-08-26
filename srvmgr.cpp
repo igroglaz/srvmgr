@@ -2542,6 +2542,19 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
     return r;
 }
 
+// test for "Too weak for this map" (max_player_skill_2? < MapLevel)
+void __declspec(naked) allow_low_skill_enter_high_tier_maps()
+{
+    // instead of: 004FE632:
+    __asm
+    {
+        mov    ecx, 0x004FE950
+        jmp    ecx
+    }
+}
+
+
+// test for "Too strong for this map" (MapLevel < max_player_skill_1?)
 void __declspec(naked) test_if_valid_injection()
 {
     // method: jmp
@@ -2575,9 +2588,9 @@ test_if_valid_injection_softcore:
         mov    eax, Config::ServerFlags
         and    eax, SVF_SOFTCORE             // logical &
         cmp    eax, SVF_SOFTCORE             // ZF = 1 if equal
-        jnz    test_if_valid_injection_valid // if (ZF != 0) jump... -- so if SOFTCORE: jump
-                                             // if we change it to 'jz' it will allow enter low-lvl maps at
-                                             // any mode, not only softcore (but not high-tier with low skills)
+    //  jnz    test_if_valid_injection_valid // if (ZF != 0) jump... -- so if SOFTCORE: jump
+        jz    test_if_valid_injection_valid  // hack to allow enter low-lvl maps at any mode,
+                                             // not only softcore (but not high-tier with low skills)
         mov    edx, 0x004FE61D
         jmp    edx
 
