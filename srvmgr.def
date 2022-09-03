@@ -172,4 +172,5 @@ set_mage_male_max_parameters_taking_potion			@308
 set_mage_female_max_parameters_taking_potion		@309
 bound_quest_reward						@310
 allow_low_skill_enter_high_tier_maps				@311
+set_char_min_speed              		@312
 

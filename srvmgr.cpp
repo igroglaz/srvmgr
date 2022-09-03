@@ -398,7 +398,43 @@ void _declspec(naked) set_max_player_parameters()
     }
 }
 
-// using potions
+// make speed at server1 equal to 15
+//531b72
+// we incert HC speed right before starting of other insctruction...
+// means that we kinda adding new HC value, instead of
+// changing previous ones
+void _declspec(naked) set_char_min_speed()
+{
+    /*
+    dword ptr [EBP + -0x28] - this->
+     word ptr [ExX +  0x84] - body
+     word ptr [ExX +  0x86] - reaction
+     word ptr [ExX +  0x8c] - speed
+    */
+    __asm
+    {       
+        cmp   [Config::ServerID], 1        // '-'. if equal: ZF = 1
+        jz    set_speed_min
+        //-----------------------------------
+        mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
+        movsx ECX,word ptr [EAX + 0x84]    // + second one so we won't overwrite next 3 bytes' MOV with 5 bytes' JMP
+        mov   edx, 0x00531b7c              // jump to next command
+        jmp   edx                          //
+        //-----------------------------------
+    set_speed_min:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 15                       // put 15 to register
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 15
+        /////////////////////////////////////
+        mov   EAX,dword ptr [EBP + -0x28]
+        movsx ECX,word ptr [EAX + 0x84]
+        mov   edx, 0x00531b7c
+        jmp   edx
+    }
+}
+
+// using potions - drinking stat potions
 
 void _declspec(naked) set_max_player_parameters_for_use_potion()
 {
@@ -449,7 +485,7 @@ void _declspec(naked) set_mage_female_max_parameters()
     }
 }
 
-// taking potions
+// taking potions - getting stat potions from tavern quest
 
 void _declspec(naked) set_max_player_parameters_for_take_potion()
 {

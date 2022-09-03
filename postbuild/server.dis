@@ -227,6 +227,7 @@ JMP set_mage_female_max_parameters_taking_potion 5661EA // set_mage_female_max_p
 JMP bound_quest_reward 565406 // bound_quest_reward
 
 CALL allow_low_skill_enter_high_tier_maps 4FE632 //
+CALL set_char_min_speed 531b72 //
 
 ///////// jmp, 1: call
 
