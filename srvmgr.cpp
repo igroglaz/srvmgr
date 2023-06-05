@@ -413,7 +413,10 @@ void _declspec(naked) set_char_min_speed()
     */
     __asm
     {       
-        cmp   [Config::ServerID], 1        // '-'. if equal: ZF = 1
+        mov   EAX, [Config::ServerID]    // get server ID
+        cmp   EAX, 1                     // if server ID is 1: ZF = 1
+        jz    set_speed_min
+        cmp   EAX, 2                     // if server ID is 2: ZF = 1
         jz    set_speed_min
         //-----------------------------------
         mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
