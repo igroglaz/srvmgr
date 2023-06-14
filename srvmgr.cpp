@@ -418,6 +418,8 @@ void _declspec(naked) set_char_min_speed()
         jz    set_speed_min
         cmp   EAX, 2                     // if server ID is 2: ZF = 1
         jz    set_speed_min
+        cmp   EAX, 3                     // if server ID is 3: ZF = 1
+        jz    set_speed_three
         //-----------------------------------
         mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
         movsx ECX,word ptr [EAX + 0x84]    // + second one so we won't overwrite next 3 bytes' MOV with 5 bytes' JMP
@@ -429,6 +431,17 @@ void _declspec(naked) set_char_min_speed()
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 15                       // put 15 to register
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 15
+        /////////////////////////////////////
+        mov   EAX,dword ptr [EBP + -0x28]
+        movsx ECX,word ptr [EAX + 0x84]
+        mov   edx, 0x00531b7c
+        jmp   edx
+
+    set_speed_three:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 12                       // put 12 to register
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 12
         /////////////////////////////////////
         mov   EAX,dword ptr [EBP + -0x28]
         movsx ECX,word ptr [EAX + 0x84]
