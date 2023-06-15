@@ -441,7 +441,11 @@ void _declspec(naked) set_char_min_speed()
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 12                       // put 12 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 12                       // check if current speed is less than 12
+        jge   skip                         // if current speed is not less than 12, skip setting speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 12
+    skip:
         /////////////////////////////////////
         mov   EAX,dword ptr [EBP + -0x28]
         movsx ECX,word ptr [EAX + 0x84]
