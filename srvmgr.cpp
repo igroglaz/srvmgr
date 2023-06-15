@@ -432,10 +432,7 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 15                       // put 15 to register
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 15
         /////////////////////////////////////
-        mov   EAX,dword ptr [EBP + -0x28]
-        movsx ECX,word ptr [EAX + 0x84]
-        mov   edx, 0x00531b7c
-        jmp   edx
+        jmp   set_min_speed
 
     set_speed_three:
         /////////////////////////////////////
@@ -446,6 +443,16 @@ void _declspec(naked) set_char_min_speed()
         jge   skip                         // if current speed is not less than 12, skip setting speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 12
     skip:
+        /////////////////////////////////////
+    set_min_speed:
+        ///////////////////////////////////// Fix for ways to make player speed negative
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 2                        // put 2 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 2                        // check if current speed is less than or equal to 2
+        jg    end                          // if current speed is greater than 2, end
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 2
+    end:
         /////////////////////////////////////
         mov   EAX,dword ptr [EBP + -0x28]
         movsx ECX,word ptr [EAX + 0x84]
