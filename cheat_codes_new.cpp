@@ -1049,7 +1049,7 @@ uint32_t GetDamageBonus(byte* unit)
 }
 
 
-//  unit1 - attacker, unit2 - victim
+// unit1 - attacker, unit2 - victim
 int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
 {
     if (damage < 0) return 0;
@@ -1072,18 +1072,19 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
     // Damage modificators in PvP
     if (player1 && player2 &&
         !*(uint32_t*)(player1+0x2C) &&
-        !*(uint32_t*)(player2+0x2C))
+        !*(uint32_t*)(player2+0x2C) &&
+        player1 != player2) // Ensure it's not self-inflicted damage
     {
         if (*(uint8_t*)(unit1+0x4C) & 4) // if mage or witch
         {
-                int old_dmg = damage;
-                // This method is being called twice, so it needs to reduce the factor like shown below.
-                // If the method would be called once, it would be unnecessary
-                // factor*x = k*(k*x) => k = sqrt(factor)
-                float factor = sqrt(Config::mage_pvp_dmg_factor);
-                damage *= factor;
-                retval = damage;
-                Printf("dmg changed: %d -> %d", old_dmg, retval);
+            int old_dmg = damage;
+            // This method is being called twice, so it needs to reduce the factor like shown below.
+            // If the method would be called once, it would be unnecessary
+            // factor*x = k*(k*x) => k = sqrt(factor)
+            float factor = sqrt(Config::mage_pvp_dmg_factor);
+            damage *= factor;
+            retval = damage;
+            Printf("dmg changed: %d -> %d", old_dmg, retval);
         }
 
         // limit maximum damage dealt to player
@@ -1167,6 +1168,7 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
 
     return retval;
 }
+
 
 void __declspec(naked) imp_DropEverything()
 {
