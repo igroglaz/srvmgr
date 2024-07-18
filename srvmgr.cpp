@@ -398,6 +398,50 @@ void _declspec(naked) set_max_player_parameters()
     }
 }
 
+// crush at 00539B5Ah:
+// in this point `if (*(int *)(*(int *)(*(int *)(param_1_00 + 4) + 0xc) + 0x14) == 2) {`
+// (seems it's param_1_00 bad pointers)
+// 0x00539977
+void __declspec(naked) fix_spell_cast_crash() {
+    __asm {
+        // Save registers
+        push eax
+        push ecx
+        push edx
+
+        // Get the value of param_1_00 from the stack (ESP + 4)
+        mov eax, [esp + 0x10]    // eax = param_1_00
+        test eax, eax
+        jz return_zero
+        mov ecx, [eax + 4]
+        test ecx, ecx
+        jz return_zero
+        mov edx, [ecx + 0xc]
+        test edx, edx
+        jz return_zero
+
+        // Restore registers and jump to the original instruction
+        pop edx
+        pop ecx
+        pop eax
+
+        // Original instruction
+        cmp dword ptr [eax + 0x14], 2
+        jmp continue_execution
+
+    return_zero:
+        // Return 0 for invalid pointers
+        xor eax, eax
+        add esp, 0x0C // Adjust the stack (pop three times)
+        ret
+
+    continue_execution:
+        // Jump back to the address after the original instruction
+        jmp dword ptr [esp]
+    }
+}
+
+
 // make speed at server1 equal to 15
 //531b72
 // we incert HC speed right before starting of other insctruction...
