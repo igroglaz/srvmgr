@@ -532,7 +532,7 @@ int ReadConfig(const char* filename)
                     if(out.size() ==3){
                         std::string clazz = out[1];
                         std::string stat = out[2];
-                        Printf("Parsing '%s' '%s' '%s' = %d", parameter.c_str(), clazz.c_str(), stat.c_str(), statValue);
+                        // Printf("Parsing '%s' '%s' '%s' = %d", parameter.c_str(), clazz.c_str(), stat.c_str(), statValue);
                         MainCharacterParameters *params = NULL;
                         if(clazz == ToLower("WarriorMale"))             params = &Config::WarriorMaleMaxParameters;
                         else if (clazz == ToLower("WarriorFemale"))     params = &Config::WarriorFemaleMaxParameters;
