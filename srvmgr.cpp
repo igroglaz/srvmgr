@@ -398,6 +398,69 @@ void _declspec(naked) set_max_player_parameters()
     }
 }
 
+
+// crush at 00539B5Ah:
+// in this point `if (*(int *)(*(int *)(*(int *)(param_1_00 + 4) + 0xc) + 0x14) == 2) {`
+// (seems it's param_1_00 bad pointers)
+void __declspec(naked) fix_spell_cast_crash() {
+    __asm {
+        // Save the current values of registers eax, ecx, and edx to the stack to preserve them.
+        push eax
+        push ecx
+        push edx
+
+        ///////////////////////////////////////////////////
+        // Retrieve the value of param_1_00 from the stack.
+        ///////////////////////////////////////////////////
+        mov eax, [esp + 0x10]
+        // Check if eax (param_1_00) is zero.
+        // If eax is zero, jump to the call_upd_all label.
+        test eax, eax
+        jz call_upd_all
+
+        // Do same for other two...
+        mov ecx, [eax + 4]
+        test ecx, ecx
+        jz call_upd_all
+
+        mov edx, [ecx + 0xc]
+        test edx, edx
+        jz call_upd_all
+        ///////////////////////////////////////////////////
+
+        // If all pointers are valid (not zero), execute the original instruction:
+        // Compare the value at [edx + 0x14] with 2.
+        cmp dword ptr [edx + 0x14], 2
+
+        // Restore the values of registers edx, ecx, and eax that were saved at the beginning.
+        pop edx
+        pop ecx
+        pop eax
+
+        // Adjust the stack, removing three elements (0x0C bytes) to restore its original state.
+        add esp, 0x0C
+
+        // Return to the execution of the code after this function.
+        ret
+
+    // Label call_upd_all:
+    call_upd_all:
+        // If any pointer was zero, call the upd_all function to restore the state.
+        call upd_all
+
+        // Set eax to zero.
+        xor eax, eax
+
+        // Adjust the stack, removing three elements (0x0C bytes).
+        add esp, 0x0C
+
+        // Return to the execution of the code after this function.
+        ret
+    }
+}
+
+
+
 // make speed at server1 equal to 15
 //531b72
 // we incert HC speed right before starting of other insctruction...
