@@ -176,4 +176,5 @@ set_char_min_speed              		@312
 fix_spell_cast_crash              		@313
 fix_item_hash_crash              		@314
 fix_local_8_crash              		    @315
+fix_GetHeadPosition_crash              	@316
 

@@ -231,6 +231,7 @@ CALL set_char_min_speed 531b72 //
 CALL fix_spell_cast_crash 00539B5Ah
 CALL fix_item_hash_crash 00549B26h
 CALL fix_local_8_crash 00599E47h
+CALL fix_GetHeadPosition_crash 0059AD3Ah
 
 ///////// jmp, 1: call
 

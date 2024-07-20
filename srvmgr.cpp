@@ -530,7 +530,7 @@ void __declspec(naked) fix_item_hash_crash() {
 // local_8 = (undefined4 *)*local_8)
 void __declspec(naked) fix_local_8_crash() {
     __asm {
-        // Save the current values of registers eax, ecx, and edx to the stack to preserve them.
+        // Save the registers.
         push eax
         push ecx
         push edx
@@ -561,7 +561,7 @@ void __declspec(naked) fix_local_8_crash() {
         jmp loop_start
 
     loop_end:
-        // Restore the values of registers edx, ecx, and eax that were saved at the beginning.
+        // Restore the registers.
         pop edx
         pop ecx
         pop eax
@@ -570,6 +570,52 @@ void __declspec(naked) fix_local_8_crash() {
         ret
     }
 }
+
+
+// 59AD3Ah
+// The function does not check if 'this' is null before dereferencing it at:
+// return this->m_pNodeHead;
+void __declspec(naked) fix_GetHeadPosition_crash() {
+    __asm {
+        // Save the registers.
+        push eax
+        push ecx
+        push edx
+
+        // Retrieve the value of 'this' from the stack.
+        mov eax, [esp + 0x10]
+
+        // Check if 'this' is zero.
+        test eax, eax
+        jz return_null
+
+        // Execute the original instruction: return this->m_pNodeHead.
+        mov ecx, [eax]
+        mov eax, [eax + 4]
+
+        // Restore the registers.
+        pop edx
+        pop ecx
+        pop eax
+
+        // Return to the execution of the code after this function.
+        ret
+
+    // Label return_null:
+    return_null:
+        // Set eax to zero.
+        xor eax, eax
+
+        // Restore the registers.
+        pop edx
+        pop ecx
+        pop eax
+
+        // Return to the execution of the code after this function.
+        ret
+    }
+}
+
 
 
 
