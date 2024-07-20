@@ -1,11 +1,51 @@
 [BeginXCK]-----------------------------------
 [BeginCRK]-----------------------------------
 Patch to change the monsters given as a quest reward in the inn
-
 Old logic: take all mobs with 63 < typeId < 99, exclude Ghost.1, F_Zombie.1 and F_Skeleton.1
 New logic: take all mobs with 63 < typeId < 108, exclude all ghosts, flyers and casters by typeId
-
-Bunch of NOPs in the end to show dominance.
+Bunch of NOPs in the end to show dominance^W^W align with remaining checks.
+The assembly code for the changed fragment is:
+```
+  mov eax, dword ptr [edx+ecx]
+  cmp eax, 105
+  jle skip_unit
+  cmp eax, 108
+  jge skip_unit
+  cmp eax, 69
+  je skip_unit
+  cmp eax, 70
+  je skip_unit
+  cmp eax, 71
+  je skip_unit
+  cmp eax, 72
+  je skip_unit
+  cmp eax, 73
+  je skip_unit
+  cmp eax, 78
+  je skip_unit
+  cmp eax, 81
+  je skip_unit
+  cmp eax, 82
+  je skip_unit
+  cmp eax, 89
+  je skip_unit
+  cmp eax, 99
+  je skip_unit
+  cmp eax, 100
+  je skip_unit
+  cmp eax, 101
+  je skip_unit
+  cmp eax, 102
+  je skip_unit
+  cmp eax, 105
+  je skip_unit
+  jmp LAB_0050e04e  # Existing label, check that unit does not have `.5` in its name
+skip_unit:
+  jmp LAB_0050df39  # Existing label, start of the loop
+    (obscene amount of NOPs for alignment)
+```
+This is a test. It should give only dinos and sheep as a reward.
+If it works, we should replace the first 0x69 with 0x3F.
 
 a2server.exe
 0010D396: 83 8B
