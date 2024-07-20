@@ -230,6 +230,7 @@ CALL allow_low_skill_enter_high_tier_maps 4FE632 //
 CALL set_char_min_speed 531b72 //
 CALL fix_spell_cast_crash 00539B5Ah
 CALL fix_item_hash_crash 00549B26h
+CALL fix_local_8_crash 00599E47h
 
 ///////// jmp, 1: call
 

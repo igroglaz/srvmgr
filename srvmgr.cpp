@@ -525,6 +525,53 @@ void __declspec(naked) fix_item_hash_crash() {
 }
 
 
+// 599E47h
+// The loop does not check if local_8 is null before dereferencing it at:
+// local_8 = (undefined4 *)*local_8)
+void __declspec(naked) fix_local_8_crash() {
+    __asm {
+        // Save the current values of registers eax, ecx, and edx to the stack to preserve them.
+        push eax
+        push ecx
+        push edx
+
+        // Retrieve the value of param_1 from the stack.
+        mov eax, [esp + 0x10]
+
+        // Retrieve the value of local_8 from param_1 + 4.
+        mov ecx, [eax + 4]
+
+    loop_start:
+        // Check if local_8 is zero.
+        test ecx, ecx
+        jz loop_end
+
+        // Execute the original instruction: local_8 = (undefined4 *)*local_8.
+        mov edx, [ecx]
+        mov ecx, edx
+
+        // Call the function FUN_004221f0(local_8 + 2,1).
+        push 1
+        lea eax, [ecx + 2 * 4] // Adjust ecx to point to local_8 + 2.
+        push eax
+        call FUN_004221f0
+        add esp, 8 // Clean up the stack after the function call.
+
+        // Repeat the loop.
+        jmp loop_start
+
+    loop_end:
+        // Restore the values of registers edx, ecx, and eax that were saved at the beginning.
+        pop edx
+        pop ecx
+        pop eax
+
+        // Return to the execution of the code after this function.
+        ret
+    }
+}
+
+
 
 // make speed at server1 equal to 15
 //531b72
