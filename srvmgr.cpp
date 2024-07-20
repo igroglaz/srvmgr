@@ -460,6 +460,71 @@ void __declspec(naked) fix_spell_cast_crash() {
 }
 
 
+// 549B26h
+// bad pointer at:
+// *puVar1 = param_1_00->ItemHash;
+void __declspec(naked) fix_item_hash_crash() {
+    __asm {
+        // Save the current values of registers eax, ecx, and edx to the stack to preserve them.
+        push eax
+        push ecx
+        push edx
+
+        ///////////////////////////////////////////////////
+        // Retrieve the value of param_1_00 from the stack.
+        ///////////////////////////////////////////////////
+        mov eax, [esp + 0x10]
+        // Check if eax (param_1_00) is zero.
+        // If eax is zero, jump to call_upd_all label.
+        test eax, eax
+        jz call_upd_all
+
+        // Retrieve the value of param_2 from the stack.
+        mov ecx, [esp + 0x14]
+        // Check if ecx (param_2) is zero.
+        // If ecx is zero, jump to call_upd_all label.
+        test ecx, ecx
+        jz call_upd_all
+
+        // Retrieve the value of field_0x13 from param_2.
+        // If the value of param_2->field10_0x11 is zero, jump to call_upd_all label.
+        mov edx, [ecx + 0x10]
+        test edx, edx
+        jz call_upd_all
+
+        ///////////////////////////////////////////////////
+        // If all pointers are valid (not zero), execute the original instruction:
+        movzx edx, word ptr [ecx + 0x13 + edx] // Getting puVar1 address in edx
+        mov [edx], eax // Storing param_1_00->ItemHash in puVar1
+
+        // Restore the values of registers edx, ecx, and eax that were saved at the beginning.
+        pop edx
+        pop ecx
+        pop eax
+
+        // Adjust the stack, removing three elements (0x0C bytes) to restore its original state.
+        add esp, 0x0C
+
+        // Return to the execution of the code after this function.
+        ret
+
+    // Label call_upd_all:
+    call_upd_all:
+        // If any pointer was zero, call the upd_all function to restore the state.
+        call upd_all
+
+        // Set eax to zero.
+        xor eax, eax
+
+        // Adjust the stack, removing three elements (0x0C bytes).
+        add esp, 0x0C
+
+        // Return to the execution of the code after this function.
+        ret
+    }
+}
+
+
 
 // make speed at server1 equal to 15
 //531b72
