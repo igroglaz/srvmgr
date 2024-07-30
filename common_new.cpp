@@ -684,6 +684,35 @@ void __declspec(naked) imp_LogIP()
     }
 }
 
+// 505656
+void __declspec(naked) disable_mage_scrolls()
+{
+    __asm
+    {   
+        // Встраиваемся и подменяем первую инструкцию..
+        cmp dword ptr [ebp - 0x14], 0x0  // ..более расширенной (с проверкой на класс героя)
+        je DoNotUseScroll                // Если 0, переходим на DoNotUseScroll
+
+        // Проверка на класс героя (если герой маг - не используем свиток)
+        mov edx, [ebp - 0x14]            // Получаем указатель на player
+        mov eax, [edx + 0x38]            // Получаем указатель на current_unit
+        mov cl, byte ptr [eax + 0x4c]    // Получаем значение 0x4c
+        and cl, 0x4                      // Проверяем бит 2
+        test cl, cl                      // TEST cl, cl
+        jz DoNotUseScroll                // Если 0, переходим на DoNotUseScroll
+
+        // Проверка пройдена; герой - не маг, поэтому...
+        mov edx, 0x0050864e              // ..продолжаем обработку кейсов 0x25 и 0x26
+        jmp edx
+
+    DoNotUseScroll:
+        // Герой - маг, не используем свиток
+        mov edx, 0x00505678              // Пропускаем использования свитка
+        jmp edx
+    }
+}
+
+
 void _stdcall UseItems(byte* unit, byte* packet)
 {
     if(!(Config::ServerFlags & SVF_NOHEALING)) return;
