@@ -84,7 +84,7 @@ JMP pkill_msg 556C0F /// pkill own
 //JMP ghost_gen 53B910 /// ghost_gen
 JMP fix_0051946B 51946B /// bug fix 0x0051946B
 //JMP add_health_potions 54D700 /// skip health potions
-JMP heal_enemies 53A5CB /// heal enemies
+// JMP heal_enemies 53A5CB /// heal enemies
 JMP player_respawned 531278 /// death/respawn exp formulas // player_respawned 
 JMP player_died 556A56 /// death/respawn exp formulas // player_died 
 JMP player_killed 557005 /// death/respawn exp formulas // player_killed 
