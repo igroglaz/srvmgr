@@ -399,21 +399,24 @@ void _declspec(naked) set_max_player_parameters()
 }
 
 
-// make speed   1-2: 15   |   3: 12   |   4: 11   |   5: 10   |   6: 9   |   7: 8   |   7+: 2
+// min.speed:
+// 1-2: 15   |   3: 12   |   4: 11   |   5: 10   |   6: 9   |   7+: 8
+// max.speed:
+// 1-2: 15   |   3: 21   |   4: 23   |   5: 25   |   6: 30  |   7+: 35
 //531b72
-// we incert HC speed right before starting of other insctruction...
+// we insert HC speed right before starting of other instruction...
 // means that we kinda adding new HC value, instead of
 // changing previous ones
 void _declspec(naked) set_char_min_speed()
 {
     /*
     dword ptr [EBP + -0x28] - this->
-     word ptr [ExX +  0x84] - body
-     word ptr [ExX +  0x86] - reaction
-     word ptr [ExX +  0x8c] - speed
+    word ptr [ExX +  0x84] - body
+    word ptr [ExX +  0x86] - reaction
+    word ptr [ExX +  0x8c] - speed
     */
     __asm
-    {       
+    {
         mov   EAX, [Config::ServerID]    // get server ID
         cmp   EAX, 1                     // if server ID is 1: ZF = 1
         jz    set_speed_1_2
@@ -429,6 +432,12 @@ void _declspec(naked) set_char_min_speed()
         jz    set_speed_6
         cmp   EAX, 7                     // if server ID is 7: ZF = 1
         jz    set_speed_7
+        cmp   EAX, 8                     // if server ID is 8: ZF = 1
+        jz    set_speed_8
+        cmp   EAX, 9                     // if server ID is 9: ZF = 1
+        jz    set_speed_9
+        cmp   EAX, 10                    // if server ID is 10: ZF = 1
+        jz    set_speed_10
         //-----------------------------------
         mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
         movsx ECX,word ptr [EAX + 0x84]    // + second one so we won't overwrite next 3 bytes' MOV with 5 bytes' JMP
@@ -449,8 +458,14 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 12                       // put 12 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
         cmp   AX, 12                       // check if current speed is less than 12
-        jge   skip                         // if current speed is not less than 12, skip setting speed
+        jge   skip_min_speed_3             // if current speed is not less than 12, skip setting min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 12
+    skip_min_speed_3:
+        /////////////////////////////////////
+        mov   DX, 21                       // put 21 to register
+        cmp   AX, 21                       // check if current speed is greater than 21
+        jle   set_min_speed                // if current speed is not greater than 21, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 21
         jmp   set_min_speed
         /////////////////////////////////////
     set_speed_4:
@@ -459,8 +474,14 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 11                       // put 11 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
         cmp   AX, 11                       // check if current speed is less than 11
-        jge   skip                         // if current speed is not less than 11, skip setting speed
+        jge   skip_min_speed_4             // if current speed is not less than 11, skip setting min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 11
+    skip_min_speed_4:
+        /////////////////////////////////////
+        mov   DX, 23                       // put 23 to register
+        cmp   AX, 23                       // check if current speed is greater than 23
+        jle   set_min_speed                // if current speed is not greater than 23, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 23
         jmp   set_min_speed
         /////////////////////////////////////
     set_speed_5:
@@ -469,8 +490,14 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 10                       // put 10 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
         cmp   AX, 10                       // check if current speed is less than 10
-        jge   skip                         // if current speed is not less than 10, skip setting speed
+        jge   skip_min_speed_5             // if current speed is not less than 10, skip setting min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 10
+    skip_min_speed_5:
+        /////////////////////////////////////
+        mov   DX, 25                       // put 25 to register
+        cmp   AX, 25                       // check if current speed is greater than 25
+        jle   set_min_speed                // if current speed is not greater than 25, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 25
         jmp   set_min_speed
         /////////////////////////////////////
     set_speed_6:
@@ -479,8 +506,14 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 9                        // put 9 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
         cmp   AX, 9                        // check if current speed is less than 9
-        jge   skip                         // if current speed is not less than 9, skip setting speed
+        jge   skip_min_speed_6             // if current speed is not less than 9, skip setting min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 9
+    skip_min_speed_6:
+        /////////////////////////////////////
+        mov   DX, 30                       // put 30 to register
+        cmp   AX, 30                       // check if current speed is greater than 30
+        jle   set_min_speed                // if current speed is not greater than 30, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 30
         jmp   set_min_speed
         /////////////////////////////////////
     set_speed_7:
@@ -489,8 +522,62 @@ void _declspec(naked) set_char_min_speed()
         mov   DX, 8                        // put 8 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
         cmp   AX, 8                        // check if current speed is less than 8
-        jge   skip                         // if current speed is not less than 8, skip setting speed
+        jge   skip_min_speed_7             // if current speed is not less than 8, skip setting min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
+    skip_min_speed_7:
+        /////////////////////////////////////
+        mov   DX, 35                       // put 35 to register
+        cmp   AX, 35                       // check if current speed is greater than 35
+        jle   set_min_speed                // if current speed is not greater than 35, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_8:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 8                        // put 8 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 8                        // check if current speed is less than 8
+        jge   skip_min_speed_8             // if current speed is not less than 8, skip setting min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
+    skip_min_speed_8:
+        /////////////////////////////////////
+        mov   DX, 35                       // put 35 to register
+        cmp   AX, 35                       // check if current speed is greater than 35
+        jle   set_min_speed                // if current speed is not greater than 35, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_9:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 8                        // put 8 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 8                        // check if current speed is less than 8
+        jge   skip_min_speed_9             // if current speed is not less than 8, skip setting min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
+    skip_min_speed_9:
+        /////////////////////////////////////
+        mov   DX, 35                       // put 35 to register
+        cmp   AX, 35                       // check if current speed is greater than 35
+        jle   set_min_speed                // if current speed is not greater than 35, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_10:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 8                        // put 8 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 8                        // check if current speed is less than 8
+        jge   skip_min_speed_10            // if current speed is not less than 8, skip setting min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
+    skip_min_speed_10:
+        /////////////////////////////////////
+        mov   DX, 35                       // put 35 to register
+        cmp   AX, 35                       // check if current speed is greater than 35
+        jle   set_min_speed                // if current speed is not greater than 35, set min speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
         jmp   set_min_speed
         /////////////////////////////////////
     skip:
