@@ -375,9 +375,9 @@ void _declspec(naked) player_pkilled()
     }
 }
 
+
 ///////////////////////////////////////////////
 // extend checking max player parameters
-
 void _declspec(naked) set_max_player_parameters()
 {
     __asm
@@ -398,7 +398,8 @@ void _declspec(naked) set_max_player_parameters()
     }
 }
 
-// make speed at server1 equal to 15
+
+// make speed   1-2: 15   |   3: 12   |   4: 11   |   5: 10   |   6: 9   |   7: 8   |   7+: 2
 //531b72
 // we incert HC speed right before starting of other insctruction...
 // means that we kinda adding new HC value, instead of
@@ -415,18 +416,26 @@ void _declspec(naked) set_char_min_speed()
     {       
         mov   EAX, [Config::ServerID]    // get server ID
         cmp   EAX, 1                     // if server ID is 1: ZF = 1
-        jz    set_speed_min
+        jz    set_speed_1_2
         cmp   EAX, 2                     // if server ID is 2: ZF = 1
-        jz    set_speed_min
+        jz    set_speed_1_2
         cmp   EAX, 3                     // if server ID is 3: ZF = 1
-        jz    set_speed_three
+        jz    set_speed_3
+        cmp   EAX, 4                     // if server ID is 4: ZF = 1
+        jz    set_speed_4
+        cmp   EAX, 5                     // if server ID is 5: ZF = 1
+        jz    set_speed_5
+        cmp   EAX, 6                     // if server ID is 6: ZF = 1
+        jz    set_speed_6
+        cmp   EAX, 7                     // if server ID is 7: ZF = 1
+        jz    set_speed_7
         //-----------------------------------
         mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
         movsx ECX,word ptr [EAX + 0x84]    // + second one so we won't overwrite next 3 bytes' MOV with 5 bytes' JMP
         mov   edx, 0x00531b7c              // jump to next command
         jmp   edx                          //
         //-----------------------------------
-    set_speed_min:
+    set_speed_1_2:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 15                       // put 15 to register
@@ -434,7 +443,7 @@ void _declspec(naked) set_char_min_speed()
         /////////////////////////////////////
         jmp   set_min_speed
 
-    set_speed_three:
+    set_speed_3:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 12                       // put 12 to register
@@ -442,10 +451,53 @@ void _declspec(naked) set_char_min_speed()
         cmp   AX, 12                       // check if current speed is less than 12
         jge   skip                         // if current speed is not less than 12, skip setting speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 12
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_4:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 11                       // put 11 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 11                       // check if current speed is less than 11
+        jge   skip                         // if current speed is not less than 11, skip setting speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 11
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_5:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 10                       // put 10 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 10                       // check if current speed is less than 10
+        jge   skip                         // if current speed is not less than 10, skip setting speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 10
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_6:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 9                        // put 9 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 9                        // check if current speed is less than 9
+        jge   skip                         // if current speed is not less than 9, skip setting speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 9
+        jmp   set_min_speed
+        /////////////////////////////////////
+    set_speed_7:
+        /////////////////////////////////////
+        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
+        mov   DX, 8                        // put 8 to register
+        mov   AX, word ptr [ECX + 0x8c]    // get current speed
+        cmp   AX, 8                        // check if current speed is less than 8
+        jge   skip                         // if current speed is not less than 8, skip setting speed
+        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
+        jmp   set_min_speed
+        /////////////////////////////////////
     skip:
+        jmp   set_min_speed
         /////////////////////////////////////
     set_min_speed:
-        ///////////////////////////////////// Fix for ways to make player speed negative
+        ///////////////////////////////////// Fix when player speed might be negative
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 2                        // put 2 to register
         mov   AX, word ptr [ECX + 0x8c]    // get current speed
@@ -461,8 +513,8 @@ void _declspec(naked) set_char_min_speed()
     }
 }
 
-// using potions - drinking stat potions
 
+// using potions - drinking stat potions
 void _declspec(naked) set_max_player_parameters_for_use_potion()
 {
     __asm
@@ -512,8 +564,8 @@ void _declspec(naked) set_mage_female_max_parameters()
     }
 }
 
-// taking potions - getting stat potions from tavern quest
 
+// taking potions - getting stat potions from tavern quest
 void _declspec(naked) set_max_player_parameters_for_take_potion()
 {
     __asm
@@ -563,9 +615,9 @@ void _declspec(naked) set_mage_female_max_parameters_taking_potion()
     }
 }
 
+
 ///////////////////////////////////////////////
 // extend inns
-
 void _declspec(naked) bound_quest_reward()
 { // 565406
     __asm
@@ -585,7 +637,6 @@ not_too_high:
     }
 }
 
-///////////////////////////////////////////////
 
 void _declspec(naked) heal_enemies()
 { // 0053A5CB
