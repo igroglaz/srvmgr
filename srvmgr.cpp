@@ -418,38 +418,32 @@ void _declspec(naked) set_char_min_speed()
     __asm
     {
         mov   EAX, [Config::ServerID]    // get server ID
-        cmp   EAX, 1                     // if server ID is 1: ZF = 1
-        jz    set_speed_1_2
-        cmp   EAX, 2                     // if server ID is 2: ZF = 1
-        jz    set_speed_1_2
-        cmp   EAX, 3                     // if server ID is 3: ZF = 1
-        jz    set_speed_3
+        cmp   EAX, 3                     // check if server ID is less than 3
+        jle   handle_speed_1_to_3        // jump to handle speeds 1-3 if true
+
         cmp   EAX, 4                     // if server ID is 4: ZF = 1
         jz    set_speed_4
         cmp   EAX, 5                     // if server ID is 5: ZF = 1
         jz    set_speed_5
         cmp   EAX, 6                     // if server ID is 6: ZF = 1
         jz    set_speed_6
-        cmp   EAX, 7                     // if server ID is 7: ZF = 1
-        jz    set_speed_7
-        cmp   EAX, 8                     // if server ID is 8: ZF = 1
-        jz    set_speed_8
-        cmp   EAX, 9                     // if server ID is 9: ZF = 1
-        jz    set_speed_9
-        cmp   EAX, 10                    // if server ID is 10: ZF = 1
-        jz    set_speed_10
-        //-----------------------------------
-        mov   EAX,dword ptr [EBP + -0x28]  // instruction which we replace...
-        movsx ECX,word ptr [EAX + 0x84]    // + second one so we won't overwrite next 3 bytes' MOV with 5 bytes' JMP
-        mov   edx, 0x00531b7c              // jump to next command
-        jmp   edx                          //
-        //-----------------------------------
+
+        // Handle servers 7 and above (same speed settings)
+        cmp   EAX, 7                     // if server ID is 7 or higher: ZF = 1
+        jge   set_speed_7_plus
+
+    handle_speed_1_to_3:
+        cmp   EAX, 1                     // if server ID is 1 or 2: ZF = 1
+        jz    set_speed_1_2
+        cmp   EAX, 2                     // if server ID is 2: ZF = 1
+        jz    set_speed_1_2
+        jmp   set_speed_3
+
     set_speed_1_2:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 15                       // put 15 to register
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 15
-        /////////////////////////////////////
         jmp   set_min_speed
 
     set_speed_3:
@@ -467,7 +461,7 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 21, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 21
         jmp   set_min_speed
-        /////////////////////////////////////
+
     set_speed_4:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
@@ -483,7 +477,7 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 23, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 23
         jmp   set_min_speed
-        /////////////////////////////////////
+
     set_speed_5:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
@@ -499,7 +493,7 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 25, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 25
         jmp   set_min_speed
-        /////////////////////////////////////
+
     set_speed_6:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
@@ -515,8 +509,8 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 30, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 30
         jmp   set_min_speed
-        /////////////////////////////////////
-    set_speed_7:
+
+    set_speed_7_plus:
         /////////////////////////////////////
         mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
         mov   DX, 8                        // put 8 to register
@@ -531,55 +525,7 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 35, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
         jmp   set_min_speed
-        /////////////////////////////////////
-    set_speed_8:
-        /////////////////////////////////////
-        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
-        mov   DX, 8                        // put 8 to register
-        mov   AX, word ptr [ECX + 0x8c]    // get current speed
-        cmp   AX, 8                        // check if current speed is less than 8
-        jge   skip_min_speed_8             // if current speed is not less than 8, skip setting min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
-    skip_min_speed_8:
-        /////////////////////////////////////
-        mov   DX, 35                       // put 35 to register
-        cmp   AX, 35                       // check if current speed is greater than 35
-        jle   set_min_speed                // if current speed is not greater than 35, set min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
-        jmp   set_min_speed
-        /////////////////////////////////////
-    set_speed_9:
-        /////////////////////////////////////
-        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
-        mov   DX, 8                        // put 8 to register
-        mov   AX, word ptr [ECX + 0x8c]    // get current speed
-        cmp   AX, 8                        // check if current speed is less than 8
-        jge   skip_min_speed_9             // if current speed is not less than 8, skip setting min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
-    skip_min_speed_9:
-        /////////////////////////////////////
-        mov   DX, 35                       // put 35 to register
-        cmp   AX, 35                       // check if current speed is greater than 35
-        jle   set_min_speed                // if current speed is not greater than 35, set min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
-        jmp   set_min_speed
-        /////////////////////////////////////
-    set_speed_10:
-        /////////////////////////////////////
-        mov   ECX,dword ptr [EBP + -0x28]  // get base for stats
-        mov   DX, 8                        // put 8 to register
-        mov   AX, word ptr [ECX + 0x8c]    // get current speed
-        cmp   AX, 8                        // check if current speed is less than 8
-        jge   skip_min_speed_10            // if current speed is not less than 8, skip setting min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 8
-    skip_min_speed_10:
-        /////////////////////////////////////
-        mov   DX, 35                       // put 35 to register
-        cmp   AX, 35                       // check if current speed is greater than 35
-        jle   set_min_speed                // if current speed is not greater than 35, set min speed
-        mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
-        jmp   set_min_speed
-        /////////////////////////////////////
+
     skip:
         jmp   set_min_speed
         /////////////////////////////////////
@@ -599,6 +545,7 @@ void _declspec(naked) set_char_min_speed()
         jmp   edx
     }
 }
+
 
 
 // using potions - drinking stat potions
