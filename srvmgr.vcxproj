@@ -85,6 +85,7 @@
     <ClCompile Include="distance_bug.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="forbidden_items.cpp" />
+    <ClCompile Include="inn.cpp" />
     <ClCompile Include="itemex.cpp" />
     <ClCompile Include="magic_resist_limits.cpp" />
     <ClCompile Include="map_rotation.cpp" />

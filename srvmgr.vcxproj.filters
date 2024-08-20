@@ -153,6 +153,9 @@
     <ClCompile Include="magic_resist_limits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">
