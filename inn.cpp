@@ -130,6 +130,7 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 	excluded_type_ids.insert(100); // Druids
 	excluded_type_ids.insert(101); // Mercenary orc (campaign)
 	excluded_type_ids.insert(102); // Mercenary troll (campaign)
+	excluded_type_ids.insert(104); // Spider
 	excluded_type_ids.insert(105); // Succubi
 
 	for (int i = 0; i < monsters.size; ++i) {
