@@ -399,6 +399,42 @@ void _declspec(naked) set_max_player_parameters()
 }
 
 
+// 52bd75
+// Unit should die at 0 HP instead of getting into the limbo
+// and stay with 0 HP forever (gives cheat to hide player behind
+// "nearly-dead" monsters).
+void __declspec(naked) check_health()
+{
+    __asm
+    {
+        mov edx, [ebp + -0x10]      // Org: Load unit's base address
+        movsx eax, word ptr [edx + 0x94] // Org: Load unit's HP into EAX
+        test eax, eax               // Test if HP is negative or zero
+        jge HP_Zero_check           // If HP >= 0, jump to HP_Zero_check
+        mov edx, 0x0052bd83         // Org: if HP < 0 continue to Org
+        jmp edx                     
+
+    HP_Zero_check:
+        // Check if HP is exactly 0
+        cmp eax, 0                  // Compare HP with 0
+        jne NextFunction            // If HP is not 0, skip patch
+
+        // Check HPRegen
+        mov ecx, [edx + 0x98]       // Load HPRegen value into ECX
+        test ecx, ecx               // Test if HPRegen is zero
+        jz NextFunction             // If HPRegen == 0, skip patch
+
+        // If HP is 0 and HPRegen is not 0, continue to custom handling
+        mov edx, 0x0052bd83         // Set jump address to custom handling code
+        jmp edx                     // Jump to custom handling
+
+    NextFunction:
+        mov edx, 0x0052bdd3         // Continue with the original code
+        jmp edx
+    }
+}
+
+
 // min.speed:
 // 1-2: 15   |   3: 12   |   4: 11   |   5: 10   |   6: 9   |   7+: 8
 // max.speed:

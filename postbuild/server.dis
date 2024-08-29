@@ -229,8 +229,8 @@ JMP bound_quest_reward 565406 // bound_quest_reward
 CALL allow_low_skill_enter_high_tier_maps 4FE632
 CALL set_char_min_speed 531b72
 CALL disable_mage_scrolls 50566a
-
 JMP change_inn_reward_mob 50df19
+CALL check_health 52bd75
 
 ///////// jmp, 1: call
 
