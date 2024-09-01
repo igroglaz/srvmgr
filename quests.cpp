@@ -142,6 +142,13 @@ const void* CLASS_KILL_N_MONSTERS = (void*)0x0060F9C0;
 const void* CLASS_KILL_MONSTER = (void*)0x0060F9F8;
 const void* CLASS_KILL_GROUP = (void*)0x60F988;
 
+struct Group {
+	int whatever[7];
+	int group_id;
+	// We don't care about other fields.
+	// See full structure definition in `PlayerSubStru1` in Ghidra.
+};
+
 bool player_has_quest_for_n_monsters(T_PLAYER* player, _DWORD quest_monster_type){
     QuestIterator iter = QuestIterator();
     TQuestNode* node;
@@ -198,13 +205,13 @@ void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* ques
     }
 }
 
-void __stdcall filter_out_existing_group_quests(T_PLAYER* player, T_UNIT* quest_monster_selected, unsigned int* matching_monsters_counter_ptr){
-    if(Config::AllowOnlyOneQuest_KillTheGroup && player_has_quest_for_monster_id(player, quest_monster_selected->id_ext.id)){
+void __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, T_UNIT* picture_unit, unsigned int* matching_monsters_counter_ptr) {
+    // If this group is already in the player's quests, we skip it.
+    if (Config::AllowOnlyOneQuest_KillTheGroup && player_has_quest_for_monster_group(player, group->group_id)) {
         return;
-    } else {
-        // There is no such a monster in the player's quests, we can add it into the possible quests
-        *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
     }
+
+    *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
 #define LOCAL_VAR_QUEST_MONSTER_SELECTED EBP - 0X434
@@ -244,9 +251,11 @@ int __declspec(naked) remove_existing_group_quests_wrapper(){
         push eax
         mov eax, [LOCAL_VAR_QUEST_MONSTER_SELECTED]
         push eax
+        mov eax, [EBP - 0x440]
+        push eax
         mov eax, [LOCAL_VAR_PLAYER]
         push eax
-        call filter_out_existing_monster_quests
+        call filter_out_existing_group_quests
         retn
     }
 }
