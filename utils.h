@@ -53,9 +53,6 @@ struct __declspec(align(4)) T_LINKEDLIST
   int maxInd;
   _DWORD dword20;
 };
-struct __declspec(align(4)) T_PLAYER_1{
-
-};
 struct T_UNIT;
 struct  T_PLAYER
 {
@@ -84,13 +81,13 @@ struct  T_PLAYER
     _DWORD dwordA60;
 };
 
-
 struct __declspec(align(4)) T_UNIT
 {
   void *clazz;
   T_ID id_ext;
   _BYTE gap0[6];
-  _WORD wordE;
+  _BYTE type_id;
+  _BYTE byteF;
   _DWORD position;
   T_PLAYER *unknown_struct;
   _BYTE gap1[12];
@@ -105,7 +102,7 @@ struct __declspec(align(4)) T_UNIT
   _WORD word42;
   _BYTE gap4[6];
   _BYTE byte4A;
-  _BYTE byte4B;
+  _BYTE face;
   _BYTE unit_attrs;
   _BYTE gap5[3];
   _DWORD dword50;
@@ -137,6 +134,5 @@ struct __declspec(align(4)) T_UNIT
   _BYTE gap9[82];
   _DWORD dword1A0;
 };
-
 
 #pragma pack()

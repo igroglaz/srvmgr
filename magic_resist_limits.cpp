@@ -5,7 +5,7 @@
 int getLimit(T_UNIT* unit, int magic_ind)
 {
     bool warrior = (unit->unit_attrs & 4) == 0;
-    bool female = unit->wordE == 34 || unit->wordE == 36;
+    bool female = unit->type_id == 34 || unit->type_id == 36;
 
     MainCharacterParameters* params = NULL;
 
