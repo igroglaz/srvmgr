@@ -19,6 +19,7 @@
 #include "lib\socket.hpp"
 #include "srvmgr_new.h"
 #include "player_info.h"
+#include "quests.h"
 #include "zxmgr.h"
 
 /// CDECL нет очистки стека функцией
@@ -2861,6 +2862,9 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
             log_format("Error: couldn't initialize ItemEx plugin.\n");
             return FALSE;
         }*/
+
+		// Initialize stuff for quest filtering.
+		InitializeQuestFilter();
 
         break;
     case DLL_PROCESS_DETACH:

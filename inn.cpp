@@ -2,6 +2,7 @@
 #include <unordered_set>
 
 #include "lib/utils.hpp"
+#include "quests.h"
 
 // A couple data types used in the inn logic.
 namespace {
@@ -162,4 +163,34 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 	}
 
 	return target_mob;
+}
+
+void InitializeMobNames() {
+	if (mob_names.get() != nullptr) {
+		return;
+	}
+
+	std::unique_ptr<std::unordered_map<int, std::string>> new_mob_names(new std::unordered_map<int, std::string>());
+
+	const GameDataRes* data = (GameDataRes*)0x6d0668;
+	const Array<MonsterInfo>& monsters = data->monsters;
+
+	for (int i = 0; i < monsters.size; ++i) {
+		const MonsterInfo& m = monsters.data[i];
+		if (m.monsterData.data == nullptr) {
+			continue;
+		}
+
+		const MonsterInfoData& d = *m.monsterData.data;
+
+		const int mob_type = d.face << 8 | d.typeId;
+
+		(*new_mob_names)[mob_type] = ToLower(m.name);
+	}
+	
+	if (mob_names.get() != nullptr) {
+		return;
+	}
+
+	mob_names = std::move(new_mob_names);
 }
