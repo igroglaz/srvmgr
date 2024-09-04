@@ -10,8 +10,10 @@
 #include "player_info.h"
 #include "pktmgr.h"
 #include <math.h>
+#include "quests.h"
 #include "scanrange.h"
 #include "screenshots.h"
+#include "utils.h"
 
 
 uint32_t ParseFlags(std::string string)
@@ -166,6 +168,62 @@ void DropEverything(byte* unit, bool full = false)
     zxmgr::GiveMoney(player, 0, 0);
 }
 
+void ProcessCheat_Quest(byte* player, std::string command) {
+	if (!Config::AllowQuestFilters) {
+		zxmgr::SendMessage(player, "Quest filtering is disabled");
+		return;
+	}
+
+	T_PLAYER* p = (T_PLAYER*)player;
+	short player_id = p->id_ext.id;
+
+	command.erase(0, 7);
+	std::string filter = TrimLeft(command);
+		
+	int matching_mobs = 0;
+
+	if (filter.length() > 0) {
+        filter = ToLower(command);
+
+		InitializeMobNames();
+
+		for (auto mob = mob_names->begin(); mob != mob_names->end(); mob++) {
+			if (mob->second.find(filter) != std::string::npos) {
+				matching_mobs++;
+			}
+		}
+			
+		if (matching_mobs == 0) {
+			zxmgr::SendMessage(player, "'%s' does not match any mobs, quest filter unchanged", filter.c_str());
+			return;
+		}
+	}
+
+	quest_filter_per_player[player_id] = filter;
+	if (filter.length() > 0) {
+		zxmgr::SendMessage(player, "Quest filter set to '%s', %d mobs match the filter", filter.c_str(), matching_mobs);
+	} else {
+		zxmgr::SendMessage(player, "Quest filter reset", filter);
+	}
+}
+
+void ProcessCheat_QuestsInfo(byte* player, std::string command) {
+	T_PLAYER* p = (T_PLAYER*)player;
+	short player_id = p->id_ext.id;
+
+	zxmgr::SendMessage(player, "Current player: %d", player_id);
+
+	for (auto it = quest_filter_per_player.begin(); it != quest_filter_per_player.end(); ++it) {
+		if (!it->second.empty()) {
+			zxmgr::SendMessage(player, "Quest filter for %d: '%s'", it->first, it->second.c_str());
+		}
+	}
+
+	if (mob_names.get()) {
+		zxmgr::SendMessage(player, "Total mob names: %d", mob_names->size());
+	}
+}
+
 void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights, bool console)
 {
     if (!ccommand) return;
@@ -208,7 +266,17 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                    map_name, map_file, tm_h, tm_m, tm_s, time_left.c_str());
 
         goto ex;
-    }
+	}
+	
+	if (rawcmd == "#quest") {
+		ProcessCheat_Quest(player, command);
+		return;
+	}
+	
+	if (rawcmd == "#quests_info") {
+		ProcessCheat_QuestsInfo(player, command);
+		return;
+	}
 
     if (rights & GMF_CMD_CHAT)
     {

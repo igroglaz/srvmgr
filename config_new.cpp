@@ -168,7 +168,7 @@ namespace Config
     bool AllowOnlyOneQuest_KillNMonsters = false;
     bool AllowOnlyOneQuest_KillTheMonster = false;
     bool AllowOnlyOneQuest_KillTheGroup = false;
-
+	bool AllowQuestFilters = false;
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
@@ -591,6 +591,11 @@ int ReadConfig(const char* filename)
                     if(!CheckBool(value)) return lnid;
                     Config::AllowOnlyOneQuest_KillTheGroup = StrToBool(value);
                 }
+				else if(parameter == ToLower("AllowQuestFilters"))
+				{
+                    if(!CheckBool(value)) return lnid;
+                    Config::AllowQuestFilters = StrToBool(value);
+				}
                 else if(parameter == "servercaps")
                 {
                     value = Trim(ToLower(value));

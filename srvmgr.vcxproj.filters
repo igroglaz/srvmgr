@@ -248,6 +248,9 @@
     <ClInclude Include="this_call.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="quests.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />

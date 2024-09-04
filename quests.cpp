@@ -1,5 +1,16 @@
 #include "config_new.h"
+#include "quests.h"
 #include "utils.h"
+
+std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
+std::unordered_map<short, std::string> quest_filter_per_player;
+
+void InitializeQuestFilter() {
+	// The game supports up to 16 players, with IDs starting at 16. Let's be safe and allocate some more.
+	for (short i = 0; i < 64; ++i) {
+		quest_filter_per_player[i] = "";
+	}
+}
 
 int __declspec(naked) imp_inn_quest_roll_interval()
 { // 0053693C
@@ -187,31 +198,59 @@ bool player_has_quest_for_monster_group(T_PLAYER* player, _DWORD groupId){
     return false;
 }
 
-void __stdcall filter_out_existing_n_monters_quests(T_PLAYER* player, _DWORD quest_monster_type, unsigned int* matching_monsters_counter_ptr){
-    if(Config::AllowOnlyOneQuest_KillNMonsters && player_has_quest_for_n_monsters(player, quest_monster_type)){
+void __stdcall filter_out_existing_n_monsters_quests(T_PLAYER* player, _DWORD quest_monster_type, unsigned int* matching_monsters_counter_ptr){
+	// Is this unit type already in the player's quests?
+    if (Config::AllowOnlyOneQuest_KillNMonsters && player_has_quest_for_n_monsters(player, quest_monster_type)) {
         return;
-    } else {
-        // There is no such a monster in the player's quests, we can add it into the possible quests
-        *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
     }
+
+	if (Config::AllowQuestFilters) {
+		InitializeMobNames();
+
+		// Note: `mob_names` keys use the same format as the `quest_monster_type`.
+		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		if ((*mob_names.get())[quest_monster_type].find(name_filter) == std::string::npos) {
+			return;
+		}
+	}
+
+    *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
 void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* quest_monster_selected, unsigned int* matching_monsters_counter_ptr){
-    if(Config::AllowOnlyOneQuest_KillTheMonster && player_has_quest_for_monster_id(player, quest_monster_selected->id_ext.id)){
+    // Is this unit already in the player's quests?
+    if (Config::AllowOnlyOneQuest_KillTheMonster && player_has_quest_for_monster_id(player, quest_monster_selected->id_ext.id)) {
         return;
-    } else {
-        // There is no such a monster in the player's quests, we can add it into the possible quests
-        *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
     }
+
+	if (Config::AllowQuestFilters) {
+		InitializeMobNames();
+
+		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		if ((*mob_names)[quest_monster_selected->face << 8 | quest_monster_selected->type_id].find(name_filter) == std::string::npos) {
+			return;
+		}
+	}
+	
+	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
 void __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, T_UNIT* picture_unit, unsigned int* matching_monsters_counter_ptr) {
-    // If this group is already in the player's quests, we skip it.
+    // Is this group already in the player's quests?
     if (Config::AllowOnlyOneQuest_KillTheGroup && player_has_quest_for_monster_group(player, group->group_id)) {
         return;
     }
 
-    *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
+	if (Config::AllowQuestFilters) {
+		InitializeMobNames();
+
+		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		if ((*mob_names)[picture_unit->face << 8 | picture_unit->type_id].find(name_filter) == std::string::npos) {
+			return;
+		}
+	}
+	
+	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
 #define LOCAL_VAR_QUEST_MONSTER_SELECTED EBP - 0X434
@@ -225,7 +264,7 @@ int __declspec(naked) remove_existing_n_monters_quests_wrapper(){
         push edx
         mov eax, [LOCAL_VAR_PLAYER]
         push eax
-        call filter_out_existing_n_monters_quests
+        call filter_out_existing_n_monsters_quests
         retn
     }
 }

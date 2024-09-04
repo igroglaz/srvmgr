@@ -76,6 +76,7 @@ namespace Config
     extern bool AllowOnlyOneQuest_KillNMonsters;
     extern bool AllowOnlyOneQuest_KillTheMonster;
     extern bool AllowOnlyOneQuest_KillTheGroup;
+	extern bool AllowQuestFilters;
 
     extern std::string IPAddress;
     extern uint16_t IPAddressP;

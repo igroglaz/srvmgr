@@ -132,6 +132,7 @@
     <ClInclude Include="player_info.h" />
     <ClInclude Include="protolayer_hat.h" />
     <ClInclude Include="pvm2.h" />
+    <ClInclude Include="quests.h" />
     <ClInclude Include="scanrange.h" />
     <ClInclude Include="screenshots.h" />
     <ClInclude Include="shared.h" />
