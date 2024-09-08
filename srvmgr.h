@@ -38,6 +38,8 @@ void from_win(char *s);
 void to_koi(char *s);
 void to_win(char *s);
 
+int GetCurrentTimeModulo();
+
 void __stdcall set_mode_2(char*s);
 
 #ifndef type_mydata

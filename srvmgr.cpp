@@ -425,14 +425,27 @@ void __declspec(naked) check_health()
         test ecx, ecx               // Test if HPRegen is zero
         jz NextFunction             // If HPRegen == 0, skip patch
 
-        // If HP is 0 and HPRegen is not 0, continue to custom handling
-        mov edx, 0x0052bd83         // Set jump address to custom handling code
-        jmp edx                     // Jump to custom handling
+        // Pseudo-random decision based on current time (1 in 60 chance)
+        call GetCurrentTimeModulo   // Call the function to check time-based condition
+        test eax, eax               // Test if the result is zero
+        jz NextFunction             // If zero, go to NextFunction
+
+        // If HP is 0, HPRegen > 0, and the random condition is met, continue to custom handling
+        mov edx, 0x0052bd83         // Jump to this->HP = this->HP + -1
+        jmp edx
 
     NextFunction:
         mov edx, 0x0052bdd3         // Continue with the original code
         jmp edx
     }
+}
+
+
+// Function to return a simple random-like value based on the current time
+int GetCurrentTimeModulo()
+{
+    std::time_t now = std::time(0);  // Get the current time in seconds
+    return (now % 60 == 0);          // every 60 seconds
 }
 
 
