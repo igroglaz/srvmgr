@@ -168,7 +168,7 @@ void DropEverything(byte* unit, bool full = false)
     zxmgr::GiveMoney(player, 0, 0);
 }
 
-void ProcessCheat_Quest(byte* player, std::string command) {
+void ProcessCheat_Quest(byte* player, const std::string& args) {
 	if (!Config::AllowQuestFilters) {
 		zxmgr::SendMessage(player, "Quest filtering is disabled");
 		return;
@@ -177,14 +177,11 @@ void ProcessCheat_Quest(byte* player, std::string command) {
 	T_PLAYER* p = (T_PLAYER*)player;
 	short player_id = p->id_ext.id;
 
-	command.erase(0, 7);
-	std::string filter = TrimLeft(command);
+	std::string filter = NormalizeMobName(TrimLeft(args).c_str());
 		
 	int matching_mobs = 0;
 
 	if (filter.length() > 0) {
-        filter = ToLower(command);
-
 		InitializeMobNames();
 
 		for (auto mob = mob_names->begin(); mob != mob_names->end(); mob++) {
@@ -207,12 +204,11 @@ void ProcessCheat_Quest(byte* player, std::string command) {
 	}
 }
 
-void ProcessCheat_QuestsInfo(byte* player, std::string command) {
+void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
 	T_PLAYER* p = (T_PLAYER*)player;
 	short player_id = p->id_ext.id;
 
 	zxmgr::SendMessage(player, "Current player: %d", player_id);
-
 	for (auto it = quest_filter_per_player.begin(); it != quest_filter_per_player.end(); ++it) {
 		if (!it->second.empty()) {
 			zxmgr::SendMessage(player, "Quest filter for %d: '%s'", it->first, it->second.c_str());
@@ -233,11 +229,14 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
     command = Trim(command);
 
     std::string rawcmd = command;
+	std::string args;
 
     size_t spacepos = command.find_first_of(' ');
 
-    if (spacepos != std::string::npos)
+    if (spacepos != std::string::npos) {
         rawcmd.erase(spacepos);
+		args = command.substr(spacepos+1);
+	}
 
     if (rawcmd == "#mapinfo")
     {
@@ -268,13 +267,13 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
         goto ex;
 	}
 	
-	if (rawcmd == "#quest") {
-		ProcessCheat_Quest(player, command);
+	if (rawcmd == "#quest" || rawcmd == "#q") {
+		ProcessCheat_Quest(player, args);
 		return;
 	}
 	
 	if (rawcmd == "#quests_info") {
-		ProcessCheat_QuestsInfo(player, command);
+		ProcessCheat_QuestsInfo(player, args);
 		return;
 	}
 

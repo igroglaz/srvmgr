@@ -12,6 +12,20 @@ void InitializeQuestFilter() {
 	}
 }
 
+std::string NormalizeMobName(const char* name) {
+	std::string result = name;
+
+	for (auto it = result.begin(); it != result.end(); ++it) {
+		if (*it == '-') {
+			*it = '_';
+		} else {
+			*it = tolower(*it);
+		}
+	}
+
+	return result;
+}
+
 int __declspec(naked) imp_inn_quest_roll_interval()
 { // 0053693C
     __asm
