@@ -185,7 +185,7 @@ void InitializeMobNames() {
 
 		const int mob_type = d.face << 8 | d.typeId;
 
-		(*new_mob_names)[mob_type] = ToLower(m.name);
+		(*new_mob_names)[mob_type] = NormalizeMobName(m.name);
 	}
 	
 	if (mob_names.get() != nullptr) {
