@@ -171,6 +171,7 @@ void InitializeMobNames() {
 	}
 
 	std::unique_ptr<std::unordered_map<int, std::string>> new_mob_names(new std::unordered_map<int, std::string>());
+	std::unique_ptr<std::unordered_map<int, std::string>> new_mob_names_raw(new std::unordered_map<int, std::string>());
 
 	const GameDataRes* data = (GameDataRes*)0x6d0668;
 	const Array<MonsterInfo>& monsters = data->monsters;
@@ -186,6 +187,7 @@ void InitializeMobNames() {
 		const int mob_type = d.face << 8 | d.typeId;
 
 		(*new_mob_names)[mob_type] = NormalizeMobName(m.name);
+		(*new_mob_names_raw)[mob_type] = m.name;
 	}
 	
 	if (mob_names.get() != nullptr) {
@@ -193,4 +195,5 @@ void InitializeMobNames() {
 	}
 
 	mob_names = std::move(new_mob_names);
+	mob_names_raw = std::move(new_mob_names_raw);
 }

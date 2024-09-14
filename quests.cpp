@@ -3,6 +3,7 @@
 #include "utils.h"
 
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
+std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
 std::unordered_map<short, std::string> quest_filter_per_player;
 
 void InitializeQuestFilter() {
@@ -186,6 +187,24 @@ bool player_has_quest_for_n_monsters(T_PLAYER* player, _DWORD quest_monster_type
     }
     return false;
 }
+
+std::vector<std::string> QuestStateNMonsters(void* p) {
+	T_PLAYER* player = (T_PLAYER*)p;
+	std::vector<std::string> result;
+
+    QuestIterator iter = QuestIterator();
+    TQuestNode* node;
+    while ((node = iter.next()) != NULL) {
+        TQuest* quest = node->quest;
+        _DWORD existing_quest_monster_type = quest->obj;
+        if (quest->clazz == CLASS_KILL_N_MONSTERS && player->id_ext.id == quest->player_id.id) {
+			result.push_back(Format("Quest to kill %s: %d out of %d done", (*mob_names_raw)[quest->obj].c_str(), quest->dword20, quest->dword1C));
+        }
+    }
+
+	return std::move(result);
+}
+
 bool player_has_quest_for_monster_id(T_PLAYER* player, __int16 monsterId){
     QuestIterator iter = QuestIterator();
     TQuestNode* node;
