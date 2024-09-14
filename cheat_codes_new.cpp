@@ -220,6 +220,17 @@ void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
 	}
 }
 
+void ProcessCheat_QuestState(byte* player, const std::string& args) {
+	T_PLAYER* p = (T_PLAYER*)player;
+	short player_id = p->id_ext.id;
+
+	std::vector<std::string> messages = QuestStateNMonsters(p);
+
+	for (auto it = messages.begin(); it != messages.end(); ++it) {
+		zxmgr::SendMessage(player, "%s", it->c_str());
+	}
+}
+
 void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights, bool console)
 {
     if (!ccommand) return;
@@ -274,6 +285,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 	
 	if (rawcmd == "#quests_info") {
 		ProcessCheat_QuestsInfo(player, args);
+		return;
+	}
+
+	if (rawcmd == "#quest_state" || rawcmd == "#qs") {
+		ProcessCheat_QuestState(player, args);
 		return;
 	}
 
