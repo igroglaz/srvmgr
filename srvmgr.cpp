@@ -2877,7 +2877,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
         }*/
 
 		// Initialize stuff for quest filtering.
-		InitializeQuestFilter();
+		InitializePlayerSettings();
 
         break;
     case DLL_PROCESS_DETACH:

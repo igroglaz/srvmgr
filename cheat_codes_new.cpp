@@ -178,10 +178,23 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 	short player_id = p->id_ext.id;
 
 	std::string filter = NormalizeMobName(TrimLeft(args).c_str());
-		
-	int matching_mobs = 0;
+	int mob_count = 0;
+
+	int spacepos = filter.find(' ');
+    if (spacepos != std::string::npos) {
+		std::string raw_count = TrimLeft(filter.substr(spacepos+1));
+		filter.erase(spacepos);
+
+		if (!CheckInt(raw_count)) {
+			zxmgr::SendMessage(player, "'%s' is not an integer, ignored", raw_count.c_str());
+		} else {
+			mob_count = static_cast<int>(StrToInt(raw_count));
+		}
+	}
 
 	if (filter.length() > 0) {
+		int matching_mobs = 0;
+
 		InitializeMobNames();
 
 		for (auto mob = mob_names->begin(); mob != mob_names->end(); mob++) {
@@ -196,11 +209,17 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 		}
 	}
 
-	quest_filter_per_player[player_id] = filter;
+	player_settings[player_id]->quest_filter = filter;
+	player_settings[player_id]->quest_mob_count = mob_count;
+
 	if (filter.length() > 0) {
-		zxmgr::SendMessage(player, "Quest filter set to '%s', %d mobs match the filter", filter.c_str(), matching_mobs);
+		if (mob_count > 0) {
+			zxmgr::SendMessage(player, "Quest filter set to '%s', mob count set to %d", filter.c_str(), mob_count);
+		} else {
+			zxmgr::SendMessage(player, "Quest filter set to '%s'", filter.c_str());
+		}
 	} else {
-		zxmgr::SendMessage(player, "Quest filter reset", filter);
+		zxmgr::SendMessage(player, "Quest filter reset");
 	}
 }
 
@@ -209,9 +228,9 @@ void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
 	short player_id = p->id_ext.id;
 
 	zxmgr::SendMessage(player, "Current player: %d", player_id);
-	for (auto it = quest_filter_per_player.begin(); it != quest_filter_per_player.end(); ++it) {
-		if (!it->second.empty()) {
-			zxmgr::SendMessage(player, "Quest filter for %d: '%s'", it->first, it->second.c_str());
+	for (auto it = player_settings.begin(); it != player_settings.end(); ++it) {
+		if (!it->second->quest_filter.empty()) {
+			zxmgr::SendMessage(player, "Quest filter for %d: '%s'", it->first, it->second->quest_filter.c_str());
 		}
 	}
 

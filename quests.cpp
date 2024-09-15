@@ -4,12 +4,12 @@
 
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
-std::unordered_map<short, std::string> quest_filter_per_player;
+std::unordered_map<short, std::unique_ptr<PlayerSettings>> player_settings;
 
-void InitializeQuestFilter() {
+void InitializePlayerSettings() {
 	// The game supports up to 16 players, with IDs starting at 16. Let's be safe and allocate some more.
 	for (short i = 0; i < 64; ++i) {
-		quest_filter_per_player[i] = "";
+		player_settings.emplace(std::make_pair(i, new PlayerSettings()));
 	}
 }
 
@@ -241,7 +241,7 @@ void __stdcall filter_out_existing_n_monsters_quests(T_PLAYER* player, _DWORD qu
 		InitializeMobNames();
 
 		// Note: `mob_names` keys use the same format as the `quest_monster_type`.
-		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
 		if ((*mob_names.get())[quest_monster_type].find(name_filter) == std::string::npos) {
 			return;
 		}
@@ -259,7 +259,7 @@ void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* ques
 	if (Config::AllowQuestFilters) {
 		InitializeMobNames();
 
-		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
 		if ((*mob_names)[quest_monster_selected->face << 8 | quest_monster_selected->type_id].find(name_filter) == std::string::npos) {
 			return;
 		}
@@ -277,7 +277,7 @@ void __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, 
 	if (Config::AllowQuestFilters) {
 		InitializeMobNames();
 
-		const std::string name_filter = quest_filter_per_player[player->id_ext.id];
+		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
 		if ((*mob_names)[picture_unit->face << 8 | picture_unit->type_id].find(name_filter) == std::string::npos) {
 			return;
 		}
@@ -335,3 +335,76 @@ int __declspec(naked) remove_existing_group_quests_wrapper(){
 #undef LOCAL_VAR_QUEST_MONSTER_SELECTED
 #undef LOCAL_VAR_MATCHING_MONSTERS_COUNTER
 #undef LOCAL_VAR_PLAYER
+
+int rand_interval(int min, int max) {
+    int r;
+
+    const int range = 1 + max - min;
+    const int buckets = RAND_MAX / range;
+    const int limit = buckets * range;
+
+    /* Create equal size buckets all in a row, then fire randomly towards
+     * the buckets until you land in one of them. All buckets are equally
+     * likely. If you land off the end of the line of buckets, try again. */
+    do
+    {
+        r = std::rand();
+    } while (r >= limit);
+
+    return min + (r / buckets);
+}
+
+unsigned int __fastcall KillNCount(T_PLAYER* player, unsigned int mob_count) {
+	Printf("KillNCount: player=0x%x, mob_count=%d", player, mob_count);
+
+	const int desired_count = player_settings[player->id_ext.id]->quest_mob_count;
+
+	int min_mobs = 0;
+	int max_mobs = 0;
+
+	// This block is copy-pasted from the original A2 logic.
+	if (mob_count < 2) {
+		min_mobs = 1;
+		max_mobs = 4;
+	} else if (mob_count < 4) {
+		min_mobs = 2;
+		max_mobs = 6;
+	} else if (mob_count < 8) {
+		min_mobs = 2;
+		max_mobs = 7;
+	} else {
+		// In vanilla A2 this was 2--10, we updated it to 5--25.
+		min_mobs = 5;
+		max_mobs = 25;
+	}
+
+	// If the player-set value in available, return it.
+	if (min_mobs <= desired_count && desired_count <= max_mobs) {
+		return desired_count;
+	}
+
+	// Otherwise return a random value between min and max inclusive.
+	return rand_interval(min_mobs, max_mobs);
+}
+
+// Address in a2serv.exe: 562996.
+// Originally:
+//	1. number of mobs of this type (on the map) lives in `DWORD PTR [ebp-0x450]`,
+//	2. chosen number of mobs for the quest lives in `DWORD PTR [ebp-0x964]`.
+// Note: this function is invoked via `jmp`, not `call`, because I want to preserve the stack offsets.
+void __declspec(naked) quest_change_kill_n_count() {
+	__asm {
+		// Argument 1: current player.
+        mov ecx, [ebp + 0x8]
+		// Argument 2: number of mobs of this type.
+		mov edx, [ebp - 0x450]
+
+		call KillNCount
+		// Save into the original variable.
+		mov [ebp - 0x964], eax
+
+		// Jump to the original place.
+		mov eax, 0x00562a03
+		jmp eax
+	}
+}
