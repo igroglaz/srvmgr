@@ -232,6 +232,8 @@ CALL disable_mage_scrolls 50566a
 JMP change_inn_reward_mob 50df19
 CALL check_health 52bd75
 
+JMP quest_change_kill_n_count 00562996
+
 ///////// jmp, 1: call
 
 

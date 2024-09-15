@@ -176,3 +176,4 @@ set_char_min_speed              		@312
 disable_mage_scrolls              		@313
 change_inn_reward_mob                   @314
 check_health                            @315
+quest_change_kill_n_count				@316
