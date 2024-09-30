@@ -16,4 +16,5 @@ srv_quest_no_mail.xck
 srv_range.fc
 turn_off_random_bag.xck
 quest_availability.xck
+quest_availability_top.xck
 group_kill_reward.xck
