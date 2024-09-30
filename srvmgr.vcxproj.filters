@@ -260,5 +260,11 @@
     </None>
     <None Include="postbuild\server.dis" />
     <None Include="srvmgr.def" />
+    <None Include="postbuild\patches\quest_availability.xck">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="postbuild\patches\quest_availability_top.xck">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

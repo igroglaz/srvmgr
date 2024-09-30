@@ -1,0 +1,22 @@
+[BeginXCK]-----------------------------------
+[BeginCRK]-----------------------------------
+Patch to increase the availability of quests.
+
+Original logic: the mob is suggested in the quests if
+`mob_defence < 3*top_skill + const`, where `top_skill`
+is the top skill of the current character (including
+bonuses from equipped magic items).
+
+The patch changes 3 in this formula to 100, effectively
+removing the top boundary for quests for almost all players.
+
+Note that the bottom boundary is a bit decreased by `quest_vailability.xck`.
+
+a2server.exe
+00161AEE: 03 64
+001621F5: 03 64
+00162F1D: 03 64
+001626FC: 03 64
+00163422: 03 64
+[EndCRK]-------------------------------------
+[EndXCK]-------------------------------------

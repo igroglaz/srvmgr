@@ -153,6 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="postbuild\arena.txt" />
+    <None Include="postbuild\patches\quest_availability.xck" />
+    <None Include="postbuild\patches\quest_availability_top.xck" />
     <None Include="postbuild\server.dis" />
     <None Include="postbuild\srvlist.txt" />
     <None Include="postbuild\srvmgr.bat" />
