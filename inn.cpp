@@ -194,6 +194,17 @@ void InitializeMobNames() {
 		return;
 	}
 
+	// Most mobs of the first level don't have a suffix, which makes it
+	// impossible to choose only them with filters. For example, the ghost is
+	// `Ghost`, but a filter `Ghost` would also match `Ghost.2`.
+	// Let's append `.1` to each mob name that doesn't have a level.
+	for (auto it = new_mob_names->begin(); it != new_mob_names->end(); ++it) {
+		const char mob_name_end = it->second.back();
+		if (mob_name_end < '0' || mob_name_end > '9') {
+			it->second += ".1";
+		}
+	}
+
 	mob_names = std::move(new_mob_names);
 	mob_names_raw = std::move(new_mob_names_raw);
 }
