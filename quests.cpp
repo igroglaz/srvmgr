@@ -367,10 +367,10 @@ unsigned int __fastcall KillNCount(T_PLAYER* player, unsigned int mob_count) {
 		min_mobs = 1;
 		max_mobs = 4;
 	} else if (mob_count < 4) {
-		min_mobs = 2;
+		min_mobs = 1; // was 2. become 1 for dragon.4 q at 6+
 		max_mobs = 6;
 	} else if (mob_count < 8) {
-		min_mobs = 2;
+		min_mobs = 1; // was 2
 		max_mobs = 7;
 	} else {
 		// In vanilla A2 this was 2--10, we updated it to 5--25.
