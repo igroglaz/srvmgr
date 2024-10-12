@@ -169,6 +169,9 @@ namespace Config
     bool AllowOnlyOneQuest_KillTheMonster = false;
     bool AllowOnlyOneQuest_KillTheGroup = false;
 	bool AllowQuestFilters = false;
+
+	uint32_t InnRewardTypeIdMin;
+	uint32_t InnRewardTypeIdMax;
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
@@ -595,6 +598,16 @@ int ReadConfig(const char* filename)
 				{
                     if(!CheckBool(value)) return lnid;
                     Config::AllowQuestFilters = StrToBool(value);
+				}
+				else if(parameter == ToLower("InnRewardTypeIdMin"))
+				{
+                    if(!CheckInt(value)) return lnid;
+                    Config::InnRewardTypeIdMin = ReadIntegerParameter(value, 0, 255);
+				}
+				else if(parameter == ToLower("InnRewardTypeIdMax"))
+				{
+                    if(!CheckInt(value)) return lnid;
+                    Config::InnRewardTypeIdMax = ReadIntegerParameter(value, 0, 255);
 				}
                 else if(parameter == "servercaps")
                 {
