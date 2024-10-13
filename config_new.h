@@ -78,6 +78,10 @@ namespace Config
     extern bool AllowOnlyOneQuest_KillTheGroup;
 	extern bool AllowQuestFilters;
 
+	// If set, the inn reward mobs will be given for type_id in range [min, max].
+	extern uint32_t InnRewardTypeIdMin; // Default: 64.
+	extern uint32_t InnRewardTypeIdMax; // Default: 107.
+
     extern std::string IPAddress;
     extern uint16_t IPAddressP;
 

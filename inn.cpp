@@ -1,6 +1,7 @@
 #include <cstring>
 #include <unordered_set>
 
+#include "config_new.h"
 #include "lib/utils.hpp"
 #include "quests.h"
 #include "config_new.h"
@@ -116,6 +117,9 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 	int target_mob = 0;
 	int max_exp = 0;
 
+	int type_id_min = Config::InnRewardTypeIdMin ? Config::InnRewardTypeIdMin : 64;
+	int type_id_max = Config::InnRewardTypeIdMax ? Config::InnRewardTypeIdMax : 107;
+
 	// Type IDs of excluded mobs.
 	std::unordered_set<int> excluded_type_ids;
 	excluded_type_ids.insert(69); // Ghosts
@@ -143,7 +147,7 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 
 		const MonsterInfoData& d = *m.monsterData.data;
 
-		if (d.typeId <= 63 || d.typeId >= 108) {
+		if (d.typeId < type_id_min || d.typeId > type_id_max) {
 			continue;
 		}
 
