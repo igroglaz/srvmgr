@@ -3,6 +3,7 @@
 
 #include "lib/utils.hpp"
 #include "quests.h"
+#include "config_new.h"
 
 // A couple data types used in the inn logic.
 namespace {
@@ -96,6 +97,7 @@ struct GameDataRes {
 
 } // anonymous namespace
 
+
 // Address in a2serv.exe: 50df19.
 // Original `ChooseRewardMob_0050df19` has `GameDataRes*` in ECX and `target_experience` on the stack.
 // `__fastcall` convention: last two arguments are passed in ECX and EDX, the rest on the stack.
@@ -142,14 +144,17 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 
 		const MonsterInfoData& d = *m.monsterData.data;
 
-		if (d.typeId <= 63 || d.typeId >= 108) {
-			continue;
-		}
+        if (Config::ServerID > 7 && d.typeId != 76) { // at 7+ only allow turtle1-4
+                continue; // Skip mobs that we don't want to see
+        } else {
+            if (d.typeId <= 63 || d.typeId >= 108) {
+                continue;
+            }
 
-		// Skip the mobs that we don't want to see.
-		if (excluded_type_ids.count(d.typeId)) {
-			continue;
-		}
+            if (excluded_type_ids.count(d.typeId)) {
+                continue;
+            }
+        }
 
 		// Skip all level-5 mobs.
 		if (std::strstr(m.name, ".5") != nullptr) {
@@ -164,6 +169,7 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 
 	return target_mob;
 }
+
 
 void InitializeMobNames() {
 	if (mob_names.get() != nullptr) {
