@@ -3,6 +3,7 @@
 
 #include "lib/utils.hpp"
 #include "quests.h"
+#include "config_new.h"
 
 // A couple data types used in the inn logic.
 namespace {
@@ -155,6 +156,11 @@ int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_e
 		if (std::strstr(m.name, ".5") != nullptr) {
 			continue;
 		}
+
+        // at 7+ server allow only turtle as reward in tavern
+        if (Config::ServerID > 7 && d.typeId != 76) {
+            continue;
+        }
 
 		if (d.experience <= target_experience && d.experience > max_exp) {
 			target_mob = i; // We are returning the index in the monster list.
