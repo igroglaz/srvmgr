@@ -100,6 +100,11 @@ void __stdcall drop_rnd_items(T_LINKEDLIST * item_list_src, T_LINKEDLIST * item_
         if (src_current->value->id == stopItemId)
             break;
 
+        if (src_current->value->id == 3667) {
+            src_current = src_current->prev;
+            continue;
+        }
+
         int dropN = getDropNum(src_current->value->amount, probability);
 
         if (dropN > 0)
