@@ -103,7 +103,7 @@ struct GameDataRes {
 // `__fastcall` convention: last two arguments are passed in ECX and EDX, the rest on the stack.
 //
 // Note that `target_experience` is around reward (in gold) divided by 16.
-int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_experience) {
+extern "C" int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, int target_experience) {
 	// Original logic:
 	//   1) Take all mobs with 63 < `typeId` < 99
 	//   2) exclude Ghost.1, F_Zombie.1 and F_Skeleton.1 by `face`
