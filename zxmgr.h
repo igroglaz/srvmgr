@@ -1,6 +1,8 @@
 #pragma once
 
+#include <string>
 #include <vector>
+
 #include "syslib.h"
 
 #define PLAYER_FLAG_AI 1

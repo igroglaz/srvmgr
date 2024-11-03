@@ -64,10 +64,6 @@ float limit(float n, float lo, float hi)
         return hi;
     return n;
 }
-int round(float a)
-{
-    return (int)(a+0.5f);
-}
 int getDropNum(int num, float probability)
 {
         int dropN = 0;
@@ -85,7 +81,7 @@ int getDropNum(int num, float probability)
             else
             {
                 float odds = limit(rnd_gaussian(probability, 0.1), 0, 1);
-                dropN = round(odds * num);
+                dropN = (int)round(odds * num);
             }
         }
         return dropN;

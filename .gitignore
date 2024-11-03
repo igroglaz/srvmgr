@@ -25,3 +25,8 @@ postbuild/release
 /postbuild/tmp_world/
 postbuild/world/data.xml
 postbuild/_data/world.res
+
+CMakeFiles/*
+*.cmake
+*.code-workspace
+build
