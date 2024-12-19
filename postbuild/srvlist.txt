@@ -16,3 +16,4 @@ turn_off_random_bag.xck
 quest_availability.xck
 quest_availability_top.xck
 group_kill_reward.xck
+skip_new_character_1000_gold.xck

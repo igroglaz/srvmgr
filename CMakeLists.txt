@@ -29,6 +29,7 @@ add_library(srvmgr SHARED srvmgr.def
     magic_resist_limits.cpp
     map_rotation.cpp
     multiplayer_shop.cpp
+    new_character.cpp
     partial_drop.cpp
     pktmgr.cpp
     player_info.cpp

@@ -1,0 +1,35 @@
+[BeginXCK]-----------------------------------
+[BeginCRK]-----------------------------------
+Patch to not give the new player 1000 gold.
+
+Original, at address 004fdf7c (offset 000fd37c in the binary file):
+    Binary: c7  41  3c  e8  03  00  00
+    
+    Assembly: DWORD PTR [ecx+0x3c], 1000
+
+    Equivalent code: player->money = 1000;
+
+New:
+    Binary: c7  41  3c  00  00  00  00
+            ==  ==  ==  ^^  ^^  ==  ==
+    
+    Assembly: DWORD PTR [ecx+0x3c], 0
+
+    Equivalent code: player->money = 0;
+
+Note: register ECX contains the pointer to the current player, 0x3c is the
+offset to the `money` field. We change only the right-hand side of the
+assignment operator, but check the whole instruction to make sure that we're
+changing the right thing.
+
+a2server.exe
+000FD37C: C7 C7
+000FD37D: 41 41
+000FD37E: 3C 3C
+000FD37F: E8 00
+000FD380: 03 00
+000FD381: 00 00
+000FD382: 00 00
+
+[EndCRK]-------------------------------------
+[EndXCK]-------------------------------------
