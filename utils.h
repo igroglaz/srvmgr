@@ -132,7 +132,7 @@ struct __declspec(align(4)) T_UNIT
   _BYTE gap66[121];
   _DWORD exp;
   _BYTE gap77[12];
-  _DWORD dword140;
+  void* spellbook;
   _BYTE gap8[8];
   _WORD word14C;
   _BYTE gap9[82];

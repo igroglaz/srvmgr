@@ -239,6 +239,13 @@ JMP quest_change_kill_n_count 00562996
 // Don't `cd` to the installation directory of the client. It doesn't make sense for the server.
 JMP overwrite_current_directory 00482687
 
+// New character creation.
+// Don't set the new character's stats to 25 if not all stat points were spent.
+JMP skip_new_character_stats 00501049
+
+// Don't give the new character the initial weapon.
+JMP skip_new_character_weapon 00533421
+
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������
 //CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"
