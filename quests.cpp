@@ -408,3 +408,19 @@ void __declspec(naked) quest_change_kill_n_count() {
 		jmp eax
 	}
 }
+
+void __stdcall CheckPlayerSettings(T_PLAYER* player) {
+    const int id = player->id_ext.id;
+    const std::string name = player->name;
+
+    auto& settings = player_settings[id];
+    if (!settings || settings->player_name.empty()) {
+        // Settings are not set.
+        return;
+    }
+
+    if (settings->player_name != name) {
+        Printf("CheckPlayerSettings: clearing for player %d: name '%s' != '%s'", id, settings->player_name.c_str(), name.c_str());
+		settings.reset(new PlayerSettings());
+    }
+}

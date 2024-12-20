@@ -4,10 +4,13 @@
 #include <string>
 #include <unordered_map>
 
+#include "utils.h"
+
 // Settings set by the player.
 struct PlayerSettings {
 	std::string quest_filter;
 	int quest_mob_count;
+	std::string player_name; // This is used to reset settings on relogin.
 };
 
 // Player settings. Player ID -> settings.
@@ -31,3 +34,8 @@ void InitializeMobNames();
 // Returns the state for "kill N monsters" quests for a given player.
 // Returns formatted user-readable strings.
 std::vector<std::string> QuestStateNMonsters(void* player);
+
+// Checks player name and the name in the existing player settings. If they are
+// different, it means that these settings were created by another player which
+// has already left the game, so we reset the settings.
+void __stdcall CheckPlayerSettings(T_PLAYER* player);

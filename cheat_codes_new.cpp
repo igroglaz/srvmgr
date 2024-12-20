@@ -211,6 +211,7 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 
 	player_settings[player_id]->quest_filter = filter;
 	player_settings[player_id]->quest_mob_count = mob_count;
+    player_settings[player_id]->player_name = p->name;
 
 	if (filter.length() > 0) {
 		if (mob_count > 0) {
