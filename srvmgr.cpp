@@ -32,7 +32,7 @@ char player_respawn[] = "Player %s respawned.";
 char enter_b1[] = "<cmd: enter to building>\n";
 char cancel_camp1[] = "Player %s cancelled camping.";
 char enter_shop1[] = "Player %s entered shop ID=%u from (%u, %u).";
-char enter_inn1[] = "Player %s entered inn ID=%u from (%u, %u).";
+char enter_inn1[] = "Player %s entered inn! ID=%u from (%u, %u).";
 char left_shop1[] = "Player %s left shop.";
 char left_inn1[] = "Player %s left inn.";
 char aErrPoint[] = "name: %s, error dst\n";
@@ -1798,6 +1798,12 @@ void _declspec(naked) enter_inn (void) {
 
         push    offset enter_inn1
         call    Printf
+
+        // When player enters the inn, we check if the quest filter needs to be reset.
+        mov eax, [ebp-0x0A8] // Unit.
+        push [eax + 0x14] // Player.
+        call CheckPlayerSettings
+
 e_i_sk:
         mov    ecx, [ebp-0x0A8]
         push    ecx

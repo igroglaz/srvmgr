@@ -1,3 +1,5 @@
+#pragma once
+
 #pragma pack(1)
 #define _DWORD __int32
 #define _WORD __int16
@@ -59,7 +61,7 @@ struct  T_PLAYER
     _BYTE gap0[4];
     T_ID id_ext;
     _BYTE gap1[16];
-    _DWORD dword18;
+    const char* name;
     _BYTE gap2[8];
     _DWORD dword24;
     _DWORD dword28;
@@ -79,6 +81,8 @@ struct  T_PLAYER
     _DWORD dwordA58;
     _BYTE gap8[4];
     _DWORD dwordA60;
+    char gapA62[20];
+    const char* account_name;
 };
 
 struct __declspec(align(4)) T_UNIT
