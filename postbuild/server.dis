@@ -236,6 +236,8 @@ JMP quest_change_kill_n_count 00562996
 
 ///////// jmp, 1: call
 
+// Don't `cd` to the installation directory of the client. It doesn't make sense for the server.
+JMP overwrite_current_directory 00482687
 
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������
