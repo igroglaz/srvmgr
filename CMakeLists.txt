@@ -42,6 +42,7 @@ add_library(srvmgr SHARED srvmgr.def
     spell_duration_fix.cpp
     srvmgr.cpp
     srvmgr_new.cpp
+    startup.cpp
     this_call.cpp
     quests.cpp
     unit_info.cpp
