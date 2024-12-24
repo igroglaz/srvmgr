@@ -440,7 +440,6 @@ void __declspec(naked) check_health()
     }
 }
 
-
 // Function to return a simple random-like value based on the current time
 int GetCurrentTimeModulo()
 {
