@@ -103,6 +103,7 @@
     <ClCompile Include="spell_duration_fix.cpp" />
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />
+    <ClCompile Include="startup.cpp" />
     <ClCompile Include="this_call.cpp" />
     <ClCompile Include="quests.cpp" />
     <ClCompile Include="unit_info.cpp" />
