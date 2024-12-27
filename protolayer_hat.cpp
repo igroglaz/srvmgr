@@ -67,7 +67,7 @@ bool NetCmd_UpdateInfo()
         {
             pack.WriteUInt32(NetHat::Info.GameMode);
             pack.WriteString(NetHat::Info.MapName);
-            pack.WriteUInt8(NetHat::Info.MapLevel);
+            pack.WriteUInt8(static_cast<uint8_t>(NetHat::Info.MapLevel));
             uint32_t p_mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000);
             uint32_t p_mapheight = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004);
             uint32_t p_maptime = *(uint32_t*)(*(uint32_t*)(0x00642C2C) + 0x254) / 1000;
@@ -157,10 +157,10 @@ bool NetCmd_UpdateInfo()
     {
         Packet pack;
         pack.WriteUInt8(0xD2);
-        pack.WriteUInt8(NetHat::Info.PlayerCount);
-        pack.WriteUInt8(NetHat::Info.MapLevel);
-        pack.WriteUInt8(NetHat::Info.GameMode);
-        pack.WriteUInt8(NetHat::Info.MapSize);
+        pack.WriteUInt8(static_cast<uint8_t>(NetHat::Info.PlayerCount));
+        pack.WriteUInt8(static_cast<uint8_t>(NetHat::Info.MapLevel));
+        pack.WriteUInt8(static_cast<uint8_t>(NetHat::Info.GameMode));
+        pack.WriteUInt8(static_cast<uint8_t>(NetHat::Info.MapSize));
         pack.WriteString(NetHat::Info.MapName);
 
         return (SOCK_SendPacket(NetHat::Socket, pack, Config::ProtocolVersion) == 0);
@@ -196,7 +196,7 @@ void _stdcall Net_HatPrepare()
     std::vector<std::string> ipd = Explode(dadr, ":");
     NetHat::ControlAddr = ipd[0];
     if (ipd.size() == 2)
-        NetHat::ControlPort = StrToInt(ipd[1]) + 1000;
+        NetHat::ControlPort = static_cast<uint16_t>(StrToInt(ipd[1]) + 1000);
 
     char* stadd = *(char**)(0x006D15B8);
     std::string dadd(stadd);
@@ -204,7 +204,7 @@ void _stdcall Net_HatPrepare()
     ipd = Explode(dadd, ":");
     NetHat::HatAddr = ipd[0];
     if (ipd.size() == 2)
-        NetHat::HatPort = StrToInt(ipd[1]);
+        NetHat::HatPort = static_cast<uint16_t>(StrToInt(ipd[1]));
 
     NetHat::ShuttingDown = false;
     NetHat::LastReconnect = 0;
@@ -323,7 +323,7 @@ bool Net_HatProcess()
             Player* pi = PI_Get(player);
             if (pi)
             {
-                pi->UnmuteDate = unmutedate;
+                pi->UnmuteDate = static_cast<uint32_t>(unmutedate);
                 Printf("Player %s (login %s) should be muted until %02d.%02d.%04d %02d:%02d:%02d.",
                     *(const char**)(player + 0x18), login.c_str(), parsedTime.tm_mday, parsedTime.tm_mon + 1, parsedTime.tm_year + 1900, parsedTime.tm_hour, parsedTime.tm_min, parsedTime.tm_sec);
             }

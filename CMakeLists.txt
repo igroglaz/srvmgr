@@ -62,6 +62,8 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 target_compile_options(srvmgr PUBLIC /MT)
 target_link_options(srvmgr PUBLIC /NODEFAULTLIB:MSVCRT)
 
+add_compile_definitions(srvmgr _CRT_SECURE_NO_WARNINGS _WINSOCK_DEPRECATED_NO_WARNINGS)
+
 # Postbuild commands.
 add_custom_command(TARGET srvmgr
     POST_BUILD

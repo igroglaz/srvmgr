@@ -15,13 +15,6 @@ int __declspec(naked) imp_distance_bug_fix()
         push    ecx
         call    distance_bug_fix_internal
 
-
-
-
-
-
-
-ret_point:
         mov        eax, [ebp+8]    // postfix
         ret
     }

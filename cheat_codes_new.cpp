@@ -808,9 +808,9 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             int32_t start_x = p_x - 25;
             int32_t start_y = p_y - 25;
 
-            for (int32_t i = start_x; i <= start_x+count_x; i++)
+            for (uint32_t i = start_x; i <= start_x+count_x; i++)
             {
-                for (int32_t j = start_y; j <= start_y+count_y; j++)
+                for (uint32_t j = start_y; j <= start_y+count_y; j++)
                 {
                     if (i < 8 || i > p_mapwidth - 8 ||
                         j < 8 || j > p_mapheight - 8) continue;
@@ -1163,7 +1163,7 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
     // calculate damage bonus
     uint32_t damage_bonus = GetDamageBonus(unit1);
     if (damage_bonus && damage > 0)
-        damage = double(damage) * (double(damage_bonus) / 100 + 1.0);
+        damage = static_cast<int16_t>(double(damage) * (double(damage_bonus) / 100 + 1.0));
 
     int32_t retval = damage;
 
@@ -1185,7 +1185,7 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
             // If the method would be called once, it would be unnecessary
             // factor*x = k*(k*x) => k = sqrt(factor)
             float factor = sqrt(Config::mage_pvp_dmg_factor);
-            damage *= factor;
+            damage = static_cast<uint16_t>(damage * factor);
             retval = damage;
             Printf("dmg changed: %d -> %d", old_dmg, retval);
         }

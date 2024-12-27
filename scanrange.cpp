@@ -14,8 +14,8 @@ byte* Scanrange_Player = NULL;
 bool srvmgr_CheckValid(int16_t x, int16_t y)
 {
     // max size of the map is 240 (255, but cause of borders -(8+8))
-    uint32_t mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000); // get value from ALM
-    uint32_t mapheight = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004);
+    int16_t mapwidth = static_cast<int16_t>(*(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000)); // get value from ALM
+    int16_t mapheight = static_cast<int16_t>(*(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004));
 
     return (x >= 7 && y >= 7 && // non-valid for values less than 6 (see map editor 'corners')
         x <= mapwidth - 7 &&

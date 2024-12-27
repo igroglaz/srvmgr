@@ -19,7 +19,7 @@ bool BinaryStream::LoadFromFile(std::string filename)
     if(!strm.is_open()) return false;
 
     strm.seekg(0, std::ios::end);
-    size_t size = strm.tellg();
+    size_t size = static_cast<size_t>(strm.tellg());
     strm.seekg(0, std::ios::beg);
 
     for(size_t i = 0; i < size; i++)

@@ -232,7 +232,7 @@ bool itemex_ParseLine(std::string line, IgnoreStructure& structure)
         {
             uint16_t id = 0;
             if(CheckHex(arg))
-                id = HexToInt(arg);
+                id = static_cast<uint16_t>(HexToInt(arg));
             if(id != 0)
                 structure.idsIgnored.push_back(id);
             else return false;

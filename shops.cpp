@@ -6,7 +6,7 @@
 //#include "this_call.h"
 
 __int16 __stdcall increase_potions_in_shops(__int16 original_value){
-    return original_value * Config::shop_potions_factor;
+    return static_cast<int16_t>(original_value * Config::shop_potions_factor);
 }
 
 void __declspec(naked) imp_increase_potions_in_shops()

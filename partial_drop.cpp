@@ -22,10 +22,10 @@ float rnd()
 float rnd_gaussian(float mu, float sigma)
 {
     float u1, u2;
-    float two_pi = 2.0 * M_PI;
+    float two_pi = static_cast<float>(2.0 * M_PI);
     u1 = rnd();
     u2 = rnd();
-    float z0 = sqrt(-2.0 * log(u1)) * cos(two_pi * u2);
+    float z0 = static_cast<float>(sqrt(-2.0 * log(u1)) * cos(two_pi * u2));
     return z0 * sigma + mu;
 }
 
@@ -84,7 +84,7 @@ int getDropNum(int num, float probability)
             }
             else
             {
-                float odds = limit(rnd_gaussian(probability, 0.1), 0, 1);
+                float odds = limit(rnd_gaussian(probability, 0.1f), 0, 1);
                 dropN = round_num(odds * num);
             }
         }
@@ -255,8 +255,6 @@ void __declspec(naked) imp_drop_partially()
         push    ecx    
         call    drop_partially
         mov     [ebp-0C0h], eax        // pass ground bag
-
-ret_point:
         ret        0xC
     }
 }
@@ -273,7 +271,6 @@ int __stdcall imp_check_unit_man(){
         pop        ecx
         pop        eax
         je        special_case
-std_case:
         mov        [ecx+0x9A], ax
 special_case:
     }

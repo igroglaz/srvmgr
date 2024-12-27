@@ -183,10 +183,10 @@ namespace IPFilter
         }
         Addr = 0;
         Masked = 0;
-        uint8_t oc_1 = StrToInt(at[0]);
-        uint8_t oc_2 = StrToInt(at[1]);
-        uint8_t oc_3 = StrToInt(at[2]);
-        uint8_t oc_4 = StrToInt(at[3]);
+        uint8_t oc_1 = static_cast<uint8_t>(StrToInt(at[0]));
+        uint8_t oc_2 = static_cast<uint8_t>(StrToInt(at[1]));
+        uint8_t oc_3 = static_cast<uint8_t>(StrToInt(at[2]));
+        uint8_t oc_4 = static_cast<uint8_t>(StrToInt(at[3]));
         Addr |= oc_1;
         Addr <<= 8;
         Addr |= oc_2;

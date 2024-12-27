@@ -40,7 +40,6 @@ void __declspec(naked) fix_StoneCurseDurationCalculation()
     {
         cmp        dword ptr [esp],0x05396D9+6
         jne        call2
-call1:
         mov        edx, [ebp-0x0C]
         jmp        calc
 call2:    //cmp        dword ptr [esp],0x053C32E+6
