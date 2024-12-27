@@ -574,9 +574,6 @@ void _declspec(naked) set_char_min_speed()
         jle   set_min_speed                // if current speed is not greater than 35, set min speed
         mov   word ptr [ECX + 0x8c],DX     // to base+8c put 35
         jmp   set_min_speed
-
-    skip:
-        jmp   set_min_speed
         /////////////////////////////////////
     set_min_speed:
         ///////////////////////////////////// Fix when player speed might be negative
@@ -2721,7 +2718,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
 
         Packet pack;
         pack.Reset();
-        for(uint32_t i = 0; i < pkt_size; i++)
+        for(int i = 0; i < pkt_size; i++)
             pack.WriteUInt8(rd[i]);
         pack.Seek(0);
 

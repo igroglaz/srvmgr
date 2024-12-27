@@ -719,8 +719,8 @@ void _stdcall UseItems(byte* unit, byte* packet)
 
     uint8_t source = *(uint8_t*)(packet+0x0C);
     uint8_t destination = *(uint8_t*)(packet+0x0D);
-    uint8_t order = *(uint16_t*)(packet+0x0E);
-    uint8_t count = *(uint16_t*)(packet+0x10);
+    uint16_t order = *(uint16_t*)(packet+0x0E);
+    uint16_t count = *(uint16_t*)(packet+0x10);
 
     if(source == 2 && destination == 1) // moving item onto character
     {

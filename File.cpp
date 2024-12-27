@@ -25,7 +25,7 @@ bool FileArchive::Open(std::string filename, std::string directory)
     str.read((char*)&fat_size, 4);
 
     str.seekg(fat_offset);
-    size_t pos = str.tellg();
+    size_t pos = static_cast<size_t>(str.tellg());
     if(pos != (size_t)fat_offset)
         return false;
 
@@ -152,7 +152,7 @@ bool File::Open(std::string filename)
         myName = filename;
         myOffset = 0;
         myStream.seekg(0, std::ios::end);
-        myLength = myStream.tellg();
+        myLength = static_cast<uint32_t>(myStream.tellg());
         myStream.seekg(0, std::ios::beg);
         myPosition = 0;
         myOpen = true;
@@ -191,7 +191,7 @@ uint32_t File::Read(void* where, uint32_t size)
 
     myStream.seekg(myOffset+myPosition);
     myStream.read((char*)where, size);
-    uint32_t cnt = myStream.gcount();
+    uint32_t cnt = static_cast<uint32_t>(myStream.gcount());
     myPosition += cnt;
 
     return cnt;

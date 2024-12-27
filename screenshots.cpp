@@ -10,7 +10,7 @@ uint32_t ClientScreenshot_Enqueue(byte* gm, byte* target)
     ClientScreenshot cs;
     cs.SourcePlayer = gm;
     cs.TargetPlayer = target;
-    cs.RequestedAt = time(NULL);
+    cs.RequestedAt = static_cast<uint32_t>(time(NULL));
     cs.UID = Config::IPAddressP << 16 | (++ScreenshotUID);
     Screenshots.push_back(cs);
     return cs.UID;
