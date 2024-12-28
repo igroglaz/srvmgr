@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #pragma pack(1)
 #define _DWORD __int32
 #define _WORD __int16
@@ -124,7 +126,10 @@ struct __declspec(align(4)) T_UNIT
   T_INVENTORY_ITEM *weapon;
   T_INVENTORY_ITEM *shield;
   T_LINKEDLIST *inventory;
-  _BYTE gap44[20];
+  const char* name2;
+  _BYTE gap84[8];
+  uint16_t speed;
+  _BYTE gap8e[6];
   _WORD word94;
   _WORD word96;
   _BYTE gap55[30];

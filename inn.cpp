@@ -144,8 +144,9 @@ extern "C" int __fastcall change_inn_reward_mob(GameDataRes *data, int unused, i
 
 		const MonsterInfoData& d = *m.monsterData.data;
 
-        if (Config::ServerID > 7 && d.typeId != 76) { // at 7+ only allow turtle1-4
-                continue; // Skip mobs that we don't want to see
+        // Skip mobs that we don't want to see
+        if (Config::ServerID >= QUEST_T1 && d.typeId != 76) { // at quest maps only allow turtle1-4
+            continue;
         } else {
             if (d.typeId <= 63 || d.typeId >= 108) {
                 continue;
