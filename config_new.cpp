@@ -102,7 +102,7 @@ namespace Config
     uint32_t LogMode = SVL_ALL;
     std::string LogFile = "server.log";
 
-    uint32_t ServerID = 0;
+    ServerIDType ServerID = UNDEFINED;
     bool ServerStarted = false;
     std::string CurrentMapName = "N/A";
     std::string CurrentMapTitle = "N/A";
@@ -368,7 +368,7 @@ int ReadConfig(const char* filename)
                 {
                     if(!CheckInt(value)) return lnid;
                     uint32_t val = StrToInt(value);
-                    Config::ServerID = val;
+                    Config::ServerID = static_cast<ServerIDType>(val);
                     *(uint32_t*)(0x006D15C4) = val;
                 }
                 else if(parameter == "sayrange")
