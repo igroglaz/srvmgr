@@ -90,6 +90,7 @@
     <ClCompile Include="magic_resist_limits.cpp" />
     <ClCompile Include="map_rotation.cpp" />
     <ClCompile Include="multiplayer_shop.cpp" />
+    <ClCompile Include="new_character.cpp" />
     <ClCompile Include="partial_drop.cpp" />
     <ClCompile Include="pktmgr.cpp" />
     <ClCompile Include="player_info.cpp" />
