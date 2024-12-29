@@ -455,7 +455,6 @@ void __fastcall SetCharMinSpeed(T_UNIT* unit) {
     uint16_t min_speed = 0, max_speed = 0;
 
     switch (Config::ServerID) {
-        case START:
         case EASY:
             min_speed = 15;
             max_speed = 15;
