@@ -71,15 +71,15 @@ struct  T_PLAYER
     _BYTE gap3[2];
     _WORD word32;
     _BYTE gap4[4];
-    T_UNIT * pt_srv_unit38;
-    _DWORD dword3C;
+    T_UNIT* current_unit;
+    int32_t money;
     _BYTE gap5[2];
     _BYTE byte42;
     _BYTE gap6[2565];
-    _DWORD dwordA48;
-    _DWORD dwordA4C;
+    uint32_t monster_kills;
+    uint32_t player_kills;
     _BYTE gap7[4];
-    _DWORD dwordA54;
+    uint32_t deaths;
     _DWORD dwordA58;
     _BYTE gap8[4];
     _DWORD dwordA60;
@@ -127,7 +127,10 @@ struct __declspec(align(4)) T_UNIT
   T_INVENTORY_ITEM *shield;
   T_LINKEDLIST *inventory;
   const char* name2;
-  _BYTE gap84[8];
+  uint16_t body;
+  uint16_t reaction;
+  uint16_t mind;
+  uint16_t spirit;
   uint16_t speed;
   _BYTE gap8e[6];
   _WORD word94;
@@ -145,3 +148,6 @@ struct __declspec(align(4)) T_UNIT
 };
 
 #pragma pack()
+
+bool IsWarrior(T_UNIT* unit);
+bool IsFemale(T_UNIT* unit);

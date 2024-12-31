@@ -70,7 +70,7 @@ void AddSpell(void* spellbook, int spell_id) {
 }
 
 void __stdcall CreateMagicBook(T_UNIT* unit, int main_sphere) {
-    if ((unit->unit_attrs & 4) == 0) { // Warrior.
+    if (IsWarrior(unit)) {
         return;
     }
 
