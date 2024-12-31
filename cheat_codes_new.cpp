@@ -9,6 +9,7 @@
 #include "zxmgr.h"
 #include "player_info.h"
 #include "pktmgr.h"
+#include "reborn_readiness.hpp"
 #include <math.h>
 #include "quests.h"
 #include "scanrange.h"
@@ -312,6 +313,10 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 		ProcessCheat_QuestState(player, args);
 		return;
 	}
+
+    if (rawcmd == "#reborn") {
+        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player);
+    }
 
     if (rights & GMF_CMD_CHAT)
     {

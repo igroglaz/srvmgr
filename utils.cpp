@@ -1,3 +1,5 @@
+#include "utils.h"
+
 #include "srvmgr.h"
 #include "shared.h"
 
@@ -178,4 +180,12 @@ void to_koi(char *s)
         *s = static_cast<char>(table[static_cast<unsigned char>(*s)]);
         s++;
     }
+}
+
+bool IsWarrior(T_UNIT* unit) {
+    return (unit->unit_attrs & 4) == 0;
+}
+
+bool IsFemale(T_UNIT* unit) {
+    return unit->type_id == 34 || unit->type_id == 36;
 }

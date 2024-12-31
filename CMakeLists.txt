@@ -35,6 +35,7 @@ add_library(srvmgr SHARED srvmgr.def
     player_info.cpp
     protolayer_hat.cpp
     pvm2.cpp
+    reborn_readiness.cpp
     scanrange.cpp
     scanrange_check.cpp
     screenshots.cpp
