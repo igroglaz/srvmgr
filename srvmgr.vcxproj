@@ -96,6 +96,7 @@
     <ClCompile Include="player_info.cpp" />
     <ClCompile Include="protolayer_hat.cpp" />
     <ClCompile Include="pvm2.cpp" />
+    <ClCompile Include="reborn_readiness.cpp" />
     <ClCompile Include="scanrange.cpp" />
     <ClCompile Include="scanrange_check.cpp" />
     <ClCompile Include="screenshots.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="protolayer_hat.h" />
     <ClInclude Include="pvm2.h" />
     <ClInclude Include="quests.h" />
+    <ClInclude Include="reborn_readiness.hpp" />
     <ClInclude Include="scanrange.h" />
     <ClInclude Include="screenshots.h" />
     <ClInclude Include="shared.h" />

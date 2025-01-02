@@ -210,7 +210,8 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
     } else {
         zxmgr::SendMessage(p, "*NOT* ready for reborn. Requirements for %s character at server %d:", category, server_id);
     }
-    for (const auto& line: info_lines) {
-        zxmgr::SendMessage(p, "%s", line.c_str());
+    for (std::vector<std::string>::const_iterator it = info_lines.cbegin(); it != info_lines.cend(); ++it) {
+        zxmgr::SendMessage(p, "%s", it->c_str());
     }
+
 }

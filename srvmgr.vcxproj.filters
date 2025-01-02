@@ -162,6 +162,9 @@
     <ClCompile Include="new_character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="reborn_readiness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="quests.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reborn_readiness.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
