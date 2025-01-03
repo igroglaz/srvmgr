@@ -13,8 +13,10 @@ struct PlayerInfo {
     bool female;
     bool has_treasure;
     int32_t money;
+    uint16_t body;
     uint16_t reaction;
     uint16_t mind;
+    uint16_t spirit;
     int32_t experience;
     uint32_t monster_kills;
     uint32_t deaths;
@@ -42,10 +44,14 @@ void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
             if (item->effects.size) {
                 auto* ptr = item->effects.first_node;
                 while (ptr != NULL) {
-                    if (ptr->value->effect_id == 3) {
+                    if (ptr->value->effect_id == 2) {
+                        player_info.body -= ptr->value->value1;
+                    } else if (ptr->value->effect_id == 3) {
                         player_info.mind -= ptr->value->value1;
                     } else if (ptr->value->effect_id == 4) {
                         player_info.reaction -= ptr->value->value1;
+                    } else if (ptr->value->effect_id == 5) {
+                        player_info.spirit -= ptr->value->value1;
                     }
 
                     ptr = ptr->next;
@@ -79,8 +85,10 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     player_info.female = IsFemale(unit);
     player_info.has_treasure = has_treasure;
     player_info.money = player->money;
+    player_info.body = unit->body;
     player_info.reaction = unit->reaction;
     player_info.mind = unit->mind;
+    player_info.spirit = unit->spirit;
     player_info.experience = unit->exp;
     player_info.monster_kills = player->monster_kills;
     player_info.deaths = player->deaths;
@@ -194,15 +202,15 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
     std::vector<std::string> info_lines;
     if (player_info.mind < need_mind) {
         ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d mind, you have %d", need_mind, player_info.mind));
+        info_lines.emplace_back(Format("- Need %d mind, you have %d (also you have: %d body, %d reaction, %d spirit)", need_mind, player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
     } else if (need_mind > 0) {
-        info_lines.emplace_back(Format("+ You have %d mind", player_info.mind));
+        info_lines.emplace_back(Format("+ You have %d mind (also you have: %d body, %d reaction, %d spirit)", player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
     }
     if (player_info.reaction < need_reaction) {
         ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d reaction, you have %d", need_reaction, player_info.reaction));
+        info_lines.emplace_back(Format("- Need %d reaction, you have %d (also you have: %d body, %d mind, %d spirit)", need_reaction, player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
     } else if (need_reaction > 0) {
-        info_lines.emplace_back(Format("+ You have %d reaction", player_info.reaction));
+        info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
     }
 
     if (!player_info.has_treasure) {
