@@ -246,6 +246,11 @@ JMP skip_new_character_stats 00501049
 // Don't give the new character the initial weapon.
 JMP skip_new_character_weapon 00533421
 
+// Solo player stuff.
+JMP remember_a2server 005051c5
+JMP solo_pickup_sack 005a9977
+JMP solo_pick_all_sacks 005a99dd
+
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������
 //CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"

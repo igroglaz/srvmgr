@@ -78,6 +78,14 @@ struct T_INVENTORY_LIST
   _DWORD dword20;
 };
 
+struct A2Position {
+  uint8_t x;
+  uint8_t y;
+  uint16_t yx;
+  uint32_t f4;
+  void* instance;
+};
+
 struct T_UNIT;
 struct  T_PLAYER
 {
@@ -115,8 +123,8 @@ struct __declspec(align(4)) T_UNIT
   _BYTE gap0[6];
   _BYTE type_id;
   _BYTE byteF;
-  _DWORD position;
-  T_PLAYER *unknown_struct;
+  A2Position* position;
+  T_PLAYER *player;
   _BYTE gap1[12];
   int *pint24;
   _DWORD dword28;
@@ -172,6 +180,39 @@ struct __declspec(align(4)) T_UNIT
 struct A2Human {
   T_UNIT unit;
   T_INVENTORY_ITEM* dress[13];
+  // ...
+};
+
+template <typename T>
+struct A2ListWrapper {
+  void* rtti_pointer;
+  T_LINKEDLIST<T> list;
+};
+
+struct A2Bag {
+  void* vtbl;
+  int32_t f4;
+  int32_t token_id;
+  int16_t item_data_id;
+  int16_t type_id;
+  A2Position* position;
+  void* owner;
+  int8_t gap[40];
+  T_LINKEDLIST<T_INVENTORY_ITEM>* items;
+};
+
+struct A2ServerStruct {
+  T_LINKEDLIST<void>* buildings;
+  A2ListWrapper<void>* some_things;
+  T_LINKEDLIST<A2Bag>* sacks;
+  A2ListWrapper<void>* units;
+  T_LINKEDLIST<void> virtual_casters;
+  T_LINKEDLIST<T_UNIT> some_units;
+};
+
+struct A2Server {
+  uint8_t gap[0x7c];
+  A2ServerStruct* server_struct;
   // ...
 };
 
