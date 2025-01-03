@@ -165,6 +165,9 @@
     <ClCompile Include="reborn_readiness.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="solo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="charcheck.h">

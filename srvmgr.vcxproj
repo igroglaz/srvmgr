@@ -102,6 +102,7 @@
     <ClCompile Include="screenshots.cpp" />
     <ClCompile Include="shared.cpp" />
     <ClCompile Include="shops.cpp" />
+    <ClCompile Include="solo.cpp" />
     <ClCompile Include="spell_duration_fix.cpp" />
     <ClCompile Include="srvmgr.cpp" />
     <ClCompile Include="srvmgr_new.cpp" />

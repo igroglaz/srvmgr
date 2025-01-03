@@ -41,6 +41,7 @@ add_library(srvmgr SHARED srvmgr.def
     screenshots.cpp
     shared.cpp
     shops.cpp
+    solo.cpp
     spell_duration_fix.cpp
     srvmgr.cpp
     srvmgr_new.cpp

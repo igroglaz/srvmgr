@@ -203,7 +203,7 @@ int __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec)
 #define uint32 unsigned __int32
 bool isPlayerUnit(T_UNIT* unit)
 {
-    return unit->unknown_struct->unitType == 0;
+    return unit->player->unitType == 0;
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {

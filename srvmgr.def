@@ -180,3 +180,6 @@ quest_change_kill_n_count				@316
 overwrite_current_directory             @317
 skip_new_character_stats                @318
 skip_new_character_weapon               @319
+solo_pickup_sack                        @320
+solo_pick_all_sacks                     @321
+remember_a2server                       @322
