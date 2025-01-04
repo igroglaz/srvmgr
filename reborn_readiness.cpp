@@ -25,6 +25,36 @@ const int32_t m = k * k;
 
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p);
 
+// A2 server only stores the effective unit stats () Walk over all equipped
+void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
+    for (int i = -2; i < 13; ++i) {
+        T_INVENTORY_ITEM* item;
+
+        if (i == -2) {
+            item = human->unit.weapon;
+        } else if (i == -1) {
+            item = human->unit.shield;
+        } else {
+            item = human->dress[i];
+        }
+
+        if (item != nullptr) {
+            if (item->effects.size) {
+                auto* ptr = item->effects.first_node;
+                while (ptr != NULL) {
+                    if (ptr->value->effect_id == 3) {
+                        player_info.mind -= ptr->value->value1;
+                    } else if (ptr->value->effect_id == 4) {
+                        player_info.reaction -= ptr->value->value1;
+                    }
+
+                    ptr = ptr->next;
+                }
+            }
+        }
+    }
+}
+
 void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char* p) {
     T_UNIT* unit = player->current_unit;
 
@@ -34,7 +64,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
 
     bool has_treasure = false;
     if (unit->inventory) {
-        T_SRV_LINKED_NODE* ptr = unit->inventory->first_node;
+        T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* ptr = unit->inventory->list.first_node;
         while (ptr != NULL) {
             if (ptr->value->id == 3667) {
                 has_treasure = true;
@@ -54,6 +84,13 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     player_info.experience = unit->exp;
     player_info.monster_kills = player->monster_kills;
     player_info.deaths = player->deaths;
+
+    if (unit->clazz != A2_HUMAN_CLASS) {
+        zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_HUMAN_CLASS);
+    } else {
+        A2Human* human = reinterpret_cast<A2Human*>(unit);
+        SubtractEquippedItems(human, player_info);
+    }
 
     CheckRebornReadiness(server_id, player_info, p);
 }
@@ -99,7 +136,7 @@ int32_t ServerRequirementsMoney(ServerIDType server_id, const PlayerInfo& player
 
     // Hardcore and regular characters.
     switch (server_id) {
-        case EASY: return 50*k;
+        case EASY: return 30*k;
         case KIDS: return 300*k;
         case NIVAL: return 1500*k;
         case MEDIUM: return 7*m;
@@ -213,5 +250,4 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
     for (std::vector<std::string>::const_iterator it = info_lines.cbegin(); it != info_lines.cend(); ++it) {
         zxmgr::SendMessage(p, "%s", it->c_str());
     }
-
 }
