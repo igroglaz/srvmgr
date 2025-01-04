@@ -7,10 +7,47 @@
 #define _WORD __int16
 #define _BYTE char
 
+const void* const A2_HUMAN_CLASS = reinterpret_cast<void*>(0x0060F0C8);
+
 struct T_ID
 {
   _WORD id;
   _WORD type;
+};
+
+template <typename T>
+struct __declspec(align(4)) T_SRV_LINKED_NODE
+{
+  T_SRV_LINKED_NODE *next;
+  T_SRV_LINKED_NODE *prev;
+  T* value;
+};
+
+template <typename T>
+struct __declspec(align(4)) T_LINKEDLIST
+{
+  _BYTE gap0[4];
+  T_SRV_LINKED_NODE<T> *first_node;
+  T_SRV_LINKED_NODE<T> *last_node;
+  __int32 size;
+  _DWORD dword10;
+  struct CPlex *pcplex14;
+  _DWORD dword18;
+};
+
+struct A2Effect {
+  uint8_t gap0[0x3c];
+  uint8_t effect_id; // Effect ID, same as in the editor.
+  uint8_t usage_type;
+  uint8_t gap3E[2];
+  uint8_t value1; // The main effect value.
+  uint8_t value2; // Optional second value. Used for damage, like "astral damage 3--5".
+};
+
+struct A2WorldEquip {
+  void* clazz;
+  const char* name;
+  // ...
 };
 
 struct T_INVENTORY_ITEM
@@ -18,14 +55,9 @@ struct T_INVENTORY_ITEM
   _DWORD dword0;
   _BYTE gap4[8];
   _WORD wordC;
-  _BYTE gapE[22];
-  _DWORD dword24;
-  _DWORD dword28;
-  _DWORD dword2C;
-  _DWORD dword30;
-  struct CPlex *pcplex34;
-  _DWORD dword38;
-  _DWORD dword3C;
+  _BYTE gapE[18];
+  T_LINKEDLIST<A2Effect> effects;
+  A2WorldEquip* world_equip;
   unsigned __int16 id;
   _WORD amount;
   _BYTE byte44;
@@ -39,24 +71,13 @@ struct T_INVENTORY_ITEM
   _DWORD dword54;
 };
 
-struct __declspec(align(4)) T_SRV_LINKED_NODE
+struct T_INVENTORY_LIST
 {
-  T_SRV_LINKED_NODE *next;
-  T_SRV_LINKED_NODE *prev;
-  T_INVENTORY_ITEM* value;
-};
-struct __declspec(align(4)) T_LINKEDLIST
-{
-  _BYTE gap0[4];
-  T_SRV_LINKED_NODE *first_node;
-  T_SRV_LINKED_NODE *last_node;
-  __int32 size;
-  _DWORD dword10;
-  struct CPlex *pcplex14;
-  _DWORD dword18;
+  T_LINKEDLIST<T_INVENTORY_ITEM> list;
   int maxInd;
   _DWORD dword20;
 };
+
 struct T_UNIT;
 struct  T_PLAYER
 {
@@ -125,7 +146,7 @@ struct __declspec(align(4)) T_UNIT
   _DWORD dword70;
   T_INVENTORY_ITEM *weapon;
   T_INVENTORY_ITEM *shield;
-  T_LINKEDLIST *inventory;
+  T_INVENTORY_LIST *inventory;
   const char* name2;
   uint16_t body;
   uint16_t reaction;
@@ -145,6 +166,13 @@ struct __declspec(align(4)) T_UNIT
   _WORD word14C;
   _BYTE gap9[82];
   _DWORD dword1A0;
+  _BYTE gap1A4[100];
+};
+
+struct A2Human {
+  T_UNIT unit;
+  T_INVENTORY_ITEM* dress[13];
+  // ...
 };
 
 #pragma pack()

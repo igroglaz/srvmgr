@@ -7,11 +7,11 @@
 
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
 
-T_LINKEDLIST* __stdcall create_new_item_list()
+T_INVENTORY_LIST* __stdcall create_new_item_list()
 {
     #define FUNC_ITEM_LIST_CONSTRUCTOR 0x00551C0A
-    T_LINKEDLIST* list = (T_LINKEDLIST*)a2_operator_new(0x24);
-    return (T_LINKEDLIST*)this_call(FUNC_ITEM_LIST_CONSTRUCTOR, list);
+    T_INVENTORY_LIST* list = (T_INVENTORY_LIST*)a2_operator_new(0x24);
+    return (T_INVENTORY_LIST*)this_call(FUNC_ITEM_LIST_CONSTRUCTOR, list);
 }
 
 float rnd()
@@ -30,17 +30,17 @@ float rnd_gaussian(float mu, float sigma)
 }
 
 
-void a2insert(T_LINKEDLIST * list, int pos, T_INVENTORY_ITEM* item)
+void a2insert(T_INVENTORY_LIST * list, int pos, T_INVENTORY_ITEM* item)
 {
     this_call(0x00551FC3, (void*)list, (void*)pos, (void*)item);
 }
 
-void a2insert(T_LINKEDLIST * list, T_INVENTORY_ITEM* item)
+void a2insert(T_INVENTORY_LIST * list, T_INVENTORY_ITEM* item)
 {
     a2insert(list, list->maxInd, item);
 }
 
-T_INVENTORY_ITEM* a2remove(T_LINKEDLIST * list, int pos, int n)
+T_INVENTORY_ITEM* a2remove(T_INVENTORY_LIST * list, int pos, int n)
 {
     return (T_INVENTORY_ITEM*)this_call(0x00552E42, (void*)list, (void*)pos, (void*)n);
 }
@@ -90,10 +90,10 @@ int getDropNum(int num, float probability)
         }
         return dropN;
 }
-void __stdcall drop_rnd_items(T_LINKEDLIST * item_list_src, T_LINKEDLIST * item_list_dst, float probability, int stopItemId)
+void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST * item_list_dst, float probability, int stopItemId)
 {
-    T_SRV_LINKED_NODE* src_current = item_list_src->last_node;
-    int ind = item_list_src->size-1;
+    T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* src_current = item_list_src->list.last_node;
+    int ind = item_list_src->list.size - 1;
     std::vector<IndNum> to_remove;
     while (src_current != NULL)
     {
@@ -137,9 +137,9 @@ bool __stdcall unit_has_weared_items(T_UNIT* unit)
     }
     return false;
 }
-void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_LINKEDLIST * item_list_dst, float probability)
+void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_INVENTORY_LIST * item_list_dst, float probability)
 {
-    if (unit->clazz != (void *)0x0060F0C8)
+    if (unit->clazz != A2_HUMAN_CLASS)
         return;        // unit does not support weared items
 
     for (int i = 1; i < 13; ++i )
@@ -187,7 +187,7 @@ void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_LINKEDLIST * item_list_dst,
     }
 }
 
-int CopyInventoryToMap(T_UNIT *unit, T_LINKEDLIST *inventory, int a3, int a4)
+int CopyInventoryToMap(T_UNIT *unit, T_INVENTORY_LIST *inventory, int a3, int a4)
 {
     #define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
     return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
@@ -199,9 +199,9 @@ const int T_UNIT_SKIP_DMG = 0xB203;
 int __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec)
 {
     return false; //// <-- fastfix to prevent cheating
-    if (unit && unit->inventory && unit->inventory->size >= 1)
+    if (unit && unit->inventory && unit->inventory->list.size >= 1)
     {
-        T_SRV_LINKED_NODE* node = unit->inventory->first_node;
+        T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* node = unit->inventory->list.first_node;
         for (int i = 0; i < 3; i++)
         {
             if (!node)
@@ -220,11 +220,11 @@ bool isPlayerUnit(T_UNIT* unit)
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
-    if (unit && unit->inventory && (unit->inventory->size > 0 || unit_has_weared_items(unit)))
+    if (unit && unit->inventory && (unit->inventory->list.size > 0 || unit_has_weared_items(unit)))
     {
         if (isPlayerUnit(unit))
         {
-            T_LINKEDLIST* bag = create_new_item_list();
+            T_INVENTORY_LIST* bag = create_new_item_list();
             if (nonStandardUnit(unit, T_UNIT_SKIP_DRP))
                 drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability, T_UNIT_SKIP_DRP_BAR);
             else
