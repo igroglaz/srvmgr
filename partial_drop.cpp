@@ -124,19 +124,6 @@ void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST
     }
 }
 
-bool __stdcall unit_has_weared_items(T_UNIT* unit)
-{
-    if (unit->weapon || unit->shield)
-        return true;
-
-    for (int i = 1; i < 13; ++i )
-    {
-        T_INVENTORY_ITEM* item = (T_INVENTORY_ITEM*)((char*)unit+0x208)+i;
-        if (item)
-            return true;
-    }
-    return false;
-}
 void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_INVENTORY_LIST * item_list_dst, float probability)
 {
     if (unit->clazz != A2_HUMAN_CLASS)
@@ -220,7 +207,7 @@ bool isPlayerUnit(T_UNIT* unit)
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
-    if (unit && unit->inventory && (unit->inventory->list.size > 0 || unit_has_weared_items(unit)))
+    if (unit && unit->inventory && unit->inventory->list.size > 0)
     {
         if (isPlayerUnit(unit))
         {
