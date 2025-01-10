@@ -45,11 +45,6 @@ T_INVENTORY_ITEM* a2remove(T_INVENTORY_LIST * list, int pos, int n)
     return (T_INVENTORY_ITEM*)this_call(0x00552E42, (void*)list, (void*)pos, (void*)n);
 }
 
-T_INVENTORY_ITEM* unit_unwear_item(T_UNIT * unit, T_INVENTORY_ITEM* item)
-{
-    return 0;
-}
-
 struct IndNum
 {
     __int16 ind;
@@ -90,16 +85,13 @@ int getDropNum(int num, float probability)
         }
         return dropN;
 }
-void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST * item_list_dst, float probability, int stopItemId)
+void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST * item_list_dst, float probability)
 {
     T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* src_current = item_list_src->list.last_node;
     int ind = item_list_src->list.size - 1;
     std::vector<IndNum> to_remove;
     while (src_current != NULL)
     {
-        if (src_current->value->id == stopItemId)
-            break;
-
         if (src_current->value->id == 3667) {
             ind--;
             src_current = src_current->prev;
@@ -180,32 +172,12 @@ int CopyInventoryToMap(T_UNIT *unit, T_INVENTORY_LIST *inventory, int a3, int a4
     #define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
     return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
 }
-const int T_UNIT_SKIP_MAN = 0x1102;
-const int T_UNIT_SKIP_DRP = 0xBA38;
-const int T_UNIT_SKIP_DRP_BAR = 0xF625;
-const int T_UNIT_SKIP_DMG = 0xB203;
-int __stdcall nonStandardUnit(T_UNIT* unit, unsigned __int16 spec)
-{
-    return false; //// <-- fastfix to prevent cheating
-    if (unit && unit->inventory && unit->inventory->list.size >= 1)
-    {
-        T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* node = unit->inventory->list.first_node;
-        for (int i = 0; i < 3; i++)
-        {
-            if (!node)
-                break;
-            if (node->value->id == spec)
-                return node->value->amount;
-            node=node->next;
-        }
-    }
-    return false;
-}
-#define uint32 unsigned __int32
+
 bool isPlayerUnit(T_UNIT* unit)
 {
     return unit->player->unitType == 0;
 }
+
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
     if (unit && unit->inventory)
@@ -213,13 +185,8 @@ void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
         if (isPlayerUnit(unit))
         {
             T_INVENTORY_LIST* bag = create_new_item_list();
-            if (nonStandardUnit(unit, T_UNIT_SKIP_DRP))
-                drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability, T_UNIT_SKIP_DRP_BAR);
-            else
-            {
-                drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability, 0);
-                drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
-            }
+            drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability);
+            drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
             CopyInventoryToMap(unit, bag, a3, a4);
         }
         else
@@ -247,55 +214,6 @@ void __declspec(naked) imp_drop_partially()
     }
 }
 
-int __stdcall imp_check_unit_man(){
-    __asm
-    {
-        push    eax    // store for future
-        push    ecx // store for future
-        push    T_UNIT_SKIP_MAN
-        push    ecx
-        call    nonStandardUnit
-        cmp        al, 1
-        pop        ecx
-        pop        eax
-        je        special_case
-        mov        [ecx+0x9A], ax
-special_case:
-    }
-}
-int __stdcall calc_dmg(T_UNIT *u1, T_UNIT *u2, int damage){
-    if (u1)
-    {
-        if (char* p1 = *(char**)((char*)u1 + 0x14))
-        {
-            if (p1 && !*(uint32_t*)(p1 + 0x2C))
-                return damage;
-        }
-    }
-    if (u2 && nonStandardUnit(u2, T_UNIT_SKIP_DMG))
-    {
-        T_UNIT *unit = u2;
-        int lvl = 15*unit->word96/100;
-        if(unit->word94 - damage < lvl)
-            return unit->word94 - lvl;
-    }
-    return damage;
-}
-
-int __declspec(naked) imp_check_unit_dmg()
-{ // 0053693C
-    __asm
-    {
-        push    edx
-        push    eax
-        push    [ebp - 0x3C]
-        push    [ebp + 0xC]
-        call    calc_dmg
-        pop        edx
-        ret
-    }
-}
-
 void __stdcall update_unit_ui_wrapper(T_UNIT *unit, int a){
     __asm
     {
@@ -306,57 +224,5 @@ void __stdcall update_unit_ui_wrapper(T_UNIT *unit, int a){
         mov     ecx, 0x006C3A08
         mov     edx, 0x51C601
         call    edx
-    }
-}
-int update_val(_WORD *val1, _WORD val2, int lvl){
-    int old_val = *val1;
-    int pcnt = (100*(*val1)/(val2));
-    if (pcnt < 15)
-        pcnt = 15;
-
-    int a = pcnt + 2;
-    int y = 3000/(a*a) + lvl;
-    if(y < 0)
-        y=0;
-    *val1 += y;
-    if (*val1>val2)
-        *val1 = val2;
-
-    return *val1 - old_val;
-}
-void __stdcall imp_regen_internal(T_UNIT *unit)
-{
-    int update = 0;
-
-    if (unit->word94 < unit->word96)
-    {
-        if (int lvl = nonStandardUnit(unit, T_UNIT_SKIP_DMG))
-        {
-            if (update_val(&unit->word94, unit->word96, lvl))
-                update++;
-        }
-    }
-
-    if (*(_WORD*)((char*)unit+0x9A) < *(_WORD*)((char*)unit+0x9C))
-    {
-        if(int lvl = nonStandardUnit(unit, T_UNIT_SKIP_MAN))
-            update_val((_WORD*)((char*)unit+0x9A), *(_WORD*)((char*)unit+0x9C), lvl);
-    }
-
-    if (update)
-        update_unit_ui_wrapper(unit, 1);
-}
-
-int __declspec(naked) imp_regen()
-{ // 00556401
-    __asm
-    {
-        push [ebp - 0x18]
-        call imp_regen_internal
-
-        mov ecx,[ebp-0x18]
-        xor edx,edx
-        mov dx,[ecx+0x000001A4]
-        ret
     }
 }
