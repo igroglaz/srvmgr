@@ -1,3 +1,4 @@
+#include "config_new.h"
 #include "lib/utils.hpp"
 #include "utils.h"
 #include "zxmgr.h"
@@ -156,8 +157,8 @@ extern "C" __declspec(naked) void solo_pickup_sack() {
         mov unit, eax
     }
 
-    if (!IsSoloPlayer(unit)) {
-        // Original logic for regular chars.
+    if (!IsSoloPlayer(unit) || Config::ServerID == EASY) {
+        // Original logic for regular chars and first server.
         unit->dword50 = 2;
     } else {
         SoloPickup(unit, a2server_instance);
@@ -179,8 +180,8 @@ extern "C" __declspec(naked) void solo_pick_all_sacks() {
         mov unit, ecx
     }
 
-    if (!IsSoloPlayer(unit)) {
-        // Original logic for regular chars.
+    if (!IsSoloPlayer(unit) || Config::ServerID == EASY) {
+        // Original logic for regular chars and first server.
         unit->dword50 = 26;
     }
 
