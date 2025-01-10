@@ -190,7 +190,6 @@ CALL fix_spell_duration_overflow 53C52A // fix spell duration overflow
 CALL imp_drop_partially 0052E264 // implement partial drop after death 
 CALL imp_drop_partially 0052DEEF // implement partial drop after death -- // sometimes worn items do not drop after death even with 100% chance...
                                                                             // so I comment it out for now and we will use oldschool imp_DropAll 52DA11
-CALL imp_check_unit_dmg 00504067
 //CALL imp_regen 00556401 6 // used for cheating (with leather shield)
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn
