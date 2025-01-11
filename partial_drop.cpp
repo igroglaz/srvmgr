@@ -207,7 +207,7 @@ bool isPlayerUnit(T_UNIT* unit)
 }
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
-    if (unit && unit->inventory && unit->inventory->list.size > 0)
+    if (unit && unit->inventory)
     {
         if (isPlayerUnit(unit))
         {
