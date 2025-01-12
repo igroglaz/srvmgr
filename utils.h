@@ -169,9 +169,13 @@ struct __declspec(align(4)) T_UNIT
   uint16_t spirit;
   uint16_t speed;
   _BYTE gap8e[6];
-  _WORD word94;
-  _WORD word96;
-  _BYTE gap55[30];
+  _WORD hp;
+  _WORD hp_max;
+  _WORD hp_regen;
+  _WORD mp;
+  _WORD mp_max;
+  _WORD mp_regen;
+  _BYTE gap55[22];
   _BYTE byteB6;
   _BYTE gap66[97];
   uint16_t skills[5];
