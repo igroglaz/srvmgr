@@ -166,7 +166,9 @@ struct __declspec(align(4)) T_UNIT
   _WORD word96;
   _BYTE gap55[30];
   _BYTE byteB6;
-  _BYTE gap66[121];
+  _BYTE gap66[97];
+  uint16_t skills[5];
+  _BYTE gap12A[14];
   _DWORD exp;
   _BYTE gap77[12];
   void* spellbook;
@@ -180,7 +182,8 @@ struct __declspec(align(4)) T_UNIT
 struct A2Human {
   T_UNIT unit;
   T_INVENTORY_ITEM* dress[13];
-  // ...
+  int32_t main_sphere;
+  int32_t experience_per_sphere[5];
 };
 
 template <typename T>
