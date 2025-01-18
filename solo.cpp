@@ -54,11 +54,20 @@ void RemoveLinkedListElement(T_SRV_LINKED_NODE<T>* item, T_LINKEDLIST<T>* list) 
     list->size--;
 }
 
+bool IsBookOfBless(T_INVENTORY_ITEM* item) {
+    return item
+        && item->id == 3589                                 // Astral book,
+        && item->effects.size != 0                          // with magic,
+        && item->effects.first_node->value->effect_id == 42 // casting spell
+        && item->effects.first_node->value->value1 == 20;   // Bless.
+}
+
 // Sack pickup logic for a solo character.
 //
 // Iterates through all sacks currently on the map. If the character is staying
-// on top of a sack, pick all treasures from that sack and put into the player's
-// inventory.
+// on top of a sack and the character has an astral book with bless, replace
+// that book with the treasure(s) from the sack. If the player already has a
+// treasure, increase the amount of treasures and don't remove the book.
 //
 // Known issues:
 // 1. Doesn't update the sack money size, so the bag visually retains its size.
@@ -106,7 +115,7 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                 continue;
             }
 
-            bool found_in_inventory = false;
+            bool had_treasure_in_inventory = false;
 
             for (auto inventory_ptr = unit->inventory->list.first_node; inventory_ptr != nullptr; inventory_ptr = inventory_ptr->next) {
                 if (inventory_ptr->value->id == item_ptr->value->id) {
@@ -117,28 +126,29 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                     RemoveLinkedListElement(item_ptr, sack->items);
                     // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
-                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure!  Move any item in the inventory to another place to reveal it.");
-                    found_in_inventory = true;
+                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure! Move any item in the inventory to another place to reveal it.");
+                    had_treasure_in_inventory = true;
                     break;
                 }
             }
 
-            if (!found_in_inventory) {
-                // Move the item from the sack into the player's inventory.
-                auto& inventory = unit->inventory->list;
-                auto inv_prev = inventory.last_node;
+            if (!had_treasure_in_inventory) {
+                for (auto inventory_ptr = unit->inventory->list.first_node; inventory_ptr != nullptr; inventory_ptr = inventory_ptr->next) {
+                    if (IsBookOfBless(inventory_ptr->value)) {
+                        // Replace the book with the treasure(s).
+                        inventory_ptr->value->id = item_ptr->value->id;
+                        inventory_ptr->value->amount = item_ptr->value->amount;
+                        inventory_ptr->value->effects.size = 0;
+                        inventory_ptr->value->effects.first_node = nullptr;
+                        inventory_ptr->value->effects.last_node = nullptr;
 
-                RemoveLinkedListElement(item_ptr, sack->items);
-                
-                inventory.last_node = item_ptr;
-                item_ptr->next = nullptr;
-                item_ptr->prev = inv_prev;
-                inventory.size++;
-                if (inv_prev) {
-                    inv_prev->next = item_ptr;
+                        RemoveLinkedListElement(item_ptr, sack->items);
+                        // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
+
+                        zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure! Move any item in the inventory to another place to reveal it.");
+                        break;
+                    }
                 }
-
-                zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure!  Move any item in the inventory to another place to reveal it.");
             }
 
             if (sack->items->size == 0) {
