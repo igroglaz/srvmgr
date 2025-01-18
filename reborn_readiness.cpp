@@ -11,6 +11,7 @@
 struct PlayerInfo {
     bool warrior;
     bool female;
+    std::string clan;
     bool has_treasure;
     int32_t money;
     uint16_t body;
@@ -20,6 +21,7 @@ struct PlayerInfo {
     int32_t experience;
     uint32_t monster_kills;
     uint32_t deaths;
+    int skills[5];
 };
 
 const int32_t k = 1000;
@@ -80,9 +82,17 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
         }
     }
 
+    std::string full_name = unit->name2;
+    std::string clan;
+    size_t separator = full_name.find('|');
+    if (separator != std::string::npos) {
+        clan = full_name.substr(separator + 1);
+    }
+
     PlayerInfo player_info;
     player_info.warrior = IsWarrior(unit);
     player_info.female = IsFemale(unit);
+    player_info.clan = clan;
     player_info.has_treasure = has_treasure;
     player_info.money = player->money;
     player_info.body = unit->body;
@@ -98,6 +108,10 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     } else {
         A2Human* human = reinterpret_cast<A2Human*>(unit);
         SubtractEquippedItems(human, player_info);
+
+        for (int i = 0; i < 5; ++i) {
+            player_info.skills[i] = unit->skills[i];
+        }
     }
 
     CheckRebornReadiness(server_id, player_info, p);
@@ -170,6 +184,97 @@ uint32_t ServerRequirementsMonsterKills(ServerIDType server_id, const PlayerInfo
     return 0;
 }
 
+void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
+    bool ready_for_reclass = true;
+    std::vector<std::string> info_lines;
+    const int32_t need_money = 300000001;
+    const int32_t need_experience = 177777778;
+
+    if (info.money < need_money) {
+        ready_for_reclass = false;
+        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
+    }
+
+    if (info.experience < need_experience) {
+        ready_for_reclass = false;
+        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
+    }
+
+    info_lines.emplace_back(Format("Also you have: %d body, %d reaction, %d mind, %d spirit (max: 55-76-76-76)", info.body, info.reaction, info.mind, info.spirit));
+
+    if (info.warrior) {
+        info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    } else {
+        info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    }
+
+    if (ready_for_reclass) {
+        if (info.clan == "reclass") {
+            zxmgr::SendMessage(p, "Ready for reclass! Make camp and you will reclass.");
+        } else {
+            zxmgr::SendMessage(p, "Ready for reclass! To reclass, rename your character to 'reclass'.");
+        }
+    } else {
+        zxmgr::SendMessage(p, "*NOT* ready for reclass. Requirements:");
+    }
+    for (auto it = info_lines.cbegin(); it != info_lines.cend(); ++it) {
+        zxmgr::SendMessage(p, "%s", it->c_str());
+    }
+}
+
+void CheckAscendReadiness(const PlayerInfo& info, unsigned char* p) {
+    bool ready_for_ascend = true;
+    std::vector<std::string> info_lines;
+    const int32_t need_money = 2147000001;
+    const int32_t need_experience = 177777778;
+    const int16_t need_total_stats = 284;
+
+    const int16_t total_stats = info.body + info.reaction + info.mind + info.spirit;
+    if (total_stats < need_total_stats) {
+        ready_for_ascend = false;
+        info_lines.emplace_back(Format("- Need stats: you have %d body, %d reaction, %d mind, %d spirit (max: 56-76-76-76)", info.body, info.reaction, info.mind, info.spirit));
+    } else {
+        info_lines.emplace_back(Format("+ You have maxed out stats"));
+    }
+
+    if (info.money < need_money) {
+        ready_for_ascend = false;
+        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
+    }
+
+    if (info.experience < need_experience) {
+        ready_for_ascend = false;
+        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
+    }
+
+    if (info.warrior) {
+        info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    } else {
+        info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    }
+
+    if (ready_for_ascend) {
+        if (info.clan == "ascend") {
+            zxmgr::SendMessage(p, "Ready for ascend! Make camp and you will ascend.");
+        } else {
+            zxmgr::SendMessage(p, "Ready for ascend! To ascend, rename your character to 'ascend'.");
+        }
+    } else {
+        zxmgr::SendMessage(p, "*NOT* ready for ascend. Requirements:");
+    }
+    for (auto it = info_lines.cbegin(); it != info_lines.cend(); ++it) {
+        zxmgr::SendMessage(p, "%s", it->c_str());
+    }
+}
+
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p) {
     int16_t need_mind = 0;
     int16_t need_reaction = 0;
@@ -180,8 +285,11 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         case MEDIUM: need_reaction = 40; break;
         case HARD: need_reaction = 50; break;
         default:
-            zxmgr::SendMessage(p, "This server does not have a rebirth.");
-            return;
+            if (player_info.female) {
+                return CheckAscendReadiness(player_info, p);
+            }
+            
+            return CheckReclassReadiness(player_info, p);
     }
 
     int32_t treasure_gives_gold = 0; // Note: gold is awarded only once, even for two treasures.
