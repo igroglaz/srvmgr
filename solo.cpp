@@ -127,6 +127,7 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                     // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
                     zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure! Move any item in the inventory to another place to reveal it.");
+                    zxmgr::SendMessage((byte*)unit->player, "Use #reborn command to check your status.");
                     had_treasure_in_inventory = true;
                     break;
                 }
@@ -146,6 +147,7 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                         // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
                         zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure! Move any item in the inventory to another place to reveal it.");
+                        zxmgr::SendMessage((byte*)unit->player, "Use #reborn command to check your status.");
                         break;
                     }
                 }
