@@ -117,7 +117,7 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                     RemoveLinkedListElement(item_ptr, sack->items);
                     // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
-                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure!  Move any item in the inventory to another place to reveal it.");
+                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure! Move any item in the inventory to another place to reveal it.");
                     found_in_inventory = true;
                     break;
                 }
@@ -126,19 +126,19 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
             if (!found_in_inventory) {
                 // Move the item from the sack into the player's inventory.
                 auto& inventory = unit->inventory->list;
-                auto inv_prev = inventory.last_node;
+                auto inv_next = inventory.first_node;
 
                 RemoveLinkedListElement(item_ptr, sack->items);
-                
-                inventory.last_node = item_ptr;
-                item_ptr->next = nullptr;
-                item_ptr->prev = inv_prev;
+
+                inventory.first_node = item_ptr;
+                item_ptr->next = inv_next;
+                item_ptr->prev = nullptr;
                 inventory.size++;
-                if (inv_prev) {
-                    inv_prev->next = item_ptr;
+                if (inv_next) {
+                    inv_next->prev = item_ptr;
                 }
 
-                zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure!  Move any item in the inventory to another place to reveal it.");
+                zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure! Move any item in the inventory to another place to reveal it.");
             }
 
             if (sack->items->size == 0) {
