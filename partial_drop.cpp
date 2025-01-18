@@ -101,6 +101,7 @@ void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST
             break;
 
         if (src_current->value->id == 3667) {
+            ind--;
             src_current = src_current->prev;
             continue;
         }
