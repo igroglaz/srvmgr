@@ -487,7 +487,7 @@ void __declspec(naked) imp_Experience3()
 {
     __asm
     {
-        cmp        ecx, MAX_SKILL
+        cmp        eax, MAX_SKILL
         jge        loc_530AB2
         mov        edx, 0x00530921
         jmp        edx
