@@ -62,6 +62,16 @@ bool IsBookOfBless(T_INVENTORY_ITEM* item) {
         && item->effects.first_node->value->value1 == 20;   // Bless.
 }
 
+// Refresh the inventory cached at the client.
+// Taken from around address 00503663.
+void RefreshPlayerInventory(T_UNIT* unit) {
+    // Only ECX is used by the function, but __fastcall passes EDX too.
+    typedef void (__fastcall *A2RefreshInventory)(int address, int unused, T_UNIT* unit, T_PLAYER* player, int arg4, int arg5, int arg6, int arg7);
+    A2RefreshInventory refresh_inventory = (A2RefreshInventory)0x00519221;
+
+    refresh_inventory(0x006c3a08, 0, unit, unit->player, -1, 0x0ffb, 0, 0);
+}
+
 // Sack pickup logic for a solo character.
 //
 // Iterates through all sacks currently on the map. If the character is staying
@@ -103,6 +113,8 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
         return;
     }
 
+    bool picked_up = false;
+
     auto sack_ptr = sacks->first_node;
     for (auto sack_ptr = sacks->first_node; sack_ptr != nullptr; sack_ptr = sack_ptr->next) {
         const auto& sack = sack_ptr->value;
@@ -126,9 +138,10 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                     RemoveLinkedListElement(item_ptr, sack->items);
                     // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
-                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure! Move any item in the inventory to another place to reveal it.");
+                    zxmgr::SendMessage((byte*)unit->player, "You picked up another treasure!");
                     zxmgr::SendMessage((byte*)unit->player, "Use #reborn command to check your status.");
                     had_treasure_in_inventory = true;
+                    picked_up = true;
                     break;
                 }
             }
@@ -146,8 +159,9 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                         RemoveLinkedListElement(item_ptr, sack->items);
                         // We leak the memory of `item_ptr` here. I don't know how to clean it up :D
 
-                        zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure! Move any item in the inventory to another place to reveal it.");
+                        zxmgr::SendMessage((byte*)unit->player, "You picked up a treasure!");
                         zxmgr::SendMessage((byte*)unit->player, "Use #reborn command to check your status.");
+                        picked_up = true;
                         break;
                     }
                 }
@@ -157,6 +171,10 @@ void SoloPickup(T_UNIT* unit, A2Server* server) {
                 RemoveLinkedListElement(sack_ptr, sacks);
             }
         }
+    }
+
+    if (picked_up) {
+        RefreshPlayerInventory(unit);
     }
 }
 
