@@ -116,6 +116,11 @@ struct  T_PLAYER
     const char* account_name;
 };
 
+struct A2UnitEye2 {
+  uint8_t gap[10];
+  uint16_t command_to;
+};
+
 struct __declspec(align(4)) T_UNIT
 {
   void *clazz;
@@ -133,14 +138,13 @@ struct __declspec(align(4)) T_UNIT
   CPlex *pcplex34;
   _BYTE gap2[4];
   _DWORD dword3C;
-  _BYTE gap3[2];
-  _WORD word42;
+  T_UNIT* last_hit_by;
   _BYTE gap4[6];
   _BYTE byte4A;
   _BYTE face;
   _BYTE unit_attrs;
   _BYTE gap5[3];
-  _DWORD dword50;
+  _DWORD state;
   _DWORD unit_state;
   void *pcobject58;
   void *pcobject5C;
@@ -155,7 +159,7 @@ struct __declspec(align(4)) T_UNIT
   T_INVENTORY_ITEM *weapon;
   T_INVENTORY_ITEM *shield;
   T_INVENTORY_LIST *inventory;
-  const char* name2;
+  const char* name;
   uint16_t body;
   uint16_t reaction;
   uint16_t mind;
@@ -176,7 +180,9 @@ struct __declspec(align(4)) T_UNIT
   _WORD word14C;
   _BYTE gap9[82];
   _DWORD dword1A0;
-  _BYTE gap1A4[100];
+  _BYTE gap1A4[32];
+  A2UnitEye2* eye2;
+  _BYTE gap1c8[64];
 };
 
 struct A2Human {

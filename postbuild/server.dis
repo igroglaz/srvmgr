@@ -249,6 +249,10 @@ JMP skip_new_character_weapon 00533421
 JMP remember_a2server 005051c5
 JMP solo_pickup_sack 005a9977
 JMP solo_pick_all_sacks 005a99dd
+JMP drop_item_under 00505e9c
+JMP drop_item_to_another 00505ebe
+JMP choose_drop_item 00505a23
+JMP drop_gold 005060a4
 
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������

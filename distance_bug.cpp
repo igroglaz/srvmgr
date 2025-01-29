@@ -1,8 +1,8 @@
 #include "utils.h"
 
 void __stdcall distance_bug_fix_internal(T_UNIT *unit){
-    if(unit->dword50 == 13){
-        unit->dword50 = 12;
+    if(unit->state == 13){
+        unit->state = 12;
     }
 }
 
