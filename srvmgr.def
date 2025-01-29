@@ -180,3 +180,7 @@ skip_new_character_weapon               @319
 solo_pickup_sack                        @320
 solo_pick_all_sacks                     @321
 remember_a2server                       @322
+drop_item_under                         @323
+drop_item_to_another                    @324
+choose_drop_item                        @325
+drop_gold                               @326

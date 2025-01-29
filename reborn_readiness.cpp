@@ -82,7 +82,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
         }
     }
 
-    std::string full_name = unit->name2;
+    std::string full_name = unit->name;
     std::string clan;
     size_t separator = full_name.find('|');
     if (separator != std::string::npos) {

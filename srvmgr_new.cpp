@@ -11,6 +11,7 @@
 #include "unit_info.h"
 #include "forbidden_items.h"
 #include "multiplayer_shop.h"
+#include "solo.h"
 
 void ChangeWndTitle(const char* title)
 {
@@ -53,6 +54,8 @@ void OnInitializeMap()
 
     // update PlayerInfo structures for new map
     PI_Reset();
+
+    ClearStapleCells();
 }
 
 void OnPreInitializeMap()

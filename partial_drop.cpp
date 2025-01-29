@@ -4,8 +4,12 @@
 #define _USE_MATH_DEFINES
 #include "math.h"
 #include "this_call.h"
+#include "solo.h"
 
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
+auto a2_delete = (void (__cdecl *)(void*))0x005ddf90;
+auto a2_bag_destructor = (void (__fastcall *)(T_INVENTORY_LIST*))0x00551c7a;
+
 
 T_INVENTORY_LIST* __stdcall create_new_item_list()
 {
@@ -178,6 +182,11 @@ bool isPlayerUnit(T_UNIT* unit)
     return unit->player->unitType == 0;
 }
 
+void DeleteInventory(T_INVENTORY_LIST* bag) {
+    a2_bag_destructor(bag);
+    a2_delete(bag);
+}
+
 void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
 {
     if (unit && unit->inventory)
@@ -187,10 +196,21 @@ void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
             T_INVENTORY_LIST* bag = create_new_item_list();
             drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability);
             drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
-            CopyInventoryToMap(unit, bag, a3, a4);
+
+            if (bag->list.size) {
+                PoisonStapleCell(unit->position);
+            }
+
+            if (IsGigaPlayer(unit)) {
+                DeleteInventory(bag);
+            } else {
+                CopyInventoryToMap(unit, bag, a3, a4);
+            }
         }
         else
         {
+            StapleCellOnMobKill(unit);
+
             // If this is a monster, we drop all items like it's done in original a2
             CopyInventoryToMap(unit, unit->inventory, a3, a4);
             unit->inventory = create_new_item_list();
