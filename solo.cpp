@@ -46,18 +46,16 @@ void ClearStapleCells() {
     staple_cells.clear();
 }
 
-// Address: 005051c5
+// Address: 00504a99
 extern "C" __declspec(naked) void remember_a2server() {
     __asm {
-        // Pick a2server pointer from the stack.
-        mov ecx, DWORD PTR [ebp-0xc38]
+        // a2server pointer is in ECX, input parameter.
         call RememberA2Server
 
         // Replay original instruction and restore instruction pointer.
-        mov eax, DWORD PTR [ebp-0x10]
-        mov ecx, 0
-        mov cl, BYTE PTR [eax+0xc]
-        mov edx, 0x005051cd
+        push -1
+        push 0x601976
+        mov edx, 0x00504aa0
         jmp edx
     }
 }
@@ -281,10 +279,6 @@ extern "C" __declspec(naked) void drop_item_under() {
         mov ecx, eax
         call PoisonStapleCell
 
-        // Also remember `A2Server` pointer to support `StapleCellOnMobKill`.
-        mov ecx, DWORD PTR [ebp-0xc38]
-        call RememberA2Server
-
         // Restore original instruction and position.
         mov eax, DWORD PTR [ebp-0xc38]
         mov edx, 0x00505ea2
@@ -297,10 +291,6 @@ extern "C" __declspec(naked) void drop_item_to_another() {
     // ECX holds the address to the drop cell.
     __asm {
         call PoisonStapleCell
-
-        // Also remember `A2Server` pointer to support `StapleCellOnMobKill`.
-        mov ecx, DWORD PTR [ebp-0xc38]
-        call RememberA2Server
 
         // Restore original instruction and position.
         mov edx, DWORD PTR [ebp-0xc38]
@@ -388,10 +378,6 @@ extern "C" __declspec(naked) void drop_gold() {
     }
 
     __asm {
-        // Also remember `A2Server` pointer to support `StapleCellOnMobKill`.
-        mov ecx, DWORD PTR [ebp-0xc38]
-        call RememberA2Server
-
         // Restore original instruction and position.
         mov edx, DWORD PTR [ebp-0x8c]
         mov eax, 0x005060aa
