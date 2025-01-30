@@ -246,7 +246,7 @@ JMP skip_new_character_stats 00501049
 JMP skip_new_character_weapon 00533421
 
 // Solo player stuff.
-JMP remember_a2server 005051c5
+JMP remember_a2server 00504a99
 JMP solo_pickup_sack 005a9977
 JMP solo_pick_all_sacks 005a99dd
 JMP drop_item_under 00505e9c
