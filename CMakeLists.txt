@@ -39,6 +39,7 @@ add_library(srvmgr SHARED srvmgr.def
     scanrange.cpp
     scanrange_check.cpp
     screenshots.cpp
+    scroll_burn.cpp
     shared.cpp
     shops.cpp
     solo.cpp

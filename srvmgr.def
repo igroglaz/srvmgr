@@ -170,7 +170,6 @@ set_mage_female_max_parameters_taking_potion		@309
 bound_quest_reward						@310
 allow_low_skill_enter_high_tier_maps				@311
 set_char_min_speed              		@312
-disable_mage_scrolls              		@313
 change_inn_reward_mob                   @314
 check_health                            @315
 quest_change_kill_n_count				@316
@@ -184,3 +183,4 @@ drop_item_under                         @323
 drop_item_to_another                    @324
 choose_drop_item                        @325
 drop_gold                               @326
+fix_scroll_burn                         @327

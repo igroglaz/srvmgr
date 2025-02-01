@@ -100,6 +100,7 @@
     <ClCompile Include="scanrange.cpp" />
     <ClCompile Include="scanrange_check.cpp" />
     <ClCompile Include="screenshots.cpp" />
+    <ClCompile Include="scroll_burn.cpp" />
     <ClCompile Include="shared.cpp" />
     <ClCompile Include="shops.cpp" />
     <ClCompile Include="solo.cpp" />
