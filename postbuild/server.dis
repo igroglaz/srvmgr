@@ -227,7 +227,6 @@ JMP bound_quest_reward 565406 // bound_quest_reward
 
 CALL allow_low_skill_enter_high_tier_maps 4FE632
 CALL set_char_min_speed 531b72
-CALL disable_mage_scrolls 50566a
 JMP change_inn_reward_mob 50df19
 CALL check_health 52bd75
 
@@ -253,6 +252,9 @@ JMP drop_item_under 00505e9c
 JMP drop_item_to_another 00505ebe
 JMP choose_drop_item 00505a23
 JMP drop_gold 005060a4
+
+// Fix bug with burning the inventory items with scrolls when they run out.
+JMP fix_scroll_burn 005056e1
 
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������
