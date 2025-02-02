@@ -96,6 +96,8 @@ bool IsBookOfBless(T_INVENTORY_ITEM* item) {
 // Refresh the inventory cached at the client.
 // Taken from around address 00503663.
 void RefreshPlayerInventory(T_UNIT* unit) {
+    Printf("[solo] RefreshPlayerInventory: unit=0x%x (%s), player=0x%x (id=%d)", unit, unit ? unit->name : "?", unit ? unit->player : nullptr, unit && unit->player ? unit->player->id_ext.id : -1);
+
     // Only ECX is used by the function, but __fastcall passes EDX too.
     typedef void (__fastcall *A2RefreshInventory)(int address, int unused, T_UNIT* unit, T_PLAYER* player, int arg4, int arg5, int arg6, int arg7);
     A2RefreshInventory refresh_inventory = (A2RefreshInventory)0x00519221;
@@ -106,6 +108,8 @@ void RefreshPlayerInventory(T_UNIT* unit) {
 // If the player's name has changed, it means that the player has logged out and another one logged in.
 // The player ID is reused, but we should clear all staples for the logged-out player.
 void CheckStaplesForReloggedCharacter(T_PLAYER* player) {
+    Printf("[solo] CheckStaplesForReloggedCharacter: player=0x%x (%s, id=%d)", player, player ? player->name : "?", player ? player->id_ext.id : -1);
+
     const int8_t player_id = static_cast<int8_t>(player->id_ext.id);
     auto player_name_id = player_names.find(player_id);
     if (player_name_id == player_names.end()) {
@@ -129,6 +133,8 @@ void CheckStaplesForReloggedCharacter(T_PLAYER* player) {
 //
 // If the chosen sack is stapled with player ID, allow the player to pick it up.
 void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
+    Printf("[solo] SoloPickup: unit=0x%x (%s), y=%d, x=%d", unit, unit ? unit->name : "?", y, x);
+
     if (!IsSoloPlayer(unit)) {
         // Original logic for regular chars.
         unit->state = 2;
@@ -150,8 +156,10 @@ void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
         // If the player is currently staying on the sack, let them pick it up. Otherwise let them only go to the sack.
         // This is to prevent races with other players poisoning the cell.
         if (unit->position->yx == yx) {
+            Printf("[solo] SoloPickup: unit=0x%x (%s) picks up bag at %d", unit, unit->name, yx);
             unit->state = 2;
         } else {
+            Printf("[solo] SoloPickup: unit=0x%x (%s) moves to %d", unit, unit->name, yx);
             unit->state = 1;
         }
     }
@@ -176,6 +184,8 @@ void __fastcall SoloPickupAll(T_UNIT* unit) {
     if (!unit || !unit->position || !unit->player) {
         Printf("[solo_pickup_all] null unit");
     }
+
+    Printf("[solo] SoloPickupAll: unit=0x%x (%s)", unit, unit->name);
 
     if (!IsSoloPlayer(unit)) {
         // Original logic for regular chars.
@@ -210,11 +220,14 @@ extern "C" __declspec(naked) void solo_pick_all_sacks() {
 }
 
 extern "C" void __fastcall PoisonStapleCell(A2Position* pos) {
+    Printf("[staple]: PoisonStapleCell: 0x%x -> %d", pos, pos ? pos->yx : 0);
     staple_cells[pos->yx] = -1;
     Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
 }
 
 T_SRV_LINKED_NODE<A2Bag>* FindSack(int16_t pos_yx) {
+    Printf("[solo] FindSack at %d", pos_yx);
+
     A2Server* server = a2server_instance;
 
     if (server == nullptr) {
@@ -230,20 +243,34 @@ T_SRV_LINKED_NODE<A2Bag>* FindSack(int16_t pos_yx) {
 
     auto* sacks = server_struct->sacks;
     if (sacks == nullptr || !sacks->size) {
+        Printf("[solo] FindSack: sacks=0x%x, size=%d", sacks, sacks ? sacks->size : -1);
         return nullptr;
     }
 
     auto sack_ptr = sacks->first_node;
     for (auto sack_ptr = sacks->first_node; sack_ptr != nullptr; sack_ptr = sack_ptr->next) {
         if (sack_ptr->value->position->yx == pos_yx) {
+            Printf("[solo] FindSack: found sack=0x%x, size=%d", sack_ptr->value, sack_ptr->value->items ? sack_ptr->value->items->size : -1);
             return sack_ptr;
         }
     }
+        
+    Printf("[solo] FindSack: found no sack at %d", pos_yx);
 
     return nullptr;
 }
 
 extern "C" void __fastcall StapleCellOnMobKill(T_UNIT* killed_unit) {
+    Printf(
+        "[solo] StapleCellOnMobKill: unit=0x%x (name=%s, id=%d), killed_by=0x%x (name=%s, id=%d)",
+        killed_unit,
+        killed_unit ? killed_unit->name : "?",
+        killed_unit ? killed_unit->id_ext.id : 0,
+        killed_unit ? killed_unit->last_hit_by : nullptr,
+        killed_unit && killed_unit->last_hit_by && killed_unit->last_hit_by->player ? killed_unit->last_hit_by->player->name : "?",
+        killed_unit && killed_unit->last_hit_by && killed_unit->last_hit_by->player ? killed_unit->last_hit_by->player->id_ext.id : -1
+    );
+
     if (!killed_unit || !killed_unit->last_hit_by || !killed_unit->last_hit_by->player || killed_unit->last_hit_by->player->id_ext.id < 16) {
         return;
     }
@@ -288,6 +315,8 @@ extern "C" __declspec(naked) void drop_item_under() {
 
 // Address: 00505ebe
 extern "C" __declspec(naked) void drop_item_to_another() {
+    Printf("[solo] drop_item_to_another");
+
     // ECX holds the address to the drop cell.
     __asm {
         call PoisonStapleCell
@@ -299,53 +328,48 @@ extern "C" __declspec(naked) void drop_item_to_another() {
     }
 }
 
-// Address: 00505a23
-// Prevent giga-players from dropping items on the map.
-extern "C" __declspec(naked) void choose_drop_item() {
-    uint8_t* packet;
-    __asm {
-        mov packet, ecx
-    }
+int __fastcall ChooseDropItem(uint8_t* packet, T_UNIT* unit) {
+    uint8_t from = packet[0xc], to = packet[0xd];
+    
+    Printf("[solo] ChooseDropItem: packet=0x%x, from=%d, to=%d; unit=0x%x (%s)", packet, from, to, unit, unit ? unit->name : "?");
 
-    // 1: equip, 2: inventory, 3: ground, 4: shop.
-    uint8_t from, to;
-    from = packet[0xc];
-    to = packet[0xd];
     if (to == 3 && (from == 1 || from == 2)) {
-        T_UNIT* unit = nullptr;
-        
-        __asm {
-            mov eax, DWORD PTR [ebp-0x54]
-            mov unit, eax
-        }
-
         if (IsGigaPlayer(unit)) {
             Printf("[giga-drop] %d->%d for player %s is not allowed", from, to, unit->name);
 
             // Refresh player's inventory so that client knows that nothing was dropped.
             RefreshPlayerInventory(unit);
 
-            // Prevent changes, immediately return from the function.
-            __asm {
-                mov edx, 0x0050864e
-                jmp edx
-            }
+            return 1;
         }
     }
 
-    // Restore original instruction and position.
-    __asm {
-        // Restore old ECX.
-        mov ecx, packet
+    return 0;
+}
 
+// Address: 00505a23
+// Prevent giga-players from dropping items on the map.
+extern "C" __declspec(naked) void choose_drop_item() {
+    __asm {
+        // ECX register contains the packet.
+        mov edx, eax // EAX register contains the unit.
+        call ChooseDropItem
+
+        cmp eax, 0 // Did `ChooseDropItem` return 0?
+        jz original // Yes -> proceed with original logic.
+
+        // Don't do anything, immediately return from the function.
+        mov edx, 0x0050864e
+        jmp edx
+
+    original:
         // Restore original instruction.
         xor edx, edx
-        mov dl, from
-        cmp edx, 2
+        mov dl, BYTE PTR [ecx+0xc]
 
         // Restore original position.
-        mov eax, 0x00505a2b
-        jmp eax
+        mov ebx, 0x00505a28
+        jmp ebx
     }
 }
 
@@ -357,6 +381,8 @@ extern "C" __declspec(naked) void drop_gold() {
     __asm {
         mov player, eax    // Player is in EAX
     }
+
+    Printf("[solo] drop_gold: player=0x%x (%s)", player, player ? player->name : "?");
 
     if (player && player->current_unit) {
         if (IsGigaPlayer(player->current_unit)) {
