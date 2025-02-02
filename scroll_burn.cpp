@@ -9,6 +9,8 @@ void a2insert(T_INVENTORY_LIST* list, int pos, T_INVENTORY_ITEM* item);
 void RefreshPlayerInventory(T_UNIT* unit);
 
 int __fastcall CheckItemWhenCasting(T_INVENTORY_ITEM* item, T_UNIT* unit, int position) {
+    Printf("[scroll_burn] CheckItemWhenCasting: item=0x%x (id=%d), unit=0x%x (%s), position=%d", item, item ? item->id : 0, unit, unit ? unit->name : "?", position);
+
     if (!item || !unit) { // Impossible, but let's check anyway.
         return 1;
     }
@@ -18,6 +20,13 @@ int __fastcall CheckItemWhenCasting(T_INVENTORY_ITEM* item, T_UNIT* unit, int po
     // the item back.
     // Note: vanilla logic is `item->effects.size == 0 || item->effects.first_node->value->effect_id != 0x29`.
     if (!IsScroll(item) || item->effects.size == 0 || item->effects.first_node->value->effect_id != 0x29 || !IsWarrior(unit)) {
+        Printf(
+            "[scroll_burn] prevent burning item: id=%d, effects=%d, first=%d, warrior=%d",
+            item->id,
+            item->effects.size,
+            item->effects.size && item->effects.first_node && item->effects.first_node->value ? item->effects.first_node->value->effect_id : 0,
+            IsWarrior(unit)
+        );
         if (unit->inventory) {
             Printf("[scroll_burn] item id=%d should be put into inventory of unit '%s' at position %d", item->id, unit->name, position);
             a2insert(unit->inventory, position, item);
