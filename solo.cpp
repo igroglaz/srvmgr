@@ -10,7 +10,8 @@
 // If several different players killed mobs in the same cell without picking up a bag, the staple is poisoned (set to -1).
 // If a player adds an item to a staple bag (by dying or moving an item), the staple is also poisoned.
 std::unordered_map<int16_t, int8_t> staple_cells;
-std::unordered_map<int8_t, std::string> player_names;
+// Names of characters that have stapled cells. If the name changes, that's due to relogin, so we remove all staples.
+std::unordered_map<int8_t, std::string> staple_char_names;
 
 // Characters with `@` as the first letter of the name are in the solo mode.
 bool IsPureSoloPlayer(T_UNIT* unit) {
@@ -107,25 +108,35 @@ void RefreshPlayerInventory(T_UNIT* unit) {
 
 // If the player's name has changed, it means that the player has logged out and another one logged in.
 // The player ID is reused, but we should clear all staples for the logged-out player.
-void CheckStaplesForReloggedCharacter(T_PLAYER* player) {
-    Printf("[solo] CheckStaplesForReloggedCharacter: player=0x%x (%s, id=%d)", player, player ? player->name : "?", player ? player->id_ext.id : -1);
+void CheckStaplesForReloggedCharacter(T_UNIT* unit) {
+    Printf("[solo] CheckStaplesForReloggedCharacter: unit=0x%x (%s, player_id=%d)", unit, unit ? unit->name : "?", unit && unit->player ? unit->player->id_ext.id : -1);
 
-    const int8_t player_id = static_cast<int8_t>(player->id_ext.id);
-    auto player_name_id = player_names.find(player_id);
-    if (player_name_id == player_names.end()) {
-        player_names[player_id] = player->name;
+    if (!unit || !unit->player) {
         return;
     }
 
-    if (player_name_id->second != player->name) {
-        player_names.erase(player_name_id);
-        player_names[player_id] = player->name;
+    const int8_t player_id = static_cast<int8_t>(unit->player->id_ext.id);
+    auto stapled_name_it = staple_char_names.find(player_id);
+    if (stapled_name_it == staple_char_names.end()) {
+        Printf("[solo] CheckStaplesForReloggedCharacter: saved character name %d -> %s", player_id, unit->name);
+        staple_char_names[player_id] = unit->name;
+        return;
+    }
+    
+    if (stapled_name_it->second != unit->name) {
+        staple_char_names.erase(stapled_name_it);
+        staple_char_names[player_id] = unit->name;
+
+        int removed = 0;
 
         for (auto it = staple_cells.begin(); it != staple_cells.end(); ++it) {
             if (it->second == player_id) {
+                ++removed;
                 staple_cells.erase(it);
             }
         }
+
+        Printf("[solo] CheckStaplesForReloggedCharacter: player %d relogged, removed %d staples", player_id, removed);
     }
 }
 
@@ -148,7 +159,7 @@ void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
 
     int16_t yx = (((y & 0xFF) << 8) | (x & 0xFF)) & 0xFFFF;
     
-    CheckStaplesForReloggedCharacter(unit->player);
+    CheckStaplesForReloggedCharacter(unit);
     
     auto staple_it = staple_cells.find(yx);
     Printf("[solo_pickup]: staple at %d: %s", yx, (staple_it != staple_cells.end() ? "exists" : "not found"));
@@ -193,7 +204,7 @@ void __fastcall SoloPickupAll(T_UNIT* unit) {
         return;
     }
 
-    CheckStaplesForReloggedCharacter(unit->player);
+    CheckStaplesForReloggedCharacter(unit);
 
     // If the player stands on top of a stapled cell, let them pick up only that bag.
     auto staple_it = staple_cells.find(unit->position->yx);
@@ -297,6 +308,8 @@ extern "C" void __fastcall StapleCellOnMobKill(T_UNIT* killed_unit) {
     staple_cells[position] = staple_with;
 
     Printf("[staple]: stapled cell %d with %d, there are %d staple cells now", position, staple_with, staple_cells.size());
+
+    CheckStaplesForReloggedCharacter(killed_unit->last_hit_by);
 }
 
 // Address: 00505e9c
