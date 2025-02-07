@@ -250,7 +250,7 @@ JMP solo_pickup_sack 005a9977
 JMP solo_pick_all_sacks 005a99dd
 JMP drop_item_under 00505e9c
 JMP drop_item_to_another 00505ebe
-JMP choose_drop_item 00505a23
+JMP choose_drop_item 0050597c
 JMP drop_gold 005060a4
 
 // Fix bug with burning the inventory items with scrolls when they run out.

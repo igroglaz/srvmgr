@@ -360,12 +360,15 @@ int __fastcall ChooseDropItem(uint8_t* packet, T_UNIT* unit) {
     return 0;
 }
 
-// Address: 00505a23
+// Address: 0050597c
 // Prevent giga-players from dropping items on the map.
 extern "C" __declspec(naked) void choose_drop_item() {
     __asm {
-        // ECX register contains the packet.
-        mov edx, eax // EAX register contains the unit.
+        // Original instruction can be replayed immediately.
+        mov DWORD PTR [ebp-0x60], 0
+
+        mov ecx, DWORD PTR [ebp-0x5c] // Packet.
+        mov edx, DWORD PTR [ebp-0x54] // Unit.
         call ChooseDropItem
 
         cmp eax, 0 // Did `ChooseDropItem` return 0?
@@ -376,13 +379,9 @@ extern "C" __declspec(naked) void choose_drop_item() {
         jmp edx
 
     original:
-        // Restore original instruction.
-        xor edx, edx
-        mov dl, BYTE PTR [ecx+0xc]
-
         // Restore original position.
-        mov ebx, 0x00505a28
-        jmp ebx
+        mov edx, 0x00505983
+        jmp edx
     }
 }
 
