@@ -30,3 +30,4 @@ CMakeFiles/*
 *.cmake
 *.code-workspace
 build
+.vscode/
