@@ -45,6 +45,7 @@ extern "C" void __fastcall RememberA2Server(A2Server* server) {
 
 void ClearStapleCells() {
     staple_cells.clear();
+    staple_char_names.clear();
 }
 
 // Address: 00504a99
