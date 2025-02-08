@@ -18,7 +18,7 @@ bool IsPureSoloPlayer(T_UNIT* unit) {
     return unit->name[0] == '@';
 }
 
-// Giga-players --- solo players with 0 deaths.
+// Giga-players --- solo players which get reverted to checkpoint if they die.
 bool IsGigaPlayer(T_UNIT* unit) {
     return unit->name[0] == '_';
 }
@@ -62,37 +62,19 @@ extern "C" __declspec(naked) void remember_a2server() {
     }
 }
 
-template <typename T>
-void RemoveLinkedListElement(T_SRV_LINKED_NODE<T>* item, T_LINKEDLIST<T>* list) {
-    if (item->next) {
-        item->next->prev = item->prev;
-    } else {
-        list->last_node = item->prev;
-    }
-    if (item->prev) {
-        item->prev->next = item->next;
-    } else {
-        list->first_node = item->next;
-    }
-    list->size--;
-}
+T_INVENTORY_ITEM* a2remove(T_INVENTORY_LIST* list, int pos, int n); // defined in partial_drop.cpp
 
-void PutItemIntoBag(T_INVENTORY_LIST* inventory, T_INVENTORY_ITEM* item) {
-    __asm {
-        mov ecx, item
-        push ecx
-        mov ecx, inventory
-        mov eax, 0x00551fa3
-        call eax
+bool GigaAllowedToPickup(T_INVENTORY_ITEM* item, ServerIDType server_id) {
+    if (item->id == 3667) { // Treasures can be picked up always.
+        return true;
     }
-}
 
-bool IsBookOfBless(T_INVENTORY_ITEM* item) {
-    return item
-        && item->id == 3589                                 // Astral book,
-        && item->effects.size != 0                          // with magic,
-        && item->effects.first_node->value->effect_id == 42 // casting spell
-        && item->effects.first_node->value->value1 == 20;   // Bless.
+    if (server_id >= QUEST_T1) {
+        // At quest maps we allow picking up quest items.
+        return item->price == 2 && item->effects.size;
+    }
+
+    return false;
 }
 
 // Refresh the inventory cached at the client.
@@ -141,6 +123,60 @@ void CheckStaplesForReloggedCharacter(T_UNIT* unit) {
     }
 }
 
+// Giga-players are allowed to pick up only certain items.
+// This function is a pre-pickup --- it removes all forbidden items from the bag the unit is standing on.
+bool GigaPickup(T_UNIT* unit) {
+    if (!IsGigaPlayer(unit)) {
+        return true;
+    }
+
+    if (EASY < Config::ServerID) {
+        bool allowed = false;
+
+        auto sack = FindSack(unit->position->yx);
+        if (!sack) {
+            return false;
+        }
+
+        auto items = sack->value->items;
+        for (auto item_it = items->first_node; item_it; item_it = item_it->next) {
+            if (GigaAllowedToPickup(item_it->value, Config::ServerID)) {
+                allowed = true;
+                break;
+            }
+        }
+
+        if (!allowed) {
+            // Don't do anything if we're not allowed to pick the bag up.
+            return false;
+        }
+
+        // Can pickup? Remove all forbidden items before the pickup.
+        Printf("[giga] character %s picks up bag at %d. It had %d items and %d money", unit->name, unit->position->yx, items->size, sack->value->money);
+        int position = 0;
+        auto item_it = items->first_node;
+        while (item_it) {
+            auto item = item_it->value;
+
+            if (!GigaAllowedToPickup(item, Config::ServerID)) {
+                Printf("[giga] deleting item in sack at position %d: id=%d, amount=%d, price=%d, effects total=%d", position, item->id, item->amount, item->price, item->effects.size);
+                auto next = item_it->next;
+                // Reinterpret cast is kinda sketchy, but `T_INVENTORY_LIST*` has the first value field `T_LINKED_LIST<T_INVENTORY_ITEM>`, so it should still work.
+                a2remove(reinterpret_cast<T_INVENTORY_LIST*>(items), position, item->amount);
+                item_it = next;
+            } else {
+                Printf("[giga] leaving item in sack at position %d: id=%d, amount=%d, price=%d, effects total=%d", position, item->id, item->amount, item->price, item->effects.size);
+                item_it = item_it->next;
+                ++position;
+            }
+        }
+
+        sack->value->money = 0;
+    }
+
+    return true;
+}
+
 // Sack pickup logic for a solo character.
 //
 // If the chosen sack is stapled with player ID, allow the player to pick it up.
@@ -159,7 +195,7 @@ void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
     }
 
     int16_t yx = (((y & 0xFF) << 8) | (x & 0xFF)) & 0xFFFF;
-    
+
     CheckStaplesForReloggedCharacter(unit);
     
     auto staple_it = staple_cells.find(yx);
@@ -169,6 +205,11 @@ void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
         // This is to prevent races with other players poisoning the cell.
         if (unit->position->yx == yx) {
             Printf("[solo] SoloPickup: unit=0x%x (%s) picks up bag at %d", unit, unit->name, yx);
+
+            if (!GigaPickup(unit)) {
+                return;
+            }
+
             unit->state = 2;
         } else {
             Printf("[solo] SoloPickup: unit=0x%x (%s) moves to %d", unit, unit->name, yx);
@@ -211,6 +252,11 @@ void __fastcall SoloPickupAll(T_UNIT* unit) {
     auto staple_it = staple_cells.find(unit->position->yx);
     if (staple_it != staple_cells.end() && staple_it->second == unit->player->id_ext.id) {
         Printf("[solo_pickup_all] player %s picks up the bag at %d", unit->name, unit->position->yx);
+
+        if (!GigaPickup(unit)) {
+            return;
+        }
+
         unit->state = 2;
         unit->eye2->command_to = unit->position->yx;
         // The "pickup bag" function also sets two other parameters to 0, and the
