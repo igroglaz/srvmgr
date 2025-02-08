@@ -55,7 +55,8 @@ struct T_INVENTORY_ITEM
   _DWORD dword0;
   _BYTE gap4[8];
   _WORD wordC;
-  _BYTE gapE[18];
+  _BYTE gapE[14];
+  uint32_t price;
   T_LINKEDLIST<A2Effect> effects;
   A2WorldEquip* world_equip;
   unsigned __int16 id;
@@ -206,7 +207,8 @@ struct A2Bag {
   int16_t type_id;
   A2Position* position;
   void* owner;
-  int8_t gap[40];
+  int8_t gap[36];
+  int32_t money;
   T_LINKEDLIST<T_INVENTORY_ITEM>* items;
 };
 
