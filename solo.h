@@ -13,5 +13,6 @@ T_SRV_LINKED_NODE<A2Bag>* FindSack(int16_t pos_yx);
 
 void ClearStapleCells();
 
-// Is current player in giga mode --- solo mode + 0 deaths.
+bool IsSoloPlayer(T_UNIT* unit);
 bool IsGigaPlayer(T_UNIT* unit);
+bool IsPureSoloPlayer(T_UNIT* unit);
