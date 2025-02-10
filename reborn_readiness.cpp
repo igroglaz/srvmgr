@@ -6,13 +6,15 @@
 
 #include "config_new.h"
 #include "lib/utils.hpp"
+#include "solo.h"
 #include "zxmgr.h"
 
 struct PlayerInfo {
     bool warrior;
     bool female;
+    bool solo;
     std::string clan;
-    bool has_treasure;
+    int has_treasures;
     int32_t money;
     uint16_t body;
     uint16_t reaction;
@@ -70,13 +72,12 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
         return zxmgr::SendMessage(p, "no current unit");
     }
 
-    bool has_treasure = false;
+    int has_treasures = 0;
     if (unit->inventory) {
         T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* ptr = unit->inventory->list.first_node;
         while (ptr != NULL) {
             if (ptr->value->id == 3667) {
-                has_treasure = true;
-                break;
+                has_treasures += ptr->value->amount;
             }
             ptr = ptr->next;
         }
@@ -92,8 +93,9 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     PlayerInfo player_info;
     player_info.warrior = IsWarrior(unit);
     player_info.female = IsFemale(unit);
+    player_info.solo = IsSoloPlayer(unit);
     player_info.clan = clan;
-    player_info.has_treasure = has_treasure;
+    player_info.has_treasures = has_treasures;
     player_info.money = player->money;
     player_info.body = unit->body;
     player_info.reaction = unit->reaction;
@@ -321,11 +323,20 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
     }
 
-    if (!player_info.has_treasure) {
-        ready_for_reborn = false;
-        info_lines.emplace_back("- Need the treasure from a boss or a minion");
+    if (player_info.solo && server_id <= MEDIUM) {
+        if (player_info.has_treasures < 2) {
+            ready_for_reborn = false;
+            info_lines.emplace_back(Format("- Need two treasures from a boss or a minion, you have %d", player_info.has_treasures));
+        } else {
+            info_lines.emplace_back(Format("+ You have %d treasures", player_info.has_treasures));
+        }
     } else {
-        info_lines.emplace_back("+ You have the treasure");
+        if (!player_info.has_treasures) {
+            ready_for_reborn = false;
+            info_lines.emplace_back("- Need the treasure from a boss or a minion");
+        } else {
+            info_lines.emplace_back("+ You have the treasure");
+        }
     }
 
     if (player_info.money < need_money) {
