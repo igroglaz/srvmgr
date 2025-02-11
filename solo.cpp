@@ -352,11 +352,11 @@ extern "C" void __fastcall StapleCellOnMobKill(T_UNIT* killed_unit) {
         }
     }
 
+    CheckStaplesForReloggedCharacter(killed_unit->last_hit_by);
+
     staple_cells[position] = staple_with;
 
     Printf("[staple]: stapled cell %d with %d, there are %d staple cells now", position, staple_with, staple_cells.size());
-
-    CheckStaplesForReloggedCharacter(killed_unit->last_hit_by);
 }
 
 // Address: 00505e9c
