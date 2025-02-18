@@ -9,7 +9,7 @@
 // When a monster leaves a new bag, this cell is stapled with the ID of last-hit player.
 // If several different players killed mobs in the same cell without picking up a bag, the staple is poisoned (set to -1).
 // If a player adds an item to a staple bag (by dying or moving an item), the staple is also poisoned.
-std::unordered_map<int16_t, int8_t> staple_cells;
+std::unordered_map<uint16_t, int8_t> staple_cells;
 // Names of characters that have stapled cells. If the name changes, that's due to relogin, so we remove all staples.
 std::unordered_map<int8_t, std::string> staple_char_names;
 
@@ -194,12 +194,12 @@ void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
         return;
     }
 
-    int16_t yx = (((y & 0xFF) << 8) | (x & 0xFF)) & 0xFFFF;
+    uint16_t yx = (((y & 0xFF) << 8) | (x & 0xFF)) & 0xFFFF;
 
     CheckStaplesForReloggedCharacter(unit);
     
     auto staple_it = staple_cells.find(yx);
-    Printf("[solo_pickup]: staple at %d: %s", yx, (staple_it != staple_cells.end() ? "exists" : "not found"));
+    Printf("[solo_pickup]: staple at %d: %d", yx, (staple_it != staple_cells.end() ? staple_it->second : -1));
     if (staple_it != staple_cells.end() && staple_it->second == unit->player->id_ext.id) {
         // If the player is currently staying on the sack, let them pick it up. Otherwise let them only go to the sack.
         // This is to prevent races with other players poisoning the cell.
@@ -283,7 +283,7 @@ extern "C" void __fastcall PoisonStapleCell(A2Position* pos) {
     Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
 }
 
-T_SRV_LINKED_NODE<A2Bag>* FindSack(int16_t pos_yx) {
+T_SRV_LINKED_NODE<A2Bag>* FindSack(uint16_t pos_yx) {
     Printf("[solo] FindSack at %d", pos_yx);
 
     A2Server* server = a2server_instance;
