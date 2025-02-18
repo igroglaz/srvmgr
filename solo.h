@@ -9,7 +9,7 @@ extern "C" void __fastcall PoisonStapleCell(A2Position* pos);
 
 extern "C" void __fastcall StapleCellOnMobKill(T_UNIT* killed_unit);
 
-T_SRV_LINKED_NODE<A2Bag>* FindSack(int16_t pos_yx);
+T_SRV_LINKED_NODE<A2Bag>* FindSack(uint16_t pos_yx);
 
 void ClearStapleCells();
 
