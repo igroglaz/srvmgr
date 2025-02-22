@@ -391,8 +391,6 @@ extern "C" __declspec(naked) void drop_item_to_another() {
 int __fastcall ChooseDropItem(uint8_t* packet, T_UNIT* unit) {
     uint8_t from = packet[0xc], to = packet[0xd];
     
-    Printf("[solo] ChooseDropItem: packet=0x%x, from=%d, to=%d; unit=0x%x (%s)", packet, from, to, unit, unit ? unit->name : "?");
-
     if (to == 3 && (from == 1 || from == 2)) {
         if (IsGigaPlayer(unit)) {
             Printf("[giga-drop] %d->%d for player %s is not allowed", from, to, unit->name);
