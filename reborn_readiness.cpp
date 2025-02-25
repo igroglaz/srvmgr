@@ -2,10 +2,12 @@
 
 #include <cstdint>
 #include <string>
+#include <map>
 #include <vector>
 
 #include "config_new.h"
 #include "lib/utils.hpp"
+#include "quests.h"
 #include "solo.h"
 #include "zxmgr.h"
 
@@ -21,13 +23,100 @@ struct PlayerInfo {
     uint16_t mind;
     uint16_t spirit;
     int32_t experience;
-    uint32_t monster_kills;
+    uint8_t* monster_kills_by_server_id;
     uint32_t deaths;
     int skills[5];
 };
 
 const int32_t k = 1000;
 const int32_t m = k * k;
+
+// Keeping this list up-to-date would be annoying. We should find a way to request this directly from the hat.
+std::map<ServerIDType, std::map<int, uint8_t>> girl_needs_monster_kills{
+    {EASY, {
+        ////////////////////// 1
+        {692, 1},  // Necro_Female1
+        {616, 1},  // Ogre
+        {620, 1},  // Troll
+        ////////////////////// 14
+        {657, 14}, // F_Zombie.1
+        {664, 14}, // F_Skeleton.1
+        {668, 14}, // A_Skeleton.1
+        {629, 14}, // Ghost.2
+        {715, 14}, // Dino
+        {632, 14}, // Bee
+        {707, 14}, // Spider
+    }},
+    {KIDS, {
+        ////////////////////// 1
+        {617, 1},  // Ogre.2
+        {621, 1},  // Troll.2
+        {2374, 1}, // Demon
+        {711, 1},  // Succubus
+        ////////////////////// 14
+        {630, 14}, // Ghost.3
+        {609, 14}, // Orc_Sword.2
+        {633, 14}, // Bee.2
+        {707, 14}, // Spider
+    }},
+    {NIVAL, {
+        ////////////////////// 1
+        {696, 1},  // Necro_Leader2
+        {695, 1},  // Necro_Female2
+        {694, 1},  // Necro_Male2
+        {712, 1},  // Succubus.2
+        ////////////////////// 14
+        {669, 14}, // A_Skeleton.2
+        {661, 14}, // A_Zombie.2
+        {617, 14}, // Ogre.2
+        {621, 14}, // Troll.2
+        {625, 14}, // Bat_Sonic.2
+        {708, 14}, // Spider.2
+    }},
+    {MEDIUM, {
+        ////////////////////// 1
+        {701, 1},  // Necro_Female4
+        {671, 1},  // A_Skeleton.4
+        {667, 1},  // F_Skeleton.4
+        ////////////////////// 14
+        {666, 14}, // F_Skeleton.3
+        {659, 14}, // F_Zombie.3
+        {618, 14}, // Ogre.3
+        {622, 14}, // Troll.3
+        {610, 14}, // Orc_Sword.3
+        {614, 14}, // Orc_Bow.3
+        {631, 14}, // Ghost.4
+        {603, 14}, // Goblin_Pike.4
+        {717, 14}, // Dino.3
+        {626, 14}, // Bat_Sonic.3
+        {634, 14}, // Bee.3
+        {709, 14}, // Spider.3
+    }},
+    {HARD, {
+        {2132, 14}, // 2F_KnightLeader4
+        {2130, 14}, // 2H_Knight4
+        {671, 14}, // A_Skeleton.4
+        {663, 14}, // A_Zombie.4
+        {667, 14}, // F_Skeleton.4
+        {660, 14}, // F_Zombie.4
+        {718, 14}, // Dino.4
+        {673, 14}, // M_Skeleton.4
+        {701, 14}, // Necro_Female4
+        {702, 14}, // Necro_Leader4
+        {700, 14}, // Necro_Male4
+        {619, 14}, // Ogre.4
+        {623, 14}, // Troll.4
+        {656, 14}, // Orc_Shaman.4
+        {611, 14}, // Orc_Sword.4
+        {615, 14}, // Orc_Bow.4
+        {627, 14}, // Bat_Sonic.4
+        {635, 14}, // Bee.4
+        {710, 14}, // Spider.4
+        {714, 14}, // Succubus.4
+        {812, 14}, // Turtle.5
+        {808, 14}, // Ghost.5
+    }},
+};
 
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p);
 
@@ -102,7 +191,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     player_info.mind = unit->mind;
     player_info.spirit = unit->spirit;
     player_info.experience = unit->exp;
-    player_info.monster_kills = player->monster_kills;
+    player_info.monster_kills_by_server_id = player->monster_kills_by_server_id;
     player_info.deaths = player->deaths;
 
     if (unit->clazz != A2_HUMAN_CLASS) {
@@ -353,11 +442,29 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, player_info.experience));
     }
 
-    if (player_info.monster_kills < need_monster_kills) {
-        ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d monster kills, you have %d", need_monster_kills, player_info.monster_kills));
-    } else if (need_monster_kills > 0) {
-        info_lines.emplace_back(Format("+ You have enough monster kills: need %d, you have %d", need_monster_kills, player_info.monster_kills));
+    if (player_info.female) {
+        InitializeMobNames();
+
+        auto need_kills = girl_needs_monster_kills[server_id];
+        int types_left = 0;
+        if (need_kills.size()) {
+            for (auto it = need_kills.begin(); it != need_kills.end(); ++it) {
+                auto got = player_info.monster_kills_by_server_id[it->first];
+                if (got < it->second) {
+                    if (++types_left > 5) {
+                        info_lines.emplace_back("(other mob kills omitted)");
+                        break;
+                    }
+
+                    ready_for_reborn = false;
+                    info_lines.emplace_back(Format("- Need %d kills of %s, you have %d", it->second, mob_names_by_server_id[it->first].c_str(), got));
+                }
+            }
+
+            if (types_left == 0) {
+                info_lines.emplace_back("+ You have all the mob kills");
+            }
+        }
     }
 
     const char* category;

@@ -105,7 +105,9 @@ struct  T_PLAYER
     int32_t money;
     _BYTE gap5[2];
     _BYTE byte42;
-    _BYTE gap6[2565];
+    _BYTE byte43;
+    uint8_t monster_kills_by_server_id[2560];
+    uint8_t gapA44[4];
     uint32_t monster_kills;
     uint32_t player_kills;
     _BYTE gap7[4];

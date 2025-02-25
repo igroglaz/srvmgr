@@ -5,6 +5,8 @@
 #include "quests.h"
 #include "config_new.h"
 
+std::unordered_map<int, std::string> mob_names_by_server_id;
+
 // A couple data types used in the inn logic.
 namespace {
 
@@ -195,6 +197,8 @@ void InitializeMobNames() {
 
 		(*new_mob_names)[mob_type] = NormalizeMobName(m.name);
 		(*new_mob_names_raw)[mob_type] = m.name;
+
+        mob_names_by_server_id[d.serverId] = m.name;
 	}
 	
 	if (mob_names.get() != nullptr) {

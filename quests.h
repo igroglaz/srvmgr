@@ -23,6 +23,7 @@ void InitializePlayerSettings();
 // This format is used by the "kill N monsters" quests.
 extern std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
 extern std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
+extern std::unordered_map<int, std::string> mob_names_by_server_id;
 
 // Normalizes mob name by lowercasing the string and replacing all dashes with underscores.
 std::string NormalizeMobName(const char* name);
