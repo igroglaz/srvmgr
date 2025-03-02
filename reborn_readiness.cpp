@@ -67,7 +67,7 @@ std::map<ServerIDType, std::map<int, uint8_t>> girl_needs_monster_kills{
         {712, 1},  // Succubus.2
         ////////////////////// 14
         {669, 14}, // A_Skeleton.2
-        {661, 14}, // A_Zombie.2
+        {662, 14}, // A_Zombie.3
         {617, 14}, // Ogre.2
         {621, 14}, // Troll.2
         {625, 14}, // Bat_Sonic.2
