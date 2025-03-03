@@ -1,8 +1,12 @@
 srvmgr
 ======
 
-Edit data file (spells, items etc) there:
+This is server for Rage of Mages 2 - https://rom2.ru
 
+
+======
+
+Edit data file (spells, items etc) there:
 \postbuild\world\data.xml
 
 ## How to build in VS Code
