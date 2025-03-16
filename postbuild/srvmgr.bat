@@ -25,7 +25,7 @@ for /f %%A in (srvlist.txt) do call p patches\%%A a2server.exe
 call log adding srvmgr...
 rem add_dll a2server.exe srvmgr.dll server.mp >nul
 
-DLLInject server.dis
+DLLInject server.dis || DLLInject2 server.dis
 
 if NOT %ERRORLEVEL% == 0 (
 	call log DLLInject has failed with error code %ERRORLEVEL%
