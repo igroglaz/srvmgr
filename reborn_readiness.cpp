@@ -374,7 +374,7 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         case KIDS: need_reaction = 20; break;
         case NIVAL: need_reaction = 30; break;
         case MEDIUM: need_reaction = 40; break;
-        case HARD: need_reaction = 50; break;
+        case HARD: break; // Handled separately.
         default:
             if (player_info.female) {
                 return CheckAscendReadiness(player_info, p);
@@ -405,11 +405,21 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
     } else if (need_mind > 0) {
         info_lines.emplace_back(Format("+ You have %d mind (also you have: %d body, %d reaction, %d spirit)", player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
     }
-    if (player_info.reaction < need_reaction) {
-        ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d reaction, you have %d (also you have: %d body, %d mind, %d spirit)", need_reaction, player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
-    } else if (need_reaction > 0) {
-        info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+
+    if (server_id == HARD) {
+        if (player_info.reaction < 50 || player_info.mind < 50 || player_info.spirit < 50) {
+            ready_for_reborn = false;
+            info_lines.emplace_back(Format("- Need 50 reaction, 50 mind and 50 spirit, you have: %d reaction, %d mind, %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
+        } else if (need_reaction > 0) {
+            info_lines.emplace_back(Format("+ You have %d reaction, %d mind and %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
+        }
+    } else {
+        if (player_info.reaction < need_reaction) {
+            ready_for_reborn = false;
+            info_lines.emplace_back(Format("- Need %d reaction, you have %d (also you have: %d body, %d mind, %d spirit)", need_reaction, player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+        } else if (need_reaction > 0) {
+            info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+        }
     }
 
     if (player_info.solo && server_id <= MEDIUM) {
