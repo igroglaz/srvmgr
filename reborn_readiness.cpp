@@ -410,7 +410,7 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         if (player_info.reaction < 50 || player_info.mind < 50 || player_info.spirit < 50) {
             ready_for_reborn = false;
             info_lines.emplace_back(Format("- Need 50 reaction, 50 mind and 50 spirit, you have: %d reaction, %d mind, %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
-        } else if (need_reaction > 0) {
+        } else {
             info_lines.emplace_back(Format("+ You have %d reaction, %d mind and %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
         }
     } else {
