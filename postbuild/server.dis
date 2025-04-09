@@ -259,3 +259,15 @@ JMP fix_scroll_burn 005056e1
 // stuff removed from this file by ZZYZX (?). Putting it to the end to make changes list compatible:
 //JMP area_cast 5054FF /// log area_casts - ���������������
 //CALL msgbox_am 54DBB4 /// msgbox "amount > 1000"
+
+CALL autobuff 005a7bbd 2 // heal self
+CALL autobuff 005a7c11 2 // shield
+CALL autobuff 005a7c77 2 // heal other
+CALL autobuff 005a7e57 2 // bless
+CALL autobuff 005a7f0f 2 // haste
+CALL autobuff 005a806b 2 // air protection
+CALL autobuff 005a8113 2 // earth protection
+CALL autobuff 005a81bb 2 // fire protection
+CALL autobuff 005a8261 2 // water protection
+CALL autobuff 005a8309 2 // invis other
+CALL autobuff 005a83fe 2 // invis self
