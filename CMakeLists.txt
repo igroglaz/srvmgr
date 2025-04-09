@@ -11,6 +11,7 @@ add_library(srvmgr SHARED srvmgr.def
     a2server_utils.cpp
     antiinvis.cpp
     asm_unit_info.cpp
+    autobuff.cpp
     charcheck.cpp
     cheat_codes.cpp
     cheat_codes_new.cpp

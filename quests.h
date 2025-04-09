@@ -8,9 +8,10 @@
 
 // Settings set by the player.
 struct PlayerSettings {
-	std::string quest_filter;
-	int quest_mob_count;
-	std::string player_name; // This is used to reset settings on relogin.
+    std::string quest_filter;
+    int quest_mob_count;
+    std::string player_name; // This is used to reset settings on relogin.
+    uint32_t autobuff_mask; // If bit N is 1, the spell N will not be cast during autobuff casts.
 };
 
 // Player settings. Player ID -> settings.

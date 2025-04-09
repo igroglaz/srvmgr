@@ -252,6 +252,56 @@ void ProcessCheat_QuestState(byte* player, const std::string& args) {
 	}
 }
 
+std::unordered_map<std::string, uint32_t> autobuff_spells{
+    {"heal", 0x18},
+    {"haste", 0x15},
+    {"bless", 0x14},
+    {"shield", 0x1B},
+    {"invisibility", 0x0C},
+    {"fire protection", 0x04},
+    {"water protection", 0x08},
+    {"air protection", 0x0D},
+    {"earth protection", 0x13},
+};
+
+void ProcessCheat_Autobuff(byte* player, const std::string& args) {
+    T_PLAYER* p = (T_PLAYER*)player;
+    short player_id = p->id_ext.id;
+
+    CheckPlayerSettings(p);
+    player_settings[player_id]->player_name = p->name;
+
+    std::string command = ToLower(Trim(args));
+
+    if (command.empty()) {
+        player_settings[player_id]->autobuff_mask = 0;
+        zxmgr::SendMessage(player, "Autobuff mask reset, all spells are allowed");
+        return;
+    }
+
+    // The only disambiguation needed is for `h`. Let's do `heal`, maybe
+    // somebody will find something fun with turning off healing.
+    if (command == "h") {
+        command = "heal";
+    }
+
+    for (auto it = autobuff_spells.begin(); it != autobuff_spells.end(); ++it) {
+        if (it->first.rfind(command, 0) == 0) { // Spell starts with the command
+            auto mask = 1 << it->second;
+            player_settings[player_id]->autobuff_mask ^= mask;
+            if ((player_settings[player_id]->autobuff_mask) & mask) {
+                zxmgr::SendMessage(player, "Filtered out *%s*, you will not cast it during autobuff", it->first.c_str());
+            } else {
+                zxmgr::SendMessage(player, "You will cast *%s* during autobuff normally", it->first.c_str());
+            }
+            
+            return;
+        }
+    }
+
+    zxmgr::SendMessage(player, "'%s' does not match any spells. Autobuff mask left unchanged.", command.c_str());
+}
+
 void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights, bool console)
 {
     if (!ccommand) return;
@@ -316,6 +366,10 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 
     if (rawcmd == "#reborn") {
         return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player);
+    }
+
+    if (rawcmd == "#autobuff" || rawcmd == "#ab") {
+        ProcessCheat_Autobuff(player, args);
     }
 
     if (rights & GMF_CMD_CHAT)

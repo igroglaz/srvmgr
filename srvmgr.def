@@ -184,3 +184,4 @@ drop_item_to_another                    @324
 choose_drop_item                        @325
 drop_gold                               @326
 fix_scroll_burn                         @327
+autobuff                                @328
