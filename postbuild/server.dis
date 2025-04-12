@@ -271,3 +271,5 @@ CALL autobuff 005a81bb 2 // fire protection
 CALL autobuff 005a8261 2 // water protection
 CALL autobuff 005a8309 2 // invis other
 CALL autobuff 005a83fe 2 // invis self
+
+JMP summon 0053ac32
