@@ -124,6 +124,12 @@ struct A2UnitEye2 {
   uint16_t command_to;
 };
 
+struct A2UnitEye {
+  uint8_t gap0[10];
+  uint8_t rotation_speed;
+  uint8_t gapB[169];
+};
+
 struct __declspec(align(4)) T_UNIT
 {
   void *clazz;
@@ -140,7 +146,7 @@ struct __declspec(align(4)) T_UNIT
   _DWORD dword30;
   CPlex *pcplex34;
   _BYTE gap2[4];
-  _DWORD dword3C;
+  void* monster_info; // This is `MonsterInfo`, defined in `inn.cpp`. TODO: gather all types in one file.
   T_UNIT* last_hit_by;
   _BYTE gap4[6];
   _BYTE byte4A;
@@ -175,19 +181,30 @@ struct __declspec(align(4)) T_UNIT
   _WORD mp;
   _WORD mp_max;
   _WORD mp_regen;
-  _BYTE gap55[22];
-  _BYTE byteB6;
-  _BYTE gap66[97];
+  _BYTE gapA0[5];
+  uint8_t scan_range;
+  uint16_t attack;
+  _BYTE gapA6[12];
+  uint8_t hand_damage_min;
+  uint8_t hand_damage_spread;
+  uint8_t physical_damage_type;
+  _BYTE gapBA[7];
+  uint16_t defence;
+  uint16_t absorption;
+  uint16_t protection_magic[6];
+  uint8_t protection_physical[6];
+  _BYTE gap66[68];
   uint16_t skills[5];
   _BYTE gap12A[14];
   _DWORD exp;
   _BYTE gap77[12];
   void* spellbook;
   _BYTE gap8[8];
-  _WORD word14C;
+  uint16_t server_id;
   _BYTE gap9[82];
-  _DWORD dword1A0;
-  _BYTE gap1A4[32];
+  uint32_t summoned;
+  _BYTE gap1A4[28];
+  A2UnitEye* eye;
   A2UnitEye2* eye2;
   _BYTE gap1c8[64];
 };
