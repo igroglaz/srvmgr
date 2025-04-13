@@ -120,8 +120,12 @@ struct  T_PLAYER
 };
 
 struct A2UnitEye2 {
-  uint8_t gap[10];
+  uint8_t gap0[10];
   uint16_t command_to;
+  uint8_t gapB[56];
+  uint32_t wimpy;
+  uint8_t gap48[41];
+  uint8_t see_invisible;
 };
 
 struct A2UnitEye {

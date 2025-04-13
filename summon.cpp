@@ -176,6 +176,32 @@ std::unordered_map<ServerIDType, UnitChangesBlock> unit_changes{
     }},
 };
 
+struct TypeChanges {
+    uint8_t body, reaction, mind, spirit;
+    uint16_t hp_regen;
+    uint32_t wimpy;
+    uint8_t see_invisible;
+};
+
+TypeChanges squirrel_type_changes{
+    10, 1, 1, 6, // body, reaction, mind, spirit
+    50, // hp_regen,
+    4, // wimpy
+    1, // see_invisible
+};
+TypeChanges snake_type_changes{
+    15, 1, 1, 3, // body, reaction, mind, spirit
+    60, // hp_regen,
+    0, // wimpy
+    1, // see_invisible
+};
+TypeChanges turtle_type_changes{
+    27, 1, 1, 10, // body, reaction, mind, spirit
+    150, // hp_regen,
+    0, // wimpy
+    0, // see_invisible
+};
+
 void __stdcall FixSummonedUnit(T_UNIT* unit, int level) {
     unit->summoned = 1; // Original instruction.
 
@@ -196,7 +222,7 @@ void __stdcall FixSummonedUnit(T_UNIT* unit, int level) {
     }
 
     const auto& changes_block = unit_changes[Config::ServerID];
-    auto& changes = unit->type_id == 74 ? changes_block.squirrel : unit->type_id == 75 ? changes_block.snake : changes_block.turtle;
+    const auto& changes = unit->type_id == 74 ? changes_block.squirrel : unit->type_id == 75 ? changes_block.snake : changes_block.turtle;
 
     unit->hp_max = changes.hp_max[level-1];
     unit->hp = changes.hp_max[level-1];
@@ -207,12 +233,26 @@ void __stdcall FixSummonedUnit(T_UNIT* unit, int level) {
     unit->absorption = changes.absorption[level-1];
     for (int i = 1; i < 6; ++i) {
         unit->protection_magic[i] = changes.protection_magic[level-1];
+        unit->protection_physical[i] = 0;
     }
     unit->speed = changes.speed[level-1];
     if (unit->eye) {
         unit->eye->rotation_speed = changes.rotation[level-1];
     }
     unit->scan_range = changes.scan_range;
+
+    const auto& type_changes = unit->type_id == 74 ? squirrel_type_changes : unit->type_id == 75 ? snake_type_changes : turtle_type_changes;
+
+    unit->body = type_changes.body;
+    unit->reaction = type_changes.reaction;
+    unit->mind = type_changes.mind;
+    unit->spirit = type_changes.spirit;
+    unit->hp_regen = type_changes.hp_regen;
+
+    if (unit->eye2) {
+        unit->eye2->wimpy = type_changes.wimpy;
+        unit->eye2->see_invisible = type_changes.see_invisible;
+    }
 }
 
 // Address: 0053ac32
