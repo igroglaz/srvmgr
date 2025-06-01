@@ -200,6 +200,10 @@ void InitializeMobNames() {
 
         mob_names_by_server_id[d.serverId] = m.name;
 	}
+
+    // Human mobs don't have `MonsterInfoData` attached to them. Hardcode these two for `#reborn`.
+    mob_names_by_server_id[2130] = "2H_Knight4";
+    mob_names_by_server_id[2132] = "2F_KnightLeader4";
 	
 	if (mob_names.get() != nullptr) {
 		return;
