@@ -1159,86 +1159,82 @@ ex:
 
 //#define _DAMAGE_DEBUG
 
-uint32_t GetDamageBonus(byte* unit)
-{
-    if (!unit) return 0;
+uint32_t GetDamageBonus(T_UNIT* unit) {
+    if (!unit) {
+        return 0;
+    }
 
     // check if this is human
-    void* vtable_id = (void*)*(uint32_t*)unit;
-    if (vtable_id != A2_HUMAN_CLASS)
+    if (unit->clazz != A2_HUMAN_CLASS) {
         return 0;
+    }
 
     uint32_t retval = 0;
 
-    byte* pack = *(byte**)(unit + 0x7C);
-    if (!pack) return 0;
+    if (!unit->inventory) {
+        return 0;
+    }
 
-    // on body
-    for (uint32_t i = 1; i <= 12; i++)
-    {
-        byte* item = NULL;
+    A2Human* human = (A2Human*)unit;
 
-        if (i == 1)
-            item = *(byte**)(unit + 0x74);
-        else if (i == 2)
-            item = *(byte**)(unit + 0x78);
-        else
-            item = *(byte**)(unit + 4 * i + 0x208);
+    for (uint32_t i = 1; i <= 12; i++) {
+        T_INVENTORY_ITEM* item = NULL;
 
-        if (!item) continue;
+        if (i == 1) {
+            item = unit->weapon;
+        } else if (i == 2) {
+            item = unit->shield;
+        } else {
+            item = human->dress[i];
+        }
+
+        if (!item) {
+            continue;
+        }
 
         // iterate item stats
-        byte* parms = *(byte**)(item + 0x28);
+        T_SRV_LINKED_NODE<A2Effect>* effect = item->effects.first_node;
 
-        while (parms)
-        {
-            byte* parm = *(byte**)(parms + 8);
-
-            if (parm)
-            {
-                uint32_t prm1 = *(uint8_t*)(parm + 0x3C);
-                uint32_t val1 = *(uint16_t*)(parm + 0x40);
-                uint32_t val2 = *(uint16_t*)(parm + 0x42);
-
-                if (prm1 == 26)
-                    retval += val1;
+        while (effect) {
+            if (effect->value) {
+                if (effect->value->effect_id == 26) {
+                    retval += effect->value->value1;
+                }
             }
-            parms = *(byte**)(parms + 4);
+            effect = effect->next;
         }
     }
 
     return retval;
 }
 
-
-// unit1 - attacker, unit2 - victim
-int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
-{
-    if (damage < 0) return 0;
-
-    if (unit2 && (*(uint8_t*)(unit2 + 0x4C) & 8))
+int32_t OnDamage(T_UNIT* attacker, T_UNIT* victim, int16_t damage) {
+    if (damage < 0) {
         return 0;
+    }
+
+    if (victim && (victim->unit_attrs & 8)) {
+        return 0;
+    }
 
     // calculate damage bonus
-    uint32_t damage_bonus = GetDamageBonus(unit1);
-    if (damage_bonus && damage > 0)
+    uint32_t damage_bonus = GetDamageBonus(attacker);
+    if (damage_bonus && damage > 0) {
         damage = static_cast<int16_t>(double(damage) * (double(damage_bonus) / 100 + 1.0));
+    }
 
     int32_t retval = damage;
 
-    byte* player1 = NULL;
-    byte* player2 = NULL;
-    if (unit1) player1 = *(byte**)(unit1 + 0x14);
-    if (unit2) player2 = *(byte**)(unit2 + 0x14);
+    T_PLAYER* attacker_player = attacker ? attacker->player : nullptr;
+    T_PLAYER* victim_player = victim ? victim->player : nullptr;
     
     // Damage modificators in PvP
-    if (player1 && player2 &&
-        !*(uint32_t*)(player1+0x2C) &&
-        !*(uint32_t*)(player2+0x2C) &&
-        player1 != player2) // Ensure it's not self-inflicted damage
+    if (attacker_player && victim_player &&
+        !attacker_player->unitType &&
+        !victim_player->unitType &&
+        attacker_player != victim_player) // Ensure it's not self-inflicted damage
     {
-        if (*(uint8_t*)(unit1+0x4C) & 4) // if mage or witch
-        {
+        if (attacker->unit_attrs & 4) { // if mage or witch
             int old_dmg = damage;
             // This method is being called twice, so it needs to reduce the factor like shown below.
             // If the method would be called once, it would be unnecessary
@@ -1251,15 +1247,16 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
 
         // limit maximum damage dealt to player
         int16_t pvp_dmg_lim = Config::max_pvp_dmg;
-        if (damage > pvp_dmg_lim)
+        if (damage > pvp_dmg_lim) {
             retval = pvp_dmg_lim;
+        }
     }
 
 #ifdef _DAMAGE_DEBUG
     const char* p1name = "(null)";
     const char* p2name = "(null)";
-    if (player1) p1name = *(const char**)(player1 + 0x18);
-    if (player2) p2name = *(const char**)(player2 + 0x18);
+    if (attacker_player) p1name = attacker_player->name;
+    if (victim_player) p2name = victim_player->name;
     zxmgr::SendMessage(NULL, "%s -> %d -> %s", p1name, -damage, p2name);
 #endif
 
@@ -1267,65 +1264,60 @@ int32_t OnDamage(byte* unit1, byte* unit2, int16_t damage)
     uint32_t rights2 = 0;
 
     // PvM
-    if(Config::ServerFlags & SVF_PVM)
-    {
-        if((player1 && !*(uint32_t*)(player1 + 0x2C)) &&
-           (player2 && !*(uint32_t*)(player2 + 0x2C)))
+    if (Config::ServerFlags & SVF_PVM) {
+        if((attacker_player && !attacker_player->unitType &&
+           (victim_player && !victim_player->unitType)))
                 retval = 0;
     }
 
     // Advanced PvM
-    if (Config::ServerFlags & SVF_ADVPVM)
-    {
-       /*if((player1 && !*(uint32_t*)(player1 + 0x2C)) &&
-           (player2 && !*(uint32_t*)(player2 + 0x2C)) &&
-           (vd2_CheckStrong(unit1) !=
-            vd2_CheckStrong(unit2))) retval = 0;*/
-
-        if (VerifyDamage2(unit1, unit2))
+    if (Config::ServerFlags & SVF_ADVPVM) {
+        if (VerifyDamage2((byte*)attacker, (byte*)victim)) {
             retval = 0;
+        }
     }
 
-    if (player1 && CHECK_FLAG(*(uint32_t*)(player1 + 0x14), GMF_ANY))
-    {
+    if (attacker_player && CHECK_FLAG(attacker_player->flags, GMF_ANY)) {
         retval = damage;
-        rights1 = *(uint32_t*)(player1 + 0x14) & 0xFFFFFF;
+        rights1 = attacker_player->flags & 0xFFFFFF;
 
-        if (*(uint32_t*)(player1 + 0x2C))
+        if (attacker_player->unitType)
             rights1 = 0;
     }
 
-    if (player2 && CHECK_FLAG(*(uint32_t*)(player2 + 0x14), GMF_ANY))
-    {
-        rights2 = *(uint32_t*)(player2 + 0x14) & 0xFFFFFF;
+    if (victim_player && CHECK_FLAG(victim_player->flags, GMF_ANY)) {
+        rights2 = victim_player->flags & 0xFFFFFF;
 
-        if (*(uint32_t*)(player2 + 0x2C))
+        if (victim_player->unitType)
             rights1 = 0;
     }
 
-    if (rights1 & GMF_MAXDAMAGE)
+    if (rights1 & GMF_MAXDAMAGE) {
         retval = 32767;
+    }
 
     // God mode
     if (((rights2 & GMF_GODMODE) &&
          (!(rights1 & GMF_GODMODE_ADMIN) || (rights2 & GMF_GODMODE_ADMIN))) &&
-         (player2 != player1))
+         (victim_player != attacker_player)) {
             retval = 0;
+    }
 
     if (((rights2 & GMF_GODMODE) ||
          (rights2 & GMF_GODMODE_ADMIN)) &&
-         (player1 == player2) &&
-         (unit2 == *(byte**)(player2 + 0x38)))
+         (attacker_player == victim_player) &&
+         (victim == victim_player->current_unit)) {
             retval = 0;
+    }
 
     // todo somewhere around: temporary god mode
     Player* pi = NULL;
-    if (player2 && (pi = PI_Get(player2)))
-    {
+    if (victim_player && (pi = PI_Get((byte*)victim_player))) {
         if (pi->GodMode &&    // tmp. god mode set
-           (!player1 ||    // cast from nowhere (building/trigger)
-            !CHECK_FLAG(*(uint32_t*)(player1 + 0x14), GMF_ANY))) // or damage from regular player
+           (!attacker_player ||    // cast from nowhere (building/trigger)
+            !CHECK_FLAG(attacker_player->flags, GMF_ANY))) { // or damage from regular player
                 retval = 0;
+        }
     }
 
     return retval;

@@ -92,7 +92,8 @@ struct  T_PLAYER
 {
     _BYTE gap0[4];
     T_ID id_ext;
-    _BYTE gap1[16];
+    _BYTE gap1[12];
+    uint32_t flags; // 0x14
     const char* name;
     _BYTE gap2[8];
     _DWORD dword24;
@@ -101,7 +102,7 @@ struct  T_PLAYER
     _BYTE gap3[2];
     _WORD word32;
     _BYTE gap4[4];
-    T_UNIT* current_unit;
+    T_UNIT* current_unit; // 0x38
     int32_t money;
     _BYTE gap5[2];
     _BYTE byte42;
