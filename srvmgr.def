@@ -186,3 +186,6 @@ drop_gold                               @326
 fix_scroll_burn                         @327
 autobuff                                @328
 summon                                  @329
+circle_damage_regular                   @330
+circle_damage_special                   @331
+circle_damage_magic                     @332

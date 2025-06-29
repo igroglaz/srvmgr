@@ -64,3 +64,17 @@ void SetExceptionFilter()
 {
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)&exc_handler_run);
 }
+
+void PrintStackTrace(int ebp) {
+    log_format("BEGIN STACK TRACE: 0x%08Xh <= ", ebp);
+    unsigned long stebp = *(unsigned long*)(ebp);
+    while (true) {
+        if ((stebp & 3) || IsBadReadPtr((void*)stebp, 8)) {
+            break;
+        }
+
+        log_format2("%08Xh <= ", *(unsigned long*)(stebp+4));
+        stebp = *(unsigned long*)(stebp);
+    }
+    log_format2("END STACK TRACE\n");
+}

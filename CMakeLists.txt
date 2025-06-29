@@ -15,6 +15,7 @@ add_library(srvmgr SHARED srvmgr.def
     charcheck.cpp
     cheat_codes.cpp
     cheat_codes_new.cpp
+    circle.cpp
     common_new.cpp
     config_new.cpp
     crash_filter.cpp
