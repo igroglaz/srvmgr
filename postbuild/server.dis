@@ -273,3 +273,8 @@ CALL autobuff 005a8309 2 // invis other
 CALL autobuff 005a83fe 2 // invis self
 
 JMP summon 0053ac32
+
+// Increase damage to players going for circles.
+JMP circle_damage_regular 00536d81
+JMP circle_damage_special 00536e1e
+JMP circle_damage_magic 00536ed8
