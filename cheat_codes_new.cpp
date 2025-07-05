@@ -365,7 +365,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 	}
 
     if (rawcmd == "#reborn") {
-        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player);
+        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player, false);
+    }
+
+    if (rawcmd == "#hell") {
+        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player, true);
     }
 
     if (rawcmd == "#autobuff" || rawcmd == "#ab") {

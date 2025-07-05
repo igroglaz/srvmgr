@@ -11,6 +11,25 @@ const char* PlayerName(T_UNIT* unit) {
 
 namespace circle {
 
+int Circle(T_UNIT* unit) {
+    const char* name = unit->player->name;
+
+    if (name == nullptr) {
+        return 0;
+    }
+
+    char maybe_circle = name[0];
+    if (name[0] == '_' || name[0] == '@') {
+        maybe_circle = name[1];
+    }
+
+    if ('1' >= maybe_circle || maybe_circle >= '9') {
+        return 0;
+    }
+
+    return static_cast<int>(maybe_circle - '0');
+}
+
 double Multiplier(int circle, ServerIDType server_id) {
     switch (server_id) {
         case EASY:      return 0.05 * circle;
@@ -60,22 +79,10 @@ int IncreaseDamage(T_UNIT* attacker, T_UNIT* target, int damage) {
         return damage;
     }
 
-    const char* name = target->player->name;
-
-    if (name == nullptr) {
+    int circle_number = Circle(target);
+    if (circle_number == 0) {
         return damage;
     }
-
-    char maybe_circle = name[0];
-    if (name[0] == '_' || name[0] == '@') {
-        maybe_circle = name[1];
-    }
-
-    if ('1' >= maybe_circle || maybe_circle >= '9') {
-        return damage;
-    }
-
-    int circle_number = static_cast<int>(maybe_circle - '0');
 
     double multiplier = 1 + Multiplier(circle_number, Config::ServerID);
     int bonus = Bonus(circle_number, Config::ServerID);
