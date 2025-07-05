@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 
+#include "circle.h"
 #include "config_new.h"
 #include "lib/utils.hpp"
 #include "quests.h"
@@ -15,6 +16,7 @@ struct PlayerInfo {
     bool warrior;
     bool female;
     bool solo;
+    int circle;
     std::string clan;
     int has_treasures;
     int32_t money;
@@ -118,7 +120,19 @@ std::map<ServerIDType, std::map<int, uint8_t>> girl_needs_monster_kills{
     }},
 };
 
-void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p);
+std::map<int, uint8_t> circling_needs_monster_kills{
+    {803, 14}, // Orc_Sword.5
+    {804, 14}, // Orc_Bow.5
+    {813, 14}, // Dragon.5
+    {814, 14}, // Orc_Shaman.5
+    {815, 14}, // F_Zombie.5
+    {816, 14}, // A_Zombie.5
+    {817, 14}, // F_Skeleton.5
+    {818, 14}, // A_Skeleton.5
+    {819, 14}, // M_Skeleton.5
+};
+
+void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell);
 
 // A2 server only stores the effective unit stats () Walk over all equipped
 void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
@@ -154,7 +168,7 @@ void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
     }
 }
 
-void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char* p) {
+void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char* p, bool hell) {
     T_UNIT* unit = player->current_unit;
 
     if (unit == nullptr) {
@@ -183,6 +197,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     player_info.warrior = IsWarrior(unit);
     player_info.female = IsFemale(unit);
     player_info.solo = IsSoloPlayer(unit);
+    player_info.circle = circle::Circle(unit);
     player_info.clan = clan;
     player_info.has_treasures = has_treasures;
     player_info.money = player->money;
@@ -205,7 +220,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
         }
     }
 
-    CheckRebornReadiness(server_id, player_info, p);
+    CheckRebornReadiness(server_id, player_info, p, hell);
 }
 
 int32_t ServerRequirementsExperience(ServerIDType server_id, const PlayerInfo& player_info) {
@@ -259,20 +274,30 @@ int32_t ServerRequirementsMoney(ServerIDType server_id, const PlayerInfo& player
     return 0;
 }
 
-uint32_t ServerRequirementsMonsterKills(ServerIDType server_id, const PlayerInfo& player_info) {
-    // Reclassed characters.
-    if (player_info.female) {
-        switch (server_id) {
-            case EASY: return 500;
-            case KIDS: return 1200;
-            case NIVAL: return 1500;
-            case MEDIUM: return 2000;
-            case HARD: return 4000;
+bool CheckMonsterKills(const PlayerInfo& info, const std::map<int, uint8_t>& need_kills, std::vector<std::string>& info_lines) {
+    InitializeMobNames();
+
+    bool ready = true;
+    int types_left = 0;
+
+    for (auto it = need_kills.begin(); it != need_kills.end(); ++it) {
+        auto got = info.monster_kills_by_server_id[it->first];
+        if (got < it->second) {
+            if (++types_left > 5) {
+                info_lines.emplace_back("(other mob kills omitted)");
+                break;
+            }
+
+            ready = false;
+            info_lines.emplace_back(Format("- Need %d kills of %s, you have %d", it->second, mob_names_by_server_id[it->first].c_str(), got));
         }
     }
 
-    // Hardcore and regular characters.
-    return 0;
+    if (types_left == 0) {
+        info_lines.emplace_back("+ You have all the mob kills");
+    }
+
+    return ready;
 }
 
 void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
@@ -366,7 +391,83 @@ void CheckAscendReadiness(const PlayerInfo& info, unsigned char* p) {
     }
 }
 
-void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p) {
+std::vector<std::string> no_more_circles_snark{
+    "Congratulations! You've officially run out of hell. Please see yourself out through the gift shop.",
+    "You've reached the end of hell. There is literally nothing past this. Good job!",
+    "Well done. You've completed your tour of eternal damnation. No refunds.",
+    "You really thought there was more? This isn't a buffet, it's hell. Portions are controlled.",
+    "Beyond this point is only your own imagination. Frankly, that's probably worse.",
+    "Beyond this point lies the void... and your own foolish ambition. Turn back, overachiever.",
+    "You have reached Level: Overachiever. Quest: Stop trying to break the Universe. Status: Failed.",
+    "How did you beat all of hell? Are you a doomguy or something?",
+};
+
+void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
+    if (info.circle == 8) {
+        int snark = std::rand() % no_more_circles_snark.size();
+        zxmgr::SendMessage(p, "%s", no_more_circles_snark[snark].c_str());
+        return;
+    }
+
+    bool ready = true;
+    std::vector<std::string> info_lines;
+    const int32_t need_money = 1000 * m;
+    const int32_t need_experience = 177777777;
+
+    if (info.reaction < 76 || info.mind < 76 || info.spirit < 76) {
+        ready = false;
+        info_lines.emplace_back(Format("- Need stats: you have %d body, %d reaction, %d mind, %d spirit (need 76 in reaction, mind and spirit)", info.body, info.reaction, info.mind, info.spirit));
+    } else {
+        info_lines.emplace_back(Format("+ You have maxed out stats"));
+    }
+
+    if (info.money < need_money) {
+        ready = false;
+        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
+    }
+
+    if (info.experience < need_experience) {
+        ready = false;
+        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
+    } else {
+        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
+    }
+
+    if (info.warrior) {
+        info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    } else {
+        info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    }
+
+    ready &= CheckMonsterKills(info, circling_needs_monster_kills, info_lines);
+
+    if (ready) {
+        if (info.circle == 0) {
+            if (info.clan == "circle" || info.clan == "hell") {
+                zxmgr::SendMessage(p, "Ready for hell! Make camp and you will go to the next circle of hell.");
+            } else if (info.clan == "miss_hell") {
+                zxmgr::SendMessage(p, "Ready for hell! Make camp and you will go to the next circle of hell as a female character.");
+            } else {
+                zxmgr::SendMessage(p, "Ready for hell! To go to the next circle of hell, rename your character to 'hell' or 'miss_hell'.");
+            }
+        } else {
+            if (info.clan == "circle" || info.clan == "hell" || info.clan == "miss_hell") {
+                zxmgr::SendMessage(p, "Ready for hell! Make camp and you will go to the next circle of hell.");
+            } else {
+                zxmgr::SendMessage(p, "Ready for hell! To go to the next circle of hell, rename your character to 'hell'.");
+            }
+        }
+    } else {
+        zxmgr::SendMessage(p, "*NOT* ready for hell. Requirements:");
+    }
+    for (auto it = info_lines.cbegin(); it != info_lines.cend(); ++it) {
+        zxmgr::SendMessage(p, "%s", it->c_str());
+    }
+}
+
+void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell) {
     int16_t need_mind = 0;
     int16_t need_reaction = 0;
     switch (server_id) {
@@ -376,6 +477,10 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         case MEDIUM: need_reaction = 40; break;
         case HARD: break; // Handled separately.
         default:
+            if (player_info.circle != 0 || hell) {
+                return CheckCircleReadiness(player_info, p);
+            }
+
             if (player_info.female) {
                 return CheckAscendReadiness(player_info, p);
             }
@@ -394,7 +499,6 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
 
     int32_t need_experience = ServerRequirementsExperience(server_id, player_info);
     int32_t need_money = ServerRequirementsMoney(server_id, player_info);
-    uint32_t need_monster_kills = ServerRequirementsMonsterKills(server_id, player_info);
     need_money -= treasure_gives_gold;
 
     bool ready_for_reborn = true;
@@ -452,29 +556,8 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, player_info.experience));
     }
 
-    if (player_info.female) {
-        InitializeMobNames();
-
-        auto need_kills = girl_needs_monster_kills[server_id];
-        int types_left = 0;
-        if (need_kills.size()) {
-            for (auto it = need_kills.begin(); it != need_kills.end(); ++it) {
-                auto got = player_info.monster_kills_by_server_id[it->first];
-                if (got < it->second) {
-                    if (++types_left > 5) {
-                        info_lines.emplace_back("(other mob kills omitted)");
-                        break;
-                    }
-
-                    ready_for_reborn = false;
-                    info_lines.emplace_back(Format("- Need %d kills of %s, you have %d", it->second, mob_names_by_server_id[it->first].c_str(), got));
-                }
-            }
-
-            if (types_left == 0) {
-                info_lines.emplace_back("+ You have all the mob kills");
-            }
-        }
+    if (player_info.female || player_info.circle > 0) {
+        ready_for_reborn &= CheckMonsterKills(player_info, girl_needs_monster_kills[server_id], info_lines);
     }
 
     const char* category;
