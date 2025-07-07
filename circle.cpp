@@ -92,17 +92,17 @@ int IncreaseDamage(T_UNIT* attacker, T_UNIT* target, int damage) {
 
 }
 
-int ChangeDamageRegular(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageRegular(T_UNIT* attacker, T_UNIT* target, int damage) {
     return circle::IncreaseDamage(attacker, target, damage);
 }
 
-int ChangeDamageSpecial(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageSpecial(T_UNIT* attacker, T_UNIT* target, int damage) {
     Printf("[circle/special] 0x%x -> 0x%x (%s/%s -> %s/%s) for %d", attacker, target, UnitName(attacker), PlayerName(attacker), UnitName(target), PlayerName(target), damage);
     // No idea what the original logic is for. Not modfying the damage till we see some usage.
     return damage;
 }
 
-int ChangeDamageMagic(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageMagic(T_UNIT* attacker, T_UNIT* target, int damage) {
     return circle::IncreaseDamage(attacker, target, damage);
 }
 
@@ -118,10 +118,10 @@ void __declspec(naked) circle_damage_regular() {
         mov DWORD PTR [ebp-0x1c], eax
 
         // Original logic.
-        mov ecx,DWORD PTR [ebp+0xc]
+        mov ecx, DWORD PTR [ebp+0xc]
         mov edx, 0
         mov dl, BYTE PTR [ecx+0x4c]
-        add edx, 0x10
+        and edx, 0x10
 
         // Restore original instruction.
         mov ebx, 0x00536d87
