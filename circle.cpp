@@ -1,17 +1,17 @@
 #include "config_new.h"
-#include "utils.h"
+#include "a2types.h"
 
-const char* UnitName(T_UNIT* unit) {
+const char* UnitName(A2Unit* unit) {
     return unit ? unit->name : "?";
 }
 
-const char* PlayerName(T_UNIT* unit) {
+const char* PlayerName(A2Unit* unit) {
     return unit && unit->player ? unit->player->name : "??";
 }
 
 namespace circle {
 
-int Circle(T_UNIT* unit) {
+int Circle(A2Unit* unit) {
     const char* name = unit->player->name;
 
     if (name == nullptr) {
@@ -63,7 +63,7 @@ int Bonus(int circle, ServerIDType server_id) {
 }
 
 // Increase damage to units that are going through circles.
-int IncreaseDamage(T_UNIT* attacker, T_UNIT* target, int damage) {
+int IncreaseDamage(A2Unit* attacker, A2Unit* target, int damage) {
     // Not a player's unit --- no changes.
     if (!target || !target->player || target->player->unitType != 0) {
         return damage;
@@ -92,17 +92,17 @@ int IncreaseDamage(T_UNIT* attacker, T_UNIT* target, int damage) {
 
 }
 
-int __cdecl ChangeDamageRegular(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageRegular(A2Unit* attacker, A2Unit* target, int damage) {
     return circle::IncreaseDamage(attacker, target, damage);
 }
 
-int __cdecl ChangeDamageSpecial(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageSpecial(A2Unit* attacker, A2Unit* target, int damage) {
     Printf("[circle/special] 0x%x -> 0x%x (%s/%s -> %s/%s) for %d", attacker, target, UnitName(attacker), PlayerName(attacker), UnitName(target), PlayerName(target), damage);
     // No idea what the original logic is for. Not modfying the damage till we see some usage.
     return damage;
 }
 
-int __cdecl ChangeDamageMagic(T_UNIT* attacker, T_UNIT* target, int damage) {
+int __cdecl ChangeDamageMagic(A2Unit* attacker, A2Unit* target, int damage) {
     return circle::IncreaseDamage(attacker, target, damage);
 }
 

@@ -1,8 +1,8 @@
 #include "srvmgr.h"
-#include "utils.h"
+#include "a2types.h"
 #include "config_new.h"
 
-int getLimit(T_UNIT* unit, int magic_ind)
+int getLimit(A2Unit* unit, int magic_ind)
 {
     bool warrior = IsWarrior(unit);
     bool female = IsFemale(unit);
@@ -39,7 +39,7 @@ int getLimit(T_UNIT* unit, int magic_ind)
     return 100;
 }
 
-int __stdcall imp_limit_magic_resist(T_UNIT* unit, int magic_ind, int resist)
+int __stdcall imp_limit_magic_resist(A2Unit* unit, int magic_ind, int resist)
 {
     int limit = getLimit(unit, magic_ind);
     return resist < limit ? resist: limit;

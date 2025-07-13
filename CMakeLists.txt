@@ -9,6 +9,7 @@ link_libraries(ws2_32)
 
 add_library(srvmgr SHARED srvmgr.def
     a2server_utils.cpp
+    a2types.cpp
     antiinvis.cpp
     asm_unit_info.cpp
     autobuff.cpp

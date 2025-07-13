@@ -1,14 +1,14 @@
-#include "utils.h"
+#include "a2types.h"
 #include "lib/utils.hpp"
 
-bool IsScroll(T_INVENTORY_ITEM* item) {
+bool IsScroll(A2InventoryItem* item) {
     return 3590 <= item->id && item->id <= 3647; // Reference: https://igroglaz.com/allods2/razrabotka/opisanie-predmetov
 }
 
-void a2insert(T_INVENTORY_LIST* list, int pos, T_INVENTORY_ITEM* item);
-void RefreshPlayerInventory(T_UNIT* unit);
+void a2insert(A2InventoryList* list, int pos, A2InventoryItem* item);
+void RefreshPlayerInventory(A2Unit* unit);
 
-int __fastcall CheckItemWhenCasting(T_INVENTORY_ITEM* item, T_UNIT* unit, int position) {
+int __fastcall CheckItemWhenCasting(A2InventoryItem* item, A2Unit* unit, int position) {
     Printf("[scroll_burn] CheckItemWhenCasting: item=0x%x (id=%d), unit=0x%x (%s), position=%d", item, item ? item->id : 0, unit, unit ? unit->name : "?", position);
 
     if (!item || !unit) { // Impossible, but let's check anyway.

@@ -1,6 +1,8 @@
+#include <cstdint>
+
 #include "config_new.h"
 #include "quests.h"
-#include "utils.h"
+#include "a2types.h"
 
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
@@ -88,44 +90,10 @@ exit:
     }
 }
 
-
-
-struct TQuest{
-  void *clazz;
-  _DWORD inn_id;
-  T_ID player_id;
-  __declspec(align(8)) _DWORD status;
-  __int32 obj;
-  _DWORD landmark_id;
-  _DWORD dword1C;
-  _DWORD dword20;
-  __declspec(align(8)) _DWORD dword28;
-  _DWORD dword2C;
-};
-
-struct TQuestNode{
-  TQuestNode *next_node;
-  _DWORD dword4;
-  _DWORD dword8;
-  TQuest *quest;
-};
-
-struct TQuestHashMap{
-  _BYTE gap0[8];
-  TQuestNode** bucket_arr;
-  int buckets_size;
-  _DWORD size;
-  _BYTE gap14[96];
-  TQuestNode *current_node;
-  TQuest *quest;
-  _BYTE gap7C[4];
-  _DWORD dword80;
-};
-
-class QuestIterator{
+class QuestIterator {
 private:
-    static const TQuestHashMap& GLOBAL_QUEST_MAP;
-    TQuestNode* currentNode;
+    static const A2QuestHashMap& GLOBAL_QUEST_MAP;
+    A2QuestNode* currentNode;
     int currentBucketInd;
     int getBucketsSize(){
         return GLOBAL_QUEST_MAP.buckets_size;
@@ -133,10 +101,10 @@ private:
     int getQuestsSize(){
         return GLOBAL_QUEST_MAP.size;
     }
-    TQuestNode* getNextNonEmptyBucket(){
+    A2QuestNode* getNextNonEmptyBucket(){
         if(GLOBAL_QUEST_MAP.bucket_arr){
             for (;currentBucketInd < GLOBAL_QUEST_MAP.buckets_size; currentBucketInd++){
-                TQuestNode* node = GLOBAL_QUEST_MAP.bucket_arr[currentBucketInd];
+                A2QuestNode* node = GLOBAL_QUEST_MAP.bucket_arr[currentBucketInd];
                 if(node){
                     currentBucketInd++;
                     return node;
@@ -150,7 +118,7 @@ public:
         currentNode = NULL;
         currentBucketInd = 0;
     }
-    TQuestNode* next(){
+    A2QuestNode* next(){
         if(!currentNode){
             currentNode = getNextNonEmptyBucket();
         }else{
@@ -162,26 +130,15 @@ public:
         return currentNode;
     }
 };
-const TQuestHashMap& QuestIterator::GLOBAL_QUEST_MAP = *(TQuestHashMap*)(void *)0x6CE4D8;
+const A2QuestHashMap& QuestIterator::GLOBAL_QUEST_MAP = *(A2QuestHashMap*)(void *)0x6CE4D8;
 
-const void* CLASS_KILL_N_MONSTERS = (void*)0x0060F9C0;
-const void* CLASS_KILL_MONSTER = (void*)0x0060F9F8;
-const void* CLASS_KILL_GROUP = (void*)0x60F988;
-
-struct Group {
-	int whatever[7];
-	int group_id;
-	// We don't care about other fields.
-	// See full structure definition in `PlayerSubStru1` in Ghidra.
-};
-
-bool player_has_quest_for_n_monsters(T_PLAYER* player, _DWORD quest_monster_type){
+bool player_has_quest_for_n_monsters(A2Player* player, int32_t quest_monster_type){
     QuestIterator iter = QuestIterator();
-    TQuestNode* node;
-    while((node = iter.next()) != NULL){
-        TQuest* quest = node->quest;
-        _DWORD existing_quest_monster_type = quest->obj;
-        if( quest->clazz == CLASS_KILL_N_MONSTERS && existing_quest_monster_type == quest_monster_type && player->id_ext.id == quest->player_id.id){
+    A2QuestNode* node;
+    while ((node = iter.next()) != NULL) {
+        A2Quest* quest = node->quest;
+        int32_t existing_quest_monster_type = quest->obj;
+        if( quest->clazz == A2_CLASS_KILL_N_MONSTERS && existing_quest_monster_type == quest_monster_type && player->id_ext.id == quest->player_id.id){
             return true;
         }
     }
@@ -189,49 +146,49 @@ bool player_has_quest_for_n_monsters(T_PLAYER* player, _DWORD quest_monster_type
 }
 
 std::vector<std::string> QuestStateNMonsters(void* p) {
-	T_PLAYER* player = (T_PLAYER*)p;
+	A2Player* player = (A2Player*)p;
 	std::vector<std::string> result;
 
     QuestIterator iter = QuestIterator();
-    TQuestNode* node;
+    A2QuestNode* node;
     while ((node = iter.next()) != NULL) {
-        TQuest* quest = node->quest;
-        _DWORD existing_quest_monster_type = quest->obj;
-        if (quest->clazz == CLASS_KILL_N_MONSTERS && player->id_ext.id == quest->player_id.id) {
-			result.push_back(Format("Quest to kill %s: %d out of %d done", (*mob_names_raw)[quest->obj].c_str(), quest->dword20, quest->dword1C));
+        A2Quest* quest = node->quest;
+        int32_t existing_quest_monster_type = quest->obj;
+        if (quest->clazz == A2_CLASS_KILL_N_MONSTERS && player->id_ext.id == quest->player_id.id) {
+			result.push_back(Format("Quest to kill %s: %d out of %d done", (*mob_names_raw)[quest->obj].c_str(), quest->current, quest->target));
         }
     }
 
 	return std::move(result);
 }
 
-bool player_has_quest_for_monster_id(T_PLAYER* player, __int16 monsterId){
+bool player_has_quest_for_monster_id(A2Player* player, __int16 monsterId){
     QuestIterator iter = QuestIterator();
-    TQuestNode* node;
-    while((node = iter.next()) != NULL){
-        TQuest* quest = node->quest;
-        _WORD id = (*(T_ID*)&quest->obj).id;
-        if( quest->clazz == CLASS_KILL_MONSTER && id == monsterId && player->id_ext.id == quest->player_id.id){
+    A2QuestNode* node;
+    while ((node = iter.next()) != NULL) {
+        A2Quest* quest = node->quest;
+        int16_t id = (*(A2ID*)&quest->obj).id;
+        if (quest->clazz == A2_CLASS_KILL_MONSTER && id == monsterId && player->id_ext.id == quest->player_id.id) {
             return true;
         }
     }
     return false;
 }
 
-bool player_has_quest_for_monster_group(T_PLAYER* player, _DWORD groupId){
+bool player_has_quest_for_monster_group(A2Player* player, int32_t groupId){
     QuestIterator iter = QuestIterator();
-    TQuestNode* node;
-    while((node = iter.next()) != NULL){
-        TQuest* quest = node->quest;
-        _DWORD id = quest->obj;
-        if( quest->clazz == CLASS_KILL_GROUP && id == groupId && player->id_ext.id == quest->player_id.id){
+    A2QuestNode* node;
+    while ((node = iter.next()) != NULL) {
+        A2Quest* quest = node->quest;
+        int32_t id = quest->obj;
+        if (quest->clazz == A2_CLASS_KILL_GROUP && id == groupId && player->id_ext.id == quest->player_id.id) {
             return true;
         }
     }
     return false;
 }
 
-void __stdcall filter_out_existing_n_monsters_quests(T_PLAYER* player, _DWORD quest_monster_type, unsigned int* matching_monsters_counter_ptr){
+void __stdcall filter_out_existing_n_monsters_quests(A2Player* player, int32_t quest_monster_type, unsigned int* matching_monsters_counter_ptr){
 	// Is this unit type already in the player's quests?
     if (Config::AllowOnlyOneQuest_KillNMonsters && player_has_quest_for_n_monsters(player, quest_monster_type)) {
         return;
@@ -250,7 +207,7 @@ void __stdcall filter_out_existing_n_monsters_quests(T_PLAYER* player, _DWORD qu
     *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
-void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* quest_monster_selected, unsigned int* matching_monsters_counter_ptr){
+void __stdcall filter_out_existing_monster_quests(A2Player* player, A2Unit* quest_monster_selected, unsigned int* matching_monsters_counter_ptr){
     // Is this unit already in the player's quests?
     if (Config::AllowOnlyOneQuest_KillTheMonster && player_has_quest_for_monster_id(player, quest_monster_selected->id_ext.id)) {
         return;
@@ -268,7 +225,7 @@ void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* ques
 	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
-bool __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, T_UNIT* picture_unit, unsigned int* matching_monsters_counter_ptr) {
+bool __stdcall filter_out_existing_group_quests(A2Player* player, A2Group* group, A2Unit* unit, unsigned int* matching_monsters_counter_ptr) {
     // Is this group already in the player's quests?
     if (Config::AllowOnlyOneQuest_KillTheGroup && player_has_quest_for_monster_group(player, group->group_id)) {
         return false;
@@ -278,8 +235,8 @@ bool __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, 
 		InitializeMobNames();
 
 		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if ((*mob_names)[picture_unit->face << 8 | picture_unit->type_id].find(name_filter) == std::string::npos) {
-			return true;
+		if ((*mob_names)[unit->face << 8 | unit->type_id].find(name_filter) == std::string::npos) {
+			return true; // Retry with the next unit in group.
 		}
 	}
 	
@@ -365,7 +322,7 @@ int rand_interval(int min, int max) {
     return min + (r / buckets);
 }
 
-unsigned int __fastcall KillNCount(T_PLAYER* player, unsigned int mob_count) {
+unsigned int __fastcall KillNCount(A2Player* player, unsigned int mob_count) {
 	Printf("KillNCount: player=0x%x, mob_count=%d", player, mob_count);
 
 	const int desired_count = player_settings[player->id_ext.id]->quest_mob_count;
@@ -420,7 +377,7 @@ void __declspec(naked) quest_change_kill_n_count() {
 	}
 }
 
-void __stdcall CheckPlayerSettings(T_PLAYER* player) {
+void __stdcall CheckPlayerSettings(A2Player* player) {
     const int id = player->id_ext.id;
     const std::string name = player->name;
 

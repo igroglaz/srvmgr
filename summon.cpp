@@ -2,7 +2,7 @@
 
 #include "config_new.h"
 #include "lib/utils.hpp"
-#include "utils.h"
+#include "a2types.h"
 
 struct UnitChanges {
     int16_t hp_max[4];
@@ -202,7 +202,7 @@ TypeChanges turtle_type_changes{
     0, // see_invisible
 };
 
-void __stdcall FixSummonedUnit(T_UNIT* unit, int level) {
+void __stdcall FixSummonedUnit(A2Unit* unit, int level) {
     unit->summoned = 1; // Original instruction.
 
     // Summoned units should not give exp.

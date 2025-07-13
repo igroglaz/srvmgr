@@ -137,7 +137,7 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
 // A2 server only stores the effective unit stats () Walk over all equipped
 void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
     for (int i = -2; i < 13; ++i) {
-        T_INVENTORY_ITEM* item;
+        A2InventoryItem* item;
 
         if (i == -2) {
             item = human->unit.weapon;
@@ -168,8 +168,8 @@ void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
     }
 }
 
-void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char* p, bool hell) {
-    T_UNIT* unit = player->current_unit;
+void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char* p, bool hell) {
+    A2Unit* unit = player->current_unit;
 
     if (unit == nullptr) {
         return zxmgr::SendMessage(p, "no current unit");
@@ -177,7 +177,7 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
 
     int has_treasures = 0;
     if (unit->inventory) {
-        T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* ptr = unit->inventory->list.first_node;
+        A2Node<A2InventoryItem>* ptr = unit->inventory->list.first_node;
         while (ptr != NULL) {
             if (ptr->value->id == 3667) {
                 has_treasures += ptr->value->amount;
@@ -209,8 +209,8 @@ void RebornReadinessInfo(ServerIDType server_id, T_PLAYER* player, unsigned char
     player_info.monster_kills_by_server_id = player->monster_kills_by_server_id;
     player_info.deaths = player->deaths;
 
-    if (unit->clazz != A2_HUMAN_CLASS) {
-        zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_HUMAN_CLASS);
+    if (unit->clazz != A2_CLASS_HUMAN) {
+        zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
     } else {
         A2Human* human = reinterpret_cast<A2Human*>(unit);
         SubtractEquippedItems(human, player_info);

@@ -14,7 +14,7 @@
 #include "quests.h"
 #include "scanrange.h"
 #include "screenshots.h"
-#include "utils.h"
+#include "a2types.h"
 
 
 uint32_t ParseFlags(std::string string)
@@ -175,7 +175,7 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 		return;
 	}
 
-	T_PLAYER* p = (T_PLAYER*)player;
+	A2Player* p = (A2Player*)player;
 	short player_id = p->id_ext.id;
 
 	std::string filter = NormalizeMobName(TrimLeft(args).c_str());
@@ -226,7 +226,7 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 }
 
 void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
-	T_PLAYER* p = (T_PLAYER*)player;
+	A2Player* p = (A2Player*)player;
 	short player_id = p->id_ext.id;
 
 	zxmgr::SendMessage(player, "Current player: %d", player_id);
@@ -242,7 +242,7 @@ void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
 }
 
 void ProcessCheat_QuestState(byte* player, const std::string& args) {
-	T_PLAYER* p = (T_PLAYER*)player;
+	A2Player* p = (A2Player*)player;
 	short player_id = p->id_ext.id;
 
 	std::vector<std::string> messages = QuestStateNMonsters(p);
@@ -265,7 +265,7 @@ std::unordered_map<std::string, uint32_t> autobuff_spells{
 };
 
 void ProcessCheat_Autobuff(byte* player, const std::string& args) {
-    T_PLAYER* p = (T_PLAYER*)player;
+    A2Player* p = (A2Player*)player;
     short player_id = p->id_ext.id;
 
     CheckPlayerSettings(p);
@@ -365,11 +365,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 	}
 
     if (rawcmd == "#reborn") {
-        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player, false);
+        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<A2Player*>(player), player, false);
     }
 
     if (rawcmd == "#hell") {
-        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<T_PLAYER*>(player), player, true);
+        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<A2Player*>(player), player, true);
     }
 
     if (rawcmd == "#autobuff" || rawcmd == "#ab") {
@@ -1163,13 +1163,13 @@ ex:
 
 //#define _DAMAGE_DEBUG
 
-uint32_t GetDamageBonus(T_UNIT* unit) {
+uint32_t GetDamageBonus(A2Unit* unit) {
     if (!unit) {
         return 0;
     }
 
     // check if this is human
-    if (unit->clazz != A2_HUMAN_CLASS) {
+    if (unit->clazz != A2_CLASS_HUMAN) {
         return 0;
     }
 
@@ -1182,7 +1182,7 @@ uint32_t GetDamageBonus(T_UNIT* unit) {
     A2Human* human = (A2Human*)unit;
 
     for (uint32_t i = 1; i <= 12; i++) {
-        T_INVENTORY_ITEM* item = NULL;
+        A2InventoryItem* item = NULL;
 
         if (i == 1) {
             item = unit->weapon;
@@ -1197,7 +1197,7 @@ uint32_t GetDamageBonus(T_UNIT* unit) {
         }
 
         // iterate item stats
-        T_SRV_LINKED_NODE<A2Effect>* effect = item->effects.first_node;
+        A2Node<A2Effect>* effect = item->effects.first_node;
 
         while (effect) {
             if (effect->value) {
@@ -1212,7 +1212,7 @@ uint32_t GetDamageBonus(T_UNIT* unit) {
     return retval;
 }
 
-int32_t OnDamage(T_UNIT* attacker, T_UNIT* victim, int16_t damage) {
+int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
     if (damage < 0) {
         return 0;
     }
@@ -1229,8 +1229,8 @@ int32_t OnDamage(T_UNIT* attacker, T_UNIT* victim, int16_t damage) {
 
     int32_t retval = damage;
 
-    T_PLAYER* attacker_player = attacker ? attacker->player : nullptr;
-    T_PLAYER* victim_player = victim ? victim->player : nullptr;
+    A2Player* attacker_player = attacker ? attacker->player : nullptr;
+    A2Player* victim_player = victim ? victim->player : nullptr;
     
     // Damage modificators in PvP
     if (attacker_player && victim_player &&
