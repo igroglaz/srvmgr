@@ -1,9 +1,9 @@
 #pragma once
 
-#include "utils.h"
+#include "a2types.h"
 
 namespace circle {
 
-int Circle(T_UNIT* unit);
+int Circle(A2Unit* unit);
 
 }

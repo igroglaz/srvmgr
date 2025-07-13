@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "a2types.h"
 #include "config_new.h"
 #include <vector>
 #define _USE_MATH_DEFINES
@@ -8,14 +8,14 @@
 
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
 auto a2_delete = (void (__cdecl *)(void*))0x005ddf90;
-auto a2_bag_destructor = (void (__fastcall *)(T_INVENTORY_LIST*))0x00551c7a;
+auto a2_bag_destructor = (void (__fastcall *)(A2InventoryList*))0x00551c7a;
 
 
-T_INVENTORY_LIST* __stdcall create_new_item_list()
+A2InventoryList* __stdcall create_new_item_list()
 {
     #define FUNC_ITEM_LIST_CONSTRUCTOR 0x00551C0A
-    T_INVENTORY_LIST* list = (T_INVENTORY_LIST*)a2_operator_new(0x24);
-    return (T_INVENTORY_LIST*)this_call(FUNC_ITEM_LIST_CONSTRUCTOR, list);
+    A2InventoryList* list = (A2InventoryList*)a2_operator_new(0x24);
+    return (A2InventoryList*)this_call(FUNC_ITEM_LIST_CONSTRUCTOR, list);
 }
 
 float rnd()
@@ -34,19 +34,19 @@ float rnd_gaussian(float mu, float sigma)
 }
 
 
-void a2insert(T_INVENTORY_LIST * list, int pos, T_INVENTORY_ITEM* item)
+void a2insert(A2InventoryList * list, int pos, A2InventoryItem* item)
 {
     this_call(0x00551FC3, (void*)list, (void*)pos, (void*)item);
 }
 
-void a2insert(T_INVENTORY_LIST * list, T_INVENTORY_ITEM* item)
+void a2insert(A2InventoryList * list, A2InventoryItem* item)
 {
     a2insert(list, list->maxInd, item);
 }
 
-T_INVENTORY_ITEM* a2remove(T_INVENTORY_LIST * list, int pos, int n)
+A2InventoryItem* a2remove(A2InventoryList * list, int pos, int n)
 {
-    return (T_INVENTORY_ITEM*)this_call(0x00552E42, (void*)list, (void*)pos, (void*)n);
+    return (A2InventoryItem*)this_call(0x00552E42, (void*)list, (void*)pos, (void*)n);
 }
 
 struct IndNum
@@ -89,9 +89,9 @@ int getDropNum(int num, float probability)
         }
         return dropN;
 }
-void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST * item_list_dst, float probability)
+void __stdcall drop_rnd_items(A2InventoryList * item_list_src, A2InventoryList * item_list_dst, float probability)
 {
-    T_SRV_LINKED_NODE<T_INVENTORY_ITEM>* src_current = item_list_src->list.last_node;
+    A2Node<A2InventoryItem>* src_current = item_list_src->list.last_node;
     int ind = item_list_src->list.size - 1;
     std::vector<IndNum> to_remove;
     while (src_current != NULL)
@@ -121,9 +121,9 @@ void __stdcall drop_rnd_items(T_INVENTORY_LIST * item_list_src, T_INVENTORY_LIST
     }
 }
 
-void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_INVENTORY_LIST * item_list_dst, float probability)
+void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList * item_list_dst, float probability)
 {
-    if (unit->clazz != A2_HUMAN_CLASS)
+    if (unit->clazz != A2_CLASS_HUMAN)
         return;        // unit does not support weared items
 
     for (int i = 1; i < 13; ++i )
@@ -171,29 +171,29 @@ void __stdcall drop_rnd_weared_items(T_UNIT* unit, T_INVENTORY_LIST * item_list_
     }
 }
 
-int CopyInventoryToMap(T_UNIT *unit, T_INVENTORY_LIST *inventory, int a3, int a4)
+int CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int a3, int a4)
 {
     #define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
     return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
 }
 
-bool isPlayerUnit(T_UNIT* unit)
+bool isPlayerUnit(A2Unit* unit)
 {
     return unit->player->unitType == 0;
 }
 
-void DeleteInventory(T_INVENTORY_LIST* bag) {
+void DeleteInventory(A2InventoryList* bag) {
     a2_bag_destructor(bag);
     a2_delete(bag);
 }
 
-void __stdcall drop_partially(T_UNIT* unit, int a3, int a4)
+void __stdcall drop_partially(A2Unit* unit, int a3, int a4)
 {
     if (unit && unit->inventory)
     {
         if (isPlayerUnit(unit))
         {
-            T_INVENTORY_LIST* bag = create_new_item_list();
+            A2InventoryList* bag = create_new_item_list();
             drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability);
             drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
 
@@ -234,7 +234,7 @@ void __declspec(naked) imp_drop_partially()
     }
 }
 
-void __stdcall update_unit_ui_wrapper(T_UNIT *unit, int a){
+void __stdcall update_unit_ui_wrapper(A2Unit *unit, int a){
     __asm
     {
         mov     edx, a

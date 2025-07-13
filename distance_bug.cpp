@@ -1,6 +1,6 @@
-#include "utils.h"
+#include "a2types.h"
 
-void __stdcall distance_bug_fix_internal(T_UNIT *unit){
+void __stdcall distance_bug_fix_internal(A2Unit *unit){
     if(unit->state == 13){
         unit->state = 12;
     }

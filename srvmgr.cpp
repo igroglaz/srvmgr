@@ -451,7 +451,7 @@ int GetCurrentTimeModulo()
 // 1-2: 15   |   3: 12   |   4: 11   |   5: 10   |   6: 9   |   7+: 8
 // max.speed:
 // 1-2: 15   |   3: 21   |   4: 23   |   5: 25   |   6: 30  |   7+: 35
-void __fastcall SetCharMinSpeed(T_UNIT* unit) {
+void __fastcall SetCharMinSpeed(A2Unit* unit) {
     uint16_t min_speed = 0, max_speed = 0;
 
     switch (Config::ServerID) {

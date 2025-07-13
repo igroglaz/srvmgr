@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "utils.h"
+#include "a2types.h"
 
 // Settings set by the player.
 struct PlayerSettings {
@@ -40,4 +40,4 @@ std::vector<std::string> QuestStateNMonsters(void* player);
 // Checks player name and the name in the existing player settings. If they are
 // different, it means that these settings were created by another player which
 // has already left the game, so we reset the settings.
-void __stdcall CheckPlayerSettings(T_PLAYER* player);
+void __stdcall CheckPlayerSettings(A2Player* player);

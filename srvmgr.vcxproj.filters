@@ -257,7 +257,7 @@
     <ClInclude Include="screenshots.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils.h">
+    <ClInclude Include="a2types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="this_call.h">

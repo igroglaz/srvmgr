@@ -2,7 +2,7 @@
 
 #include "config_new.h"
 #include "lib/utils.hpp"
-#include "utils.h"
+#include "a2types.h"
 #include "zxmgr.h"
 
 // Solo-characters are allowed to pick up bags only from the stapled cells (from mobs they've killed).
@@ -14,17 +14,17 @@ std::unordered_map<uint16_t, int8_t> staple_cells;
 std::unordered_map<int8_t, std::string> staple_char_names;
 
 // Characters with `@` as the first letter of the name are in the solo mode.
-bool IsPureSoloPlayer(T_UNIT* unit) {
+bool IsPureSoloPlayer(A2Unit* unit) {
     return unit->name[0] == '@';
 }
 
 // Giga-players --- solo players which get reverted to checkpoint if they die.
-bool IsGigaPlayer(T_UNIT* unit) {
+bool IsGigaPlayer(A2Unit* unit) {
     return unit->name[0] == '_';
 }
 
 // All solo characters.
-bool IsSoloPlayer(T_UNIT* unit) {
+bool IsSoloPlayer(A2Unit* unit) {
     return IsPureSoloPlayer(unit) || IsGigaPlayer(unit);
 }
 
@@ -62,9 +62,9 @@ extern "C" __declspec(naked) void remember_a2server() {
     }
 }
 
-T_INVENTORY_ITEM* a2remove(T_INVENTORY_LIST* list, int pos, int n); // defined in partial_drop.cpp
+A2InventoryItem* a2remove(A2InventoryList* list, int pos, int n); // defined in partial_drop.cpp
 
-bool GigaAllowedToPickup(T_INVENTORY_ITEM* item, ServerIDType server_id) {
+bool GigaAllowedToPickup(A2InventoryItem* item, ServerIDType server_id) {
     if (item->id == 3667) { // Treasures can be picked up always.
         return true;
     }
@@ -79,11 +79,11 @@ bool GigaAllowedToPickup(T_INVENTORY_ITEM* item, ServerIDType server_id) {
 
 // Refresh the inventory cached at the client.
 // Taken from around address 00503663.
-void RefreshPlayerInventory(T_UNIT* unit) {
+void RefreshPlayerInventory(A2Unit* unit) {
     Printf("[solo] RefreshPlayerInventory: unit=0x%x (%s), player=0x%x (id=%d)", unit, unit ? unit->name : "?", unit ? unit->player : nullptr, unit && unit->player ? unit->player->id_ext.id : -1);
 
     // Only ECX is used by the function, but __fastcall passes EDX too.
-    typedef void (__fastcall *A2RefreshInventory)(int address, int unused, T_UNIT* unit, T_PLAYER* player, int arg4, int arg5, int arg6, int arg7);
+    typedef void (__fastcall *A2RefreshInventory)(int address, int unused, A2Unit* unit, A2Player* player, int arg4, int arg5, int arg6, int arg7);
     A2RefreshInventory refresh_inventory = (A2RefreshInventory)0x00519221;
 
     refresh_inventory(0x006c3a08, 0, unit, unit->player, -1, 0x0ffb, 0, 0);
@@ -91,7 +91,7 @@ void RefreshPlayerInventory(T_UNIT* unit) {
 
 // If the player's name has changed, it means that the player has logged out and another one logged in.
 // The player ID is reused, but we should clear all staples for the logged-out player.
-void CheckStaplesForReloggedCharacter(T_UNIT* unit) {
+void CheckStaplesForReloggedCharacter(A2Unit* unit) {
     Printf("[solo] CheckStaplesForReloggedCharacter: unit=0x%x (%s, player_id=%d)", unit, unit ? unit->name : "?", unit && unit->player ? unit->player->id_ext.id : -1);
 
     if (!unit || !unit->player) {
@@ -125,7 +125,7 @@ void CheckStaplesForReloggedCharacter(T_UNIT* unit) {
 
 // Giga-players are allowed to pick up only certain items.
 // This function is a pre-pickup --- it removes all forbidden items from the bag the unit is standing on.
-bool GigaPickup(T_UNIT* unit) {
+bool GigaPickup(A2Unit* unit) {
     if (!IsGigaPlayer(unit)) {
         return true;
     }
@@ -161,8 +161,8 @@ bool GigaPickup(T_UNIT* unit) {
             if (!GigaAllowedToPickup(item, Config::ServerID)) {
                 Printf("[giga] deleting item in sack at position %d: id=%d, amount=%d, price=%d, effects total=%d", position, item->id, item->amount, item->price, item->effects.size);
                 auto next = item_it->next;
-                // Reinterpret cast is kinda sketchy, but `T_INVENTORY_LIST*` has the first value field `T_LINKED_LIST<T_INVENTORY_ITEM>`, so it should still work.
-                a2remove(reinterpret_cast<T_INVENTORY_LIST*>(items), position, item->amount);
+                // Reinterpret cast is kinda sketchy, but `A2InventoryList*` has the first value field `A2LinkedList<A2InventoryItem>`, so it should still work.
+                a2remove(reinterpret_cast<A2InventoryList*>(items), position, item->amount);
                 item_it = next;
             } else {
                 Printf("[giga] leaving item in sack at position %d: id=%d, amount=%d, price=%d, effects total=%d", position, item->id, item->amount, item->price, item->effects.size);
@@ -180,7 +180,7 @@ bool GigaPickup(T_UNIT* unit) {
 // Sack pickup logic for a solo character.
 //
 // If the chosen sack is stapled with player ID, allow the player to pick it up.
-void __cdecl SoloPickup(T_UNIT* unit, int y, int x) {
+void __cdecl SoloPickup(A2Unit* unit, int y, int x) {
     Printf("[solo] SoloPickup: unit=0x%x (%s), y=%d, x=%d", unit, unit ? unit->name : "?", y, x);
 
     if (!IsSoloPlayer(unit)) {
@@ -233,7 +233,7 @@ extern "C" __declspec(naked) void solo_pickup_sack() {
     }
 }
 
-void __fastcall SoloPickupAll(T_UNIT* unit) {
+void __fastcall SoloPickupAll(A2Unit* unit) {
     if (!unit || !unit->position || !unit->player) {
         Printf("[solo_pickup_all] null unit");
     }
@@ -283,7 +283,7 @@ extern "C" void __fastcall PoisonStapleCell(A2Position* pos) {
     Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
 }
 
-T_SRV_LINKED_NODE<A2Bag>* FindSack(uint16_t pos_yx) {
+A2Node<A2Bag>* FindSack(uint16_t pos_yx) {
     Printf("[solo] FindSack at %d", pos_yx);
 
     A2Server* server = a2server_instance;
@@ -318,7 +318,7 @@ T_SRV_LINKED_NODE<A2Bag>* FindSack(uint16_t pos_yx) {
     return nullptr;
 }
 
-extern "C" void __fastcall StapleCellOnMobKill(T_UNIT* killed_unit) {
+extern "C" void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
     Printf(
         "[solo] StapleCellOnMobKill: unit=0x%x (name=%s, id=%d), killed_by=0x%x (name=%s, id=%d)",
         killed_unit,
@@ -388,7 +388,7 @@ extern "C" __declspec(naked) void drop_item_to_another() {
     }
 }
 
-int __fastcall ChooseDropItem(uint8_t* packet, T_UNIT* unit) {
+int __fastcall ChooseDropItem(uint8_t* packet, A2Unit* unit) {
     uint8_t from = packet[0xc], to = packet[0xd];
     
     if (to == 3 && (from == 1 || from == 2)) {
@@ -434,7 +434,7 @@ extern "C" __declspec(naked) void choose_drop_item() {
 // Prevent giga-players from dropping gold on the map.
 // If the regular player drops gold, poison the cell.
 extern "C" __declspec(naked) void drop_gold() {
-    T_PLAYER* player;
+    A2Player* player;
     __asm {
         mov player, eax    // Player is in EAX
     }

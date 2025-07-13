@@ -148,7 +148,7 @@
     <ClInclude Include="syslib.h" />
     <ClInclude Include="this_call.h" />
     <ClInclude Include="unit_info.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="a2types.h" />
     <ClInclude Include="zxmgr.h" />
     <ClInclude Include="lib\hat2.hpp" />
     <ClInclude Include="lib\packet.hpp" />

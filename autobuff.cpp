@@ -1,10 +1,10 @@
-#include "utils.h"
+#include "a2types.h"
 #include "lib/utils.hpp"
 #include "quests.h"
 
 auto a2PickSpell = (void* (__stdcall *)(void* unit, int spell_number, int unused))(0x005a79d6);
 
-bool CanCast(T_UNIT* unit, int spell_number) {
+bool CanCast(A2Unit* unit, int spell_number) {
     CheckPlayerSettings(unit->player);
 
     auto autobuff_mask = player_settings[unit->player->id_ext.id]->autobuff_mask;
@@ -14,7 +14,7 @@ bool CanCast(T_UNIT* unit, int spell_number) {
     return true;
 }
 
-void* __stdcall autobuff(T_UNIT* unit, int spell_number, int unused) {
+void* __stdcall autobuff(A2Unit* unit, int spell_number, int unused) {
     if (!CanCast(unit, spell_number)) {
         return nullptr;
     }

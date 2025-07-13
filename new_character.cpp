@@ -1,5 +1,5 @@
 #include "lib/utils.hpp"
-#include "utils.h"
+#include "a2types.h"
 
 extern "C" __declspec(naked) void skip_new_character_stats() {
     __asm {
@@ -69,7 +69,7 @@ void AddSpell(void* spellbook, int spell_id) {
     }
 }
 
-void __stdcall CreateMagicBook(T_UNIT* unit, int main_sphere) {
+void __stdcall CreateMagicBook(A2Unit* unit, int main_sphere) {
     if (IsWarrior(unit)) {
         return;
     }
