@@ -196,7 +196,9 @@ CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for ques
 
 CALL remove_existing_n_monters_quests_wrapper 0056289E 9 //Prevent inns to give a quest on the same monster if a player already has it
 CALL remove_existing_monster_quests_wrapper 00562E10 9 //Prevent inns to give a quest on the same monster if a player already has it
-CALL remove_existing_group_quests_wrapper 00563355 9 //Prevent inns to give a quest on the same monster if a player already has it
+
+// Don't give a quest for a group if: another player already has a quest for this group OR the group's units are filtered out.
+JMP remove_existing_group_quests_wrapper 00563355
 
 CALL imp_distance_bug_fix 005AAA8D // Fix staff distance bug
 

@@ -35,6 +35,12 @@ struct __declspec(align(4)) T_LINKEDLIST
   _DWORD dword18;
 };
 
+template <typename T>
+struct A2ListWrapper {
+  void* rtti_pointer;
+  T_LINKEDLIST<T> list;
+};
+
 struct A2Effect {
   uint8_t gap0[0x3c];
   uint8_t effect_id; // Effect ID, same as in the editor.
@@ -88,6 +94,18 @@ struct A2Position {
 };
 
 struct T_UNIT;
+struct T_PLAYER;
+struct A2Group {
+  T_LINKEDLIST<T_UNIT> units;
+  int group_id;
+  T_LINKEDLIST<void*> some_list;
+  void* some_ptr;
+  void* some_addr;
+  T_PLAYER* player;
+  void* some_addr2;
+  void* some_addr3;
+};
+
 struct  T_PLAYER
 {
     _BYTE gap0[4];
@@ -96,8 +114,8 @@ struct  T_PLAYER
     uint32_t flags; // 0x14
     const char* name;
     _BYTE gap2[8];
-    _DWORD dword24;
-    _DWORD dword28;
+    A2ListWrapper<T_UNIT>* unit_list;
+    T_LINKEDLIST<A2Group>* groups;
     int unitType;
     _BYTE gap3[2];
     _WORD word32;
@@ -219,12 +237,6 @@ struct A2Human {
   T_INVENTORY_ITEM* dress[13];
   int32_t main_sphere;
   int32_t experience_per_sphere[5];
-};
-
-template <typename T>
-struct A2ListWrapper {
-  void* rtti_pointer;
-  T_LINKEDLIST<T> list;
 };
 
 struct A2Bag {
