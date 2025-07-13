@@ -268,10 +268,10 @@ void __stdcall filter_out_existing_monster_quests(T_PLAYER* player, T_UNIT* ques
 	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
 }
 
-void __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, T_UNIT* picture_unit, unsigned int* matching_monsters_counter_ptr) {
+bool __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, T_UNIT* picture_unit, unsigned int* matching_monsters_counter_ptr) {
     // Is this group already in the player's quests?
     if (Config::AllowOnlyOneQuest_KillTheGroup && player_has_quest_for_monster_group(player, group->group_id)) {
-        return;
+        return false;
     }
 
 	if (Config::AllowQuestFilters) {
@@ -279,11 +279,12 @@ void __stdcall filter_out_existing_group_quests(T_PLAYER* player, Group* group, 
 
 		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
 		if ((*mob_names)[picture_unit->face << 8 | picture_unit->type_id].find(name_filter) == std::string::npos) {
-			return;
+			return true;
 		}
 	}
 	
 	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
+    return false;
 }
 
 #define LOCAL_VAR_QUEST_MONSTER_SELECTED EBP - 0X434
@@ -328,7 +329,17 @@ int __declspec(naked) remove_existing_group_quests_wrapper(){
         mov eax, [LOCAL_VAR_PLAYER]
         push eax
         call filter_out_existing_group_quests
-        retn
+
+        test eax, eax
+        jz next_group
+
+        // Retry with next unit from the group.
+        mov ebx, 0x00563366
+        jmp ebx
+
+        next_group: // Stop checking this group, move to the next group.
+        mov ebx, 0x005633d1
+        jmp ebx
     }
 }
 
