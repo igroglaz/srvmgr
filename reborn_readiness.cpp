@@ -132,6 +132,16 @@ std::map<int, uint8_t> circling_needs_monster_kills{
     {819, 14}, // M_Skeleton.5
 };
 
+std::string WithSpaces(int value) {
+    std::string s = std::to_string(value);
+    int position = static_cast<int>(s.length()) - 3;
+    while (position > 0) {
+        s.insert(position, " ");
+        position -= 3;
+    }
+    return s;
+}
+
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell);
 
 // A2 server only stores the effective unit stats () Walk over all equipped
@@ -300,33 +310,46 @@ bool CheckMonsterKills(const PlayerInfo& info, const std::map<int, uint8_t>& nee
     return ready;
 }
 
-void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
-    bool ready_for_reclass = true;
-    std::vector<std::string> info_lines;
-    const int32_t need_money = 300000001;
-    const int32_t need_experience = 177777778;
-
+bool CheckMoney(const PlayerInfo& info, int32_t need_money, std::vector<std::string>& info_lines) {
+    bool result = true;
     if (info.money < need_money) {
-        ready_for_reclass = false;
-        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
+        info_lines.emplace_back(Format("- Need %s money, you have %s", WithSpaces(need_money).c_str(), WithSpaces(info.money).c_str()));
+        result = false;
     } else {
-        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
+        info_lines.emplace_back(Format("+ You have enough money: need %s, you have %s", WithSpaces(need_money).c_str(), WithSpaces(info.money).c_str()));
     }
 
+    return result;
+}
+
+bool CheckExperience(const PlayerInfo& info, int32_t need_experience, std::vector<std::string>& info_lines) {
+    bool result = true;
     if (info.experience < need_experience) {
-        ready_for_reclass = false;
-        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
+        info_lines.emplace_back(Format("- Need %s experience, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(info.experience).c_str()));
+        result = false;
     } else {
-        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
+        info_lines.emplace_back(Format("+ You have enough experience: need %s, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(info.experience).c_str()));
     }
-
-    info_lines.emplace_back(Format("Also you have: %d body, %d reaction, %d mind, %d spirit (max: 55-76-76-76)", info.body, info.reaction, info.mind, info.spirit));
 
     if (info.warrior) {
         info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
     } else {
         info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
     }
+
+    return result;
+}
+
+void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
+    bool ready_for_reclass = true;
+    std::vector<std::string> info_lines;
+    const int32_t need_money = 300000001;
+    const int32_t need_experience = 177777778;
+
+    ready_for_reclass &= CheckMoney(info, need_money, info_lines);
+    ready_for_reclass &= CheckExperience(info, need_experience, info_lines);
+
+    info_lines.emplace_back(Format("Also you have: %d body, %d reaction, %d mind, %d spirit (max: 55-76-76-76)", info.body, info.reaction, info.mind, info.spirit));
 
     if (ready_for_reclass) {
         if (info.clan == "reclass") {
@@ -357,25 +380,8 @@ void CheckAscendReadiness(const PlayerInfo& info, unsigned char* p) {
         info_lines.emplace_back(Format("+ You have maxed out stats"));
     }
 
-    if (info.money < need_money) {
-        ready_for_ascend = false;
-        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
-    } else {
-        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
-    }
-
-    if (info.experience < need_experience) {
-        ready_for_ascend = false;
-        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
-    } else {
-        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
-    }
-
-    if (info.warrior) {
-        info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
-    } else {
-        info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
-    }
+    ready_for_ascend &= CheckMoney(info, need_money, info_lines);
+    ready_for_ascend &= CheckExperience(info, need_experience, info_lines);
 
     if (ready_for_ascend) {
         if (info.clan == "ascend") {
@@ -421,26 +427,8 @@ void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
         info_lines.emplace_back(Format("+ You have maxed out stats"));
     }
 
-    if (info.money < need_money) {
-        ready = false;
-        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, info.money));
-    } else {
-        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, info.money));
-    }
-
-    if (info.experience < need_experience) {
-        ready = false;
-        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, info.experience));
-    } else {
-        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, info.experience));
-    }
-
-    if (info.warrior) {
-        info_lines.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
-    } else {
-        info_lines.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
-    }
-
+    ready &= CheckMoney(info, need_money, info_lines);
+    ready &= CheckExperience(info, need_experience, info_lines);
     ready &= CheckMonsterKills(info, circling_needs_monster_kills, info_lines);
 
     if (ready) {
@@ -544,16 +532,16 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
 
     if (player_info.money < need_money) {
         ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d money, you have %d", need_money, player_info.money));
+        info_lines.emplace_back(Format("- Need %s money, you have %s", WithSpaces(need_money).c_str(), WithSpaces(player_info.money).c_str()));
     } else if (need_money > 0) {
-        info_lines.emplace_back(Format("+ You have enough money: need %d, you have %d", need_money, player_info.money));
+        info_lines.emplace_back(Format("+ You have enough money: need %s, you have %s", WithSpaces(need_money).c_str(), WithSpaces(player_info.money).c_str()));
     }
 
     if (player_info.experience < need_experience) {
         ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d experience, you have %d", need_experience, player_info.experience));
+        info_lines.emplace_back(Format("- Need %s experience, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(player_info.experience).c_str()));
     } else if (need_experience > 0) {
-        info_lines.emplace_back(Format("+ You have enough experience: need %d, you have %d", need_experience, player_info.experience));
+        info_lines.emplace_back(Format("+ You have enough experience: need %s, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(player_info.experience).c_str()));
     }
 
     if (player_info.female || player_info.circle > 0) {
