@@ -6,8 +6,6 @@
 #include "quests.h"
 #include "config_new.h"
 
-std::unordered_map<int, std::string> mob_names_by_server_id;
-
 // Address in a2serv.exe: 50df19.
 // Original `ChooseRewardMob_0050df19` has `A2GameDataRes*` in ECX and `target_experience` on the stack.
 // `__fastcall` convention: last two arguments are passed in ECX and EDX, the rest on the stack.
@@ -101,10 +99,20 @@ void InitializeMobNames() {
 
 		const A2MonsterInfoData& d = *m.monsterData.data;
 
+		// Add necros share the same type_id=99. Same with druids (100) and catapults (101).
+		std::string name = m.name;
+		if (d.typeId == 99) {
+			name = "Necro";
+		} else if (d.typeId == 100) {
+			name = "Druid";
+		} else if (d.typeId == 101) {
+			name = "Catapult";
+		}
+
 		const int mob_type = d.face << 8 | d.typeId;
 
-		(*new_mob_names)[mob_type] = NormalizeMobName(m.name);
-		(*new_mob_names_raw)[mob_type] = m.name;
+		(*new_mob_names)[mob_type] = NormalizeMobName(name.c_str());
+		(*new_mob_names_raw)[mob_type] = name;
 
         mob_names_by_server_id[d.serverId] = m.name;
 	}
@@ -117,11 +125,15 @@ void InitializeMobNames() {
 		return;
 	}
 
+	for (auto it = mob_names_by_server_id.begin(); it != mob_names_by_server_id.end(); ++it) {
+		mob_names_by_server_id_normed[it->first] = NormalizeMobName(it->second.c_str());
+	}
+
 	// Most mobs of the first level don't have a suffix, which makes it
 	// impossible to choose only them with filters. For example, the ghost is
 	// `Ghost`, but a filter `Ghost` would also match `Ghost.2`.
 	// Let's append `.1` to each mob name that doesn't have a level.
-	for (auto it = new_mob_names->begin(); it != new_mob_names->end(); ++it) {
+	for (auto it = mob_names_by_server_id_normed.begin(); it != mob_names_by_server_id_normed.end(); ++it) {
 		const char mob_name_end = it->second.back();
 		if (mob_name_end < '0' || mob_name_end > '9') {
 			it->second += ".1";

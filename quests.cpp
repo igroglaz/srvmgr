@@ -6,6 +6,8 @@
 
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
+std::unordered_map<int, std::string> mob_names_by_server_id;
+std::unordered_map<int, std::string> mob_names_by_server_id_normed;
 std::unordered_map<short, std::unique_ptr<PlayerSettings>> player_settings;
 
 void InitializePlayerSettings() {
@@ -199,7 +201,7 @@ void __stdcall filter_out_existing_n_monsters_quests(A2Player* player, int32_t q
 
 		// Note: `mob_names` keys use the same format as the `quest_monster_type`.
 		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if ((*mob_names.get())[quest_monster_type].find(name_filter) == std::string::npos) {
+		if ((*mob_names)[quest_monster_type].find(name_filter) == std::string::npos) {
 			return;
 		}
 	}
@@ -217,7 +219,7 @@ void __stdcall filter_out_existing_monster_quests(A2Player* player, A2Unit* ques
 		InitializeMobNames();
 
 		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if ((*mob_names)[quest_monster_selected->face << 8 | quest_monster_selected->type_id].find(name_filter) == std::string::npos) {
+		if (mob_names_by_server_id_normed[quest_monster_selected->server_id].find(name_filter) == std::string::npos) {
 			return;
 		}
 	}
@@ -235,7 +237,7 @@ bool __stdcall filter_out_existing_group_quests(A2Player* player, A2Group* group
 		InitializeMobNames();
 
 		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if ((*mob_names)[unit->face << 8 | unit->type_id].find(name_filter) == std::string::npos) {
+		if (mob_names_by_server_id_normed[unit->server_id].find(name_filter) == std::string::npos) {
 			return true; // Retry with the next unit in group.
 		}
 	}

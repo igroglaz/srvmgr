@@ -198,7 +198,7 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 
 		InitializeMobNames();
 
-		for (auto mob = mob_names->begin(); mob != mob_names->end(); mob++) {
+		for (auto mob = mob_names_by_server_id_normed.begin(); mob != mob_names_by_server_id_normed.end(); mob++) {
 			if (mob->second.find(filter) != std::string::npos) {
 				matching_mobs++;
 			}
