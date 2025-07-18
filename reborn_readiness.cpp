@@ -16,6 +16,7 @@ struct PlayerInfo {
     bool warrior;
     bool female;
     bool solo;
+    bool legend;
     int circle;
     std::string clan;
     int has_treasures;
@@ -207,6 +208,7 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
     player_info.warrior = IsWarrior(unit);
     player_info.female = IsFemale(unit);
     player_info.solo = IsSoloPlayer(unit);
+    player_info.legend = IsGigaPlayer(unit);
     player_info.circle = circle::Circle(unit);
     player_info.clan = clan;
     player_info.has_treasures = has_treasures;
@@ -270,6 +272,10 @@ int32_t ServerRequirementsMoney(ServerIDType server_id, const PlayerInfo& player
             case MEDIUM: return 21*m;
             case HARD: return 100*m;
         }
+    }
+
+    if (player_info.legend && server_id == NIVAL) {
+        return 900*k;
     }
 
     // Hardcore and regular characters.
