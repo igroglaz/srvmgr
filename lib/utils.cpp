@@ -6,17 +6,15 @@
 #include <cstdio>
 #include <ctime>
 
-using namespace std;
-
 /*
-    utils::Format: функция, аналогичная sprintf(), но для STL строк.
+    utils::Format: С„СѓРЅРєС†РёСЏ, Р°РЅР°Р»РѕРіРёС‡РЅР°СЏ sprintf(), РЅРѕ РґР»СЏ STL СЃС‚СЂРѕРє.
 
-    Возвращает отформатированную STL строку.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕС‚С„РѕСЂРјР°С‚РёСЂРѕРІР°РЅРЅСѓСЋ STL СЃС‚СЂРѕРєСѓ.
 
-    format: формат
-    ...: аргументы для формата
+    format: С„РѕСЂРјР°С‚
+    ...: Р°СЂРіСѓРјРµРЅС‚С‹ РґР»СЏ С„РѕСЂРјР°С‚Р°
 */
-std::string Format(const string format, ...)
+std::string Format(const std::string format, ...)
 {
     char line[2049];
     line[2048] = 0;
@@ -25,21 +23,21 @@ std::string Format(const string format, ...)
     vsnprintf(line, 2048, format.c_str(), list);
     va_end(list);
 
-    return string(line);
+    return std::string(line);
 }
 
 /*
-    utils::Explode: функция для разбиения строки на подстроки.
+    utils::Explode: С„СѓРЅРєС†РёСЏ РґР»СЏ СЂР°Р·Р±РёРµРЅРёСЏ СЃС‚СЂРѕРєРё РЅР° РїРѕРґСЃС‚СЂРѕРєРё.
 
-    Возвращает массив из найденных подстрок.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ РјР°СЃСЃРёРІ РёР· РЅР°Р№РґРµРЅРЅС‹С… РїРѕРґСЃС‚СЂРѕРє.
 
-    what: разбиваемая строка
-    separator: разделитель
+    what: СЂР°Р·Р±РёРІР°РµРјР°СЏ СЃС‚СЂРѕРєР°
+    separator: СЂР°Р·РґРµР»РёС‚РµР»СЊ
 */
-vector<string> Explode(const string& what, const string& separator)
+std::vector<std::string> Explode(const std::string& what, const std::string& separator)
 {
-    string curstr;
-    vector<string> retval;
+    std::string curstr;
+    std::vector<std::string> retval;
     for(size_t i = 0; i < what.length(); i++)
     {
         if(what.find(separator, i) == i)
@@ -57,18 +55,18 @@ vector<string> Explode(const string& what, const string& separator)
 }
 
 /*
-    utils::TrimLeft, utils::TrimRight, utils::Trim: обрезать незначимые символы в начале строки (TrimLeft), в конце (TrimRight)
-        или и там, и там (Trim).
+    utils::TrimLeft, utils::TrimRight, utils::Trim: РѕР±СЂРµР·Р°С‚СЊ РЅРµР·РЅР°С‡РёРјС‹Рµ СЃРёРјРІРѕР»С‹ РІ РЅР°С‡Р°Р»Рµ СЃС‚СЂРѕРєРё (TrimLeft), РІ РєРѕРЅС†Рµ (TrimRight)
+        РёР»Рё Рё С‚Р°Рј, Рё С‚Р°Рј (Trim).
 
-    Возвращает обрезанную строку.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕР±СЂРµР·Р°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ.
 
-    what: обрезаемая строка
-    callback: функция, определяющая значимость символа. См. IsWhitespace
+    what: РѕР±СЂРµР·Р°РµРјР°СЏ СЃС‚СЂРѕРєР°
+    callback: С„СѓРЅРєС†РёСЏ, РѕРїСЂРµРґРµР»СЏСЋС‰Р°СЏ Р·РЅР°С‡РёРјРѕСЃС‚СЊ СЃРёРјРІРѕР»Р°. РЎРј. IsWhitespace
 */
-string TrimLeft(const string& what, bool (callback)(char))
+std::string TrimLeft(const std::string& what, bool (callback)(char))
 {
-    string ret = what;
-    for(string::iterator i = ret.begin(); i != ret.end(); ++i)
+    std::string ret = what;
+    for(std::string::iterator i = ret.begin(); i != ret.end(); ++i)
     {
         if(callback((*i)))
             continue;
@@ -78,10 +76,10 @@ string TrimLeft(const string& what, bool (callback)(char))
     return "";
 }
 
-string TrimRight(const string& what, bool (callback)(char))
+std::string TrimRight(const std::string& what, bool (callback)(char))
 {
-    string ret = what;
-    for(string::reverse_iterator i = ret.rbegin(); i != ret.rend(); ++i)
+    std::string ret = what;
+    for(std::string::reverse_iterator i = ret.rbegin(); i != ret.rend(); ++i)
     {
         if(callback((*i)))
             continue;
@@ -91,17 +89,17 @@ string TrimRight(const string& what, bool (callback)(char))
     return "";
 }
 
-string Trim(const string& what, bool (callback)(char))
+std::string Trim(const std::string& what, bool (callback)(char))
 {
     return TrimRight(TrimLeft(what, callback));
 }
 
 /*
-    utils::IsWhitespace: вспомогательная функция для Trim*
+    utils::IsWhitespace: РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ Trim*
 
-    Возвращает true, если символ является пробелом и его нужно обрезать.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё СЃРёРјРІРѕР» СЏРІР»СЏРµС‚СЃСЏ РїСЂРѕР±РµР»РѕРј Рё РµРіРѕ РЅСѓР¶РЅРѕ РѕР±СЂРµР·Р°С‚СЊ.
 
-    what: проверяемый символ.
+    what: РїСЂРѕРІРµСЂСЏРµРјС‹Р№ СЃРёРјРІРѕР».
 */
 bool IsWhitespace(char what)
 {
@@ -119,90 +117,72 @@ bool IsWhitespace(char what)
 }
 
 /*
-    utils::ToLower, utils::ToUpper: преобразование строки в верхний или нижний регистр.
+    utils::ToLower, utils::ToUpper: РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ РІРµСЂС…РЅРёР№ РёР»Рё РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ.
 
-    Возвращает преобразованную строку.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ.
 
-    what: Преобразовываемая строка.
+    what: РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРјР°СЏ СЃС‚СЂРѕРєР°.
 */
-string ToLower(const string& what)
+std::string ToLower(const std::string& what)
 {
-    string ret = what;
-    for(string::iterator i = ret.begin(); i != ret.end(); ++i)
+    std::string ret = what;
+    for(std::string::iterator i = ret.begin(); i != ret.end(); ++i)
         (*i) = tolower((*i));
     return ret;
 }
 
-string ToUpper(const string& what)
+std::string ToUpper(const std::string& what)
 {
-    string ret = what;
-    for(string::iterator i = ret.begin(); i != ret.end(); ++i)
+    std::string ret = what;
+    for(std::string::iterator i = ret.begin(); i != ret.end(); ++i)
         (*i) = toupper((*i));
     return ret;
 }
 
-#include <fstream>
-
 /*
-    utils::FileExists: проверка на существование файла.
+    utils::Basename: СЃСЂРµР·Р°С‚СЊ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ, РѕСЃС‚Р°РІРёРІ С‚РѕР»СЊРєРѕ РµРіРѕ РЅР°Р·РІР°РЅРёРµ.
 
-    Возвращает true, если файл существует.
+    Р’РѕР·РІСЂР°С‰Р°РµРјРѕРµ Р·РЅР°С‡РµРЅРёРµ: РѕР±СЂРµР·Р°РЅРЅР°СЏ СЃС‚СЂРѕРєР°.
 
-    filename: название проверяемого файла.
+    filename: СЃС‚Р°СЂРѕРµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р°.
 */
-bool FileExists(const string& filename)
+std::string Basename(const std::string& filename)
 {
-    ifstream f_temp;
-    f_temp.open(filename.c_str(), ios::in | ios::binary);
-    if(!f_temp.is_open()) return false;
-    f_temp.close();
-    return true;
-}
-
-/*
-    utils::Basename: срезать путь к файлу, оставив только его название.
-
-    Возвращаемое значение: обрезанная строка.
-
-    filename: старое название файла.
-*/
-string Basename(const string& filename)
-{
-    string ret = FixSlashes(filename);
+    std::string ret = FixSlashes(filename);
     uint32_t where = ret.find_last_of('/');
-    if(where == string::npos) return ret;
+    if(where == std::string::npos) return ret;
     ret.erase(0, where+1);
     return ret;
 }
 
 /*
-    utils::FixSlashes: сделать путь к файлу POSIX-совместимым (т.е. с человеческими слешами вместо backslash, используемого в DOS/Windows)
+    utils::FixSlashes: СЃРґРµР»Р°С‚СЊ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ POSIX-СЃРѕРІРјРµСЃС‚РёРјС‹Рј (С‚.Рµ. СЃ С‡РµР»РѕРІРµС‡РµСЃРєРёРјРё СЃР»РµС€Р°РјРё РІРјРµСЃС‚Рѕ backslash, РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РІ DOS/Windows)
 
-    Возвращаемое значение: исправленная строка.
+    Р’РѕР·РІСЂР°С‰Р°РµРјРѕРµ Р·РЅР°С‡РµРЅРёРµ: РёСЃРїСЂР°РІР»РµРЅРЅР°СЏ СЃС‚СЂРѕРєР°.
 
-    filename: старое название файла.
+    filename: СЃС‚Р°СЂРѕРµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р°.
 */
-string FixSlashes(const string& filename)
+std::string FixSlashes(const std::string& filename)
 {
-    string ret = filename;
-    for(string::iterator i = ret.begin(); i != ret.end(); ++i)
+    std::string ret = filename;
+    for(std::string::iterator i = ret.begin(); i != ret.end(); ++i)
         if((*i) == '\\') (*i) = '/';
     return ret;
 }
 
 /*
-    utils::TruncateSlashes: удалить повторяющиеся слеши (напр. main//graphics/mainmenu//menu_.bmp).
+    utils::TruncateSlashes: СѓРґР°Р»РёС‚СЊ РїРѕРІС‚РѕСЂСЏСЋС‰РёРµСЃСЏ СЃР»РµС€Рё (РЅР°РїСЂ. main//graphics/mainmenu//menu_.bmp).
 
-    Возвращает исправленную строку.
+    Р’РѕР·РІСЂР°С‰Р°РµС‚ РёСЃРїСЂР°РІР»РµРЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ.
 
-    filename: старое название файла.
+    filename: СЃС‚Р°СЂРѕРµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р°.
 */
-string TruncateSlashes(const string& filename)
+std::string TruncateSlashes(const std::string& filename)
 {
-    string ret = filename;
+    std::string ret = filename;
     char lastchar = 0;
     char thischar = 0;
-    for(string::iterator i = ret.begin(); i != ret.end(); ++i)
+    for(std::string::iterator i = ret.begin(); i != ret.end(); ++i)
     {
         thischar = (*i);
         if((thischar == '/' || thischar == '\\') &&
@@ -216,14 +196,14 @@ string TruncateSlashes(const string& filename)
     return ret;
 }
 
-unsigned long StrToInt(const string& what)
+unsigned long StrToInt(const std::string& what)
 {
 	unsigned long retval;
 	sscanf(what.c_str(), "%u", &retval);
 	return retval;
 }
 
-float StrToFloat(const string& what)
+float StrToFloat(const std::string& what)
 {
 	float retval;
 	sscanf(what.c_str(), "%f", &retval);
@@ -233,24 +213,24 @@ float StrToFloat(const string& what)
 // take each char from (hopefully) numeric string and
 // check that each character's is ASCII from 48 (0d) to 57 (9d)
 // (size_t - unsigned type not less than 16)
-bool CheckInt(const string& what)
+bool CheckInt(const std::string& what)
 {
 	for(size_t i = 0; i < what.length(); i++)
 		if(what[i] < 0x30 || 0x39 < what[i]) return false;
 	return true;
 }
 
-bool CheckBool(const string& what)
+bool CheckBool(const std::string& what)
 {
-    string wh2 = ToLower(Trim(what));
+    std::string wh2 = ToLower(Trim(what));
     if(wh2 == "true" || wh2 == "false" || wh2 == "yes" || wh2 == "no" || wh2 == "y" || wh2 == "n" || wh2 == "0" || wh2 == "1")
         return true;
     return false;
 }
 
-bool StrToBool(const string& what)
+bool StrToBool(const std::string& what)
 {
-	string cr = Trim(ToLower(what));
+	std::string cr = Trim(ToLower(what));
 	if(cr == "yes" || cr == "true" || cr == "1" || cr == "y")
 		return true;
 	return false;
@@ -271,7 +251,7 @@ bool CheckIP(std::string addr)
     return true;
 }
 
-bool CheckFloat(const string& what)
+bool CheckFloat(const std::string& what)
 {
 	for(size_t i = 0; i < what.length(); i++)
 		if((what[i] < 0x30 || 0x39 < what[i]) && what[i] != '.') return false;
@@ -303,14 +283,14 @@ void _stdcall Printf(const char* format, ...)
 	delete[] line;
 }
 
-unsigned long HexToInt(const string& what)
+unsigned long HexToInt(const std::string& what)
 {
 	unsigned int retval;
 	sscanf(what.c_str(), "%X", &retval);
 	return retval;
 }
 
-bool CheckHex(const string& what)
+bool CheckHex(const std::string& what)
 {
 	for(size_t i = 0; i < what.length(); i++)
 		if((what[i] < 0x30 || 0x39 < what[i]) && !(what[i] >= 'A' && what[i] <= 'F') && !(what[i] >= 'a' && what[i] <= 'f')) return false;
