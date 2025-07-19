@@ -3,8 +3,10 @@
 #include "srvmgrdef.h"
 #include "cheat_codes_new.h"
 
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <random>
+#include <vector>
 
 unsigned long MAX_SKILL = 110;              // Vanilla (V): 100; we use SOFTCORE values by default
 unsigned long MAX_EXP_ON_SKILL = 35742360;  // V: 13779612;
@@ -163,6 +165,7 @@ namespace Config
     int16_t max_pvp_dmg = 100;
     float shop_potions_factor = 1;
     bool server_rotate_maps = true;
+    bool shuffle_maps = true;
 
     // If these settings are set to true, it will forbid a player from taking several quests for the same monster, group or monster type.
     bool AllowOnlyOneQuest_KillNMonsters = false;
@@ -197,17 +200,17 @@ int ReadConfig(const char* filename)
         SetCString((byte*)(0x006D15BC), "chr");              // ChrBase
     }
 
-    using namespace std;
-    ifstream f_cfg;
-    f_cfg.open(filename, ios::in);
+    std::ifstream f_cfg;
+    f_cfg.open(filename, std::ios::in);
     if(!f_cfg.is_open()) return -1;
 
-    string line;
+    std::string line;
     int32_t lnid = 0;
     std::string section = "root";
 
-    while(getline(f_cfg, line))
-    {
+    std::vector<std::pair<std::string, uint32_t>> maps;
+
+    while (std::getline(f_cfg, line)) {
         lnid++;
         bool enc = false;
         for(size_t i = 0; i < line.length(); i++)
@@ -258,7 +261,7 @@ int ReadConfig(const char* filename)
         {
             line.erase(0, 1);
             size_t whs = line.find_first_of(']');
-            if(whs == string::npos)
+            if(whs == std::string::npos)
             {
                 return lnid;
             }
@@ -277,7 +280,7 @@ int ReadConfig(const char* filename)
         {
             std::string parameter, value;
             size_t whd = line.find_first_of('=');
-            if(whd != string::npos)
+            if(whd != std::string::npos)
             {
                 parameter = line;
                 parameter.erase(whd);
@@ -336,6 +339,12 @@ int ReadConfig(const char* filename)
                 {
                     if(!CheckBool(value)) return lnid;
                     Config::server_rotate_maps = StrToBool(value);
+                }
+                else if(parameter == ToLower("ShuffleMaps")) {
+                    if (!CheckBool(value)) {
+                        return lnid;
+                    }
+                    Config::shuffle_maps = StrToBool(value);
                 }
                 else if(parameter == "description")
                 {
@@ -654,7 +663,7 @@ int ReadConfig(const char* filename)
                         parameter == "ipaddress2" ||
                         parameter == "hataddress")
                 {
-                    vector<string> ipd = Explode(value, ":");
+                    std::vector<std::string> ipd = Explode(value, ":");
                     if(ipd.size() > 2) return lnid;
                     if(!CheckIP(ipd[0])) return lnid;
                     uint32_t port = 8001;
@@ -689,7 +698,7 @@ int ReadConfig(const char* filename)
             {
                 if(parameter == "server")
                 {
-                    vector<string> ipd = Explode(value, ":");
+                    std::vector<std::string> ipd = Explode(value, ":");
                     if(ipd.size() > 2) return lnid;
                     if(!CheckIP(ipd[0])) return lnid;
                     uint32_t port = 3306;
@@ -709,7 +718,7 @@ int ReadConfig(const char* filename)
                 std::string m_filename = parameter;
                 uint32_t m_time = 2147483647;
                 if(value.length()) m_time = (uint32_t)(StrToFloat(value) * 60.0);
-                AppendMaplist(m_filename.c_str(), m_time);
+                maps.emplace_back(std::move(m_filename), m_time);
             }
             else
             {
@@ -728,6 +737,16 @@ int ReadConfig(const char* filename)
     }
 
     f_cfg.close();
+
+    if (Config::shuffle_maps) {
+        auto device = std::random_device{};
+        std::mt19937 generator(device());
+        std::shuffle(maps.begin(), maps.end(), generator);
+    }
+
+    for (auto& map_and_time: maps) {
+        AppendMaplist(map_and_time.first.c_str(), map_and_time.second);
+    }
 
     return 0;
 }
