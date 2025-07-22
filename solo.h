@@ -13,6 +13,6 @@ A2Node<A2Bag>* FindSack(uint16_t pos_yx);
 
 void ClearStapleCells();
 
-bool IsSoloPlayer(A2Unit* unit);
-bool IsGigaPlayer(A2Unit* unit);
-bool IsPureSoloPlayer(A2Unit* unit);
+bool IsSoloPlayer(const A2Unit* unit);
+bool IsGigaPlayer(const A2Unit* unit);
+bool IsPureSoloPlayer(const A2Unit* unit);

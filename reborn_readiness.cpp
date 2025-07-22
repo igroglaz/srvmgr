@@ -10,6 +10,7 @@
 #include "lib/utils.hpp"
 #include "quests.h"
 #include "solo.h"
+#include "thresholds.h"
 #include "zxmgr.h"
 
 struct PlayerInfo {
@@ -19,118 +20,17 @@ struct PlayerInfo {
     bool legend;
     int circle;
     std::string clan;
-    int has_treasures;
-    int32_t money;
+    uint32_t has_treasures;
+    uint32_t money;
     uint16_t body;
     uint16_t reaction;
     uint16_t mind;
     uint16_t spirit;
-    int32_t experience;
+    uint32_t experience;
     uint8_t* monster_kills_by_server_id;
     uint32_t deaths;
     int skills[5];
-};
-
-const int32_t k = 1000;
-const int32_t m = k * k;
-
-// Keeping this list up-to-date would be annoying. We should find a way to request this directly from the hat.
-std::map<ServerIDType, std::map<int, uint8_t>> girl_needs_monster_kills{
-    {EASY, {
-        ////////////////////// 1
-        {692, 1},  // Necro_Female1
-        {616, 1},  // Ogre
-        {620, 1},  // Troll
-        ////////////////////// 14
-        {657, 14}, // F_Zombie.1
-        {664, 14}, // F_Skeleton.1
-        {668, 14}, // A_Skeleton.1
-        {629, 14}, // Ghost.2
-        {715, 14}, // Dino
-        {632, 14}, // Bee
-        {707, 14}, // Spider
-    }},
-    {KIDS, {
-        ////////////////////// 1
-        {617, 1},  // Ogre.2
-        {621, 1},  // Troll.2
-        {2374, 1}, // Demon
-        {711, 1},  // Succubus
-        {609, 3}, // Orc_Sword.2
-        ////////////////////// 14
-        {630, 14}, // Ghost.3
-        {633, 14}, // Bee.2
-        {707, 14}, // Spider
-    }},
-    {NIVAL, {
-        ////////////////////// 1
-        {696, 1},  // Necro_Leader2
-        {695, 1},  // Necro_Female2
-        {694, 1},  // Necro_Male2
-        {712, 1},  // Succubus.2
-        ////////////////////// 14
-        {669, 14}, // A_Skeleton.2
-        {662, 14}, // A_Zombie.3
-        {617, 14}, // Ogre.2
-        {621, 14}, // Troll.2
-        {625, 14}, // Bat_Sonic.2
-        {708, 14}, // Spider.2
-    }},
-    {MEDIUM, {
-        ////////////////////// 1
-        {701, 1},  // Necro_Female4
-        {671, 1},  // A_Skeleton.4
-        {667, 1},  // F_Skeleton.4
-        ////////////////////// 14
-        {666, 14}, // F_Skeleton.3
-        {659, 14}, // F_Zombie.3
-        {618, 14}, // Ogre.3
-        {622, 14}, // Troll.3
-        {610, 14}, // Orc_Sword.3
-        {614, 14}, // Orc_Bow.3
-        {631, 14}, // Ghost.4
-        {603, 14}, // Goblin_Pike.4
-        {717, 14}, // Dino.3
-        {626, 14}, // Bat_Sonic.3
-        {634, 14}, // Bee.3
-        {709, 14}, // Spider.3
-    }},
-    {HARD, {
-        {2132, 14}, // 2F_KnightLeader4
-        {2130, 14}, // 2H_Knight4
-        {671, 14}, // A_Skeleton.4
-        {663, 14}, // A_Zombie.4
-        {667, 14}, // F_Skeleton.4
-        {660, 14}, // F_Zombie.4
-        {718, 14}, // Dino.4
-        {673, 14}, // M_Skeleton.4
-        {701, 14}, // Necro_Female4
-        {702, 14}, // Necro_Leader4
-        {700, 14}, // Necro_Male4
-        {619, 14}, // Ogre.4
-        {623, 14}, // Troll.4
-        {656, 14}, // Orc_Shaman.4
-        {611, 14}, // Orc_Sword.4
-        {615, 14}, // Orc_Bow.4
-        {627, 14}, // Bat_Sonic.4
-        {635, 14}, // Bee.4
-        {710, 14}, // Spider.4
-        {714, 14}, // Succubus.4
-        {812, 14}, // Turtle.5
-        {808, 14}, // Ghost.5
-    }},
-};
-
-std::map<int, uint8_t> circling_needs_monster_kills{
-    {803, 14}, // Orc_Sword.5
-    {804, 14}, // Orc_Bow.5
-    {813, 14}, // Dragon.5
-    {814, 14}, // Orc_Shaman.5
-    {815, 14}, // F_Zombie.5
-    {816, 14}, // A_Zombie.5
-    {817, 14}, // F_Skeleton.5
-    {818, 14}, // A_Skeleton.5
-    {819, 14}, // M_Skeleton.5
+    A2Unit* unit;
 };
 
 std::string WithSpaces(int value) {
@@ -220,6 +120,7 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
     player_info.experience = unit->exp;
     player_info.monster_kills_by_server_id = player->monster_kills_by_server_id;
     player_info.deaths = player->deaths;
+    player_info.unit = unit;
 
     if (unit->clazz != A2_CLASS_HUMAN) {
         zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
@@ -232,71 +133,30 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
         }
     }
 
+    thresholds::thresholds.MaybeReload(thresholds::THRESHOLDS_FILE);
+
     CheckRebornReadiness(server_id, player_info, p, hell);
 }
 
-int32_t ServerRequirementsExperience(ServerIDType server_id, const PlayerInfo& player_info) {
-    // Reclassed characters.
-    if (player_info.female) {
-        switch (server_id) {
-            case EASY: return 50*k;
-            case KIDS: return 500*k;
-            case NIVAL: return 2*m;
-            case MEDIUM: return 11*m;
-            case HARD: return 50*m;
-        }
-    }
-
-    // Hardcore characters.
-    if (player_info.deaths <= 1) {
-        switch (server_id) {
-            case EASY: return 35*k;
-            case KIDS: return 100*k;
-            case NIVAL: return 500*k;
-            case MEDIUM: return 11*m;
-            case HARD: return 50*m;
-        }
-    }
-
-    // Regular characters.
-    return 0;
+int32_t ServerRequirementsExperience(const PlayerInfo& player_info) {
+    return thresholds::thresholds.Value("reborn.experience", player_info.unit);
 }
 
-int32_t ServerRequirementsMoney(ServerIDType server_id, const PlayerInfo& player_info) {
-    // Reclassed characters.
-    if (player_info.female) {
-        switch (server_id) {
-            case EASY: return 100*k;
-            case KIDS: return 1*m;
-            case NIVAL: return 5*m;
-            case MEDIUM: return 21*m;
-            case HARD: return 100*m;
-        }
-    }
-
-    if (player_info.legend && server_id == NIVAL) {
-        return 900*k;
-    }
-
-    // Hardcore and regular characters.
-    switch (server_id) {
-        case EASY: return 30*k;
-        case KIDS: return 300*k;
-        case NIVAL: return 1500*k;
-        case MEDIUM: return 7*m;
-        case HARD: return 50*m;
-    }
-
-    return 0;
+int32_t ServerRequirementsMoney(const PlayerInfo& player_info) {
+    return thresholds::thresholds.Value("reborn.money", player_info.unit);
 }
 
-bool CheckMonsterKills(const PlayerInfo& info, const std::map<int, uint8_t>& need_kills, std::vector<std::string>& info_lines) {
+bool CheckMonsterKills(const PlayerInfo& info, const std::unordered_map<uint16_t, int>* need_kills, std::vector<std::string>& info_lines) {
+    if (!need_kills) {
+        return true;
+    }
+
     InitializeMobNames();
 
     bool ready = true;
     int types_left = 0;
 
-    for (auto it = need_kills.begin(); it != need_kills.end(); ++it) {
+    for (auto it = need_kills->begin(); it != need_kills->end(); ++it) {
         auto got = info.monster_kills_by_server_id[it->first];
         if (got < it->second) {
             if (++types_left > 5) {
@@ -316,7 +176,7 @@ bool CheckMonsterKills(const PlayerInfo& info, const std::map<int, uint8_t>& nee
     return ready;
 }
 
-bool CheckMoney(const PlayerInfo& info, int32_t need_money, std::vector<std::string>& info_lines) {
+bool CheckMoney(const PlayerInfo& info, uint32_t need_money, std::vector<std::string>& info_lines) {
     bool result = true;
     if (info.money < need_money) {
         info_lines.emplace_back(Format("- Need %s money, you have %s", WithSpaces(need_money).c_str(), WithSpaces(info.money).c_str()));
@@ -328,7 +188,7 @@ bool CheckMoney(const PlayerInfo& info, int32_t need_money, std::vector<std::str
     return result;
 }
 
-bool CheckExperience(const PlayerInfo& info, int32_t need_experience, std::vector<std::string>& info_lines) {
+bool CheckExperience(const PlayerInfo& info, uint32_t need_experience, std::vector<std::string>& info_lines) {
     bool result = true;
     if (info.experience < need_experience) {
         info_lines.emplace_back(Format("- Need %s experience, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(info.experience).c_str()));
@@ -349,8 +209,8 @@ bool CheckExperience(const PlayerInfo& info, int32_t need_experience, std::vecto
 void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
     bool ready_for_reclass = true;
     std::vector<std::string> info_lines;
-    const int32_t need_money = 300000001;
-    const int32_t need_experience = 177777778;
+    const uint32_t need_money = thresholds::thresholds.Value("reclass.money", info.unit);
+    const uint32_t need_experience = thresholds::thresholds.Value("reclass.experience", info.unit);
 
     ready_for_reclass &= CheckMoney(info, need_money, info_lines);
     ready_for_reclass &= CheckExperience(info, need_experience, info_lines);
@@ -374,10 +234,14 @@ void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
 void CheckAscendReadiness(const PlayerInfo& info, unsigned char* p) {
     bool ready_for_ascend = true;
     std::vector<std::string> info_lines;
-    const int32_t need_money = 2147000001;
-    const int32_t need_experience = 177777778;
-    const int16_t need_total_stats = 284;
+    const uint32_t need_money = thresholds::thresholds.Value("ascend.money", info.unit);
+    const uint32_t need_experience = thresholds::thresholds.Value("ascend.experience", info.unit);
+    const uint32_t need_body = thresholds::thresholds.Value("ascend.stats.body", info.unit);
+    const uint32_t need_reaction = thresholds::thresholds.Value("ascend.stats.reaction", info.unit);
+    const uint32_t need_mind = thresholds::thresholds.Value("ascend.stats.mind", info.unit);
+    const uint32_t need_spirit = thresholds::thresholds.Value("ascend.stats.spirit", info.unit);
 
+    const int16_t need_total_stats = need_body + need_reaction + need_mind + need_spirit;
     const int16_t total_stats = info.body + info.reaction + info.mind + info.spirit;
     if (total_stats < need_total_stats) {
         ready_for_ascend = false;
@@ -423,19 +287,24 @@ void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
 
     bool ready = true;
     std::vector<std::string> info_lines;
-    const int32_t need_money = 1000 * m;
-    const int32_t need_experience = 177777777;
+    const uint32_t need_money = thresholds::thresholds.Value("hell.money", info.unit);
+    const uint32_t need_experience = thresholds::thresholds.Value("hell.experience", info.unit);
+    const uint32_t need_reaction = thresholds::thresholds.Value("hell.stats.reaction", info.unit);
+    const uint32_t need_mind = thresholds::thresholds.Value("hell.stats.mind", info.unit);
+    const uint32_t need_spirit = thresholds::thresholds.Value("hell.stats.spirit", info.unit);
 
-    if (info.reaction < 76 || info.mind < 76 || info.spirit < 76) {
+    if (info.reaction < need_reaction || info.mind < need_mind || info.spirit < need_spirit) {
         ready = false;
         info_lines.emplace_back(Format("- Need stats: you have %d body, %d reaction, %d mind, %d spirit (need 76 in reaction, mind and spirit)", info.body, info.reaction, info.mind, info.spirit));
     } else {
         info_lines.emplace_back(Format("+ You have maxed out stats"));
     }
 
+    auto hell_needs_kills = thresholds::thresholds.Mobs("hell.mobs", info.unit);
+
     ready &= CheckMoney(info, need_money, info_lines);
     ready &= CheckExperience(info, need_experience, info_lines);
-    ready &= CheckMonsterKills(info, circling_needs_monster_kills, info_lines);
+    ready &= CheckMonsterKills(info, hell_needs_kills, info_lines);
 
     if (ready) {
         if (info.circle == 0) {
@@ -462,68 +331,64 @@ void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
 }
 
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell) {
-    int16_t need_mind = 0;
-    int16_t need_reaction = 0;
-    switch (server_id) {
-        case EASY: need_mind = 15; break;
-        case KIDS: need_reaction = 20; break;
-        case NIVAL: need_reaction = 30; break;
-        case MEDIUM: need_reaction = 40; break;
-        case HARD: break; // Handled separately.
-        default:
-            if (player_info.circle != 0 || hell) {
-                return CheckCircleReadiness(player_info, p);
-            }
+    if (server_id >= NIGHTMARE) {
+        if (player_info.circle != 0 || hell) {
+            return CheckCircleReadiness(player_info, p);
+        }
 
-            if (player_info.female) {
-                return CheckAscendReadiness(player_info, p);
-            }
-            
-            return CheckReclassReadiness(player_info, p);
+        if (player_info.female) {
+            return CheckAscendReadiness(player_info, p);
+        }
+
+        return CheckReclassReadiness(player_info, p);
     }
 
-    int32_t treasure_gives_gold = 0; // Note: gold is awarded only once, even for two treasures.
-    switch (server_id) {
-        case EASY: treasure_gives_gold = 5000; break;
-        case KIDS: treasure_gives_gold = 30000; break;
-        case NIVAL: treasure_gives_gold = 100000; break;
-        case MEDIUM: treasure_gives_gold = 500000; break;
-        case HARD: treasure_gives_gold = 1000000; break;
-    }
+    uint32_t need_reaction = thresholds::thresholds.Value("reborn.stats.reaction", player_info.unit);
+    uint32_t need_mind = thresholds::thresholds.Value("reborn.stats.mind", player_info.unit);
+    uint32_t need_spirit = thresholds::thresholds.Value("reborn.stats.spirit", player_info.unit);
 
-    int32_t need_experience = ServerRequirementsExperience(server_id, player_info);
-    int32_t need_money = ServerRequirementsMoney(server_id, player_info);
+    uint32_t treasure_gives_gold = thresholds::thresholds.Value("treasure_award", player_info.unit);
+
+    uint32_t need_experience = ServerRequirementsExperience(player_info);
+    uint32_t need_money = ServerRequirementsMoney(player_info);
     need_money -= treasure_gives_gold;
 
     bool ready_for_reborn = true;
     std::vector<std::string> info_lines;
-    if (player_info.mind < need_mind) {
-        ready_for_reborn = false;
-        info_lines.emplace_back(Format("- Need %d mind, you have %d (also you have: %d body, %d reaction, %d spirit)", need_mind, player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
-    } else if (need_mind > 0) {
-        info_lines.emplace_back(Format("+ You have %d mind (also you have: %d body, %d reaction, %d spirit)", player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
-    }
 
     if (server_id == HARD) {
-        if (player_info.reaction < 50 || player_info.mind < 50 || player_info.spirit < 50) {
+        if (player_info.reaction < need_reaction || player_info.mind < need_mind || player_info.spirit < need_spirit) {
             ready_for_reborn = false;
-            info_lines.emplace_back(Format("- Need 50 reaction, 50 mind and 50 spirit, you have: %d reaction, %d mind, %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
+            info_lines.emplace_back(Format("- Need %d reaction, %d mind and %d spirit, you have: %d reaction, %d mind, %d spirit (also you have %d body)", need_reaction, need_mind, need_spirit, player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
         } else {
             info_lines.emplace_back(Format("+ You have %d reaction, %d mind and %d spirit (also you have %d body)", player_info.reaction, player_info.mind, player_info.spirit, player_info.body));
         }
     } else {
-        if (player_info.reaction < need_reaction) {
-            ready_for_reborn = false;
-            info_lines.emplace_back(Format("- Need %d reaction, you have %d (also you have: %d body, %d mind, %d spirit)", need_reaction, player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
-        } else if (need_reaction > 0) {
-            info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+        if (need_mind) {
+            if (player_info.mind < need_mind) {
+                ready_for_reborn = false;
+                info_lines.emplace_back(Format("- Need %d mind, you have %d (also you have: %d body, %d reaction, %d spirit)", need_mind, player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
+            } else if (need_mind > 0) {
+                info_lines.emplace_back(Format("+ You have %d mind (also you have: %d body, %d reaction, %d spirit)", player_info.mind, player_info.body, player_info.reaction, player_info.spirit));
+            }
+        }
+
+        if (need_reaction) {
+            if (player_info.reaction < need_reaction) {
+                ready_for_reborn = false;
+                info_lines.emplace_back(Format("- Need %d reaction, you have %d (also you have: %d body, %d mind, %d spirit)", need_reaction, player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+            } else if (need_reaction > 0) {
+                info_lines.emplace_back(Format("+ You have %d reaction (also you have: %d body, %d mind, %d spirit)", player_info.reaction, player_info.body, player_info.mind, player_info.spirit));
+            }
         }
     }
 
-    if (player_info.solo && server_id <= MEDIUM) {
-        if (player_info.has_treasures < 2) {
+    uint32_t need_treasures = thresholds::thresholds.Value("reborn.treasures", player_info.unit);
+
+    if (need_treasures > 1) {
+        if (player_info.has_treasures < need_treasures) {
             ready_for_reborn = false;
-            info_lines.emplace_back(Format("- Need two treasures from a boss or a minion, you have %d", player_info.has_treasures));
+            info_lines.emplace_back(Format("- Need %d treasures from a boss or a minion, you have %d", need_treasures, player_info.has_treasures));
         } else {
             info_lines.emplace_back(Format("+ You have %d treasures", player_info.has_treasures));
         }
@@ -550,9 +415,8 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
         info_lines.emplace_back(Format("+ You have enough experience: need %s, you have %s", WithSpaces(need_experience).c_str(), WithSpaces(player_info.experience).c_str()));
     }
 
-    if (player_info.female || player_info.circle > 0) {
-        ready_for_reborn &= CheckMonsterKills(player_info, girl_needs_monster_kills[server_id], info_lines);
-    }
+    auto needs_kills = thresholds::thresholds.Mobs("reborn.mobs", player_info.unit);
+    ready_for_reborn &= CheckMonsterKills(player_info, needs_kills, info_lines);
 
     const char* category;
     if (player_info.female) {
