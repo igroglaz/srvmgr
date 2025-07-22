@@ -14,11 +14,12 @@
 #include <sstream>
 #include <ctime>
 
+#include "player_info.h"
 #include "lib\utils.hpp"
 #include "lib\packet.hpp"
 #include "lib\socket.hpp"
 #include "srvmgr_new.h"
-#include "player_info.h"
+#include "thresholds.h"
 #include "quests.h"
 #include "zxmgr.h"
 
@@ -2749,6 +2750,14 @@ void _declspec(naked) load_config()
 #include "File.h"
 #include "itemex.h"
 
+void LoadThresholds() {
+    try {
+        thresholds::thresholds.LoadFromFile(thresholds::THRESHOLDS_FILE);
+    } catch (const thresholds::ParseException& error) {
+        log_format("Loading thresholds failed: %s\n", error.what());
+    }
+}
+
 BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     const unsigned char cr20[0x50] =
@@ -2793,6 +2802,8 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
 
 		// Initialize stuff for quest filtering.
 		InitializePlayerSettings();
+
+        LoadThresholds();
 
         break;
     case DLL_PROCESS_DETACH:

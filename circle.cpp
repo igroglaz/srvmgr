@@ -11,7 +11,7 @@ const char* PlayerName(A2Unit* unit) {
 
 namespace circle {
 
-int Circle(A2Unit* unit) {
+int Circle(const A2Unit* unit) {
     const char* name = unit->player->name;
 
     if (name == nullptr) {

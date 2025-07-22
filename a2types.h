@@ -378,5 +378,5 @@ struct A2GameDataRes {
 };
 
 
-bool IsWarrior(A2Unit* unit);
-bool IsFemale(A2Unit* unit);
+bool IsWarrior(const A2Unit* unit);
+bool IsFemale(const A2Unit* unit);

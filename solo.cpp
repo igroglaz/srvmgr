@@ -14,17 +14,17 @@ std::unordered_map<uint16_t, int8_t> staple_cells;
 std::unordered_map<int8_t, std::string> staple_char_names;
 
 // Characters with `@` as the first letter of the name are in the solo mode.
-bool IsPureSoloPlayer(A2Unit* unit) {
+bool IsPureSoloPlayer(const A2Unit* unit) {
     return unit->name[0] == '@';
 }
 
 // Giga-players --- solo players which get reverted to checkpoint if they die.
-bool IsGigaPlayer(A2Unit* unit) {
+bool IsGigaPlayer(const A2Unit* unit) {
     return unit->name[0] == '_';
 }
 
 // All solo characters.
-bool IsSoloPlayer(A2Unit* unit) {
+bool IsSoloPlayer(const A2Unit* unit) {
     return IsPureSoloPlayer(unit) || IsGigaPlayer(unit);
 }
 

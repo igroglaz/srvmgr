@@ -52,6 +52,7 @@ add_library(srvmgr SHARED srvmgr.def
     startup.cpp
     summon.cpp
     this_call.cpp
+    thresholds.cpp
     quests.cpp
     unit_info.cpp
     utils.cpp

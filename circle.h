@@ -4,6 +4,6 @@
 
 namespace circle {
 
-int Circle(A2Unit* unit);
+int Circle(const A2Unit* unit);
 
 }
