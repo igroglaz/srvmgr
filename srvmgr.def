@@ -189,3 +189,4 @@ summon                                  @329
 circle_damage_regular                   @330
 circle_damage_special                   @331
 circle_damage_magic                     @332
+dont_eat_bad_food                       @333

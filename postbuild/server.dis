@@ -280,3 +280,6 @@ JMP summon 0053ac32
 JMP circle_damage_regular 00536d81
 JMP circle_damage_special 00536e1e
 JMP circle_damage_magic 00536ed8
+
+// Prevent eating treasure and cross-dressing.
+JMP dont_eat_bad_food 00505bdf

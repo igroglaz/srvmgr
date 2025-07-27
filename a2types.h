@@ -144,6 +144,7 @@ struct A2InventoryItem {
     int8_t byte44;
     int8_t byte45;
     int8_t byte46;
+    int8_t byte47;
     int16_t word48;
     int16_t word4A;
     int8_t byte4C;
