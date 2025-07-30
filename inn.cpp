@@ -139,6 +139,12 @@ void InitializeMobNames() {
 			it->second += ".1";
 		}
 	}
+	for (auto it = new_mob_names->begin(); it != new_mob_names->end(); ++it) {
+		const char mob_name_end = it->second.back();
+		if (mob_name_end < '0' || mob_name_end > '9') {
+			it->second += ".1";
+		}
+	}
 
 	mob_names = std::move(new_mob_names);
 	mob_names_raw = std::move(new_mob_names_raw);
