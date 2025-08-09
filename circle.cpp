@@ -23,11 +23,11 @@ int Circle(const A2Unit* unit) {
         maybe_circle = name[1];
     }
 
-    if ('1' >= maybe_circle || maybe_circle >= '9') {
-        return 0;
+    if ('1' <= maybe_circle && maybe_circle <= '9') {
+        return static_cast<int>(maybe_circle - '0');
     }
 
-    return static_cast<int>(maybe_circle - '0');
+    return 0;
 }
 
 double Multiplier(int circle, ServerIDType server_id) {
