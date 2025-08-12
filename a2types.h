@@ -259,7 +259,7 @@ struct A2Unit {
     void *piunknownvtbl68;
     int8_t byte6C;
     int8_t gap7[3];
-    int32_t dword70;
+    A2Group* group;
     A2InventoryItem *weapon;
     A2InventoryItem *shield;
     A2InventoryList *inventory;
@@ -294,7 +294,8 @@ struct A2Unit {
     int32_t exp;
     int8_t gap77[12];
     void* spellbook;
-    int8_t gap8[8];
+    int8_t gap8[4];
+    int32_t summon_id; // All summoned mobs of one player will have the same non-null value of this field.
     uint16_t server_id;
     int8_t gap9[82];
     uint32_t summoned;

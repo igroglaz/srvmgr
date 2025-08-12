@@ -283,3 +283,5 @@ JMP circle_damage_magic 00536ed8
 
 // Prevent eating treasure and cross-dressing.
 JMP dont_eat_bad_food 00505bdf
+
+JMP unsummon_unit 00557985

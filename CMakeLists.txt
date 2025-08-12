@@ -55,6 +55,7 @@ add_library(srvmgr SHARED srvmgr.def
     thresholds.cpp
     quests.cpp
     unit_info.cpp
+    unsummon_unit.cpp
     utils.cpp
     zxmgr.cpp
     lib/hat2.cpp
