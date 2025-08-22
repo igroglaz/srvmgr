@@ -1,5 +1,6 @@
 #include "reborn_readiness.hpp"
 
+#include <cmath>
 #include <cstdint>
 #include <string>
 #include <map>
@@ -12,6 +13,10 @@
 #include "solo.h"
 #include "thresholds.h"
 #include "zxmgr.h"
+
+int SkillLevelForExperience(uint32_t experience) {
+    return static_cast<int>(floor(log10(experience / 1000.0 + 1.0) / log10(1.1)));
+}
 
 struct PlayerInfo {
     bool warrior;
@@ -30,6 +35,8 @@ struct PlayerInfo {
     uint8_t* monster_kills_by_server_id;
     uint32_t deaths;
     int skills[5];
+    int32_t main_sphere;
+    int32_t experience_per_sphere[5];
     A2Unit* unit;
 };
 
@@ -126,10 +133,12 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
         zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
     } else {
         A2Human* human = reinterpret_cast<A2Human*>(unit);
-        SubtractEquippedItems(human, player_info);
+        SubtractEquippedItems(human, player_info); 
 
         for (int i = 0; i < 5; ++i) {
             player_info.skills[i] = unit->skills[i];
+            player_info.main_sphere = human->main_sphere;
+            player_info.experience_per_sphere[i] = human->experience_per_sphere[i];
         }
     }
 
@@ -204,6 +213,67 @@ bool CheckExperience(const PlayerInfo& info, uint32_t need_experience, std::vect
     }
 
     return result;
+}
+
+void SkillsAndCeilings(const PlayerInfo& info, std::vector<std::string>& messages) {
+    if (info.warrior) {
+        messages.emplace_back(Format("Your skills: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    } else {
+        messages.emplace_back(Format("Your skills: %d fire, %d water, %d air, %d earth, %d astral", info.skills[0], info.skills[1], info.skills[2], info.skills[3], info.skills[4]));
+    }
+
+    const uint32_t limit_main = thresholds::thresholds.Value("experience_limit.main_skill", info.unit);
+    const uint32_t limit_secondary = thresholds::thresholds.Value("experience_limit.secondary", info.unit);
+    if (limit_main != 0 && limit_secondary != 0) {
+        int max_skill_main = SkillLevelForExperience(limit_main);
+        int max_skill_secondary = SkillLevelForExperience(limit_secondary);
+
+        messages.emplace_back(Format("Max skills at this server: %d primary and astral/shooting, %d secondary", max_skill_main, max_skill_secondary));
+    }
+    
+    const uint32_t experience_cutoff = thresholds::thresholds.Value("reborn.experience_cutoff", info.unit);
+    if (experience_cutoff == 0) {
+        return;
+    }
+
+    // If the player were to reborn right now, how much experience per sphere will they have?
+    int32_t new_exp[5];
+
+    // TODO: All this logic is better be in thresholds as well.
+    if (!info.female && info.circle == 0) {
+        for (int i = 0; i < 4; ++i) {
+            new_exp[i] = info.experience_per_sphere[i] / 2;
+        }
+
+        new_exp[info.main_sphere - 1] = 0;
+
+        if (info.deaths == 0) {
+            new_exp[4] = info.experience_per_sphere[4] / 2;
+        } else if (info.warrior) {
+            new_exp[4] = info.experience_per_sphere[4] / static_cast<int>(Config::ServerID + 1);
+        } else {
+            new_exp[4] = 0;
+        }
+    } else {
+        for (int i = 0; i < 5; ++i) {
+            new_exp[i] = 0;
+        }
+    }
+
+    int skills[5];
+    for (int i = 0; i < 5; ++i) {
+        if (new_exp[i] > static_cast<int32_t>(experience_cutoff)) {
+            new_exp[i] = experience_cutoff;
+        }
+
+        skills[i] = SkillLevelForExperience(new_exp[i]);
+    }
+
+    if (info.warrior) {
+        messages.emplace_back(Format("Upon reborn, your skills will be: %d blade, %d axe, %d bludgeon, %d pike, %d shooting", skills[0], skills[1], skills[2], skills[3], skills[4]));
+    } else {
+        messages.emplace_back(Format("Upon reborn, your skills will be: %d fire, %d water, %d air, %d earth, %d astral", skills[0], skills[1], skills[2], skills[3], skills[4]));
+    }
 }
 
 void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
@@ -418,8 +488,12 @@ void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info,
     auto needs_kills = thresholds::thresholds.Mobs("reborn.mobs", player_info.unit);
     ready_for_reborn &= CheckMonsterKills(player_info, needs_kills, info_lines);
 
+    SkillsAndCeilings(player_info, info_lines);
+
     const char* category;
-    if (player_info.female) {
+    if (player_info.circle) {
+        category = "hell";
+    } else if (player_info.female) {
         category = "reclassed";
     } else if (player_info.deaths <= 1) {
         category = "hardcore";
