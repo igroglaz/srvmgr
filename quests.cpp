@@ -435,3 +435,29 @@ void __declspec(naked) inn_scrolls_reward() {
         jmp ebx
     }
 }
+
+bool SkipPotionReward() {
+    bool result = Config::ServerID >= NIGHTMARE;
+    return result;
+}
+
+// Address: 005660c8
+void __declspec(naked) skip_potion_reward() {
+    __asm {
+        call SkipPotionReward
+
+        cmp eax, 0
+        jnz skip
+
+        // Original instruction.
+        mov edx, DWORD PTR [ebp+0x8]
+        mov eax, DWORD PTR [edx+0x38]
+
+        mov ebx, 0x005660ce
+        jmp ebx
+
+    skip:
+        mov ebx, 0x0056661c
+        jmp ebx
+    }
+}
