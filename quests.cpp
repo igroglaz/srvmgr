@@ -394,3 +394,11 @@ void __stdcall CheckPlayerSettings(A2Player* player) {
 		settings.reset(new PlayerSettings());
     }
 }
+
+// Address: 005666c1
+void __declspec(naked) skip_experience_reward() {
+    __asm {
+        mov ebx, 0x00566773
+        jmp ebx
+    }
+}
