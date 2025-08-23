@@ -287,3 +287,4 @@ JMP dont_eat_bad_food 00505bdf
 JMP unsummon_unit 00557985
 
 JMP skip_experience_reward 005666c1
+JMP inn_scrolls_reward 00565b27

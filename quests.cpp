@@ -402,3 +402,36 @@ void __declspec(naked) skip_experience_reward() {
         jmp ebx
     }
 }
+
+uint32_t __fastcall InnScrollsReward(A2Player* player, uint32_t reward) {
+    if (IsWarrior(player->current_unit)) {
+        // Note: max reward is 16383000, so this doesn't overflow.
+        return static_cast<uint32_t>(reward * 1.5);
+    }
+
+    // Mages don't get scrolls.
+    return 0;
+}
+
+// Address: 00565b27
+void __declspec(naked) inn_scrolls_reward() {
+    __asm {
+        mov ecx, DWORD PTR[ebp+0x8] // Player
+        mov edx, DWORD PTR[ebp-0x18] // Reward
+
+        call InnScrollsReward
+
+        cmp eax, 0
+        jz skip
+
+        // Restore ECX from the original instruction.
+        mov ecx, DWORD PTR[ebp-0x48]
+        
+        mov ebx, 0x00565b2d
+        jmp ebx
+
+    skip:
+        mov ebx, 0x00565c15
+        jmp ebx
+    }
+}
