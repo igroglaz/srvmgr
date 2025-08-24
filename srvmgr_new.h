@@ -11,7 +11,7 @@ void OnServerClosed();
 void OnShopError();
 void OnLocalMessageBox(const char* message);
 void OnServerTic();
-void LogIP(byte* player);
+void LogIP(A2Player* player);
 byte* CreateItemParameter(byte* param, byte* item);
 bool CheckItemUpgradable(byte* item);
 bool Sv_ProcessClientPacket(int16_t id, byte* player, Packet& pack);

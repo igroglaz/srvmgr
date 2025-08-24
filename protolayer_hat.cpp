@@ -101,7 +101,7 @@ bool NetCmd_UpdateInfo()
                 pack.WriteString(player_login);
                 pack.WriteUInt32(player_id1);
                 pack.WriteUInt32(player_id2);
-                byte* vd = zxmgr::GetNetworkStruct(reinterpret_cast<byte*>(player));
+                byte* vd = zxmgr::GetNetworkStruct(player);
                 bool player_connected = (vd);
                 pack.WriteUInt8(player_connected);
                 if (player->unitType || !player_connected) // AI or disconnected

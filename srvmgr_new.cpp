@@ -154,10 +154,10 @@ void OnShopError()
     Printf("Shop error: amount > 1000!");
 }
 
-void LogIP(byte* player)
+void LogIP(A2Player* player)
 {
     const char* player_name = "(null)";
-    if (player) player_name = *(const char**)(player + 0x18);
+    if (player) player_name = player->name;
     byte* vd = zxmgr::GetNetworkStruct(player);
     const char* player_addr = "n/a";
     if (vd) player_addr = (const char*)(vd + 8);
