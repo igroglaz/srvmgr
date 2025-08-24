@@ -84,7 +84,7 @@ void SR_UpdateUnit(byte* unit)
 
 void SR_Step()
 {
-    std::vector<byte*> units = zxmgr::GetUnits();
+    std::vector<A2Unit*> units = zxmgr::GetUnits();
 
     for (int i = 0; i < 32; i++)
     {
@@ -93,12 +93,11 @@ void SR_Step()
         memset(Players[i].Vision, 0, sizeof(Players[i].Vision));
     }
 
-    for (std::vector<byte*>::iterator it = units.begin();
-        it != units.end(); ++it)
+    for (auto it = units.begin(); it != units.end(); ++it)
     {
-        byte* unit = (*it);
-        if (unit && unit != *(byte**)(*(byte**)(unit+0x14)+0x38))
-            SR_UpdateUnit(unit);
+        A2Unit* unit = (*it);
+        if (unit && unit != unit->player->current_unit)
+            SR_UpdateUnit(reinterpret_cast<byte*>(unit));
     }
 
     for (int i = 0; i < 32; i++)

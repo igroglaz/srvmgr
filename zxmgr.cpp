@@ -219,34 +219,34 @@ namespace zxmgr
 
     void _stdcall Kill(A2Player* pptr, A2Player* caster)
     {
-        std::vector<byte*> units = GetUnits(reinterpret_cast<byte*>(pptr));
-        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        std::vector<A2Unit*> units = GetUnits(pptr);
+        for (auto it = units.begin(); it != units.end(); ++it)
         {
-            byte* unit = (*it);
+            A2Unit* unit = (*it);
             if (!unit) continue;
-            if (*(byte**)(unit + 0x14) != reinterpret_cast<byte*>(pptr)) continue;
-            if (caster && unit == *(byte**)(caster + 0x38)) continue;
+            if (unit->player != pptr) continue;
+            if (caster && unit == caster->current_unit) continue;
 
-            *(byte**)(unit + 0x40) = NULL; // damage_by
-            *(int16_t*)(unit + 0x94) = -50;
-            UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
+            unit->last_hit_by = NULL; // damage_by
+            unit->hp = -50;
+            UpdateUnit(reinterpret_cast<byte*>(unit), nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
     void _stdcall KillAll(A2Player* pptr, bool ai_only) // ВНИМАНИЕ! в отличие от оригинального #killall, убивает ВСЕХ за исключением кастера.
     {
-        std::vector<byte*> units = GetUnits();
-        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        std::vector<A2Unit*> units = GetUnits();
+        for (auto it = units.begin(); it != units.end(); ++it)
         {
-            byte* unit = (*it);
+            A2Unit* unit = (*it);
             if (!unit) continue;
-            if (pptr && reinterpret_cast<A2Unit*>(unit) == pptr->current_unit) continue;
-            if (ai_only && *(byte**)(unit + 0x14) &&
-                !*(uint32_t*)(*(byte**)(unit + 0x14) + 0x2C)) continue;
+            if (pptr && unit == pptr->current_unit) continue;
+            if (ai_only && unit->player &&
+                !unit->player->unitType) continue;
 
-            *(byte**)(unit + 0x40) = NULL; // damage_by
-            *(int32_t*)(unit + 0x94) = -50;
-            UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
+            unit->last_hit_by = NULL; // damage_by
+            unit->hp = -50;
+            UpdateUnit(reinterpret_cast<byte*>(unit), nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
@@ -357,25 +357,26 @@ namespace zxmgr
         }
     }
 
-    void __stdcall Own(byte* to, byte* from)
+    void __stdcall Own(A2Player* to, A2Player* from)
     {
         if (!from || !to) return;
-        std::vector<byte*> units = GetUnits(from);
-        for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
+        std::vector<A2Unit*> units = GetUnits(from);
+        for (auto it = units.begin(); it != units.end(); ++it)
         {
-            byte* unit = (*it);
+            A2Unit* unit = (*it);
             if (!unit) continue;
-            if (unit == *(byte**)(*(byte**)(unit + 0x14) + 0x38)) continue;
+            if (unit == unit->player->current_unit) continue;
 
-            *(byte**)(unit + 0x14) = to;
-            UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
+            unit->player = to;
+            UpdateUnit(reinterpret_cast<byte*>(unit), 0, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
-    std::vector<byte*> _stdcall GetUnits(byte* player)
+    std::vector<A2Unit*> _stdcall GetUnits(A2Player* player)
     {
-        std::vector<byte*> retval;
-        unsigned long var_4, var_C;
+        std::vector<A2Unit*> retval;
+        A2Unit* var_4;
+        uint32_t var_C;
 
         __asm
         {
@@ -404,8 +405,7 @@ namespace zxmgr
     add_every_unit:
         }
 
-        byte* pl2 = (byte*)var_4;
-        retval.push_back(pl2);
+        retval.push_back(var_4);
 
         __asm
         {
