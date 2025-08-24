@@ -242,7 +242,7 @@ cs_cont:
     }
 }
 
-void __stdcall cheat_codes_2(byte* player, const char* command)
+void __stdcall cheat_codes_2(A2Player* player, const char* command)
 {
     byte* cstring = NULL;
     __asm
