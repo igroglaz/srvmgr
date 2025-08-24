@@ -74,7 +74,7 @@ namespace zxmgr
     byte* GetNetworkStruct(A2Player* player);
 
     byte* GetMainWnd();
-    bool ReturnUnit(byte* unit);
+    bool ReturnUnit(A2Unit* unit);
 
     uint32_t GetSpells(byte* unit);
     void SetSpells(byte* unit, uint32_t spells);
