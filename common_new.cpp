@@ -622,7 +622,7 @@ loc_4F68A7:
 
 void _stdcall imp_FixMoney(unsigned long money, unsigned long flags)
 {
-    byte* pthis;
+    A2Player* pthis;
     __asm mov pthis, ecx;
     if(!pthis) return;
 
@@ -634,7 +634,7 @@ void _stdcall imp_FixMoney(unsigned long money, unsigned long flags)
         money = 0x7FFFFFFF;
     }
 
-    unsigned long cur_money = *(unsigned long*)(pthis + 0x3C);
+    unsigned long cur_money = pthis->money;
     if(cur_money > 0x7FFFFFFF)
     {
         leftover += cur_money - 0x7FFFFFFF;
@@ -648,14 +648,14 @@ void _stdcall imp_FixMoney(unsigned long money, unsigned long flags)
         cur_money = 0x7FFFFFFF;
     }
 
-    *(unsigned long*)(pthis + 0x3C) = cur_money;
+    pthis->money = cur_money;
     if(leftover > 0x7FFFFFFF) leftover = 0x7FFFFFFF;
     
-    byte* unit = *(byte**)(pthis + 0x38);
+    A2Unit* unit = pthis->current_unit;
     if(unit && leftover)
     {
-        uint32_t p_x = *(uint8_t*)(*(byte**)(unit + 0x10));
-        uint32_t p_y = *(uint8_t*)(*(byte**)(unit + 0x10) + 1);
+        uint32_t p_x = unit->position->x;
+        uint32_t p_y = unit->position->y;
         zxmgr::CreateSack(NULL, p_x, p_y, leftover);
     }
 
