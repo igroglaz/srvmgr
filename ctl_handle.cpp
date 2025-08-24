@@ -83,11 +83,11 @@ DWORD WINAPI ThreadProc(LPVOID lpParam)
 
                         if(caster.length())
                         {
-                            byte* pp = zxmgr::FindByNickname(caster.c_str());
+                            A2Player* pp = zxmgr::FindByNickname(caster.c_str());
                             if(pp)
                             {
                                 Printf("[ctl] %s: %s", caster.c_str(), command.c_str());
-                                RunCommand(NULL, reinterpret_cast<A2Player*>(pp), command.c_str(), 0xFFFFFFFF, false);
+                                RunCommand(NULL, pp, command.c_str(), 0xFFFFFFFF, false);
                             }
                         }
                         else

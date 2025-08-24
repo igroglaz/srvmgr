@@ -46,7 +46,7 @@ byte* _stdcall CreateShopFromALMStructure(byte* struc, byte* mapdata)
     *(uint32_t*)(shop + 8) = shop_id;
     // set player pointer
     uint32_t player_id = *(uint32_t*)(struc + 0x08);
-    *(byte**)(shop + 0x14) = zxmgr::FindByID(player_id);
+    *(A2Player**)(shop + 0x14) = zxmgr::FindByID(player_id);
 
     // find shop data in ALM structure
     byte* shop_data_array = mapdata + 0x324;
