@@ -13,6 +13,6 @@ void OnLocalMessageBox(const char* message);
 void OnServerTic();
 void LogIP(A2Player* player);
 byte* CreateItemParameter(byte* param, byte* item);
-bool CheckItemUpgradable(byte* item);
+bool CheckItemUpgradable(A2InventoryItem* item);
 bool Sv_ProcessClientPacket(int16_t id, byte* player, Packet& pack);
 void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd);
