@@ -1123,12 +1123,12 @@ ret_0:
 
         if (spbk)
         {
-            *(uint32_t*)(spbk) = 0x0060EC30;
-            *(uint32_t*)(spbk + 0x04) = 0x0060EC48;
-            *(uint32_t*)(spbk + 0x08) = 0;
-            *(uint32_t*)(spbk + 0x0C) = 0;
-            *(uint32_t*)(spbk + 0x10) = 0;
-            *(uint32_t*)(spbk + 0x14) = 0;
+            spbk->vtable = (void*)0x0060EC30;
+            spbk->spells.whatever0 = 0x0060EC48;
+            spbk->spells.data = nullptr;
+            spbk->spells.size = 0;
+            spbk->spells.whatever1[0] = 0;
+            spbk->spells.whatever1[0] = 0;
         }
 
         unit->spellbook = spbk;
