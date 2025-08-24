@@ -982,13 +982,13 @@ void __declspec(naked) imp_CreateItemParameterCall3()
 // max.damage = 131 * 15
 // real max.damage = min.damage+max.damage
 // 45-2010
-void DamagePhysical(byte* victim, byte* damage, byte* attacker, uint32_t return_addr)
+void DamagePhysical(A2Unit* victim, byte* damage, A2Unit* attacker, uint32_t return_addr)
 {
-    *(uint16_t*)(attacker + 0xA6) = 2010;
+    attacker->attack = 2010;
     const char* name_victim = "(unnamed)";
     const char* name_attacker = "(unnamed)";
-    if(*(byte**)(victim + 0x14)) name_victim = *(const char**)(*(byte**)(victim + 0x14) + 0x18);
-    if(*(byte**)(attacker + 0x14)) name_attacker = *(const char**)(*(byte**)(attacker + 0x14) + 0x18);
+    if(victim->player) name_victim = victim->player->name;
+    if(attacker->player) name_attacker = attacker->player->name;
     zxmgr::SendMessage(NULL, "damage: %s -> %u-%u -> %s; return_addr = %08x", name_attacker, *(uint8_t*)(damage+0x0E), *(uint8_t*)(damage+0x0F), name_victim, return_addr);
     log_format("damage: %s -> %u-%u; return_addr = %08x\n", name_attacker, *(uint8_t*)(damage+0x0E), *(uint8_t*)(damage+0x0F), name_victim, return_addr);
 }
