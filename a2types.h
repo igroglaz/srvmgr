@@ -201,7 +201,7 @@ struct A2Player {
     int16_t diplomacy_32;
     int8_t gap4[4];
     A2Unit* current_unit; // 0x38
-    int32_t money;
+    uint32_t money;
     int8_t gap5[2];
     int8_t byte42;
     int8_t byte43;
