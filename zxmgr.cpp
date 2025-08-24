@@ -1,3 +1,4 @@
+#include "a2types.h"
 #include "syslib.h"
 #include "zxmgr.h"
 #include "srvmgr.h"
@@ -47,7 +48,7 @@ namespace zxmgr
         return vec;
     }
 
-    void __declspec(naked) SendMessageRaw(byte* pptr, char* message)
+    void __declspec(naked) SendMessageRaw(const A2Player* pptr, const char* message)
     {
         __asm
         {
@@ -65,7 +66,7 @@ namespace zxmgr
         }
     }
 
-    void __stdcall SendMessage(byte* pptr, const char* mask, ...)
+    void __stdcall SendMessage(const A2Player* player, const char* mask, ...)
     {
         va_list arglist;
         va_start(arglist, mask);
@@ -73,7 +74,7 @@ namespace zxmgr
         char buffer[4096];
         vsprintf(buffer, mask, arglist);
 
-        SendMessageRaw(pptr, buffer);
+        SendMessageRaw(player, buffer);
 
         va_end(arglist);
     }
@@ -725,11 +726,13 @@ namespace zxmgr
         std::vector<byte*> players = GetPlayers();
         for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
         {
-            byte* plr = (*it);
+            A2Player* plr = reinterpret_cast<A2Player*>(*it);
             if (!plr) continue;
 
-            uint32_t rights = *(uint32_t*)(plr + 0x14);
-            if (CHECK_FLAG(rights, GMF_ANY)) zxmgr::SendMessageRaw(plr, line);
+            uint32_t rights = plr->flags;
+            if (CHECK_FLAG(rights, GMF_ANY)) {
+                zxmgr::SendMessageRaw(plr, line);
+            }
         }
 
         delete[] line;

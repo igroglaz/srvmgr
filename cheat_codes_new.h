@@ -6,7 +6,7 @@
 #include <string>
 
 uint32_t ParseFlags(std::string string);
-void RunCommand(byte* _this, byte* player, const char* command, uint32_t rights, bool console);
+void RunCommand(byte* _this, A2Player* player, const char* command, uint32_t rights, bool console);
 bool AllyPlayers(byte* player1, byte* player2);
 int32_t OnDamage(A2Unit* unit1, A2Unit* unit2, int16_t damage);
 void __stdcall cheat_codes_2(byte* player, const char* command);

@@ -169,14 +169,13 @@ void DropEverything(byte* unit, bool full = false)
     zxmgr::GiveMoney(player, 0, 0);
 }
 
-void ProcessCheat_Quest(byte* player, const std::string& args) {
+void ProcessCheat_Quest(A2Player* player, const std::string& args) {
 	if (!Config::AllowQuestFilters) {
 		zxmgr::SendMessage(player, "Quest filtering is disabled");
 		return;
 	}
 
-	A2Player* p = (A2Player*)player;
-	short player_id = p->id_ext.id;
+	short player_id = player->id_ext.id;
 
 	std::string filter = NormalizeMobName(TrimLeft(args).c_str());
 	int mob_count = 0;
@@ -212,7 +211,7 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 
 	player_settings[player_id]->quest_filter = filter;
 	player_settings[player_id]->quest_mob_count = mob_count;
-    player_settings[player_id]->player_name = p->name;
+    player_settings[player_id]->player_name = player->name;
 
 	if (filter.length() > 0) {
 		if (mob_count > 0) {
@@ -225,9 +224,8 @@ void ProcessCheat_Quest(byte* player, const std::string& args) {
 	}
 }
 
-void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
-	A2Player* p = (A2Player*)player;
-	short player_id = p->id_ext.id;
+void ProcessCheat_QuestsInfo(A2Player* player, const std::string& args) {
+	short player_id = player->id_ext.id;
 
 	zxmgr::SendMessage(player, "Current player: %d", player_id);
 	for (auto it = player_settings.begin(); it != player_settings.end(); ++it) {
@@ -241,11 +239,10 @@ void ProcessCheat_QuestsInfo(byte* player, const std::string& args) {
 	}
 }
 
-void ProcessCheat_QuestState(byte* player, const std::string& args) {
-	A2Player* p = (A2Player*)player;
-	short player_id = p->id_ext.id;
+void ProcessCheat_QuestState(A2Player* player, const std::string& args) {
+	short player_id = player->id_ext.id;
 
-	std::vector<std::string> messages = QuestStateNMonsters(p);
+	std::vector<std::string> messages = QuestStateNMonsters(player);
 
 	for (auto it = messages.begin(); it != messages.end(); ++it) {
 		zxmgr::SendMessage(player, "%s", it->c_str());
@@ -264,12 +261,11 @@ std::unordered_map<std::string, uint32_t> autobuff_spells{
     {"earth protection", 0x13},
 };
 
-void ProcessCheat_Autobuff(byte* player, const std::string& args) {
-    A2Player* p = (A2Player*)player;
-    short player_id = p->id_ext.id;
+void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
+    short player_id = player->id_ext.id;
 
-    CheckPlayerSettings(p);
-    player_settings[player_id]->player_name = p->name;
+    CheckPlayerSettings(player);
+    player_settings[player_id]->player_name = player->name;
 
     std::string command = ToLower(Trim(args));
 
@@ -302,7 +298,7 @@ void ProcessCheat_Autobuff(byte* player, const std::string& args) {
     zxmgr::SendMessage(player, "'%s' does not match any spells. Autobuff mask left unchanged.", command.c_str());
 }
 
-void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights, bool console)
+void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t rights, bool console)
 {
     if (!ccommand) return;
     if (ccommand[0] != '#') return;
@@ -365,11 +361,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 	}
 
     if (rawcmd == "#reborn") {
-        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<A2Player*>(player), player, false);
+        return RebornReadinessInfo(Config::ServerID, player, false);
     }
 
     if (rawcmd == "#hell") {
-        return RebornReadinessInfo(Config::ServerID, reinterpret_cast<A2Player*>(player), player, true);
+        return RebornReadinessInfo(Config::ServerID, player, true);
     }
 
     if (rawcmd == "#autobuff" || rawcmd == "#ab") {
@@ -386,7 +382,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             if (!player || console)
                 what = Format("[broadcast] <server%u>: %s", Config::ServerID, command.c_str());
             else if (player)
-                what = Format("[broadcast] %s: %s", *(const char**)(player + 0x18), command.c_str());
+                what = Format("[broadcast] %s: %s", player->name, command.c_str());
             else
                 what = Format("[broadcast] %s", command.c_str());
 
@@ -402,7 +398,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             if (!player || console)
                 zxmgr::SendMessage(NULL, "<server>: %s", command.c_str());
             else if (player)
-                zxmgr::SendMessage(NULL, "%s: %s", *(const char**)(player + 0x18), command.c_str());
+                zxmgr::SendMessage(NULL, "%s: %s", player->name, command.c_str());
             else
                 zxmgr::SendMessage(NULL, command.c_str());
 
@@ -432,7 +428,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             }
 
             if (player)
-                zxmgr::Kick(player, true);
+                zxmgr::Kick(reinterpret_cast<byte*>(player), true);
 
             goto ex;
         }
@@ -539,11 +535,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             Printf("#scan command entered.\n");
             if (!player) goto ex;
             Printf("#scan performed. player found.\n");
-            byte* unit = *(byte**)(player + 0x38);
+            A2Unit* unit = player->current_unit;
             if (!unit) goto ex;
             Printf("check for unit OK.. getting dump\n");         
 
-            SR_DumpToFile(player);
+            SR_DumpToFile(reinterpret_cast<byte*>(player));
             Printf("dump finished\n");         
             goto ex;
         }
@@ -570,7 +566,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                         (tri & GMF_GODMODE_ADMIN)) goto ex;
                 }
 
-                zxmgr::Kill(target, player);
+                zxmgr::Kill(target, reinterpret_cast<byte*>(player));
             }
             goto ex;
         }
@@ -589,25 +585,25 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 if (CHECK_FLAG(tri, GMF_ANY))
                 {
                     if ((((tri & GMF_GODMODE) && !(rights & GMF_GODMODE_ADMIN)) ||
-                       (tri & GMF_GODMODE_ADMIN)) && target != player)
+                       (tri & GMF_GODMODE_ADMIN)) && target != reinterpret_cast<byte*>(player))
                             goto ex;
                 }
 
-                zxmgr::Kill(target, player);
+                zxmgr::Kill(target, reinterpret_cast<byte*>(player));
                 byte* unit = *(byte**)(target + 0x38);
 
-                if (unit && target != player)
+                if (unit && target != reinterpret_cast<byte*>(player))
                     DropEverything(unit, true);
             }
             goto ex;
         }
         else if (rawcmd == "#killall")
         {
-            zxmgr::KillAll(player, false);
+            zxmgr::KillAll(reinterpret_cast<byte*>(player), false);
         }
         else if (rawcmd == "#killai")
         {
-            zxmgr::KillAll(player, true);
+            zxmgr::KillAll(reinterpret_cast<byte*>(player), true);
         }
     }
 
@@ -623,7 +619,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 
             if (player)
             {
-                cheat_codes_2(player, ccommand);
+                cheat_codes_2(reinterpret_cast<byte*>(player), ccommand);
             }
             goto ex;
         }
@@ -639,7 +635,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 goto ex;
             }
 
-            if (player && *(byte**)(player + 0x38))
+            if (player && player->current_unit)
             {
                 command.erase(0, 7);
                 command = Trim(command);
@@ -663,7 +659,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 if (!command.length()) goto ex;
                 for (uint32_t i = 0; i < count; i++)
                 {
-                    byte* unit = zxmgr::Summon(player, command.c_str(), *(byte**)(0x00642C2C), false, NULL);
+                    byte* unit = zxmgr::Summon(reinterpret_cast<byte*>(player), command.c_str(), *(byte**)(0x00642C2C), false, NULL);
                     /*if (rights & GMF_UNITS_NOCLIP)
                         zxmgr::MakeUnitNoClip(unit);*/
                     //byte* unit = Map::CreateUnitForEx(player, command.c_str(), false);
@@ -825,11 +821,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
             if (CheckInt(command) && command.length())
                 what = StrToInt(command);
 
-            byte* unit = *(byte**)(player + 0x38);
+            A2Unit* unit = player->current_unit;
             if (!unit) goto ex;
 
-            uint8_t p_x = *(uint8_t*)(*(byte**)(unit + 0x10));
-            uint8_t p_y = *(uint8_t*)(*(byte**)(unit + 0x10) + 1);
+            uint8_t p_x = unit->position->x;
+            uint8_t p_y = unit->position->y;
 
             uint32_t p_mapwidth = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50000);
             uint32_t p_mapheight = *(uint32_t*)(*(uint32_t*)(0x006B16A8) + 0x50004);
@@ -877,7 +873,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 {
                     if (i < 8 || i > p_mapwidth - 8 ||
                         j < 8 || j > p_mapheight - 8) continue;
-                    zxmgr::CastPointEffect(unit, i, j, what);
+                    zxmgr::CastPointEffect(reinterpret_cast<byte*>(unit), i, j, what);
                 }
             }
  
@@ -886,12 +882,12 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
         else if(rawcmd == "#inn")
         {
             if (!player) goto ex;
-            byte* unit = *(byte**)(player + 0x38);
+            A2Unit* unit = player->current_unit;
             if (!unit) goto ex;
-            byte* item = *(byte**)(unit + 0x74);
+            A2InventoryItem* item = unit->weapon;
             if (!item) goto ex;
 
-            zxmgr::SendMessage(NULL, "%04x", *(uint16_t*)(item+0x40));
+            zxmgr::SendMessage(NULL, "%04x", item->id);
 
             goto ex;
         }
@@ -928,7 +924,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 goto ex;
             }
 
-            uint32_t uid = ClientScreenshot_Enqueue(player, target);
+            uint32_t uid = ClientScreenshot_Enqueue(player, reinterpret_cast<A2Player*>(target));
             Packet cmd;
             cmd.WriteUInt8(0x01);
             cmd.WriteString(*(const char**)(target + 0x0A78));
@@ -952,7 +948,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 goto ex;
             }
 
-            if (!*(byte**)(player + 0x38)) goto ex;
+            if (!player->current_unit) goto ex;
 
             command.erase(0, 7);
             command = Trim(command);
@@ -974,7 +970,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
 
             if (ToLower(command) == "gold")
             {
-                zxmgr::GiveMoney(player, count, 1);
+                zxmgr::GiveMoney(reinterpret_cast<byte*>(player), count, 1);
             }
             else
             {
@@ -988,12 +984,12 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                         if (*(uint8_t*)(t_item + 0x58) == 0 && *(uint8_t*)(t_item + 0x45) == 0 && *(uint8_t*)(t_item + 0x46) == 0 && *(uint16_t*)(t_item + 0x4A) == 1)
                         {
                             *(uint16_t*)(t_item + 0x42) = count;
-                            zxmgr::GiveItemTo(t_item, player);
+                            zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
                             break;
                         }
 
                         *(uint16_t*)(t_item + 0x42) = 1;
-                        zxmgr::GiveItemTo(t_item, player);
+                        zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
                     }
                 }
                 else
@@ -1001,11 +997,11 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                     byte* t_item = zxmgr::ConstructItem(command);
                     if (!t_item) goto ex;
                     *(uint16_t*)(t_item + 0x42) = count;
-                    zxmgr::GiveItemTo(t_item, player);
+                    zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
                 }
             }
 
-            zxmgr::UpdateUnit(*(byte**)(player + 0x38), player, 0xFFFFFFFF, 0xFFB, 0, 0);
+            zxmgr::UpdateUnit(reinterpret_cast<byte*>(player->current_unit), reinterpret_cast<byte*>(player), 0xFFFFFFFF, 0xFFB, 0, 0);
             goto ex;
         }
     }
@@ -1044,7 +1040,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 if (lowercommand.find("self") == 0)
                 {
                     targetname = "self";
-                    target = player;
+                    target = reinterpret_cast<byte*>(player);
                 }
                 else goto ex;
             }
@@ -1078,7 +1074,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                 if (r_change > 0)
                 {
                     pi->GodMode = true;
-                    if (r_change == 1) pi->GodSetter = player;
+                    if (r_change == 1) pi->GodSetter = reinterpret_cast<byte*>(player);
                     else pi->GodSetter = NULL;
                 }
                 else if (r_change < 0)
@@ -1102,7 +1098,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                         if (r_change == 1)
                         {
                             pi->SetSpells = 1;
-                            pi->SpellSetter = player;
+                            pi->SpellSetter = reinterpret_cast<byte*>(player);
                         }
                         else
                         {
@@ -1127,7 +1123,7 @@ void RunCommand(byte* _this, byte* player, const char* ccommand, uint32_t rights
                         if (r_change == -1)
                         {
                             pi->SetSpells = 1;
-                            pi->SpellSetter = player;
+                            pi->SpellSetter = reinterpret_cast<byte*>(player);
                         }
                         else
                         {
