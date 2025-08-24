@@ -318,13 +318,13 @@ bool Net_HatProcess()
             time_t unmutedate = pack.ReadUInt32();
             struct tm parsedTime;
             localtime_s(&parsedTime, &unmutedate);
-            byte* player = zxmgr::FindByLogin(login.c_str());
-            Player* pi = PI_Get(player);
+            A2Player* player = zxmgr::FindByLogin(login.c_str());
+            Player* pi = PI_Get(reinterpret_cast<byte*>(player));
             if (pi)
             {
                 pi->UnmuteDate = static_cast<uint32_t>(unmutedate);
                 Printf("Player %s (login %s) should be muted until %02d.%02d.%04d %02d:%02d:%02d.",
-                    *(const char**)(player + 0x18), login.c_str(), parsedTime.tm_mday, parsedTime.tm_mon + 1, parsedTime.tm_year + 1900, parsedTime.tm_hour, parsedTime.tm_min, parsedTime.tm_sec);
+                    player->name, login.c_str(), parsedTime.tm_mday, parsedTime.tm_mon + 1, parsedTime.tm_year + 1900, parsedTime.tm_hour, parsedTime.tm_min, parsedTime.tm_sec);
             }
             break;
         }

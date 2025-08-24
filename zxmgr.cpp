@@ -167,7 +167,7 @@ namespace zxmgr
         }
     }
 
-    byte* _stdcall FindByNickname(const char* nickname)
+    A2Player* _stdcall FindByNickname(const char* nickname)
     {
         std::vector<A2Player*> players = GetPlayers();
         for (auto it = players.begin(); it != players.end(); ++it)
@@ -193,14 +193,14 @@ namespace zxmgr
             }
 
             if (pl_nickname == nickname) {
-                return reinterpret_cast<byte*>(player);
+                return player;
             }
         }
 
         return 0;
     }
 
-    byte* _stdcall FindByLogin(const char* login)
+    A2Player* _stdcall FindByLogin(const char* login)
     {
         std::vector<A2Player*> players = GetPlayers();
         for (auto it = players.begin(); it != players.end(); ++it)
@@ -210,7 +210,7 @@ namespace zxmgr
             if (player->unitType) continue; // AI check
             const char* pl_login = player->account_name;
             if (!strcmp(pl_login, login)) {
-                return reinterpret_cast<byte*>(player);
+                return player;
             }
         }
 
@@ -1079,7 +1079,7 @@ ret_0:
         return mainWnd;
     }
 
-    byte* _stdcall FindByID(uint16_t id)
+    A2Player* _stdcall FindByID(uint16_t id)
     {
         std::vector<A2Player*> players = GetPlayers();
         for (auto it = players.begin(); it != players.end(); ++it)
@@ -1088,7 +1088,7 @@ ret_0:
             if (!player) continue;
 
             if (player->id_ext.id == id)
-                return reinterpret_cast<byte*>(player);
+                return player;
         }
 
         return NULL;

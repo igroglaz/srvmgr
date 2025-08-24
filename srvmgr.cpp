@@ -2605,7 +2605,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
         return -1;
     }
 
-    byte* p_player = NULL;
+    A2Player* p_player = NULL;
     if(p_id >= 16) p_player = zxmgr::FindByID(p_id);
 
     int r = recv(s, buf, 4, 0);
@@ -2620,7 +2620,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
     
     if((pkt_flags & 0x80100000) == 0x80100000)
     {
-        const char* p_name = (p_player ? *(const char**)(p_player+0x18) : "N/A");
+        const char* p_name = (p_player ? p_player->name : "N/A");
         //log_format("received special packet (size = %u, flags = %08X, player = %s).\n", pkt_size, pkt_flags, p_name);
         uint8_t* rd = new uint8_t[pkt_size];
         r = recv(s, (char*)rd, pkt_size, 0);
@@ -2638,7 +2638,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
 
         delete[] rd;
 
-        if(!Sv_ProcessClientPacket(p_id, p_player, pack))
+        if(!Sv_ProcessClientPacket(p_id, reinterpret_cast<byte*>(p_player), pack))
             return -1;
 
         memset(buf, 0, len);
@@ -2646,7 +2646,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
     }
     else
     {
-        const char* p_name = (p_player ? *(const char**)(p_player+0x18) : "N/A");
+        const char* p_name = (p_player ? p_player->name : "N/A");
         //log_format("received allods packet (size = %u, flags = %08X, player = %s).\n", pkt_size, pkt_flags, p_name);
         r = recv(s, buf+8, pkt_size, 0);
         if(r != pkt_size) return -1;
