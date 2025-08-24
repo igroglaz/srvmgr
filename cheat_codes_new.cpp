@@ -138,7 +138,7 @@ void DropEverything(A2Unit* unit, bool full = false)
     uint32_t p_x = unit->position->x;
     uint32_t p_y = unit->position->y;
 
-    uint32_t spellmask = zxmgr::GetSpells(reinterpret_cast<byte*>(unit));
+    uint32_t spellmask = zxmgr::GetSpells(unit);
 
     for (int i = 0; i < 32; i++)
     {
@@ -149,7 +149,7 @@ void DropEverything(A2Unit* unit, bool full = false)
         }
     }
 
-    zxmgr::SetSpells(reinterpret_cast<byte*>(unit), 0);
+    zxmgr::SetSpells(unit, 0);
     zxmgr::UpdateUnit(unit, NULL, 0xA31FFFFF, 0xFFB, 0, 0);
 
     if (!full) return;
@@ -1093,7 +1093,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                     if (pi->SetSpells == -1 && r_change != 2) // prev. command removed spells
                     {
                         pi->SetSpells = 0;
-                        zxmgr::SetSpells(reinterpret_cast<byte*>(unit), pi->LastSpells);
+                        zxmgr::SetSpells(unit, pi->LastSpells);
                         pi->LastSpells = 0;
                     }
                     else
@@ -1109,8 +1109,8 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                             pi->SpellSetter = NULL;
                         }
 
-                        pi->LastSpells = zxmgr::GetSpells(reinterpret_cast<byte*>(unit));
-                        zxmgr::SetSpells(reinterpret_cast<byte*>(unit), 0xFFFFFFFF);
+                        pi->LastSpells = zxmgr::GetSpells(unit);
+                        zxmgr::SetSpells(unit, 0xFFFFFFFF);
                     }
                 }
                 else if (r_change < 0)
@@ -1118,7 +1118,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                     if (pi->SetSpells == 1 && r_change != -2) // prev. command added spells
                     {
                         pi->SetSpells = 0;
-                        zxmgr::SetSpells(reinterpret_cast<byte*>(unit), pi->LastSpells);
+                        zxmgr::SetSpells(unit, pi->LastSpells);
                         pi->LastSpells = 0;
                     }
                     else
@@ -1135,8 +1135,8 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                         }
 
                         pi->SetSpells = -1;
-                        pi->LastSpells = zxmgr::GetSpells(reinterpret_cast<byte*>(unit));
-                        zxmgr::SetSpells(reinterpret_cast<byte*>(unit), 0);
+                        pi->LastSpells = zxmgr::GetSpells(unit);
+                        zxmgr::SetSpells(unit, 0);
                     }
                 }
 
