@@ -222,36 +222,36 @@ void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd)
         {
             // gm ally monsters, gm ally players, gm vision players
             bool has_rights = false;
-            uint32_t rights = *(uint32_t*)(player + 0x14);
+            uint32_t rights = player->flags;
             if ((rights & GMF_ANY) != GMF_ANY)
                 rights = 0;
             else has_rights = true;
             bool has_rights2 = false;
-            uint32_t rights2 = *(uint32_t*)(player2 + 0x14);
+            uint32_t rights2 = player2->flags;
             if ((rights2 & GMF_ANY) != GMF_ANY)
                 rights2 = 0;
             else has_rights2 = true;
-            if (*(uint32_t*)(player2 + 0x2C))
+            if (player2->unitType)
                 rights2 = 0;
 
             rights &= 0xFFFFFF;
             rights2 &= 0xFFFFFF;
 
             // ai
-            if ((rights & GMF_AI_ALLY) && *(uint32_t*)(player2 + 0x2C))
+            if ((rights & GMF_AI_ALLY) && player2->unitType)
             {
                 zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
                 zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
             // not ai
-            if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !*(uint32_t*)(player2 + 0x2C))
+            if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !player2->unitType)
             {
                 zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
                 zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
-            if ((rights & GMF_PLAYERS_VISION) && !*(uint32_t*)(player2 + 0x2C)) // not ai, vision
+            if ((rights & GMF_PLAYERS_VISION) && !player2->unitType) // not ai, vision
             {
                 // from others to this
                 zxmgr::SetDiplomacy(player2, player, 0x10|zxmgr::GetDiplomacy(player2, player)); 
