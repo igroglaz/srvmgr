@@ -118,10 +118,10 @@ void PI_Delete(A2Player* player)
     ClientScreenshot_DropPlayer(player);
 }
 
-Player* PI_Get(byte* player)
+Player* PI_Get(A2Player* player)
 {
     if(!player) return NULL;
-    uint16_t p_id = *(uint16_t*)(player + 4);
+    uint16_t p_id = player->id_ext.id;
     if(!p_id || p_id < 1 || p_id > 32) return NULL;
     if(!Players[p_id-1].Exists) return NULL;
     return &Players[p_id-1];

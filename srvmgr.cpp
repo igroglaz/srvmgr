@@ -1975,7 +1975,7 @@ sub_5446C7_done:
     }
 }
 
-bool _stdcall CheckPlayerMuted(byte* player)
+bool _stdcall CheckPlayerMuted(A2Player* player)
 {
     Player* pi = PI_Get(player);
     if (pi->UnmuteDate != 0 && time(NULL) < pi->UnmuteDate)
@@ -2537,7 +2537,7 @@ int PASCAL send0(SOCKET s, const char *buf, int len, int flags) {
     {
         A2Player* player = (*it);
         if (zxmgr::GetSocket(player) != s) continue;
-        Player* pi = PI_Get(reinterpret_cast<byte*>(player));
+        Player* pi = PI_Get(player);
         for (std::vector<Packet>::iterator jt = pi->EnqueuedPackets.begin(); jt != pi->EnqueuedPackets.end(); ++jt)
         {
             Packet& cmd = (*jt);
