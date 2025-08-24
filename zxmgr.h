@@ -85,7 +85,7 @@ namespace zxmgr
     void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t newdip);
 
     A2InventoryItem* GetItemFromPack(A2InventoryList* pack, uint16_t index, uint16_t count);
-    void SaveCharacter(byte* player);
+    void SaveCharacter(A2Player* player);
 
     byte* GetUnitByID(uint16_t player_id, uint16_t unit_id);
 
