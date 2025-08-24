@@ -229,7 +229,7 @@ namespace zxmgr
 
             unit->last_hit_by = NULL; // damage_by
             unit->hp = -50;
-            UpdateUnit(reinterpret_cast<byte*>(unit), nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
+            UpdateUnit(unit, nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
@@ -246,7 +246,7 @@ namespace zxmgr
 
             unit->last_hit_by = NULL; // damage_by
             unit->hp = -50;
-            UpdateUnit(reinterpret_cast<byte*>(unit), nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
+            UpdateUnit(unit, nullptr, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
@@ -368,7 +368,7 @@ namespace zxmgr
             if (unit == unit->player->current_unit) continue;
 
             unit->player = to;
-            UpdateUnit(reinterpret_cast<byte*>(unit), 0, 0xFFFFFFFF, 0xFFB, 0, 0);
+            UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
         }
     }
 
@@ -578,7 +578,7 @@ namespace zxmgr
         }
     }
 
-    void __declspec(naked) UpdateUnit(byte* unit, byte* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4)
+    void __declspec(naked) UpdateUnit(A2Unit* unit, A2Player* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4)
     {
         __asm
         {

@@ -54,7 +54,7 @@ namespace zxmgr
     void PrevMap();
 
     void MorphUnit(unsigned long unit, unsigned long kind);
-    void UpdateUnit(byte* unit, byte* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4);
+    void UpdateUnit(A2Unit* unit, A2Player* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4);
 
     int GetUnitSize(byte* unit);
     void MakeUnitNoClip(byte* unit);

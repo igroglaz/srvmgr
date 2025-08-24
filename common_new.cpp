@@ -684,7 +684,7 @@ void __declspec(naked) imp_LogIP()
     }
 }
 
-void _stdcall UseItems(byte* unit, byte* packet)
+void _stdcall UseItems(A2Unit* unit, byte* packet)
 {
     if(!(Config::ServerFlags & SVF_NOHEALING)) return;
 
@@ -696,17 +696,17 @@ void _stdcall UseItems(byte* unit, byte* packet)
     if(source == 2 && destination == 1) // moving item onto character
     {
         // find the item player is trying to use
-        byte* pack = *(byte**)(unit + 0x7C);
+        A2InventoryList* pack = unit->inventory;
         if(!pack) return;
 
         uint32_t index = 0;
-        byte* lp = *(byte**)(pack + 4);
+        A2Node<A2InventoryItem>* lp = pack->list.first_node;
         while(lp)
         {
-            byte* item = *(byte**)(lp + 8);
+            A2InventoryItem* item = lp->value;
             if(index == order)
             {
-                std::string item_name = *(const char**)(*(byte**)(item + 0x3C) + 4);
+                std::string item_name = item->world_equip->name;
                 if((item_name == "Potion Big Healing" ||
                     item_name == "Potion Medium Healing") && (Config::ServerFlags & SVF_NOHEALING))
                 {
@@ -717,7 +717,7 @@ void _stdcall UseItems(byte* unit, byte* packet)
                 break;
             }
 
-            lp = *(byte**)(lp);
+            lp = lp->next;
             index++;
         }
     }
@@ -1510,15 +1510,15 @@ void __declspec(naked) imp_UpdateOnReturn()
     }
 }
 
-void _stdcall CheckPlayerNoClip(byte* player)
+void _stdcall CheckPlayerNoClip(A2Player* player)
 {
-    byte* unit = *(byte**)(player + 0x38);
-    if ((*(uint32_t*)(player + 0x14) & GMF_NOCLIP) == GMF_NOCLIP)
+    A2Unit* unit = player->current_unit;
+    if ((player->flags & GMF_NOCLIP) == GMF_NOCLIP)
     {
-        zxmgr::MakeUnitNoClip(unit);
+        zxmgr::MakeUnitNoClip(reinterpret_cast<byte*>(unit));
     }
 
-    zxmgr::UpdateUnit(unit, *(byte**)(unit + 0x14), 0xFFFFFFFF, 0xFFB, 0, 0);
+    zxmgr::UpdateUnit(unit, unit->player, 0xFFFFFFFF, 0xFFB, 0, 0);
 }
 
 void __declspec(naked) imp_GMNoClip()
