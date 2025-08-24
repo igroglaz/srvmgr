@@ -1211,7 +1211,7 @@ ret_0:
     {
         A2Player* ppf = from->player;
         if (!ppf) return;
-        Player* pi = PI_Get(reinterpret_cast<byte*>(ppf));
+        Player* pi = PI_Get(ppf);
         if (!pi) return;
 
         byte* cspell = pi->CastSpell;

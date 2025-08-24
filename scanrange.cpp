@@ -112,7 +112,7 @@ void SR_Step()
 
 bool SR_CheckVision(byte* player, uint8_t check_x, uint8_t check_y)
 {
-    Player* pi = PI_Get(player);
+    Player* pi = PI_Get(reinterpret_cast<A2Player*>(player));
     if (!pi) return false;
     if (!srvmgr_CheckValid(check_x, check_y)) return false;
     uint32_t ticks_count = GetTickCount();
@@ -126,7 +126,7 @@ bool SR_CheckVision(byte* player, uint8_t check_x, uint8_t check_y)
 // can not be used from console
 void SR_DumpToFile(byte* player)
 {
-    Player* pi = PI_Get(player); // get player ID
+    Player* pi = PI_Get(reinterpret_cast<A2Player*>(player)); // get player ID
     if (!pi) return;    
     uint32_t ticks_count = GetTickCount(); // ms from the moment when system was started
 

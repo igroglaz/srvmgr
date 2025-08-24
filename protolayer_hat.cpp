@@ -319,7 +319,7 @@ bool Net_HatProcess()
             struct tm parsedTime;
             localtime_s(&parsedTime, &unmutedate);
             A2Player* player = zxmgr::FindByLogin(login.c_str());
-            Player* pi = PI_Get(reinterpret_cast<byte*>(player));
+            Player* pi = PI_Get(player);
             if (pi)
             {
                 pi->UnmuteDate = static_cast<uint32_t>(unmutedate);

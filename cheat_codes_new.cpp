@@ -908,7 +908,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 goto ex;
             }
 
-            Player* p = PI_Get(reinterpret_cast<byte*>(target));
+            Player* p = PI_Get(target);
             if (!p)
             {
                 if (player) zxmgr::SendMessage(player, "screenshot: Player %s has no playerinfo!", target->name);
@@ -1048,7 +1048,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 else goto ex;
             }
 
-            Player* pi = PI_Get(reinterpret_cast<byte*>(target));
+            Player* pi = PI_Get(target);
             if (!pi) goto ex;
 
             command.erase(0, targetname.length());
@@ -1315,7 +1315,7 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
 
     // todo somewhere around: temporary god mode
     Player* pi = NULL;
-    if (victim_player && (pi = PI_Get((byte*)victim_player))) {
+    if (victim_player && (pi = PI_Get(victim_player))) {
         if (pi->GodMode &&    // tmp. god mode set
            (!attacker_player ||    // cast from nowhere (building/trigger)
             !CHECK_FLAG(attacker_player->flags, GMF_ANY))) { // or damage from regular player

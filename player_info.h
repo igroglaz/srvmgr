@@ -33,7 +33,7 @@ struct Player
 
 extern Player Players[32];
 
-Player* PI_Get(byte* player);
+Player* PI_Get(A2Player* player);
 void PI_Reset();
 void PI_Clear(Player& struc);
 void PI_Create(A2Player* player);

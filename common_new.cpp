@@ -240,7 +240,7 @@ pid_skip:
     }
 }
 
-bool CheckShield(byte* player)
+bool CheckShield(A2Player* player)
 {
     Player* pi = PI_Get(player);
     if(!pi) return false;
@@ -293,19 +293,19 @@ cs_skip_cast_log:
     }
 }
 
-void ReturnFailProc(byte* unit)
+void ReturnFailProc(A2Unit* unit)
 {
     if(!unit) return;
-    byte* player = *(byte**)(unit + 0x14);
+    A2Player* player = unit->player;
     if(!player) return;
-    if(unit != *(byte**)(player + 0x38)) return; // only for main character
+    if(unit != player->current_unit) return; // only for main character
     Player* pi = PI_Get(player);
     if(!pi) return;
 
     pi->ShouldReturn = true;
     pi->LastReturn = GetTickCount(); // number of milliseconds from the moment when system was started
 
-    Printf("Warning: unit of player %s couldn't return to map.", *(const char**)(player + 0x18));
+    Printf("Warning: unit of player %s couldn't return to map.", player->name);
 }
 
 void __declspec(naked) imp_ReturnFail()
