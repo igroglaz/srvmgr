@@ -1093,7 +1093,7 @@ ret_0:
         return NULL;
     }
 
-    bool ReturnUnit(byte* unit)
+    bool ReturnUnit(A2Unit* unit)
     {
         if (!unit) return false;
         bool retval = false;
