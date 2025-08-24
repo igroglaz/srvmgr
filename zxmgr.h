@@ -19,14 +19,14 @@ namespace zxmgr
 
     void SendMessageRaw(const A2Player* pptr, const char* message);
     void SendMessage(const A2Player* pptr, const char* mask, ...);
-    void Kick(byte* pptr, bool silent);
+    void Kick(A2Player* pptr, bool silent);
     A2Player* _stdcall FindByNickname(const char* nickname);
     A2Player* _stdcall FindByLogin(const char* login);
     A2Player* _stdcall FindByID(uint16_t id);
-    void _stdcall KickAll(byte* caster);
-    void _stdcall KickAllSilent(byte* caster);
-    void _stdcall Kill(byte* player, byte* caster);
-    void _stdcall KillAll(byte* caster, bool ai_only);
+    void _stdcall KickAll(A2Player* caster);
+    void _stdcall KickAllSilent(A2Player* caster);
+    void _stdcall Kill(A2Player* player, A2Player* caster);
+    void _stdcall KillAll(A2Player* caster, bool ai_only);
     bool IsConnected(byte* player);
     byte* Summon(byte* player, const char* unitname, byte* pthis, bool ishero, byte* targetptr = 0);
     byte* ConstructItemN(const char* definition);

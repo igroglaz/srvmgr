@@ -80,7 +80,7 @@ namespace zxmgr
         va_end(arglist);
     }
 
-    void __declspec(naked) Kick(byte* pptr, bool silent)
+    void __declspec(naked) Kick(A2Player* pptr, bool silent)
     {
         __asm
         {
@@ -145,25 +145,25 @@ namespace zxmgr
         }
     }
 
-    void _stdcall KickAllSilent(byte* pptr)
+    void _stdcall KickAllSilent(A2Player* pptr)
     {
         std::vector<A2Player*> players = GetPlayers();
         for (auto it = players.begin(); it != players.end(); ++it)
         {
             A2Player* player = (*it);
-            if (player && player != reinterpret_cast<A2Player*>(pptr) && !player->unitType)
-                Kick(reinterpret_cast<byte*>(player), true);
+            if (player && player != pptr && !player->unitType)
+                Kick(player, true);
         }
     }
 
-    void _stdcall KickAll(byte* pptr)
+    void _stdcall KickAll(A2Player* pptr)
     {
         std::vector<A2Player*> players = GetPlayers();
         for (auto it = players.begin(); it != players.end(); ++it)
         {
             A2Player* player = (*it);
-            if (player && player != reinterpret_cast<A2Player*>(pptr) && !player->unitType)
-                Kick(reinterpret_cast<byte*>(player), true);
+            if (player && player != pptr && !player->unitType)
+                Kick(player, false);
         }
     }
 
@@ -217,14 +217,14 @@ namespace zxmgr
         return 0;
     }
 
-    void _stdcall Kill(byte* pptr, byte* caster)
+    void _stdcall Kill(A2Player* pptr, A2Player* caster)
     {
-        std::vector<byte*> units = GetUnits(pptr);
+        std::vector<byte*> units = GetUnits(reinterpret_cast<byte*>(pptr));
         for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
         {
             byte* unit = (*it);
             if (!unit) continue;
-            if (*(byte**)(unit + 0x14) != pptr) continue;
+            if (*(byte**)(unit + 0x14) != reinterpret_cast<byte*>(pptr)) continue;
             if (caster && unit == *(byte**)(caster + 0x38)) continue;
 
             *(byte**)(unit + 0x40) = NULL; // damage_by
@@ -233,14 +233,14 @@ namespace zxmgr
         }
     }
 
-    void _stdcall KillAll(byte* pptr, bool ai_only) // ¬Ќ»ћјЌ»≈! в отличие от оригинального #killall, убивает ¬—≈’ за исключением кастера.
+    void _stdcall KillAll(A2Player* pptr, bool ai_only) // ВНИМАНИЕ! в отличие от оригинального #killall, убивает ВСЕХ за исключением кастера.
     {
         std::vector<byte*> units = GetUnits();
         for (std::vector<byte*>::iterator it = units.begin(); it != units.end(); ++it)
         {
             byte* unit = (*it);
             if (!unit) continue;
-            if (pptr && unit == *(byte**)(pptr + 0x38)) continue;
+            if (pptr && reinterpret_cast<A2Unit*>(unit) == pptr->current_unit) continue;
             if (ai_only && *(byte**)(unit + 0x14) &&
                 !*(uint32_t*)(*(byte**)(unit + 0x14) + 0x2C)) continue;
 
