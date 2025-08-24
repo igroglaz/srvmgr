@@ -87,7 +87,7 @@ namespace zxmgr
     A2InventoryItem* GetItemFromPack(A2InventoryList* pack, uint16_t index, uint16_t count);
     void SaveCharacter(A2Player* player);
 
-    byte* GetUnitByID(uint16_t player_id, uint16_t unit_id);
+    A2Unit* GetUnitByID(uint16_t player_id, uint16_t unit_id);
 
     SOCKET GetSocket(uint16_t player_id);
     SOCKET GetSocket(byte* player);

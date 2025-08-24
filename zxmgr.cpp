@@ -1287,7 +1287,7 @@ ret_0:
         }
     }
 
-    byte __declspec(naked) *GetUnitByID(uint16_t player_id, uint16_t unit_id)
+    A2Unit __declspec(naked) *GetUnitByID(uint16_t player_id, uint16_t unit_id)
     {
         __asm
         {
