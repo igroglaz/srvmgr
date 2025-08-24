@@ -38,7 +38,7 @@ namespace zxmgr
     void GiveItemTo(A2InventoryItem* item, A2Player* player);
     void DestroyItem(A2InventoryItem* item);
     void GiveMoney(A2Player* pptr, unsigned long count, unsigned long flags);
-    void UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, byte* pptr);
+    void UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, A2Player* pptr);
     void __stdcall Own(A2Player* to, A2Player* from);
     void PickupFor(unsigned long pptr, unsigned long pthis);
 

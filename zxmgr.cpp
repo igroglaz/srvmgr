@@ -338,7 +338,7 @@ namespace zxmgr
     }
 
     // 51CEFB - ¤ так пон¤л, обновление (изменение) информации об игроке
-    void __declspec(naked) UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, byte* player)
+    void __declspec(naked) UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, A2Player* player)
     {
         __asm
         {
