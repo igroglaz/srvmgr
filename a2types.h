@@ -197,8 +197,8 @@ struct A2Player {
     A2ListWrapper<A2Unit>* unit_list;
     A2LinkedList<A2Group>* groups;
     int32_t unitType;
-    int8_t gap3[2];
-    int16_t word32;
+    int16_t diplomacy_30;
+    int16_t diplomacy_32;
     int8_t gap4[4];
     A2Unit* current_unit; // 0x38
     int32_t money;

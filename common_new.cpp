@@ -1251,30 +1251,28 @@ do_normal:
     }
 }
 
-void _stdcall SetDiplomacyEx(byte* player1)
+void _stdcall SetDiplomacyEx(A2Player* player1)
 {
     if(!player1) return;
 
-    byte* player_iterator = *(byte**)(*(uint32_t*)(0x006CDB24)+4);
-    if(!player_iterator) return;
+    std::vector<A2Player*> players = zxmgr::GetPlayers();
 
-    uint32_t rights = *(uint32_t*)(player1 + 0x14);
+    uint32_t rights = player1->flags;
     if((rights & GMF_ANY) != GMF_ANY)
         rights = 0;
     else rights &= 0xFFFFFF;
 
-    byte* Self = 0;
+    A2Player* Self = 0;
 
-    while(player_iterator)
+    for (auto it = players.begin(); it != players.end(); ++it)
     {
-        byte* player = *(byte**)(player_iterator+8);
-        player_iterator = *(byte**)(player_iterator);
+        A2Player* player = *it;
         if(!player) break;
 
-        if(!*(uint32_t*)(player + 0x2C))
+        if(!player->unitType)
             continue;
 
-        const char* name = *(const char**)(player + 0x18);
+        const char* name = player->name;
         if(stricmp(name, "Self") == 0)
         {
             Self = player;
@@ -1285,16 +1283,14 @@ void _stdcall SetDiplomacyEx(byte* player1)
     if(!Self)
         return; // error: no Self player
 
-    player_iterator = *(byte**)(*(uint32_t*)(0x006CDB24)+4);
-    while(player_iterator)
+    for (auto it = players.begin(); it != players.end(); ++it)
     {
-        byte* player2 = *(byte**)(player_iterator+8);
-        player_iterator = *(byte**)(player_iterator);
+        A2Player* player2 = *it;
         if(!player2) break;
         if(player2 == player1)
             continue;
 
-        if(*(uint32_t*)(player2 + 0x2C))
+        if(player2->unitType)
         {
             if(rights & GMF_AI_ALLY) // расставляем всем мобам алю (если стоит флаг)
             {
@@ -1310,7 +1306,7 @@ void _stdcall SetDiplomacyEx(byte* player1)
         else
         {
             // получаем флаги второго игрока
-            uint32_t rights2 = *(uint32_t*)(player2 + 0x14);
+            uint32_t rights2 = player2->flags;
             if((rights2 & GMF_ANY) != GMF_ANY)
                 rights2 = 0;
             else rights2 &= 0xFFFFFF;

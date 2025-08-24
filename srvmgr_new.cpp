@@ -250,7 +250,7 @@ void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd)
 
         if (player == player2)
         {
-            zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x12);
+            zxmgr::SetDiplomacy(player, player2, 0x12);
         }
         else
         {
@@ -274,27 +274,27 @@ void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd)
             // ai
             if ((rights & GMF_AI_ALLY) && *(uint32_t*)(player2 + 0x2C))
             {
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x02); // from this to others
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x02); // from others to this
+                zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
+                zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
             // not ai
             if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !*(uint32_t*)(player2 + 0x2C))
             {
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x02); // from this to others
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x02); // from others to this
+                zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
+                zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
             if ((rights & GMF_PLAYERS_VISION) && !*(uint32_t*)(player2 + 0x2C)) // not ai, vision
             {
                 // from others to this
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x10|zxmgr::GetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player))); 
+                zxmgr::SetDiplomacy(player2, player, 0x10|zxmgr::GetDiplomacy(player2, player)); 
             }
 
             if (rights2 & GMF_PLAYERS_VISION) // other player has vision flag
             {
                 // from this to others
-                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x10|zxmgr::GetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2)));
+                zxmgr::SetDiplomacy(player, player2, 0x10|zxmgr::GetDiplomacy(player, player2));
             }
         }
     }

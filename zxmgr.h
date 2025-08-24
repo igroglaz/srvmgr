@@ -81,8 +81,8 @@ namespace zxmgr
 
     void CastPointEffect(A2Unit* from, uint8_t to_x, uint8_t to_y, uint8_t spell);
 
-    uint8_t GetDiplomacy(byte* player1, byte* player2);
-    void SetDiplomacy(byte* player1, byte* player2, uint8_t newdip);
+    uint8_t GetDiplomacy(A2Player* player1, A2Player* player2);
+    void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t newdip);
 
     A2InventoryItem* GetItemFromPack(A2InventoryList* pack, uint16_t index, uint16_t count);
     void SaveCharacter(byte* player);
