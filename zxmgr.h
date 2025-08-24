@@ -29,11 +29,14 @@ namespace zxmgr
     void _stdcall KillAll(A2Player* caster, bool ai_only);
     bool IsConnected(A2Player* player);
     A2Unit* Summon(A2Player* player, const char* unitname, byte* pthis, bool ishero, byte* targetptr = 0);
-    byte* ConstructItemN(const char* definition);
-    byte* ConstructItem(std::string definition);
-    bool CheckItem(byte* item);
-    void GiveItemTo(byte* item, byte* player);
-    void DestroyItem(byte* item);
+
+    // `ConstructItem` returns an object of a corresponding type. It can be a weapon, an armor, and so on.
+    A2InventoryItem* ConstructItemN(const char* definition);
+    A2InventoryItem* ConstructItem(std::string definition);
+
+    bool CheckItem(A2InventoryItem* item);
+    void GiveItemTo(A2InventoryItem* item, A2Player* player);
+    void DestroyItem(A2InventoryItem* item);
     void GiveMoney(byte* pptr, unsigned long count, unsigned long flags);
     void UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, byte* pptr);
     void __stdcall Own(A2Player* to, A2Player* from);
@@ -81,7 +84,7 @@ namespace zxmgr
     uint8_t GetDiplomacy(byte* player1, byte* player2);
     void SetDiplomacy(byte* player1, byte* player2, uint8_t newdip);
 
-    byte* GetItemFromPack(byte* pack, uint16_t index, uint16_t count);
+    A2InventoryItem* GetItemFromPack(A2InventoryList* pack, uint16_t index, uint16_t count);
     void SaveCharacter(byte* player);
 
     byte* GetUnitByID(uint16_t player_id, uint16_t unit_id);

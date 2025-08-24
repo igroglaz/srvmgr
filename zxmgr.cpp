@@ -991,15 +991,15 @@ ret_0:
         }
     }
 
-    byte* ConstructItemN(const char* definition)
+    A2InventoryItem* ConstructItemN(const char* definition)
     {
         if (!definition) return NULL;
         return ConstructItem(definition);
     }
 
-    byte* ConstructItem(std::string definition)
+    A2InventoryItem* ConstructItem(std::string definition)
     {
-        byte* item_pthis = NULL;
+        A2InventoryItem* item_pthis = NULL;
         const char* cdefinition = CreateCString(definition.c_str());
 
         __asm
@@ -1017,7 +1017,7 @@ ret_0:
         return item_pthis;
     }
 
-    bool CheckItem(byte* item)
+    bool CheckItem(A2InventoryItem* item)
     {
         bool is_good = false;
 
@@ -1032,7 +1032,7 @@ ret_0:
         return is_good;
     }
 
-    void GiveItemTo(byte* item, byte* player)
+    void GiveItemTo(A2InventoryItem* item, A2Player* player)
     {
         __asm
         {
@@ -1051,7 +1051,7 @@ ret_0:
         }
     }
 
-    void __declspec(naked) DestroyItem(byte* item)
+    void __declspec(naked) DestroyItem(A2InventoryItem* item)
     {
         __asm
         {
@@ -1256,7 +1256,7 @@ ret_0:
         }
     }
 
-    byte __declspec(naked) *GetItemFromPack(byte* pack, uint16_t index, uint16_t count)
+    A2InventoryItem __declspec(naked) *GetItemFromPack(A2InventoryList* pack, uint16_t index, uint16_t count)
     {
         __asm
         {

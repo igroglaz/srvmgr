@@ -3,7 +3,7 @@
 #include "srvmgr.h"
 #include "lib\utils.hpp"
 
-bool ItemRemover_CheckForbidden(byte* item)
+bool ItemRemover_CheckForbidden(A2InventoryItem* item)
 {
     return false;
     /*
@@ -14,33 +14,33 @@ bool ItemRemover_CheckForbidden(byte* item)
     return false;*/
 }
 
-std::vector<byte*> ItemRemover_Process(byte* unit)
+std::vector<A2InventoryItem*> ItemRemover_Process(A2Unit* unit)
 {
-    std::vector<byte*> saved_items;
+    std::vector<A2InventoryItem*> saved_items;
 
-    byte* pack = *(byte**)(unit + 0x7C);
+    A2InventoryList* pack = unit->inventory;
     if(!pack) return saved_items;
 
     uint32_t index = 0;
-    byte* lp = *(byte**)(pack + 4);
-    byte* last_lp = NULL;
+    A2Node<A2InventoryItem>* lp = pack->list.first_node;
+    A2Node<A2InventoryItem>* last_lp = NULL;
     while(lp)
     {
-        byte* item = *(byte**)(lp + 8);
-        uint16_t item_count = *(uint16_t*)(item + 0x42);
+        A2InventoryItem* item = lp->value;
+        uint16_t item_count = item->amount;
         if(item_count && ItemRemover_CheckForbidden(item))
         {
-            byte* p_item = zxmgr::GetItemFromPack(pack, index, item_count);
+            A2InventoryItem* p_item = zxmgr::GetItemFromPack(pack, index, item_count);
             if(p_item)
             {
                 saved_items.push_back(p_item);
                 if(last_lp) lp = last_lp;
-                else lp = *(byte**)(pack + 4);
+                else lp = pack->list.first_node;
             }
         }
 
         last_lp = lp;
-        lp = *(byte**)(lp);
+        lp = lp->next;
         index++;
     }
 
