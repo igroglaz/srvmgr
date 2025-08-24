@@ -322,16 +322,15 @@ void __declspec(naked) imp_ReturnFail()
     }
 }
 
-uint32_t _stdcall OnCast(byte* cptr)
+uint32_t _stdcall OnCast(A2Unit* cptr)
 {
     if(!cptr) return 0;
-    byte* pptr = *(byte**)(cptr + 0x14);
-    if(!pptr || *(uint32_t*)(pptr + 0x2C)) return 0;
-    uint32_t rights = *(uint32_t*)(pptr + 0x14);
+    A2Player* pptr = cptr->player;
+    if(!pptr || pptr->unitType) return 0;
+    uint32_t rights = pptr->flags;
     if((rights & 0x3F000000) != 0x3F000000) return 0;
-    uint32_t ac_data = *(uint32_t*)(cptr + 0x1C4);
-    uint8_t action = *(uint8_t*)(ac_data + 0x08);
-    uint8_t action_2 = *(uint8_t*)(ac_data + 0x09);
+    A2UnitEye2* ac_data = cptr->eye2;
+    uint8_t action = ac_data->cast_action;
     if(action != 8 && action != 9) return 0; // unit cast, point cast
 
     return 1;
