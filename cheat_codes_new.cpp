@@ -131,14 +131,14 @@ char SpellBooks[6][10] =
 };
 
 
-void DropEverything(byte* unit, bool full = false)
+void DropEverything(A2Unit* unit, bool full = false)
 {
     if (Config::GameMode != 0) return;
 
-    uint32_t p_x = *(uint8_t*)(*(byte**)(unit + 0x10));
-    uint32_t p_y = *(uint8_t*)(*(byte**)(unit + 0x10) + 1);
+    uint32_t p_x = unit->position->x;
+    uint32_t p_y = unit->position->y;
 
-    uint32_t spellmask = zxmgr::GetSpells(unit);
+    uint32_t spellmask = zxmgr::GetSpells(reinterpret_cast<byte*>(unit));
 
     for (int i = 0; i < 32; i++)
     {
@@ -149,12 +149,12 @@ void DropEverything(byte* unit, bool full = false)
         }
     }
 
-    zxmgr::SetSpells(unit, 0);
+    zxmgr::SetSpells(reinterpret_cast<byte*>(unit), 0);
     zxmgr::UpdateUnit(unit, NULL, 0xA31FFFFF, 0xFFB, 0, 0);
 
     if (!full) return;
 
-    A2Player* player = *(A2Player**)(unit + 0x14);
+    A2Player* player = unit->player;
 
     if (!player) return;
 
@@ -593,7 +593,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 A2Unit* unit = target->current_unit;
 
                 if (unit && target != player)
-                    DropEverything(reinterpret_cast<byte*>(unit), true);
+                    DropEverything(unit, true);
             }
             goto ex;
         }
@@ -1004,7 +1004,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 }
             }
 
-            zxmgr::UpdateUnit(reinterpret_cast<byte*>(player->current_unit), reinterpret_cast<byte*>(player), 0xFFFFFFFF, 0xFFB, 0, 0);
+            zxmgr::UpdateUnit(player->current_unit, player, 0xFFFFFFFF, 0xFFB, 0, 0);
             goto ex;
         }
     }
@@ -1140,7 +1140,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                     }
                 }
 
-                zxmgr::UpdateUnit(reinterpret_cast<byte*>(unit), 0, 0xFFFFFFFF, 0xFFB, 0, 0);
+                zxmgr::UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
             }
             else if (command == "knowledge" && unit)
             {
