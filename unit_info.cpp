@@ -4,16 +4,16 @@
 
 std::vector<Unit> Units;
 
-void UI_Clear(Unit& unit, byte* cunit, uint32_t type)
+void UI_Clear(Unit& unit, A2Unit* cunit, uint32_t type)
 {
     unit.Type = type;
     unit.Class = cunit;
-    unit.Invalid = (unit.Class && *(byte**)(unit.Class+0x14));
+    unit.Invalid = (unit.Class && unit.Class->player);
     unit.VisibleFlags = 0;
     unit.VisibleFlagsLast = 0;
 }
 
-void UI_Create(byte* cunit, uint32_t type)
+void UI_Create(A2Unit* cunit, uint32_t type)
 {
     bool already_exists = false;
     for(std::vector<Unit>::iterator it = Units.begin();
@@ -31,7 +31,7 @@ void UI_Create(byte* cunit, uint32_t type)
     Units.push_back(unit);
 }
 
-void UI_Delete(byte* cunit)
+void UI_Delete(A2Unit* cunit)
 {
     for(std::vector<Unit>::iterator it = Units.begin();
         it != Units.end(); ++it)
@@ -45,7 +45,7 @@ void UI_Delete(byte* cunit)
     }
 }
 
-void UI_Destruct(byte* cunit)
+void UI_Destruct(A2Unit* cunit)
 {
     if(cunit)
     {
@@ -77,7 +77,7 @@ void UI_Tick()
     //...
 }
 
-Unit* UI_Get(byte* cunit)
+Unit* UI_Get(A2Unit* cunit)
 {
     if(!cunit) return NULL;
     for(std::vector<Unit>::iterator it = Units.begin();
