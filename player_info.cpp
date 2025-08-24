@@ -60,10 +60,10 @@ void PI_Create(A2Player* player)
     }*/
 }
 
-void PI_Delete(byte* player)
+void PI_Delete(A2Player* player)
 {
     if(!player) return;
-    uint16_t p_id = *(uint16_t*)(player + 4);
+    uint16_t p_id = player->id_ext.id;
     if(!p_id || p_id < 1 || p_id > 32) return;
 
     for(int i = 0; i < 32; i++)
@@ -94,7 +94,7 @@ void PI_Delete(byte* player)
         zxmgr::GiveItemTo(item, player);
     }*/
 
-    byte* unit = *(byte**)(player + 0x38);
+    A2Unit* unit = player->current_unit;
     bool update = false;
 
     /*if(Players[p_id-1].SavedItems.size())
@@ -105,7 +105,7 @@ void PI_Delete(byte* player)
 
     if(unit && Players[p_id-1].SetSpells != 0)
     {
-        zxmgr::SetSpells(reinterpret_cast<A2Unit*>(unit), Players[p_id-1].LastSpells);
+        zxmgr::SetSpells(unit, Players[p_id-1].LastSpells);
         Players[p_id-1].SetSpells = 0;
         Players[p_id-1].LastSpells = 0;
         Players[p_id-1].SpellSetter = NULL;
@@ -115,7 +115,7 @@ void PI_Delete(byte* player)
     //if(update && unit) zxmgr::SaveCharacter(player);
 
     PI_Clear(Players[p_id-1]);
-    ClientScreenshot_DropPlayer(reinterpret_cast<A2Player*>(player));
+    ClientScreenshot_DropPlayer(player);
 }
 
 Player* PI_Get(byte* player)
