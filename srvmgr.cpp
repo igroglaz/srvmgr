@@ -2629,7 +2629,7 @@ int _stdcall recv0(SOCKET s, char* buf, int len, int flags)
 
         delete[] rd;
 
-        if(!Sv_ProcessClientPacket(p_id, reinterpret_cast<byte*>(p_player), pack))
+        if(!Sv_ProcessClientPacket(p_id, p_player, pack))
             return -1;
 
         memset(buf, 0, len);

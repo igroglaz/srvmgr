@@ -619,7 +619,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
 
             if (player)
             {
-                cheat_codes_2(reinterpret_cast<byte*>(player), ccommand);
+                cheat_codes_2(player, ccommand);
             }
             goto ex;
         }

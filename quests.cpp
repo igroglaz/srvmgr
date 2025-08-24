@@ -169,7 +169,7 @@ bool player_has_quest_for_monster_id(A2Player* player, __int16 monsterId){
     A2QuestNode* node;
     while ((node = iter.next()) != NULL) {
         A2Quest* quest = node->quest;
-        int16_t id = (*(A2ID*)&quest->obj).id;
+        int16_t id = reinterpret_cast<A2ID*>(&quest->obj)->id;
         if (quest->clazz == A2_CLASS_KILL_MONSTER && id == monsterId && player->id_ext.id == quest->player_id.id) {
             return true;
         }
