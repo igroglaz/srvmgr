@@ -2536,7 +2536,7 @@ int PASCAL send0(SOCKET s, const char *buf, int len, int flags) {
     for (auto it = players.begin(); it != players.end(); ++it)
     {
         A2Player* player = (*it);
-        if (zxmgr::GetSocket(reinterpret_cast<byte*>(player)) != s) continue;
+        if (zxmgr::GetSocket(player) != s) continue;
         Player* pi = PI_Get(reinterpret_cast<byte*>(player));
         for (std::vector<Packet>::iterator jt = pi->EnqueuedPackets.begin(); jt != pi->EnqueuedPackets.end(); ++jt)
         {

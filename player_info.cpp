@@ -20,7 +20,7 @@ void PI_Reset()
         uint16_t p_id = player->id_ext.id;
         if(!p_id || p_id < 1 || p_id > 32) continue;
         
-        PI_Create(reinterpret_cast<byte*>(player));
+        PI_Create(player);
     }
 }
 
@@ -40,10 +40,10 @@ void PI_Clear(Player& struc)
     struc.EnqueuedPackets.clear();
 }
 
-void PI_Create(byte* player)
+void PI_Create(A2Player* player)
 {
     if(!player) return;
-    uint16_t p_id = *(uint16_t*)(player + 4);
+    uint16_t p_id = player->id_ext.id;
     if(!p_id || p_id < 1 || p_id > 32) return;
 
     Player& struc = Players[p_id-1];
@@ -75,11 +75,11 @@ void PI_Delete(byte* player)
             Players[i].GodSetter = NULL;
         }
 
-        byte* unit = *(byte**)(Players[i].Class + 0x38);
+        A2Unit* unit = Players[i].Class->current_unit;
         if(unit && Players[i].SetSpells != 0 && Players[i].SpellSetter == player &&
             (i != p_id-1))
         {
-            zxmgr::SetSpells(reinterpret_cast<A2Unit*>(unit), Players[i].LastSpells);
+            zxmgr::SetSpells(unit, Players[i].LastSpells);
             Players[i].SetSpells = 0;
             Players[i].LastSpells = 0;
             Players[i].SpellSetter = NULL;

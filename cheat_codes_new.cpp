@@ -916,7 +916,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 goto ex;
             }
 
-            SOCKET ps = zxmgr::GetSocket(reinterpret_cast<byte*>(target));
+            SOCKET ps = zxmgr::GetSocket(target);
             if (!ps)
             {
                 if (player) zxmgr::SendMessage(player, "screenshot: Player %s has no socket (AI or disconnected?)", target->name);

@@ -1324,9 +1324,9 @@ ret_0:
         return 0;
     }
 
-    SOCKET GetSocket(byte* player)
+    SOCKET GetSocket(A2Player* player)
     {
         if (!player) return 0;
-        return GetSocket(*(uint16_t*)(player+0x04));
+        return GetSocket(player->id_ext.id);
     }
 }

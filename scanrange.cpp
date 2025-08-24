@@ -51,10 +51,10 @@ void SR_UpdateUnit(byte* unit)
     {
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
-        if (*(uint32_t*)(Players[i].Class + 0x2C)) continue;
-        if (!*(byte**)(Players[i].Class + 0x38)) continue; // TODO: ->current_unit
+        if (Players[i].Class->unitType) continue;
+        if (!Players[i].Class->current_unit) continue;
 
-        if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(reinterpret_cast<A2Player*>(unit_player), reinterpret_cast<A2Player*>(Players[i].Class)) & 0x10))
+        if (Players[i].Class == reinterpret_cast<A2Player*>(unit_player) || (zxmgr::GetDiplomacy(reinterpret_cast<A2Player*>(unit_player), Players[i].Class) & 0x10))
         {
             uint8_t unit_x = *(uint8_t*)(*(byte**)(unit + 0x10));
             uint8_t unit_y = *(uint8_t*)(*(byte**)(unit + 0x10)+1);
@@ -105,8 +105,8 @@ void SR_Step()
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
 
-        if (*(byte**)(Players[i].Class+0x38))
-            SR_UpdateUnit(*(byte**)(Players[i].Class+0x38));
+        if (Players[i].Class->current_unit)
+            SR_UpdateUnit(reinterpret_cast<byte*>(Players[i].Class->current_unit));
     }
 }
 

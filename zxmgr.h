@@ -90,5 +90,5 @@ namespace zxmgr
     A2Unit* GetUnitByID(uint16_t player_id, uint16_t unit_id);
 
     SOCKET GetSocket(uint16_t player_id);
-    SOCKET GetSocket(byte* player);
+    SOCKET GetSocket(A2Player* player);
 }

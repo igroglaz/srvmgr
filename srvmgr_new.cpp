@@ -100,15 +100,15 @@ void OnServerTic()
     {
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
-        if (*(uint32_t*)(Players[i].Class + 0x2C)) continue;
-        if (!*(byte**)(Players[i].Class + 0x38)) continue;
+        if (Players[i].Class->unitType) continue;
+        if (!Players[i].Class->current_unit) continue;
 
-        byte* unit = *(byte**)(Players[i].Class + 0x38);
+        A2Unit* unit = Players[i].Class->current_unit;
 
         // milliseconds from system start - Players[i].LastReturn...
         if (Players[i].ShouldReturn && GetTickCount()-Players[i].LastReturn > 5000) // every 5 seconds
         {
-            if (zxmgr::ReturnUnit(*(A2Unit**)(Players[i].Class + 0x38)))
+            if (zxmgr::ReturnUnit(unit))
                 Players[i].ShouldReturn = false;
         }
 
