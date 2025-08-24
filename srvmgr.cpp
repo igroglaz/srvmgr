@@ -14,6 +14,7 @@
 #include <sstream>
 #include <ctime>
 
+#include "a2types.h"
 #include "player_info.h"
 #include "lib\utils.hpp"
 #include "lib\packet.hpp"
@@ -78,21 +79,11 @@ char perc_s[]="%s\n";
 double exp_death = 1; // 1.0
 double exp_full = 0.9; // 0.9
 
-const char * __stdcall get_player_name(void *pl)
+void __stdcall auto_war_cpp(A2Unit *unit_from, A2Unit *unit_to, int att)
 {
-    return *(const char **)((char *)pl + 0x18);
-}
-
-void * __stdcall get_player(void *un)
-{
-    return *(void **)((char *)un + 0x14);
-}
-
-void __stdcall auto_war_cpp(void *unit_from, void *unit_to, int att)
-{
-    void *player_from = get_player(unit_from);
-    void *player_to = get_player(unit_to);
-    Printf("Player %s (%s) set auto-war to player %s", get_player_name(player_from), att ? "attacker" : "victim", get_player_name(player_to));
+    A2Player *player_from = unit_from->player;
+    A2Player *player_to = unit_to->player;
+    Printf("Player %s (%s) set auto-war to player %s", player_from->name, att ? "attacker" : "victim", player_to->name);
 }
 
 void __declspec(naked) auto_war_1()
@@ -127,16 +118,16 @@ void __declspec(naked) auto_war_2()
     }
 }
 
-void __stdcall log_dip_change_cpp(byte *player_from, byte *player_to, int was, int became)
+void __stdcall log_dip_change_cpp(A2Player *player_from, A2Player *player_to, int was, int became)
 {
     char names[][7] = {"war", "ally", "ignore", "vision"};
     int flags[4] = {1, 2, 4, 0x10};
     for (int i = 0; i < 4; ++i)
     {
         if ((was & flags[i]) && !(became & flags[i]))
-            Printf("Player %s unset %s to player %s", get_player_name(player_from), names[i], get_player_name(player_to));
+            Printf("Player %s unset %s to player %s", player_from->name, names[i], player_to->name);
         if (!(was & flags[i]) && (became & flags[i]))
-            Printf("Player %s set %s to player %s", get_player_name(player_from), names[i], get_player_name(player_to));
+            Printf("Player %s set %s to player %s", player_from->name, names[i], player_to->name);
     }
 }
 
