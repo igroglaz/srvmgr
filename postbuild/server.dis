@@ -288,3 +288,4 @@ JMP unsummon_unit 00557985
 
 JMP skip_experience_reward 005666c1
 JMP inn_scrolls_reward 00565b27
+JMP skip_potion_reward 005660c8

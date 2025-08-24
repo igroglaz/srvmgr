@@ -193,3 +193,4 @@ dont_eat_bad_food                       @333
 unsummon_unit                           @334
 skip_experience_reward                  @335
 inn_scrolls_reward                      @336
+skip_potion_reward                      @337
