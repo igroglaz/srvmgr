@@ -415,7 +415,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             A2Player* target = zxmgr::FindByNickname(command.c_str());
 
             if (target)
-                zxmgr::Kick(reinterpret_cast<byte*>(target), false);
+                zxmgr::Kick(target, false);
 
             goto ex;
         }
@@ -428,7 +428,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             }
 
             if (player)
-                zxmgr::Kick(reinterpret_cast<byte*>(player), true);
+                zxmgr::Kick(player, true);
 
             goto ex;
         }
@@ -444,7 +444,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             A2Player* target = zxmgr::FindByNickname(command.c_str());
 
             if (target)
-                zxmgr::Kick(reinterpret_cast<byte*>(target), true);
+                zxmgr::Kick(target, true);
 
             goto ex;
         }
@@ -566,7 +566,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                         (tri & GMF_GODMODE_ADMIN)) goto ex;
                 }
 
-                zxmgr::Kill(reinterpret_cast<byte*>(target), reinterpret_cast<byte*>(player));
+                zxmgr::Kill(target, player);
             }
             goto ex;
         }
@@ -589,7 +589,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                             goto ex;
                 }
 
-                zxmgr::Kill(reinterpret_cast<byte*>(target), reinterpret_cast<byte*>(player));
+                zxmgr::Kill(target, player);
                 A2Unit* unit = target->current_unit;
 
                 if (unit && target != player)
@@ -599,11 +599,11 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
         }
         else if (rawcmd == "#killall")
         {
-            zxmgr::KillAll(reinterpret_cast<byte*>(player), false);
+            zxmgr::KillAll(player, false);
         }
         else if (rawcmd == "#killai")
         {
-            zxmgr::KillAll(reinterpret_cast<byte*>(player), true);
+            zxmgr::KillAll(player, true);
         }
     }
 
