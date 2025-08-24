@@ -154,18 +154,18 @@ void DropEverything(byte* unit, bool full = false)
 
     if (!full) return;
 
-    byte* player = *(byte**)(unit + 0x14);
+    A2Player* player = *(A2Player**)(unit + 0x14);
 
     if (!player) return;
 
-    uint32_t money = *(uint32_t*)(player + 0x3C);
+    uint32_t money = player->money;
 
     if (!money) return;
 
     if (money > 0x7FFFFFFF) money = 0x7FFFFFFF;
 
     zxmgr::CreateSack(NULL, p_x, p_y, money);
-    *(uint32_t*)(player + 0x3C) = 0;
+    player->money = 0;
     zxmgr::GiveMoney(player, 0, 0);
 }
 
@@ -970,7 +970,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
 
             if (ToLower(command) == "gold")
             {
-                zxmgr::GiveMoney(reinterpret_cast<byte*>(player), count, 1);
+                zxmgr::GiveMoney(player, count, 1);
             }
             else
             {

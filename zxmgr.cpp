@@ -320,7 +320,7 @@ namespace zxmgr
     }
 
     // добавить денег игроку
-    void __declspec(naked) GiveMoney(byte* pptr, unsigned long count, unsigned long flags)
+    void __declspec(naked) GiveMoney(A2Player* pptr, unsigned long count, unsigned long flags)
     {
         __asm
         {
