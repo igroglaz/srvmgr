@@ -1077,7 +1077,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 if (r_change > 0)
                 {
                     pi->GodMode = true;
-                    if (r_change == 1) pi->GodSetter = reinterpret_cast<byte*>(player);
+                    if (r_change == 1) pi->GodSetter = player;
                     else pi->GodSetter = NULL;
                 }
                 else if (r_change < 0)
@@ -1101,7 +1101,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                         if (r_change == 1)
                         {
                             pi->SetSpells = 1;
-                            pi->SpellSetter = reinterpret_cast<byte*>(player);
+                            pi->SpellSetter = player;
                         }
                         else
                         {
@@ -1126,7 +1126,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                         if (r_change == -1)
                         {
                             pi->SetSpells = 1;
-                            pi->SpellSetter = reinterpret_cast<byte*>(player);
+                            pi->SpellSetter = player;
                         }
                         else
                         {

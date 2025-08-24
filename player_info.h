@@ -14,14 +14,14 @@ struct Player
     bool ShouldReturn;
     uint32_t LastReturn;
     bool GodMode;
-    byte* GodSetter;
+    A2Player* GodSetter;
 
     int8_t SetSpells;
     uint32_t LastSpells;
-    byte* SpellSetter;
+    A2Player* SpellSetter;
 
     byte CastSpell[0x14];
-    std::vector<byte*> SavedItems;
+    std::vector<A2InventoryItem*> SavedItems;
 
     uint32_t UnmuteDate;
 
@@ -37,4 +37,4 @@ Player* PI_Get(byte* player);
 void PI_Reset();
 void PI_Clear(Player& struc);
 void PI_Create(A2Player* player);
-void PI_Delete(byte* player);
+void PI_Delete(A2Player* player);
