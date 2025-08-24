@@ -250,12 +250,12 @@ namespace zxmgr
         }
     }
 
-    bool IsConnected(byte* pptr)
+    bool IsConnected(A2Player* pptr)
     {
         return (GetNetworkStruct(pptr));
     }
 
-    byte __declspec(naked) *Summon(byte* pptr, const char* unitname, byte* pthis, bool ishero, byte* targetptr)
+    A2Unit __declspec(naked) *Summon(A2Player* pptr, const char* unitname, byte* pthis, bool ishero, byte* targetptr)
     {
         __asm
         {
@@ -862,7 +862,7 @@ endp:
         }
     }
 
-    byte* GetNetworkStruct(byte* player)
+    byte* GetNetworkStruct(A2Player* player)
     {
         if(!player) return NULL;
         byte* retval = NULL;

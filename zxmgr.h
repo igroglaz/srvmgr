@@ -27,8 +27,8 @@ namespace zxmgr
     void _stdcall KickAllSilent(A2Player* caster);
     void _stdcall Kill(A2Player* player, A2Player* caster);
     void _stdcall KillAll(A2Player* caster, bool ai_only);
-    bool IsConnected(byte* player);
-    byte* Summon(byte* player, const char* unitname, byte* pthis, bool ishero, byte* targetptr = 0);
+    bool IsConnected(A2Player* player);
+    A2Unit* Summon(A2Player* player, const char* unitname, byte* pthis, bool ishero, byte* targetptr = 0);
     byte* ConstructItemN(const char* definition);
     byte* ConstructItem(std::string definition);
     bool CheckItem(byte* item);
@@ -68,7 +68,7 @@ namespace zxmgr
     //unsigned long _stdcall CreateUnit(const char* name);
     //void FreeUnit(unsigned long cptr);
 
-    byte* GetNetworkStruct(byte* player);
+    byte* GetNetworkStruct(A2Player* player);
 
     byte* GetMainWnd();
     bool ReturnUnit(byte* unit);

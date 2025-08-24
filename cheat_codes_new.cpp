@@ -492,7 +492,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
 
             const char* p_charname = target->name;
             const char* p_logname = target->account_name;
-            byte* netinf = zxmgr::GetNetworkStruct(reinterpret_cast<byte*>(target));
+            byte* netinf = zxmgr::GetNetworkStruct(target);
             bool p_connected = (netinf);
             const char* p_address = "n/a";
 
@@ -659,7 +659,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 if (!command.length()) goto ex;
                 for (uint32_t i = 0; i < count; i++)
                 {
-                    byte* unit = zxmgr::Summon(reinterpret_cast<byte*>(player), command.c_str(), *(byte**)(0x00642C2C), false, NULL);
+                    A2Unit* unit = zxmgr::Summon(player, command.c_str(), *(byte**)(0x00642C2C), false, NULL);
                     /*if (rights & GMF_UNITS_NOCLIP)
                         zxmgr::MakeUnitNoClip(unit);*/
                     //byte* unit = Map::CreateUnitForEx(player, command.c_str(), false);
