@@ -4,6 +4,7 @@
 #include "syslib.h"
 #include <stdint.h>
 #include "File.h"
+#include "a2types.h"
 #include "srvmgr.h"
 
 enum
@@ -309,19 +310,19 @@ bool itemex_Initialize()
     return true;
 }
 
-bool itemex_CheckItemIgnored(byte* item)
+bool itemex_CheckItemIgnored(A2InventoryItem* item)
 {
-    uint32_t item_class = *(uint8_t*)(item + 0x45);
-    uint32_t item_material = *(uint8_t*)(item + 0x46);
-    uint32_t item_option = *(uint16_t*)(item + 0x0C);
-    uint32_t item_slot = *(uint8_t*)(item + 0x58);
-    uint16_t item_id = *(uint16_t*)(item + 0x40);
-    std::string item_name(*(const char**)(*(byte**)(item + 0x3C) + 4));
+    uint8_t item_class = item->shape;
+    uint8_t item_material = item->material;
+    uint16_t item_option = item->option;
+    uint8_t item_slot = reinterpret_cast<A2Armor*>(item)->slot;
+    uint16_t item_id = item->id;
+    std::string item_name(item->world_equip->name);
 
     // special case: (null)
     if(item_class == 0 && item_material == 0 && item_option == 0 && item_slot == 0) return 0;
 
-    if(item_slot == 0 && item_class == 0 && item_material == 0 && *(uint16_t*)(item + 0x4A) == 1)
+    if(item_slot == 0 && item_class == 0 && item_material == 0 && item->weight == 1)
     {
         // that is, slot = 14
         item_slot = 14;
@@ -337,7 +338,7 @@ bool itemex_CheckItemIgnored(byte* item)
             return true;
         if((s.flags & IgnoreFlags_Slot) && itemex_check_bit(s.slotIgnored, item_slot))
             return true;
-        if((s.flags & IgnoreFlags_Type) && itemex_check_bit(s.typeIgnored, item_option))
+        if((s.flags & IgnoreFlags_Type) && itemex_check_bit(s.typeIgnored, static_cast<uint8_t>(item_option)))
             return true;
         if(s.flags & IgnoreFlags_Id)
         {

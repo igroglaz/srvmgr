@@ -134,7 +134,7 @@ struct A2WorldEquip {
 struct A2InventoryItem {
     int32_t dword0;
     int8_t gap4[8];
-    int16_t wordC;
+    int16_t option;
     int8_t gapE[14];
     uint32_t price;
     A2LinkedList<A2Effect> effects;
@@ -146,7 +146,7 @@ struct A2InventoryItem {
     int8_t material;
     int8_t byte47;
     int16_t magic_volume;
-    int16_t weight;
+    int16_t weight; // 0x4a
     int8_t byte4C;
     int8_t byte4D;
     int8_t gap4E[6];
