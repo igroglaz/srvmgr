@@ -1207,11 +1207,11 @@ ret_0:
         }
     }
 
-    void CastPointEffect(byte* from, uint8_t to_x, uint8_t to_y, uint8_t spell)
+    void CastPointEffect(A2Unit* from, uint8_t to_x, uint8_t to_y, uint8_t spell)
     {
-        byte* ppf = *(byte**)(from + 0x14);
+        A2Player* ppf = from->player;
         if (!ppf) return;
-        Player* pi = PI_Get(ppf);
+        Player* pi = PI_Get(reinterpret_cast<byte*>(ppf));
         if (!pi) return;
 
         byte* cspell = pi->CastSpell;

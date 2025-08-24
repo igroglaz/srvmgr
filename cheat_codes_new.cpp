@@ -873,7 +873,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 {
                     if (i < 8 || i > p_mapwidth - 8 ||
                         j < 8 || j > p_mapheight - 8) continue;
-                    zxmgr::CastPointEffect(reinterpret_cast<byte*>(unit), i, j, what);
+                    zxmgr::CastPointEffect(unit, i, j, what);
                 }
             }
  
