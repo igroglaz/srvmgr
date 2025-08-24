@@ -79,7 +79,7 @@ namespace zxmgr
     uint32_t GetSpells(A2Unit* unit);
     void SetSpells(A2Unit* unit, uint32_t spells);
 
-    void CastPointEffect(byte* from, uint8_t to_x, uint8_t to_y, uint8_t spell);
+    void CastPointEffect(A2Unit* from, uint8_t to_x, uint8_t to_y, uint8_t spell);
 
     uint8_t GetDiplomacy(byte* player1, byte* player2);
     void SetDiplomacy(byte* player1, byte* player2, uint8_t newdip);
