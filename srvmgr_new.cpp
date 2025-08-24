@@ -1,3 +1,4 @@
+#include "a2types.h"
 #include "lib\utils.hpp"
 #include "config_new.h"
 #include "syslib.h"
@@ -237,19 +238,19 @@ bool Sv_ProcessClientPacket(int16_t id, byte* player, Packet& pack)
     return true;
 }
 
-void _stdcall ExtDiplomacy(byte* player, uint32_t setd)
+void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd)
 {
-    std::vector<byte*> players = zxmgr::GetPlayers();
+    std::vector<A2Player*> players = zxmgr::GetPlayers();
 
     for (size_t i = 0; i < players.size(); i++)
     {
-        byte* player2 = players[i];
+        A2Player* player2 = players[i];
         if (player2 == NULL)
             continue;
 
         if (player == player2)
         {
-            zxmgr::SetDiplomacy(player, player2, 0x12);
+            zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x12);
         }
         else
         {
@@ -273,27 +274,27 @@ void _stdcall ExtDiplomacy(byte* player, uint32_t setd)
             // ai
             if ((rights & GMF_AI_ALLY) && *(uint32_t*)(player2 + 0x2C))
             {
-                zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
-                zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x02); // from this to others
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x02); // from others to this
             }
 
             // not ai
             if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !*(uint32_t*)(player2 + 0x2C))
             {
-                zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
-                zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x02); // from this to others
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x02); // from others to this
             }
 
             if ((rights & GMF_PLAYERS_VISION) && !*(uint32_t*)(player2 + 0x2C)) // not ai, vision
             {
                 // from others to this
-                zxmgr::SetDiplomacy(player2, player, 0x10|zxmgr::GetDiplomacy(player2, player)); 
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player), 0x10|zxmgr::GetDiplomacy(reinterpret_cast<byte*>(player2), reinterpret_cast<byte*>(player))); 
             }
 
             if (rights2 & GMF_PLAYERS_VISION) // other player has vision flag
             {
                 // from this to others
-                zxmgr::SetDiplomacy(player, player2, 0x10|zxmgr::GetDiplomacy(player, player2));
+                zxmgr::SetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2), 0x10|zxmgr::GetDiplomacy(reinterpret_cast<byte*>(player), reinterpret_cast<byte*>(player2)));
             }
         }
     }

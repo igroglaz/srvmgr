@@ -1,5 +1,6 @@
 #pragma once
 
+#include "a2types.h"
 #include "lib\packet.hpp"
 
 void OnInitializeServer();
@@ -14,4 +15,4 @@ void LogIP(byte* player);
 byte* CreateItemParameter(byte* param, byte* item);
 bool CheckItemUpgradable(byte* item);
 bool Sv_ProcessClientPacket(int16_t id, byte* player, Packet& pack);
-void _stdcall ExtDiplomacy(byte* player, uint32_t setd);
+void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd);

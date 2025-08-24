@@ -8,10 +8,12 @@
 
 namespace zxmgr
 {
-    std::vector<byte*> _stdcall GetPlayers()
+    std::vector<A2Player*> _stdcall GetPlayers()
     {
-        std::vector<byte*> vec;
-        unsigned long var_8, var_C;
+        std::vector<A2Player*> vec;
+        unsigned long var_8;
+        A2Player* var_C;
+
         __asm
         {
             mov        [var_8], 0x00642C2C
@@ -32,8 +34,7 @@ namespace zxmgr
             mov        [var_C], eax
         }
 
-        byte* ch = (byte*)(var_C);
-        vec.push_back(ch);
+        vec.push_back(var_C);
 
         __asm
         {
@@ -146,36 +147,36 @@ namespace zxmgr
 
     void _stdcall KickAllSilent(byte* pptr)
     {
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            byte* player = (*it);
-            if (player && player != pptr && !*(uint32_t*)(player + 0x2C))
-                Kick(player, true);
+            A2Player* player = (*it);
+            if (player && player != reinterpret_cast<A2Player*>(pptr) && !player->unitType)
+                Kick(reinterpret_cast<byte*>(player), true);
         }
     }
 
     void _stdcall KickAll(byte* pptr)
     {
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            byte* player = (*it);
-            if (player && player != pptr && !*(uint32_t*)(player + 0x2C))
-                Kick(player, false);
+            A2Player* player = (*it);
+            if (player && player != reinterpret_cast<A2Player*>(pptr) && !player->unitType)
+                Kick(reinterpret_cast<byte*>(player), true);
         }
     }
 
     byte* _stdcall FindByNickname(const char* nickname)
     {
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            byte* player = (*it);
+            A2Player* player = (*it);
             if (!player) continue;
-            const char* pl_name = *(const char**)(player + 0x18);
+            const char* pl_name = player->name;
             std::string pl_nickname = pl_name;
-            if (*(uint32_t*)(player + 0x2C))
+            if (player->unitType)
             {
                 // convert to cp-866
                 for (size_t i = 0; i < pl_nickname.length(); i++)
@@ -191,7 +192,9 @@ namespace zxmgr
                 }
             }
 
-            if (pl_nickname == nickname) return player;
+            if (pl_nickname == nickname) {
+                return reinterpret_cast<byte*>(player);
+            }
         }
 
         return 0;
@@ -199,14 +202,16 @@ namespace zxmgr
 
     byte* _stdcall FindByLogin(const char* login)
     {
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            byte* player = (*it);
+            A2Player* player = (*it);
             if (!player) continue;
-            if (*(uint32_t*)(player + 0x2C)) continue; // AI check
-            const char* pl_login = *(const char**)(player + 0x0A78);
-            if (!strcmp(pl_login, login)) return player;
+            if (player->unitType) continue; // AI check
+            const char* pl_login = player->account_name;
+            if (!strcmp(pl_login, login)) {
+                return reinterpret_cast<byte*>(player);
+            }
         }
 
         return 0;
@@ -723,10 +728,10 @@ namespace zxmgr
         _vsnprintf(line, count, format, va);
         va_end(va);
 
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            A2Player* plr = reinterpret_cast<A2Player*>(*it);
+            A2Player* plr = *it;
             if (!plr) continue;
 
             uint32_t rights = plr->flags;
@@ -1076,14 +1081,14 @@ ret_0:
 
     byte* _stdcall FindByID(uint16_t id)
     {
-        std::vector<byte*> players = GetPlayers();
-        for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+        std::vector<A2Player*> players = GetPlayers();
+        for (auto it = players.begin(); it != players.end(); ++it)
         {
-            byte* player = (*it);
+            A2Player* player = (*it);
             if (!player) continue;
 
-            if (*(uint16_t*)(player + 4) == id)
-                return player;
+            if (player->id_ext.id == id)
+                return reinterpret_cast<byte*>(player);
         }
 
         return NULL;

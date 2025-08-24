@@ -1,3 +1,4 @@
+#include "a2types.h"
 #include "player_info.h"
 #include "zxmgr.h"
 #include "lib\utils.hpp"
@@ -12,16 +13,14 @@ void PI_Reset()
     for(int i = 0; i < 32; i++)
         PI_Clear(Players[i]);
 
-    std::vector<byte*> plrs = zxmgr::GetPlayers();
-    for(std::vector<byte*>::iterator it = plrs.begin();
-            it != plrs.end(); ++it)
-    {
-        byte* player = (*it);
+    std::vector<A2Player*> plrs = zxmgr::GetPlayers();
+    for (auto it = plrs.begin(); it != plrs.end(); ++it) {
+        A2Player* player = (*it);
         if(!player) continue;
-        uint16_t p_id = *(uint16_t*)(player + 4);
+        uint16_t p_id = player->id_ext.id;
         if(!p_id || p_id < 1 || p_id > 32) continue;
         
-        PI_Create(player);
+        PI_Create(reinterpret_cast<byte*>(player));
     }
 }
 

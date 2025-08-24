@@ -2532,12 +2532,12 @@ int PASCAL send0(SOCKET s, const char *buf, int len, int flags) {
     delete bb;*/
     // first send our packet if any
     // find player by socket
-    std::vector<byte*> players = zxmgr::GetPlayers();
-    for (std::vector<byte*>::iterator it = players.begin(); it != players.end(); ++it)
+    std::vector<A2Player*> players = zxmgr::GetPlayers();
+    for (auto it = players.begin(); it != players.end(); ++it)
     {
-        byte* player = (*it);
-        if (zxmgr::GetSocket(player) != s) continue;
-        Player* pi = PI_Get(player);
+        A2Player* player = (*it);
+        if (zxmgr::GetSocket(reinterpret_cast<byte*>(player)) != s) continue;
+        Player* pi = PI_Get(reinterpret_cast<byte*>(player));
         for (std::vector<Packet>::iterator jt = pi->EnqueuedPackets.begin(); jt != pi->EnqueuedPackets.end(); ++jt)
         {
             Packet& cmd = (*jt);
