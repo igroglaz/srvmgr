@@ -14,7 +14,7 @@
 
 namespace zxmgr
 {
-    std::vector<byte*> _stdcall GetPlayers();
+    std::vector<A2Player*> _stdcall GetPlayers();
     std::vector<byte*> _stdcall GetUnits(byte* player = NULL);
 
     void SendMessageRaw(const A2Player* pptr, const char* message);

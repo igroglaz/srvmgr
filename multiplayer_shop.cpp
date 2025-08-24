@@ -1,3 +1,4 @@
+#include "a2types.h"
 #include "zxmgr.h"
 #include "lib/utils.hpp"
 #include <map>
@@ -127,20 +128,20 @@ void _stdcall ClearShops()
     ShopReplacements.clear();
 }
 
-byte* _stdcall CheckReplacementBuilding(byte* shop, byte* coords)
+byte* _stdcall CheckReplacementBuilding(byte* shop, A2Position* coords)
 {
     // check which player owns these coords.
     // this is not 100% reliable... to-do: implement proper player check later
-    std::vector<byte*> plrs = zxmgr::GetPlayers();
-    for (std::vector<byte*>::iterator it = plrs.begin(); it != plrs.end(); ++it)
+    std::vector<A2Player*> plrs = zxmgr::GetPlayers();
+    for (auto it = plrs.begin(); it != plrs.end(); ++it)
     {
-        byte* plr = *it;
-        byte* chr = *(byte**)(plr + 0x38);
+        A2Player* plr = *it;
+        A2Unit* chr = plr->current_unit;
         if (!chr) continue;
-        if (*(byte**)(chr + 0x10) == coords)
+        if (chr->position == coords)
         {
             // player id
-            uint16_t player_id = *(uint16_t*)(plr + 0x04);
+            uint16_t player_id = plr->id_ext.id;
             uint32_t replacement_id = player_id;
             replacement_id <<= 24;
             replacement_id |= *(uint32_t*)(shop + 8) & 0x00FFFFFF; // shop id

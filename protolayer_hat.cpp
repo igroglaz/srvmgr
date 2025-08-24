@@ -76,35 +76,35 @@ bool NetCmd_UpdateInfo()
             pack.WriteUInt32(p_maptime);        // Map Time
             pack.WriteUInt32(Config::ServerFlags);
 
-            std::vector<byte*> tmp_players_Z = zxmgr::GetPlayers();
-            std::vector<byte*> tmp_players;
+            std::vector<A2Player*> players = zxmgr::GetPlayers();
+            std::vector<A2Player*> tmp_players;
             // удаляем AI-игроков
-            for (std::vector<byte*>::iterator it = tmp_players_Z.begin(); it != tmp_players_Z.end(); ++it)
+            for (auto it = players.begin(); it != players.end(); ++it)
             {
-                byte* player = (*it);
-                if (!*(uint32_t*)(player + 0x2C)) // NOT AI
+                A2Player* player = (*it);
+                if (!player->unitType) // NOT AI
                     tmp_players.push_back(player);
             }
 
             pack.WriteUInt32(tmp_players.size());
-            for (std::vector<byte*>::iterator it = tmp_players.begin(); it != tmp_players.end(); ++it)
+            for (auto it = tmp_players.begin(); it != tmp_players.end(); ++it)
             {
-                byte* player = (*it);
+                A2Player* player = (*it);
 
-                const char* player_nickname = *(const char**)(player + 0x18);
+                const char* player_nickname = player->name;
                 const char* player_login = "artificial";
-                if (!*(uint32_t*)(player + 0x2C))
-                    player_login = *(const char**)(player + 0xA78);
-                uint32_t player_id1 = *(uint32_t*)(player + 0x10);
-                uint32_t player_id2 = *(uint32_t*)(player + 0x14);
+                if (!player->unitType)
+                    player_login = player->account_name;
+                uint32_t player_id1 = player->player_id1;
+                uint32_t player_id2 = player->flags;
                 pack.WriteString(player_nickname);
                 pack.WriteString(player_login);
                 pack.WriteUInt32(player_id1);
                 pack.WriteUInt32(player_id2);
-                byte* vd = zxmgr::GetNetworkStruct(player);
+                byte* vd = zxmgr::GetNetworkStruct(reinterpret_cast<byte*>(player));
                 bool player_connected = (vd);
                 pack.WriteUInt8(player_connected);
-                if (*(uint32_t*)(player + 0x2C) || !player_connected) // AI or disconnected
+                if (player->unitType || !player_connected) // AI or disconnected
                 {
                     pack.WriteString("");
                 }
@@ -319,7 +319,6 @@ bool Net_HatProcess()
             struct tm parsedTime;
             localtime_s(&parsedTime, &unmutedate);
             byte* player = zxmgr::FindByLogin(login.c_str());
-            std::vector<byte*> players = zxmgr::GetPlayers();
             Player* pi = PI_Get(player);
             if (pi)
             {
@@ -399,4 +398,3 @@ void _stdcall imp2_ServerClosed()
 }
 
 /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! [/CONNECTION IMPORTS ] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ///
-

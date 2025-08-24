@@ -183,7 +183,8 @@ struct A2Group {
 struct A2Player {
     int8_t gap0[4];
     A2ID id_ext;
-    int8_t gap1[12];
+    int8_t gap1[8];
+    uint32_t player_id1; // 0x10
     uint32_t flags; // 0x14
     const char* name;
     int8_t gap2[8];
