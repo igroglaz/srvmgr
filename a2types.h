@@ -219,7 +219,9 @@ struct A2Player {
 };
 
 struct A2UnitEye2 {
-    uint8_t gap0[10];
+    uint8_t gap0[8];
+    uint8_t cast_action;
+    uint8_t gap9;
     uint16_t command_to;
     uint8_t gapB[56];
     uint32_t wimpy;
