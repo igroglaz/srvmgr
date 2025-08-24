@@ -1233,25 +1233,23 @@ ret_0:
         }
     }
 
-    uint8_t GetDiplomacy(byte* player1, byte* player2)
+    uint8_t GetDiplomacy(A2Player* player1, A2Player* player2)
     {
-        return *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) +
-               0xA8C4 + *(uint16_t*)(player2 + 0x04));
+        return *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * player1->id_ext.id + 0xA8C4 + player2->id_ext.id);
     }
 
-    void SetDiplomacy(byte* player1, byte* player2, uint8_t diplomacy)
+    void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t diplomacy)
     {
-        if (*(uint32_t*)(player1+0x2C) && (diplomacy & 0x10)) // vision won't work for AI players
+        if (player1->unitType && (diplomacy & 0x10)) // vision won't work for AI players
             diplomacy &= ~0x10;
 
-        *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * *(uint16_t*)(player1 + 0x04) + 0xA8C4 +
-        *(uint16_t*)(player2 + 0x04)) = diplomacy;
+        *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * player1->id_ext.id + 0xA8C4 + player2->id_ext.id) = diplomacy;
 
-        if (!*(uint32_t*)(player1+0x2C) && !*(uint32_t*)(player2+0x2C) && (diplomacy & 0x10))
+        if (!player1->unitType && !player2->unitType && (diplomacy & 0x10))
         {
             // i don't know how's this related
-            *(uint32_t*)(player2+0x32) |= *(uint32_t*)(player1+0x30); // update player2 to player1
-            *(uint32_t*)(player1+0x32) |= *(uint32_t*)(player2+0x30); // update player1 to player2
+            player2->diplomacy_32 |= player1->diplomacy_30; // update player2 to player1
+            player1->diplomacy_32 |= player2->diplomacy_30; // update player1 to player2
         }
     }
 

@@ -54,7 +54,7 @@ void SR_UpdateUnit(byte* unit)
         if (*(uint32_t*)(Players[i].Class + 0x2C)) continue;
         if (!*(byte**)(Players[i].Class + 0x38)) continue; // TODO: ->current_unit
 
-        if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(unit_player, Players[i].Class) & 0x10))
+        if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(reinterpret_cast<A2Player*>(unit_player), reinterpret_cast<A2Player*>(Players[i].Class)) & 0x10))
         {
             uint8_t unit_x = *(uint8_t*)(*(byte**)(unit + 0x10));
             uint8_t unit_y = *(uint8_t*)(*(byte**)(unit + 0x10)+1);
