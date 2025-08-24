@@ -1270,7 +1270,7 @@ ret_0:
         }
     }
 
-    void __declspec(naked) SaveCharacter(byte* player)
+    void __declspec(naked) SaveCharacter(A2Player* player)
     {
         __asm
         {
