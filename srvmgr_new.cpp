@@ -164,18 +164,18 @@ void LogIP(A2Player* player)
     Printf("Player %s has joined the game (from: %s)", player_name, player_addr);
 }
 
-byte* CreateItemParameter(byte* param, byte* item)
+A2Effect* CreateItemParameter(A2Effect* param, A2InventoryItem* item)
 {
     if (!item) return NULL;
     if (!param) return NULL;
 
-    uint32_t prm1 = *(uint8_t*)(param + 0x3C);
-    uint32_t val1 = *(uint16_t*)(param + 0x40);
-    uint32_t val2 = *(uint16_t*)(param + 0x42);
-    uint32_t item_class = *(uint8_t*)(item + 0x45);
-    uint32_t item_material = *(uint8_t*)(item + 0x46);
-    uint32_t item_option = *(uint16_t*)(item + 0x0C);
-    uint32_t item_slot = *(uint8_t*)(item + 0x58);
+    uint8_t prm1 = param->effect_id;
+    uint8_t val1 = param->value1;
+    uint8_t val2 = param->value2;
+    uint32_t item_class = item->shape;
+    uint32_t item_material = item->material;
+    uint32_t item_option = item->option;
+    uint32_t item_slot = reinterpret_cast<A2Armor*>(item)->slot;
     
     /*if ((item_slot == 4 ||
         item_slot == 5) &&
@@ -185,8 +185,8 @@ byte* CreateItemParameter(byte* param, byte* item)
             val1 = 2;
     }*/
 
-    *(uint16_t*)(param + 0x40) = val1;
-    *(uint16_t*)(param + 0x42) = val2;
+    param->value1 = val1;
+    param->value2 = val2;
 
     return param;
 }
@@ -198,7 +198,7 @@ bool CheckItemUpgradable(A2InventoryItem* item)
     return true;
 }
 
-bool Sv_ProcessClientPacket(int16_t id, byte* player, Packet& pack)
+bool Sv_ProcessClientPacket(int16_t id, A2Player* player, Packet& pack)
 {
     if (id == -1) return true; // hat
     return true;
