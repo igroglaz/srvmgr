@@ -2,12 +2,13 @@
 
 #include "syslib.h"
 #include <vector>
+#include "a2types.h"
 #include "lib/packet.hpp"
 
 struct Player
 {
     bool Exists;
-    byte* Class;
+    A2Player* Class;
     
     bool Casted;
     bool ShouldReturn;
@@ -35,5 +36,5 @@ extern Player Players[32];
 Player* PI_Get(byte* player);
 void PI_Reset();
 void PI_Clear(Player& struc);
-void PI_Create(byte* player);
+void PI_Create(A2Player* player);
 void PI_Delete(byte* player);
