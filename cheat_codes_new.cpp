@@ -978,26 +978,29 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 {
                     for (uint32_t i = 0; i < count; i++)
                     {
-                        byte* t_item = zxmgr::ConstructItem(command);
+                        A2InventoryItem* t_item = zxmgr::ConstructItem(command);
                         if (!t_item) goto ex;
+
+                        A2Armor* armor = reinterpret_cast<A2Armor*>(t_item); // To check the slot. Should work with all item types, I guess.
+
                         // special case for scrolls/potions
-                        if (*(uint8_t*)(t_item + 0x58) == 0 && *(uint8_t*)(t_item + 0x45) == 0 && *(uint8_t*)(t_item + 0x46) == 0 && *(uint16_t*)(t_item + 0x4A) == 1)
+                        if (armor->slot == 0 && t_item->shape == 0 && t_item->material == 0 && t_item->weight == 1)
                         {
-                            *(uint16_t*)(t_item + 0x42) = count;
-                            zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
+                            t_item->amount = count;
+                            zxmgr::GiveItemTo(t_item, player);
                             break;
                         }
 
                         *(uint16_t*)(t_item + 0x42) = 1;
-                        zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
+                        zxmgr::GiveItemTo(t_item, player);
                     }
                 }
                 else
                 {
-                    byte* t_item = zxmgr::ConstructItem(command);
+                    A2InventoryItem* t_item = zxmgr::ConstructItem(command);
                     if (!t_item) goto ex;
-                    *(uint16_t*)(t_item + 0x42) = count;
-                    zxmgr::GiveItemTo(t_item, reinterpret_cast<byte*>(player));
+                    t_item->amount = count;
+                    zxmgr::GiveItemTo(t_item, player);
                 }
             }
 

@@ -142,11 +142,11 @@ struct A2InventoryItem {
     uint16_t id;
     int16_t amount;
     int8_t byte44;
-    int8_t byte45;
-    int8_t byte46;
+    int8_t shape;
+    int8_t material;
     int8_t byte47;
-    int16_t word48;
-    int16_t word4A;
+    int16_t magic_volume;
+    int16_t weight;
     int8_t byte4C;
     int8_t byte4D;
     int8_t gap4E[6];
@@ -157,6 +157,12 @@ struct A2InventoryList {
     A2LinkedList<A2InventoryItem> list;
     int32_t maxInd;
     int32_t dword20;
+};
+
+struct A2Armor {
+    A2InventoryItem item;
+    uint8_t slot;
+    // ...
 };
 
 struct A2Position {
@@ -263,7 +269,7 @@ struct A2Unit {
     A2Group* group;
     A2InventoryItem *weapon;
     A2InventoryItem *shield;
-    A2InventoryList *inventory;
+    A2InventoryList *inventory; // 0x7c
     const char* name;
     uint16_t body;
     uint16_t reaction;
