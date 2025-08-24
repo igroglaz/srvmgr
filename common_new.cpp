@@ -1515,7 +1515,7 @@ void _stdcall CheckPlayerNoClip(A2Player* player)
     A2Unit* unit = player->current_unit;
     if ((player->flags & GMF_NOCLIP) == GMF_NOCLIP)
     {
-        zxmgr::MakeUnitNoClip(reinterpret_cast<byte*>(unit));
+        zxmgr::MakeUnitNoClip(unit);
     }
 
     zxmgr::UpdateUnit(unit, unit->player, 0xFFFFFFFF, 0xFFB, 0, 0);

@@ -56,15 +56,15 @@ namespace zxmgr
     void MorphUnit(unsigned long unit, unsigned long kind);
     void UpdateUnit(A2Unit* unit, A2Player* player, unsigned long flags, unsigned long flags2, unsigned long flags3, unsigned long flags4);
 
-    int GetUnitSize(byte* unit);
-    void MakeUnitNoClip(byte* unit);
+    int GetUnitSize(A2Unit* unit);
+    void MakeUnitNoClip(A2Unit* unit);
 
     void CreateSack(const char* itemname, unsigned long x, unsigned long y, unsigned long money);
 
     void _stdcall GMLog(const char* format, ...);
     void _stdcall ServerLog(const char* format, ...);
 
-    void Disconnect(byte* what);
+    void Disconnect(A2Player* player);
 
     unsigned long _stdcall GetTicks();
 
