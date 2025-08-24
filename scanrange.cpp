@@ -7,7 +7,7 @@
 
 CScanrangeCalc Scanrange;
 bool Scanrange_Initialized = false;
-byte* Scanrange_Player = NULL;
+A2Player* Scanrange_Player = NULL;
 
 // are coordinates on the map valid.. regular case up to 240, but
 // in come cases got there not pure coords, but calculatuins, eg:
@@ -32,7 +32,7 @@ uint8_t srvmgr_GetHeight(int16_t x, int16_t y)
     return *(mapheights + y * 256 + x);
 }
 
-void SR_UpdateUnit(byte* unit)
+void SR_UpdateUnit(A2Unit* unit)
 {
     if (!Scanrange_Initialized)
     {
@@ -41,7 +41,7 @@ void SR_UpdateUnit(byte* unit)
     }
 
     if (!unit) return;
-    byte* unit_player = *(byte**)(unit+0x14);
+    A2Player* unit_player = unit->player;
     if (!unit_player) return;
     Scanrange_Player = unit_player;
     // number of milliseconds from the moment when system was started
@@ -54,11 +54,12 @@ void SR_UpdateUnit(byte* unit)
         if (Players[i].Class->unitType) continue;
         if (!Players[i].Class->current_unit) continue;
 
-        if (Players[i].Class == reinterpret_cast<A2Player*>(unit_player) || (zxmgr::GetDiplomacy(reinterpret_cast<A2Player*>(unit_player), Players[i].Class) & 0x10))
+        if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(unit_player, Players[i].Class) & 0x10))
         {
-            uint8_t unit_x = *(uint8_t*)(*(byte**)(unit + 0x10));
-            uint8_t unit_y = *(uint8_t*)(*(byte**)(unit + 0x10)+1);
-            uint16_t unit_vision = *(uint16_t*)(unit+0xA4);
+            uint8_t unit_x = unit->position->x;
+            uint8_t unit_y = unit->position->y;
+            // TODO: This was *(uint16_t*)(unit+0xA4), but unit->scan_range is 1 byte at 0xA5. Something's off.
+            uint16_t unit_vision = unit->scan_range;
 
             if (!dCalc)
             {
@@ -97,7 +98,7 @@ void SR_Step()
     {
         A2Unit* unit = (*it);
         if (unit && unit != unit->player->current_unit)
-            SR_UpdateUnit(reinterpret_cast<byte*>(unit));
+            SR_UpdateUnit(unit);
     }
 
     for (int i = 0; i < 32; i++)
@@ -106,13 +107,13 @@ void SR_Step()
         if (!Players[i].Class) continue;
 
         if (Players[i].Class->current_unit)
-            SR_UpdateUnit(reinterpret_cast<byte*>(Players[i].Class->current_unit));
+            SR_UpdateUnit(Players[i].Class->current_unit);
     }
 }
 
-bool SR_CheckVision(byte* player, uint8_t check_x, uint8_t check_y)
+bool SR_CheckVision(A2Player* player, uint8_t check_x, uint8_t check_y)
 {
-    Player* pi = PI_Get(reinterpret_cast<A2Player*>(player));
+    Player* pi = PI_Get(player);
     if (!pi) return false;
     if (!srvmgr_CheckValid(check_x, check_y)) return false;
     uint32_t ticks_count = GetTickCount();
@@ -124,14 +125,14 @@ bool SR_CheckVision(byte* player, uint8_t check_x, uint8_t check_y)
 
 
 // can not be used from console
-void SR_DumpToFile(byte* player)
+void SR_DumpToFile(A2Player* player)
 {
-    Player* pi = PI_Get(reinterpret_cast<A2Player*>(player)); // get player ID
+    Player* pi = PI_Get(player); // get player ID
     if (!pi) return;    
     uint32_t ticks_count = GetTickCount(); // ms from the moment when system was started
 
     // 'player+0x18' - player name
-    log_format("SR_DumpToFile: dump initiated (for player %s).\n", *(const char**)(player+0x18));
+    log_format("SR_DumpToFile: dump initiated (for player %s).\n", player->name);
 
     for (uint32_t y = 0; y < 256; y++)
     {

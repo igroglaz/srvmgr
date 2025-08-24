@@ -513,7 +513,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             uint16_t p_mind      = unit->mind;
             uint16_t p_spirit    = unit->spirit;
 
-            const char* p_strong = (vd2_CheckStrong(reinterpret_cast<byte*>(unit)) ? "yes" : "no");
+            const char* p_strong = (vd2_CheckStrong(unit) ? "yes" : "no");
 
             if (!player || console)
             {
@@ -539,7 +539,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             if (!unit) goto ex;
             Printf("check for unit OK.. getting dump\n");         
 
-            SR_DumpToFile(reinterpret_cast<byte*>(player));
+            SR_DumpToFile(player);
             Printf("dump finished\n");         
             goto ex;
         }
@@ -1275,7 +1275,7 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
 
     // Advanced PvM
     if (Config::ServerFlags & SVF_ADVPVM) {
-        if (VerifyDamage2((byte*)attacker, (byte*)victim)) {
+        if (VerifyDamage2(attacker, victim)) {
             retval = 0;
         }
     }
