@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "a2types.h"
 #include "syslib.h"
 
 #define PLAYER_FLAG_AI 1
@@ -16,8 +17,8 @@ namespace zxmgr
     std::vector<byte*> _stdcall GetPlayers();
     std::vector<byte*> _stdcall GetUnits(byte* player = NULL);
 
-    void SendMessageRaw(byte* pptr, const char* message);
-    void SendMessage(byte* pptr, const char* mask, ...);
+    void SendMessageRaw(const A2Player* pptr, const char* message);
+    void SendMessage(const A2Player* pptr, const char* mask, ...);
     void Kick(byte* pptr, bool silent);
     byte* _stdcall FindByNickname(const char* nickname);
     byte* _stdcall FindByLogin(const char* login);

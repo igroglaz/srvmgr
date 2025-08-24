@@ -5,7 +5,7 @@
 static std::vector<ClientScreenshot> Screenshots;
 static int ScreenshotUID = 0;
 
-uint32_t ClientScreenshot_Enqueue(byte* gm, byte* target)
+uint32_t ClientScreenshot_Enqueue(A2Player* gm, A2Player* target)
 {
     ClientScreenshot cs;
     cs.SourcePlayer = gm;
@@ -42,7 +42,7 @@ void ClientScreenshot_Drop(uint32_t uid)
     }
 }
 
-void ClientScreenshot_DropPlayer(byte* player)
+void ClientScreenshot_DropPlayer(A2Player* player)
 {
     for (std::vector<ClientScreenshot>::iterator it = Screenshots.begin(); it != Screenshots.end(); ++it)
     {

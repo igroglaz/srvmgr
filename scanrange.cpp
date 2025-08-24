@@ -1,3 +1,4 @@
+#include "a2types.h"
 #include "scanrange.h"
 #include "zxmgr.h"
 #include "player_info.h"
@@ -51,7 +52,7 @@ void SR_UpdateUnit(byte* unit)
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
         if (*(uint32_t*)(Players[i].Class + 0x2C)) continue;
-        if (!*(byte**)(Players[i].Class + 0x38)) continue;
+        if (!*(byte**)(Players[i].Class + 0x38)) continue; // TODO: ->current_unit
 
         if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(unit_player, Players[i].Class) & 0x10))
         {

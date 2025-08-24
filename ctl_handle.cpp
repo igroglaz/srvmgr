@@ -87,7 +87,7 @@ DWORD WINAPI ThreadProc(LPVOID lpParam)
                             if(pp)
                             {
                                 Printf("[ctl] %s: %s", caster.c_str(), command.c_str());
-                                RunCommand(NULL, pp, command.c_str(), 0xFFFFFFFF, false);
+                                RunCommand(NULL, reinterpret_cast<A2Player*>(pp), command.c_str(), 0xFFFFFFFF, false);
                             }
                         }
                         else
@@ -117,4 +117,3 @@ DWORD WINAPI ThreadProc(LPVOID lpParam)
 
     return 0; 
 } 
-

@@ -32,7 +32,7 @@ struct PlayerInfo {
     uint16_t mind;
     uint16_t spirit;
     uint32_t experience;
-    uint8_t* monster_kills_by_server_id;
+    const uint8_t* monster_kills_by_server_id;
     uint32_t deaths;
     int skills[5];
     int32_t main_sphere;
@@ -50,7 +50,7 @@ std::string WithSpaces(int value) {
     return s;
 }
 
-void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell);
+void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, const A2Player* p, bool hell);
 
 // A2 server only stores the effective unit stats () Walk over all equipped
 void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
@@ -86,11 +86,11 @@ void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
     }
 }
 
-void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char* p, bool hell) {
+void RebornReadinessInfo(ServerIDType server_id, const A2Player* player, bool hell) {
     A2Unit* unit = player->current_unit;
 
     if (unit == nullptr) {
-        return zxmgr::SendMessage(p, "no current unit");
+        return zxmgr::SendMessage(player, "no current unit");
     }
 
     int has_treasures = 0;
@@ -130,7 +130,7 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
     player_info.unit = unit;
 
     if (unit->clazz != A2_CLASS_HUMAN) {
-        zxmgr::SendMessage(p, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
+        zxmgr::SendMessage(player, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
     } else {
         A2Human* human = reinterpret_cast<A2Human*>(unit);
         SubtractEquippedItems(human, player_info); 
@@ -144,7 +144,7 @@ void RebornReadinessInfo(ServerIDType server_id, A2Player* player, unsigned char
 
     thresholds::thresholds.MaybeReload(thresholds::THRESHOLDS_FILE);
 
-    CheckRebornReadiness(server_id, player_info, p, hell);
+    CheckRebornReadiness(server_id, player_info, player, hell);
 }
 
 int32_t ServerRequirementsExperience(const PlayerInfo& player_info) {
@@ -276,7 +276,7 @@ void SkillsAndCeilings(const PlayerInfo& info, std::vector<std::string>& message
     }
 }
 
-void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
+void CheckReclassReadiness(const PlayerInfo& info, const A2Player* p) {
     bool ready_for_reclass = true;
     std::vector<std::string> info_lines;
     const uint32_t need_money = thresholds::thresholds.Value("reclass.money", info.unit);
@@ -301,7 +301,7 @@ void CheckReclassReadiness(const PlayerInfo& info, unsigned char* p) {
     }
 }
 
-void CheckAscendReadiness(const PlayerInfo& info, unsigned char* p) {
+void CheckAscendReadiness(const PlayerInfo& info, const A2Player* p) {
     bool ready_for_ascend = true;
     std::vector<std::string> info_lines;
     const uint32_t need_money = thresholds::thresholds.Value("ascend.money", info.unit);
@@ -348,7 +348,7 @@ std::vector<std::string> no_more_circles_snark{
     "How did you beat all of hell? Are you a doomguy or something?",
 };
 
-void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
+void CheckCircleReadiness(const PlayerInfo& info, const A2Player* p) {
     if (info.circle == 8) {
         int snark = std::rand() % no_more_circles_snark.size();
         zxmgr::SendMessage(p, "%s", no_more_circles_snark[snark].c_str());
@@ -400,7 +400,7 @@ void CheckCircleReadiness(const PlayerInfo& info, unsigned char* p) {
     }
 }
 
-void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, unsigned char* p, bool hell) {
+void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, const A2Player* p, bool hell) {
     if (server_id >= NIGHTMARE) {
         if (player_info.circle != 0 || hell) {
             return CheckCircleReadiness(player_info, p);

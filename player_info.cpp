@@ -116,7 +116,7 @@ void PI_Delete(byte* player)
     //if(update && unit) zxmgr::SaveCharacter(player);
 
     PI_Clear(Players[p_id-1]);
-    ClientScreenshot_DropPlayer(player);
+    ClientScreenshot_DropPlayer(reinterpret_cast<A2Player*>(player));
 }
 
 Player* PI_Get(byte* player)
