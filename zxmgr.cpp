@@ -599,7 +599,7 @@ namespace zxmgr
         }
     }
 
-    int __declspec(naked) GetUnitSize(byte* unit)
+    int __declspec(naked) GetUnitSize(A2Unit* unit)
     {
         __asm
         {
@@ -615,15 +615,14 @@ namespace zxmgr
         }
     }
 
-    void MakeUnitNoClip(byte* unit)
+    void MakeUnitNoClip(A2Unit* unit)
     {
-        *(byte**)(*(byte**)(unit + 0x1C0) + 5) = 0;
-        byte* phys = *(byte**)(unit + 0x10);
-        int x = phys[0];
-        int y = phys[1];
+        unit->eye->byte5 = 0;
+        int x = unit->position->x;
+        int y = unit->position->y;
         // clear unit radius
         byte* someTable = *(byte**)(0x006B16A8);
-        *(byte**)(*(byte**)(unit + 0x10) + 8) = someTable;
+        unit->position->instance = someTable;
         int unitSize = zxmgr::GetUnitSize(unit);
         // вот тут ¤ не помню что имел в виду. отреверсено из старого-нового сервера
         if (someTable)
@@ -773,7 +772,7 @@ namespace zxmgr
         delete[] line;
     }
 
-    void __declspec(naked) Disconnect(byte* pptr)
+    void __declspec(naked) Disconnect(A2Player* pptr)
     {
         __asm
         {

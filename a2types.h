@@ -228,7 +228,9 @@ struct A2UnitEye2 {
 };
 
 struct A2UnitEye {
-    uint8_t gap0[10];
+    uint8_t gap0[5];
+    uint8_t byte5;
+    uint8_t gap6[4];
     uint8_t rotation_speed;
     uint8_t gapB[169];
 };

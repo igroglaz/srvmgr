@@ -455,7 +455,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             A2Player* target = zxmgr::FindByNickname(command.c_str());
 
             if (target)
-                zxmgr::Disconnect(reinterpret_cast<byte*>(target));
+                zxmgr::Disconnect(target);
 
             goto ex;
         }
