@@ -76,8 +76,8 @@ namespace zxmgr
     byte* GetMainWnd();
     bool ReturnUnit(A2Unit* unit);
 
-    uint32_t GetSpells(byte* unit);
-    void SetSpells(byte* unit, uint32_t spells);
+    uint32_t GetSpells(A2Unit* unit);
+    void SetSpells(A2Unit* unit, uint32_t spells);
 
     void CastPointEffect(byte* from, uint8_t to_x, uint8_t to_y, uint8_t spell);
 

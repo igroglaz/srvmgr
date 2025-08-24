@@ -79,7 +79,7 @@ void PI_Delete(byte* player)
         if(unit && Players[i].SetSpells != 0 && Players[i].SpellSetter == player &&
             (i != p_id-1))
         {
-            zxmgr::SetSpells(unit, Players[i].LastSpells);
+            zxmgr::SetSpells(reinterpret_cast<A2Unit*>(unit), Players[i].LastSpells);
             Players[i].SetSpells = 0;
             Players[i].LastSpells = 0;
             Players[i].SpellSetter = NULL;
@@ -105,7 +105,7 @@ void PI_Delete(byte* player)
 
     if(unit && Players[p_id-1].SetSpells != 0)
     {
-        zxmgr::SetSpells(unit, Players[p_id-1].LastSpells);
+        zxmgr::SetSpells(reinterpret_cast<A2Unit*>(unit), Players[p_id-1].LastSpells);
         Players[p_id-1].SetSpells = 0;
         Players[p_id-1].LastSpells = 0;
         Players[p_id-1].SpellSetter = NULL;

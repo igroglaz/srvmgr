@@ -1108,10 +1108,10 @@ ret_0:
         return retval;
     }
 
-    void CreateSpellbook(byte* unit)
+    void CreateSpellbook(A2Unit* unit)
     {
         if (!unit) return;
-        byte* spbk = NULL;
+        A2SpellBook* spbk = NULL;
         __asm
         {
             push    0x1C
@@ -1131,13 +1131,13 @@ ret_0:
             *(uint32_t*)(spbk + 0x14) = 0;
         }
 
-        *(byte**)(unit + 0x140) = spbk;
+        unit->spellbook = spbk;
     }
 
-    void DeleteSpellbook(byte* unit)
+    void DeleteSpellbook(A2Unit* unit)
     {
         if (!unit) return;
-        byte* spbk = *(byte**)(unit + 0x140);
+        void* spbk = unit->spellbook;
         if (!spbk) return;
 
         __asm
@@ -1148,13 +1148,13 @@ ret_0:
             call    edx
         }
 
-        *(byte**)(unit + 0x140) = NULL;
+        unit->spellbook = NULL;
     }
 
-    uint32_t GetSpells(byte* unit)
+    uint32_t GetSpells(A2Unit* unit)
     {
         if (!unit) return 0;
-        byte* spbk = *(byte**)(unit + 0x140);
+        void* spbk = unit->spellbook;
         if (!spbk) return 0;
 
         uint32_t spells = 0;
@@ -1169,7 +1169,7 @@ ret_0:
         return spells;
     }
 
-    void SetSpells(byte* unit, uint32_t spells)
+    void SetSpells(A2Unit* unit, uint32_t spells)
     {
         if (!unit) return;
         DeleteSpellbook(unit);

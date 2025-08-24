@@ -235,6 +235,17 @@ struct A2UnitEye {
     uint8_t gapB[169];
 };
 
+struct A2Spell {
+    void* vtable;
+    // ...
+};
+
+struct A2SpellBook {
+    void* vtable;
+    A2Array<A2Spell*> spells;
+    uint32_t current_spell_number;
+};
+
 struct A2Unit {
     void *clazz;
     A2ID id_ext;
@@ -302,7 +313,7 @@ struct A2Unit {
     int8_t gap12A[14];
     int32_t exp;
     int8_t gap77[12];
-    void* spellbook;
+    A2SpellBook* spellbook;
     int8_t gap8[4];
     int32_t summon_id; // All summoned mobs of one player will have the same non-null value of this field.
     uint16_t server_id;
