@@ -15,7 +15,7 @@
 namespace zxmgr
 {
     std::vector<A2Player*> _stdcall GetPlayers();
-    std::vector<byte*> _stdcall GetUnits(byte* player = NULL);
+    std::vector<A2Unit*> _stdcall GetUnits(A2Player* player = NULL);
 
     void SendMessageRaw(const A2Player* pptr, const char* message);
     void SendMessage(const A2Player* pptr, const char* mask, ...);
@@ -36,7 +36,7 @@ namespace zxmgr
     void DestroyItem(byte* item);
     void GiveMoney(byte* pptr, unsigned long count, unsigned long flags);
     void UpdatePlayer(unsigned long flags, unsigned long info, unsigned long unknown, byte* pptr);
-    void __stdcall Own(byte* to, byte* from);
+    void __stdcall Own(A2Player* to, A2Player* from);
     void PickupFor(unsigned long pptr, unsigned long pthis);
 
     unsigned long GetSpeed();
