@@ -52,40 +52,6 @@ std::string WithSpaces(int value) {
 
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, const A2Player* p, bool hell);
 
-// A2 server only stores the effective unit stats () Walk over all equipped
-void SubtractEquippedItems(A2Human* human, PlayerInfo& player_info) {
-    for (int i = -2; i < 13; ++i) {
-        A2InventoryItem* item;
-
-        if (i == -2) {
-            item = human->unit.weapon;
-        } else if (i == -1) {
-            item = human->unit.shield;
-        } else {
-            item = human->dress[i];
-        }
-
-        if (item != nullptr) {
-            if (item->effects.size) {
-                auto* ptr = item->effects.first_node;
-                while (ptr != NULL) {
-                    if (ptr->value->effect_id == 2) {
-                        player_info.body -= ptr->value->value1;
-                    } else if (ptr->value->effect_id == 3) {
-                        player_info.mind -= ptr->value->value1;
-                    } else if (ptr->value->effect_id == 4) {
-                        player_info.reaction -= ptr->value->value1;
-                    } else if (ptr->value->effect_id == 5) {
-                        player_info.spirit -= ptr->value->value1;
-                    }
-
-                    ptr = ptr->next;
-                }
-            }
-        }
-    }
-}
-
 void RebornReadinessInfo(ServerIDType server_id, const A2Player* player, bool hell) {
     A2Unit* unit = player->current_unit;
 
@@ -120,23 +86,22 @@ void RebornReadinessInfo(ServerIDType server_id, const A2Player* player, bool he
     player_info.clan = clan;
     player_info.has_treasures = has_treasures;
     player_info.money = player->money;
-    player_info.body = unit->body;
-    player_info.reaction = unit->reaction;
-    player_info.mind = unit->mind;
-    player_info.spirit = unit->spirit;
+    player_info.body = unit->body - unit->equipment_effects.extra_body;
+    player_info.reaction = unit->reaction - unit->equipment_effects.extra_reaction;
+    player_info.mind = unit->mind - unit->equipment_effects.extra_mind;
+    player_info.spirit = unit->spirit - unit->equipment_effects.extra_spirit;
     player_info.experience = unit->exp;
     player_info.monster_kills_by_server_id = player->monster_kills_by_server_id;
     player_info.deaths = player->deaths;
     player_info.unit = unit;
-
+    
     if (unit->clazz != A2_CLASS_HUMAN) {
         zxmgr::SendMessage(player, "current unit is not a human: %x != %x", unit->clazz, A2_CLASS_HUMAN);
     } else {
         A2Human* human = reinterpret_cast<A2Human*>(unit);
-        SubtractEquippedItems(human, player_info); 
 
         for (int i = 0; i < 5; ++i) {
-            player_info.skills[i] = unit->skills[i];
+            player_info.skills[i] = unit->hit_values.skill_levels[i+1] - unit->equipment_effects.extra_hit_info.skill_levels[i+1];
             player_info.main_sphere = human->main_sphere;
             player_info.experience_per_sphere[i] = human->experience_per_sphere[i];
         }

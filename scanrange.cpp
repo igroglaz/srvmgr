@@ -58,7 +58,6 @@ void SR_UpdateUnit(A2Unit* unit)
         {
             uint8_t unit_x = unit->position->x;
             uint8_t unit_y = unit->position->y;
-            // TODO: This was *(uint16_t*)(unit+0xA4), but unit->scan_range is 1 byte at 0xA5. Something's off.
             uint16_t unit_vision = unit->scan_range;
 
             if (!dCalc)

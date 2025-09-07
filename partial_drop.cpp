@@ -1,6 +1,5 @@
 #include "a2types.h"
 #include "config_new.h"
-#include <vector>
 #define _USE_MATH_DEFINES
 #include "math.h"
 #include "this_call.h"
@@ -9,7 +8,6 @@
 void* (__cdecl *a2_operator_new)(int) = (void* (*)(int))0x005DDF54;
 auto a2_delete = (void (__cdecl *)(void*))0x005ddf90;
 auto a2_bag_destructor = (void (__fastcall *)(A2InventoryList*))0x00551c7a;
-
 
 A2InventoryList* __stdcall create_new_item_list()
 {
@@ -89,8 +87,8 @@ int getDropNum(int num, float probability)
         }
         return dropN;
 }
-void __stdcall drop_rnd_items(A2InventoryList * item_list_src, A2InventoryList * item_list_dst, float probability)
-{
+
+void __stdcall drop_rnd_items(A2InventoryList* item_list_src, A2InventoryList* item_list_dst, float probability) {
     A2Node<A2InventoryItem>* src_current = item_list_src->list.last_node;
     int ind = item_list_src->list.size - 1;
     std::vector<IndNum> to_remove;
@@ -115,16 +113,18 @@ void __stdcall drop_rnd_items(A2InventoryList * item_list_src, A2InventoryList *
         ind--;
         src_current = src_current->prev;
     }
-    for (std::vector<IndNum>::iterator it = to_remove.begin() ; it != to_remove.end(); ++it)
-    {
+
+    for (std::vector<IndNum>::iterator it = to_remove.begin() ; it != to_remove.end(); ++it) {
         a2insert(item_list_dst, 0, a2remove(item_list_src, it->ind, it->num));
     }
 }
 
-void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList * item_list_dst, float probability)
-{
-    if (unit->clazz != A2_CLASS_HUMAN)
-        return;        // unit does not support weared items
+void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList* item_list_dst, float probability) {
+    if (unit->clazz != A2_CLASS_HUMAN) {
+        return; // unit does not support worn items
+    }
+
+    const A2Human* human = reinterpret_cast<A2Human*>(unit);
 
     for (int i = 1; i < 13; ++i )
     {
@@ -187,34 +187,32 @@ void DeleteInventory(A2InventoryList* bag) {
     a2_delete(bag);
 }
 
-void __stdcall drop_partially(A2Unit* unit, int a3, int a4)
-{
-    if (unit && unit->inventory)
-    {
-        if (isPlayerUnit(unit))
-        {
-            A2InventoryList* bag = create_new_item_list();
-            drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability);
-            drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
+void __stdcall drop_partially(A2Unit* unit, int a3, int a4) {
+    if (!unit) {
+        return;
+    }
 
-            if (bag->list.size) {
-                PoisonStapleCell(unit->position);
-            }
+    if (isPlayerUnit(unit)) {
+        A2InventoryList* bag = create_new_item_list();
 
-            if (IsGigaPlayer(unit)) {
-                DeleteInventory(bag);
-            } else {
-                CopyInventoryToMap(unit, bag, a3, a4);
-            }
+        drop_rnd_items(unit->inventory, bag, Config::InventoryDropProbability);
+        drop_rnd_weared_items(unit, bag, Config::WearDropProbability);
+
+        if (bag->list.size) {
+            PoisonStapleCell(unit->position);
         }
-        else
-        {
-            StapleCellOnMobKill(unit);
 
-            // If this is a monster, we drop all items like it's done in original a2
-            CopyInventoryToMap(unit, unit->inventory, a3, a4);
-            unit->inventory = create_new_item_list();
+        if (IsGigaPlayer(unit)) {
+            DeleteInventory(bag);
+        } else {
+            CopyInventoryToMap(unit, bag, a3, a4);
         }
+    } else if (unit->inventory) {
+        StapleCellOnMobKill(unit);
+
+        // If this is a monster, we drop all items like it's done in original a2
+        CopyInventoryToMap(unit, unit->inventory, a3, a4);
+        unit->inventory = create_new_item_list();
     }
 }
 

@@ -38,10 +38,11 @@ struct A2ListWrapper {
 
 template <typename T>
 struct A2Array {
-    int whatever0;
+    void* vtable;
     T *data;
-    int size;
-    int whatever1[2];
+    uint32_t size;
+    uint32_t capacity;
+    uint32_t grow_by;
 };
 
 struct A2MonsterInfoData {
@@ -132,7 +133,7 @@ struct A2WorldEquip {
 };
 
 struct A2InventoryItem {
-    int32_t dword0;
+    int32_t clazz;
     int8_t gap4[8];
     int16_t option;
     int8_t gapE[14];
@@ -248,8 +249,50 @@ struct A2SpellBook {
     uint32_t current_spell_number;
 };
 
+struct SessionMobKill {
+    uint16_t server_id;
+    uint16_t kills;
+};
+
+struct A2HitInfo { // UnitToHit in Ghidra.
+    uint16_t attack;
+    uint16_t skill_levels[6];
+    uint8_t hand_damage_min;
+    uint8_t hand_damage_spread;
+    uint8_t physical_damage_type;
+    uint8_t staff_damage_min; // I think this is used only for an empty staff?
+    uint8_t staff_damage_spread;
+    uint8_t damage_min;
+    uint8_t damage_spread;
+    uint8_t magic_damage_type;
+};
+
+struct A2Protections {
+    uint16_t defence;
+    uint16_t absorption;
+    uint16_t magic_protections[6];
+    uint8_t weapon_protections[6];
+};
+
+struct A2EquipmentEffects {
+    uint8_t extra_body;
+    uint8_t extra_reaction;
+    uint8_t extra_mind;
+    uint8_t extra_spirit;
+    uint16_t extra_speed;
+    uint16_t extra_carrying_body_100g;
+    uint16_t extra_hp_max;
+    uint16_t extra_hp_regen;
+    uint16_t extra_mp_max;
+    uint16_t extra_mp_regen;
+    uint16_t extra_scan_range;
+    A2HitInfo extra_hit_info;
+    uint16_t field12_0x28;
+    A2Protections extra_protections;
+};
+
 struct A2Unit {
-    void *clazz;
+    void* clazz;
     A2ID id_ext;
     int8_t gap0[6];
     int8_t type_id;
@@ -291,28 +334,23 @@ struct A2Unit {
     uint16_t mind;
     uint16_t spirit;
     uint16_t speed;
-    int8_t gap8e[6];
+    int16_t gap8e;
+    int16_t carrying_weight_100g; // How much stuff the character is carrying. In 100g increments.
+    int16_t carrying_body_100g; // Used to calculate how much the character's speed drops when carrying things. In vanilla, set to (body*10 + 1).
     int16_t hp;
     int16_t hp_max;
     int16_t hp_regen;
     int16_t mp;
     int16_t mp_max;
     int16_t mp_regen;
-    int8_t gapA0[5];
-    uint8_t scan_range;
-    uint16_t attack;
-    int8_t gapA6[12];
-    uint8_t hand_damage_min;
-    uint8_t hand_damage_spread;
-    uint8_t physical_damage_type;
-    int8_t gapBA[7];
-    uint16_t defence;
-    uint16_t absorption;
-    uint16_t protection_magic[6];
-    uint8_t protection_physical[6];
-    int8_t gap66[68];
-    uint16_t skills[5];
-    int8_t gap12A[14];
+    int8_t gapA0[4];
+    uint16_t scan_range;
+    A2HitInfo hit_values;
+    int8_t gapBC[2];
+    A2Protections protections;
+    A2EquipmentEffects equipment_effects;
+    A2HitInfo hit_values2;
+    int8_t gap12A[6];
     int32_t exp;
     int8_t gap77[12];
     A2SpellBook* spellbook;
@@ -321,7 +359,9 @@ struct A2Unit {
     uint16_t server_id;
     int8_t gap9[82];
     uint32_t summoned;
-    int8_t gap1A4[28];
+    int8_t gap1A4[4];
+    A2Array<SessionMobKill> mob_kills_in_session;
+    int8_t gap1BC[4];
     A2UnitEye* eye;
     A2UnitEye2* eye2;
     int8_t gap1c8[64];
@@ -329,7 +369,10 @@ struct A2Unit {
 
 struct A2Human {
     A2Unit unit;
-    A2InventoryItem* dress[13];
+    // Dress elements: 4: ring, 5: amulet, 6: helm/hat, 7: mail/dress, 8: cuirass/cape,
+    //                 9: bracers (unused for mage), 10: gauntlets/gloves, 12: boots/shoes.
+    // All other elements are unused.
+    A2InventoryItem* dress[13]; 
     int32_t main_sphere;
     int32_t experience_per_sphere[5];
 };
@@ -372,7 +415,7 @@ struct A2Quest {
     int32_t landmark_id;
     int32_t target;
     int32_t current;
-    int32_t dword24;
+    int32_t reward;
     int32_t dword28;
     int32_t dword2C;
 };

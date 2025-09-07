@@ -984,7 +984,7 @@ void __declspec(naked) imp_CreateItemParameterCall3()
 // 45-2010
 void DamagePhysical(A2Unit* victim, byte* damage, A2Unit* attacker, uint32_t return_addr)
 {
-    attacker->attack = 2010;
+    attacker->hit_values.attack = 2010;
     const char* name_victim = "(unnamed)";
     const char* name_attacker = "(unnamed)";
     if(victim->player) name_victim = victim->player->name;

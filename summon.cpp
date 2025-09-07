@@ -226,14 +226,14 @@ void __stdcall FixSummonedUnit(A2Unit* unit, int level) {
 
     unit->hp_max = changes.hp_max[level-1];
     unit->hp = changes.hp_max[level-1];
-    unit->hand_damage_min = changes.damage_min[level-1];
-    unit->hand_damage_spread = changes.damage_spread[level-1];
-    unit->defence = changes.defence[level-1];
-    unit->attack = changes.attack[level-1];
-    unit->absorption = changes.absorption[level-1];
+    unit->hit_values.hand_damage_min = changes.damage_min[level-1];
+    unit->hit_values.hand_damage_spread = changes.damage_spread[level-1];
+    unit->protections.defence = changes.defence[level-1];
+    unit->hit_values.attack = changes.attack[level-1];
+    unit->protections.absorption = changes.absorption[level-1];
     for (int i = 1; i < 6; ++i) {
-        unit->protection_magic[i] = changes.protection_magic[level-1];
-        unit->protection_physical[i] = 0;
+        unit->protections.magic_protections[i] = changes.protection_magic[level-1];
+        unit->protections.weapon_protections[i] = 0;
     }
     unit->speed = changes.speed[level-1];
     if (unit->eye) {

@@ -1,5 +1,10 @@
+#include "crash_filter.h"
+
 #include "syslib.h"
 #include "srvmgr.h"
+
+#include <windows.h>
+#include <dbghelp.h>
 
 int exc = 0;
 char awarn[]="Warning: recursive exception, characters unsaved!\n";
@@ -19,7 +24,58 @@ void _declspec(naked) exc_handler(void)
 bool exception_already = false;
 bool exception_secondary = false;
 
-DWORD exc_handler_run(struct _EXCEPTION_POINTERS *info)
+void Traceback(CONTEXT* ctx) {
+    HANDLE hProcess = GetCurrentProcess();
+    HANDLE hThread = GetCurrentThread();
+
+    STACKFRAME64 frame = {};
+    frame.AddrPC.Offset = ctx->Eip;
+    frame.AddrPC.Mode = AddrModeFlat;
+    frame.AddrFrame.Offset = ctx->Ebp;
+    frame.AddrFrame.Mode = AddrModeFlat;
+    frame.AddrStack.Offset = ctx->Esp;
+    frame.AddrStack.Mode = AddrModeFlat;
+
+    DWORD machineType = IMAGE_FILE_MACHINE_I386;
+
+    SymInitialize(hProcess, NULL, TRUE);
+    log_format("=== Stack Trace Start ===\n");
+
+    for (int i = 0; i < 64; ++i) {
+        if (!StackWalk64(
+                machineType,
+                hProcess,
+                hThread,
+                &frame,
+                ctx,
+                NULL,
+                SymFunctionTableAccess64,
+                SymGetModuleBase64,
+                NULL))
+            break;
+
+        DWORD64 addr = frame.AddrPC.Offset;
+        if (addr == 0)
+            break;
+
+        BYTE symbolBuffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME] = {};
+        SYMBOL_INFO* symbol = (SYMBOL_INFO*)symbolBuffer;
+        symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+        symbol->MaxNameLen = MAX_SYM_NAME;
+
+        DWORD64 displacement = 0;
+        if (SymFromAddr(hProcess, addr, &displacement, symbol)) {
+            log_format("  [0x%08llx] %s + 0x%llx\n", addr, symbol->Name, displacement);
+        } else {
+            log_format("  [0x%08llx] (no symbol)\n", addr);
+        }
+    }
+
+    SymCleanup(hProcess);
+    log_format("=== Stack Trace End ===\n");
+}
+
+DWORD exc_handler_run(EXCEPTION_POINTERS *info)
 {
     __try
     {
@@ -38,20 +94,8 @@ DWORD exc_handler_run(struct _EXCEPTION_POINTERS *info)
                 info->ExceptionRecord->ExceptionCode,
                 info->ExceptionRecord->ExceptionFlags);
 
-        log_format("BEGIN STACK TRACE: 0x%08Xh <= ", info->ExceptionRecord->ExceptionAddress);
-        unsigned long stebp = *(unsigned long*)(info->ContextRecord->Ebp);
-        while(true)
-        {
-            bool bad_ebp = false;
-            if(stebp & 3) bad_ebp = true;
-            if(!bad_ebp && IsBadReadPtr((void*)stebp, 8)) bad_ebp = true;
-
-            if(bad_ebp) /* ? */ break;
-
-            log_format2("%08Xh <= ", *(unsigned long*)(stebp+4));
-            stebp = *(unsigned long*)(stebp); // o_O
-        }
-        log_format2("END STACK TRACE\n");
+        PrintStackTrace(info->ContextRecord->Ebp);
+        Traceback(info->ContextRecord);
         
         ExitProcess(1);
     }

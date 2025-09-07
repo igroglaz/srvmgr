@@ -44,7 +44,7 @@ extern "C" int __fastcall change_inn_reward_mob(A2GameDataRes *data, int unused,
 	excluded_type_ids.insert(104); // Spider
 	excluded_type_ids.insert(105); // Succubi
 
-	for (int i = 0; i < monsters.size; ++i) {
+	for (uint32_t i = 0; i < monsters.size; ++i) {
 		const A2MonsterInfo& m = monsters.data[i];
 		if (m.monsterData.data == nullptr) {
 			continue;
@@ -91,7 +91,7 @@ void InitializeMobNames() {
 	const A2GameDataRes* data = (A2GameDataRes*)0x6d0668;
 	const A2Array<A2MonsterInfo>& monsters = data->monsters;
 
-	for (int i = 0; i < monsters.size; ++i) {
+	for (uint32_t i = 0; i < monsters.size; ++i) {
 		const A2MonsterInfo& m = monsters.data[i];
 		if (m.monsterData.data == nullptr) {
 			continue;

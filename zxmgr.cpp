@@ -1124,11 +1124,11 @@ ret_0:
         if (spbk)
         {
             spbk->vtable = (void*)0x0060EC30;
-            spbk->spells.whatever0 = 0x0060EC48;
+            spbk->spells.vtable = (void*)0x0060EC48;
             spbk->spells.data = nullptr;
             spbk->spells.size = 0;
-            spbk->spells.whatever1[0] = 0;
-            spbk->spells.whatever1[0] = 0;
+            spbk->spells.capacity = 0;
+            spbk->spells.grow_by = 0;
         }
 
         unit->spellbook = spbk;

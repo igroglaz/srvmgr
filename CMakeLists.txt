@@ -5,7 +5,7 @@ project(srvmgr)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-link_libraries(ws2_32)
+link_libraries(ws2_32 dbghelp)
 
 add_library(srvmgr SHARED srvmgr.def
     a2server_utils.cpp
@@ -68,8 +68,8 @@ add_library(srvmgr SHARED srvmgr.def
 
 # Static link.
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
-target_compile_options(srvmgr PUBLIC /MT)
-target_link_options(srvmgr PUBLIC /NODEFAULTLIB:MSVCRT)
+target_compile_options(srvmgr PUBLIC /MT /DYNAMICBASE:NO)
+target_link_options(srvmgr PUBLIC /NODEFAULTLIB:MSVCRT /DYNAMICBASE:NO /NXCOMPAT:NO)
 
 add_compile_definitions(srvmgr _CRT_SECURE_NO_WARNINGS _WINSOCK_DEPRECATED_NO_WARNINGS)
 
@@ -77,7 +77,9 @@ add_compile_definitions(srvmgr _CRT_SECURE_NO_WARNINGS _WINSOCK_DEPRECATED_NO_WA
 add_custom_command(TARGET srvmgr
     POST_BUILD
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND copy build\\Release\\srvmgr.dll postbuild
+    COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/srvmgr.dll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/postbuild/"
 )
 
 add_custom_command(TARGET srvmgr
