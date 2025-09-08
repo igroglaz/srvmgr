@@ -235,11 +235,13 @@ void __stdcall FixSummonedUnit(A2Unit* unit, int level) {
         unit->protections.magic_protections[i] = changes.protection_magic[level-1];
         unit->protections.weapon_protections[i] = 0;
     }
+
     unit->speed = changes.speed[level-1];
     if (unit->eye) {
         unit->eye->rotation_speed = changes.rotation[level-1];
     }
-    unit->scan_range = changes.scan_range;
+    
+    unit->scan_range = changes.scan_range << 8;
 
     const auto& type_changes = unit->type_id == 74 ? squirrel_type_changes : unit->type_id == 75 ? snake_type_changes : turtle_type_changes;
 
