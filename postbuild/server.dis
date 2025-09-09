@@ -289,3 +289,8 @@ JMP unsummon_unit 00557985
 JMP skip_experience_reward 005666c1
 JMP inn_scrolls_reward 00565b27
 JMP skip_potion_reward 005660c8
+
+JMP prevent_suicide_regular 005370ed
+JMP prevent_suicide_drain_life 0053a7cc
+JMP prevent_suicide_point_effect 0053766c
+JMP prevent_suicide_area_effect 00538473
