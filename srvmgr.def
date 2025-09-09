@@ -194,3 +194,7 @@ unsummon_unit                           @334
 skip_experience_reward                  @335
 inn_scrolls_reward                      @336
 skip_potion_reward                      @337
+prevent_suicide_regular                 @338
+prevent_suicide_drain_life              @339
+prevent_suicide_point_effect            @340
+prevent_suicide_area_effect             @341

@@ -50,6 +50,7 @@ add_library(srvmgr SHARED srvmgr.def
     srvmgr.cpp
     srvmgr_new.cpp
     startup.cpp
+    suicide.cpp
     summon.cpp
     this_call.cpp
     thresholds.cpp

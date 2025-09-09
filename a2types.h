@@ -240,7 +240,16 @@ struct A2UnitEye {
 
 struct A2Spell {
     void* vtable;
-    // ...
+    void* spell_info;
+    uint8_t spell_id;
+    uint8_t max_range;
+    uint8_t is_defensive;
+    uint8_t field5_0xb;
+    uint16_t mana_cost;
+    uint8_t damage_min;
+    uint8_t damage_spread;
+    uint16_t spell_power;
+    uint8_t field7_0x12[2];
 };
 
 struct A2SpellBook {
@@ -264,7 +273,7 @@ struct A2HitInfo { // UnitToHit in Ghidra.
     uint8_t staff_damage_spread;
     uint8_t damage_min;
     uint8_t damage_spread;
-    uint8_t magic_damage_type;
+    uint8_t spell_id;
 };
 
 struct A2Protections {
@@ -308,7 +317,9 @@ struct A2Unit {
     int8_t gap2[4];
     A2MonsterInfo* monster_info;
     A2Unit* last_hit_by;
-    int8_t gap4[6];
+    int8_t gap4[4];
+    int8_t last_hit_spell;
+    int8_t token_size;
     int8_t byte4A;
     int8_t face;
     int8_t unit_attrs;
