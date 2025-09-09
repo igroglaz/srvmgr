@@ -158,6 +158,8 @@ imp_limit_magic_resist_wrapper   			@212
 remove_existing_n_monters_quests_wrapper	@213
 remove_existing_monster_quests_wrapper		@214
 remove_existing_group_quests_wrapper		@215
+replace_unit_carrying_body_with_reaction    @299
+replace_human_carrying_body_with_reaction   @300
 set_warrior_male_max_parameters			@301
 set_warrior_female_max_parameters		@302
 set_mage_male_max_parameters			@303
