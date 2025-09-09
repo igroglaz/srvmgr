@@ -57,6 +57,7 @@ add_library(srvmgr SHARED srvmgr.def
     unit_info.cpp
     unsummon_unit.cpp
     utils.cpp
+    weight.cpp
     zxmgr.cpp
     lib/hat2.cpp
     lib/packet.cpp
