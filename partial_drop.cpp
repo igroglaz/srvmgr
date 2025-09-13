@@ -126,55 +126,19 @@ void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList* item_list_ds
 
     const A2Human* human = reinterpret_cast<A2Human*>(unit);
 
-    for (int i = 1; i < 13; ++i )
-    {
-        if (getDropNum(1, probability) > 0)
-        {
-            __asm
-            {
-                mov        ecx, [i]
-                mov        edx, [unit]
-                mov        eax, [edx + ecx * 4 + 0x208]
-                push    eax
-                mov        ecx, [unit]            // this
-                mov        edx, [ecx]
-                mov        edx, [edx + 0x48]
-                call    edx
-                push    eax                    // put item on stack
-                mov        ecx,    item_list_dst
-                mov        edx, 0x551FA3
-                call    edx
-            }
-        }
-    }
-    // ugly asm code duplication. Need to refactor
-    for (int i = 0; i < 2; ++i )
-    {
-        if (getDropNum(1, probability) > 0)
-        {
-            __asm
-            {
-                mov        ecx, [i]
-                mov        edx, [unit]
-                mov        eax, [edx + ecx * 4 + 0x74]
-                push    eax
-                mov        ecx, [unit]            // this
-                mov        edx, [ecx]
-                mov        edx, [edx + 0x48]
-                call    edx
-                push    eax                    // put item on stack
-                mov        ecx,    item_list_dst
-                mov        edx, 0x551FA3
-                call    edx
-            }
+    for (int i = -2; i < 13; ++i ) {
+        A2InventoryItem* item = (i == -2 ? unit->weapon : i == -1 ? unit->shield : human->dress[i]);
+
+        if (item && getDropNum(1, probability) > 0) {
+            a2insert(item_list_dst, unit->clazz->UnitUnequip(unit, item));
         }
     }
 }
 
-int CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int a3, int a4)
-{
-    #define FUNC_COPY_INVENTORY_TO_MAP 0x0052D8D3
-    return this_call(FUNC_COPY_INVENTORY_TO_MAP, (void *)unit, (void *)inventory, (void *)a3, (void *)a4);
+void CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int money, int a4) {
+    if (inventory->list.size || money) {
+        this_call(0x0052D8D3, (void *)unit, (void *)inventory, (void *)money, (void *)a4);
+    }
 }
 
 bool isPlayerUnit(A2Unit* unit)
@@ -187,7 +151,9 @@ void DeleteInventory(A2InventoryList* bag) {
     a2_delete(bag);
 }
 
-void __stdcall drop_partially(A2Unit* unit, int a3, int a4) {
+void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* unused, int a3, int a4) {
+    Printf("drop_partially: unit=0x%x, a3=%d, a4=%d", unit, a3, a4);
+
     if (!unit) {
         return;
     }
@@ -220,15 +186,10 @@ void __declspec(naked) imp_drop_partially()
 { // 0052E264
     __asm
     {
-        mov     ecx, [ebp-174h]        // pass a4
-        push    ecx
-        mov     edx, [ebp-1Ch]        // pass a3
-        push    edx
-        mov     ecx, [ebp-164h]        // pass unit
-        push    ecx    
+        // All parameters are taken from the stack and ECX.
         call    drop_partially
-        mov     [ebp-0C0h], eax        // pass ground bag
-        ret        0xC
+        mov edx, 0x0052e2c8
+        jmp edx
     }
 }
 
@@ -242,5 +203,14 @@ void __stdcall update_unit_ui_wrapper(A2Unit *unit, int a){
         mov     ecx, 0x006C3A08
         mov     edx, 0x51C601
         call    edx
+    }
+}
+
+// Address: 0052da11
+void __declspec(naked) partial_drop_skip_undress() {
+    __asm {
+        // Skip putting weapon, shield and all equipped items into the inventory.
+        mov eax, 0x0052daab
+        jmp eax
     }
 }

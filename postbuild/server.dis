@@ -187,9 +187,10 @@ CALL fix_spell_duration_overflow 53C0E1 // fix spell duration overflow
 CALL fix_spell_duration_overflow 53C21E // fix spell duration overflow
 CALL fix_spell_duration_overflow 53C52A // fix spell duration overflow
 
-CALL imp_drop_partially 0052E264 // implement partial drop after death 
-CALL imp_drop_partially 0052DEEF // implement partial drop after death -- // sometimes worn items do not drop after death even with 100% chance...
-                                                                            // so I comment it out for now and we will use oldschool imp_DropAll 52DA11
+JMP imp_drop_partially 0052E264 // implement partial drop after death 
+JMP imp_drop_partially 0052DEEF // implement partial drop after death. This one seems unused?
+JMP partial_drop_skip_undress 0052da11 // Skip putting all equipped items into inventory upon death.
+
 //CALL imp_regen 00556401 6 // used for cheating (with leather shield)
 
 CALL imp_inn_quest_roll_interval 00567E7C 1 //implement custom interval for quests update in the inn

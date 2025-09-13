@@ -148,7 +148,8 @@ imp_UpdateOnReturn	@154
 imp_GMNoClip		@155
 fix_spell_duration_overflow_0053973E		@201
 fix_spell_duration_overflow					@202
-imp_drop_partially							@203
+imp_drop_partially                          @203
+partial_drop_skip_undress                   @205
 imp_inn_quest_roll_interval					@206
 imp_distance_bug_fix						@208
 imp_increase_potions_in_shops   			@209
