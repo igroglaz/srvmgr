@@ -41,7 +41,7 @@ int __fastcall CheckItemWhenCasting(A2InventoryItem* item, A2Unit* unit, int pos
 }
 
 // Address: 005056e1
-extern "C" __declspec(naked) void fix_scroll_burn() {
+void __declspec(naked) fix_scroll_burn() {
     __asm {
         mov edx, DWORD PTR [ebp-0x10] // Packet.
         mov eax, 0
@@ -133,7 +133,7 @@ bool __fastcall DontEatBadFood(A2InventoryItem* item, A2Unit* unit, MovePacket* 
 }
 
 // Address: 00505bdf
-extern "C" __declspec(naked) void dont_eat_bad_food() {
+void __declspec(naked) dont_eat_bad_food() {
     __asm {
         push DWORD PTR [ebp+0x8] // Packet.
         mov ecx, DWORD PTR [ebp-0x60] // Item.

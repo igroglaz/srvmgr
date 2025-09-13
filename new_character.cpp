@@ -1,7 +1,7 @@
 #include "lib/utils.hpp"
 #include "a2types.h"
 
-extern "C" __declspec(naked) void skip_new_character_stats() {
+void __declspec(naked) skip_new_character_stats() {
     __asm {
         // Jump to `else` block.
         //
@@ -104,7 +104,7 @@ void __stdcall CreateMagicBook(A2Unit* unit, int main_sphere) {
     AddSpell(spellbook, spell_id);
 }
 
-extern "C" __declspec(naked) void skip_new_character_weapon() {
+void __declspec(naked) skip_new_character_weapon() {
     // Add the magic arrow to the mage's spellbook.
     __asm {
         push DWORD PTR [ebp+0x8]  // Human object.

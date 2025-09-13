@@ -4,6 +4,7 @@ project(srvmgr)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 link_libraries(ws2_32 dbghelp)
 
