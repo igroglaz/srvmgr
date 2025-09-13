@@ -300,8 +300,15 @@ struct A2EquipmentEffects {
     A2Protections extra_protections;
 };
 
+struct A2UnitVTable {
+    void* vfuncs[18];
+
+    typedef A2InventoryItem* (__thiscall* UnitUnequipFn)(A2Unit* self, A2InventoryItem* item);
+    UnitUnequipFn UnitUnequip;   // function at offset 0x48
+};
+
 struct A2Unit {
-    void* clazz;
+    A2UnitVTable* clazz;
     A2ID id_ext;
     int8_t gap0[6];
     int8_t type_id;
