@@ -36,7 +36,7 @@ A2Server* a2server_instance = nullptr;
 // It's a global variable, loaded via `mov eax, ds:0x642c2c`. but I can't
 // access it. No idea why. I guess DLL uses a different data segment and I
 // can't read the data segment of the EXE?
-extern "C" void __fastcall RememberA2Server(A2Server* server) {
+void __fastcall RememberA2Server(A2Server* server) {
     if (a2server_instance != server) {
         Printf("remembering a2server instance: now 0x%x", server);
         a2server_instance = server;
@@ -49,7 +49,7 @@ void ClearStapleCells() {
 }
 
 // Address: 00504a99
-extern "C" __declspec(naked) void remember_a2server() {
+void __declspec(naked) remember_a2server() {
     __asm {
         // a2server pointer is in ECX, input parameter.
         call RememberA2Server
@@ -219,7 +219,7 @@ void __cdecl SoloPickup(A2Unit* unit, int y, int x) {
 }
 
 // Address: 005a9977
-extern "C" __declspec(naked) void solo_pickup_sack() {
+void __declspec(naked) solo_pickup_sack() {
     __asm {
         push DWORD PTR [ebp+0xc]    // x coordinate of the user click
         push DWORD PTR [ebp+0x10]   // y coordinate of the user click
@@ -265,7 +265,7 @@ void __fastcall SoloPickupAll(A2Unit* unit) {
 }
 
 // Address: 005a99dd
-extern "C" __declspec(naked) void solo_pick_all_sacks() {
+void __declspec(naked) solo_pick_all_sacks() {
     __asm {
         // The unit pointer is in ECX after the instruction at 0x005a99da.
         call SoloPickupAll
@@ -277,7 +277,7 @@ extern "C" __declspec(naked) void solo_pick_all_sacks() {
     }
 }
 
-extern "C" void __fastcall PoisonStapleCell(A2Position* pos) {
+void __fastcall PoisonStapleCell(A2Position* pos) {
     Printf("[staple]: PoisonStapleCell: 0x%x -> %d", pos, pos ? pos->yx : 0);
     staple_cells[pos->yx] = -1;
     Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
@@ -318,7 +318,7 @@ A2Node<A2Bag>* FindSack(uint16_t pos_yx) {
     return nullptr;
 }
 
-extern "C" void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
+void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
     Printf(
         "[solo] StapleCellOnMobKill: unit=0x%x (name=%s, id=%d), killed_by=0x%x (name=%s, id=%d)",
         killed_unit,
@@ -360,7 +360,7 @@ extern "C" void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
 }
 
 // Address: 00505e9c
-extern "C" __declspec(naked) void drop_item_under() {
+void __declspec(naked) drop_item_under() {
     // EAX holds the address to the drop cell.
     __asm {
         mov ecx, eax
@@ -374,7 +374,7 @@ extern "C" __declspec(naked) void drop_item_under() {
 }
 
 // Address: 00505ebe
-extern "C" __declspec(naked) void drop_item_to_another() {
+void __declspec(naked) drop_item_to_another() {
     Printf("[solo] drop_item_to_another");
 
     // ECX holds the address to the drop cell.
@@ -407,7 +407,7 @@ int __fastcall ChooseDropItem(uint8_t* packet, A2Unit* unit) {
 
 // Address: 0050597c
 // Prevent giga-players from dropping items on the map.
-extern "C" __declspec(naked) void choose_drop_item() {
+void __declspec(naked) choose_drop_item() {
     __asm {
         // Original instruction can be replayed immediately.
         mov DWORD PTR [ebp-0x60], 0
@@ -433,7 +433,7 @@ extern "C" __declspec(naked) void choose_drop_item() {
 // Address: 005060a4
 // Prevent giga-players from dropping gold on the map.
 // If the regular player drops gold, poison the cell.
-extern "C" __declspec(naked) void drop_gold() {
+void __declspec(naked) drop_gold() {
     A2Player* player;
     __asm {
         mov player, eax    // Player is in EAX

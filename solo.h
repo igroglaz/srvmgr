@@ -5,9 +5,9 @@
 
 #include "a2types.h"
 
-extern "C" void __fastcall PoisonStapleCell(A2Position* pos);
+void __fastcall PoisonStapleCell(A2Position* pos);
 
-extern "C" void __fastcall StapleCellOnMobKill(A2Unit* killed_unit);
+void __fastcall StapleCellOnMobKill(A2Unit* killed_unit);
 
 A2Node<A2Bag>* FindSack(uint16_t pos_yx);
 
