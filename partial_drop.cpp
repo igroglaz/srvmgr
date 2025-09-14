@@ -135,9 +135,9 @@ void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList* item_list_ds
     }
 }
 
-void CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int money, int a4) {
+void CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int money, int main_unit) {
     if (inventory->list.size || money) {
-        this_call(0x0052D8D3, (void *)unit, (void *)inventory, (void *)money, (void *)a4);
+        this_call(0x0052D8D3, (void *)unit, (void *)inventory, (void *)money, (void *)main_unit);
     }
 }
 
@@ -151,8 +151,8 @@ void DeleteInventory(A2InventoryList* bag) {
     a2_delete(bag);
 }
 
-void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* unused, int a3, int a4) {
-    Printf("drop_partially: unit=0x%x, a3=%d, a4=%d", unit, a3, a4);
+void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* unused, int money, int main_unit) {
+    Printf("drop_partially: unit=0x%x, money=%d, main_unit=%d", unit, money, main_unit);
 
     if (!unit) {
         return;
@@ -171,13 +171,13 @@ void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* un
         if (IsGigaPlayer(unit)) {
             DeleteInventory(bag);
         } else {
-            CopyInventoryToMap(unit, bag, a3, a4);
+            CopyInventoryToMap(unit, bag, money, main_unit);
         }
     } else if (unit->inventory) {
         StapleCellOnMobKill(unit);
 
         // If this is a monster, we drop all items like it's done in original a2
-        CopyInventoryToMap(unit, unit->inventory, a3, a4);
+        CopyInventoryToMap(unit, unit->inventory, money, main_unit);
         unit->inventory = create_new_item_list();
     }
 }
