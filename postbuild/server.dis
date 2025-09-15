@@ -298,3 +298,5 @@ JMP prevent_suicide_regular 005370ed
 JMP prevent_suicide_drain_life 0053a7cc
 JMP prevent_suicide_point_effect 0053766c
 JMP prevent_suicide_area_effect 00538473
+
+JMP notify_about_map_rotation 0048aa87
