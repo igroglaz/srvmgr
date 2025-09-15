@@ -127,27 +127,25 @@ bool CheckMonsterKills(const PlayerInfo& info, const std::unordered_map<uint16_t
 
     InitializeMobNames();
 
-    bool ready = true;
-    int types_left = 0;
+    std::string message;
 
     for (auto it = need_kills->begin(); it != need_kills->end(); ++it) {
         auto got = info.monster_kills_by_server_id[it->first];
         if (got < it->second) {
-            if (++types_left > 5) {
-                info_lines.emplace_back("(other mob kills omitted)");
-                break;
+            if (!message.empty()) {
+                message += ",  ";
             }
-
-            ready = false;
-            info_lines.emplace_back(Format("- Need %d kills of %s, you have %d", it->second, mob_names_by_server_id[it->first].c_str(), got));
+            message += Format("%s: %d", mob_names_by_server_id[it->first].c_str(), it->second - got);
         }
     }
 
-    if (types_left == 0) {
+    if (message.empty()) {
         info_lines.emplace_back("+ You have all the mob kills");
+        return true;
     }
 
-    return ready;
+    info_lines.emplace_back("- Need kills: " + message);
+    return false;
 }
 
 bool CheckMoney(const PlayerInfo& info, uint32_t need_money, std::vector<std::string>& info_lines) {
