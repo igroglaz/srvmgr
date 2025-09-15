@@ -298,6 +298,114 @@ void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
     zxmgr::SendMessage(player, "'%s' does not match any spells. Autobuff mask left unchanged.", command.c_str());
 }
 
+void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
+    if (Config::ServerID != ServerIDType::QUEST_T1) {
+        return;
+    }
+
+    const auto* map_files = (A2Array<const char*>*)0x006d15f0;
+    const auto* map_times = (A2Array<int32_t>*)0x006d1618;
+    const int map_index = *(int *)0x006d1634;
+
+    if (map_index == map_files->size - 1) {
+        zxmgr::SendMessage(player, "This is the last map in the pool, voting is closed. The next map will be chosen randomly.");
+        return;
+    }
+    if (map_index == map_files->size - 2) {
+        zxmgr::SendMessage(player, "There's only one map left in the pool, voting is closed.");
+        return;
+    }
+
+    CheckPlayerSettings(player);
+
+    // Convert map names for easier access.
+    std::vector<std::string> all_map_names;
+    for (uint32_t i = 0; i < map_files->size; ++i) {
+        std::string name = Basename(map_files->data[i]);
+        all_map_names.emplace_back(std::move(name));
+    }
+
+    // Vote for a map.
+    if (!args.empty()) {
+        std::string name = Trim(args);
+
+        std::vector<std::string> matching_maps;
+        for (uint32_t i = map_index + 1; i < map_files->size; ++i) {
+            if (all_map_names[i].find(name) != std::string::npos) {
+                matching_maps.push_back(all_map_names[i]);
+            }
+        }
+
+        if (matching_maps.size() == 0) {
+            zxmgr::SendMessage(player, "Map '%s' is not available for selection", name.c_str());
+            return;
+        }
+        if (matching_maps.size() > 1) {
+            std::string names = "";
+            for (auto& match: matching_maps) {
+                if (names.length()) {
+                    names += ", ";
+                }
+                names += match;
+            }
+            zxmgr::SendMessage(player, "Multiple maps match '%s': %s", name.c_str(), names.c_str());
+            return;
+        }
+
+        zxmgr::SendMessage(player, "You voted for map '%s'", matching_maps[0].c_str());
+        player_settings[player->id_ext.id]->map_vote = matching_maps[0];
+    }
+
+    // Calculate current votes.
+    std::map<std::string, int> current_votes;
+    for (auto& ps: player_settings) {
+        if (!ps.second->map_vote.empty()) {
+            current_votes[ps.second->map_vote]++;
+        }
+    }
+
+    // The player didn't vote --- show current votes.
+    if (args.empty()) {
+        for (auto& vote: current_votes) {
+            zxmgr::SendMessage(player, "Map '%s' has %d votes", vote.first.c_str(), vote.second);
+        }
+        return;
+    }
+
+    // Which map is now the most voted?
+    int most_votes = -1;
+    std::string next_map;
+    for (auto& vote: current_votes) {
+        if (vote.second == most_votes) {
+            next_map = "";
+        } else if (vote.second > most_votes) {
+            most_votes = vote.second;
+            next_map = vote.first;
+        }
+    }
+
+    int next_map_index = -1;
+    if (!next_map.empty()) {
+        for (size_t i = 0; i < all_map_names.size(); ++i) {
+            if (all_map_names[i] == next_map) {
+                next_map_index = i;
+            }
+        }
+
+        // Set the map.
+        if (next_map_index != -1 && next_map_index > map_index + 1) {
+            // Rotate map_names and durations.
+            const int begin = map_index + 1;
+            const int middle = next_map_index;
+            const int end = map_files->size;
+            std::rotate(map_files->data + begin, map_files->data + middle, map_files->data + end);
+            std::rotate(map_times->data + begin, map_times->data + middle, map_times->data + end);
+        }
+
+        zxmgr::SendMessage(player, "The next map will be '%s' with %d vote(s).", next_map.c_str(), most_votes);
+    }
+}
+
 void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t rights, bool console)
 {
     if (!ccommand) return;
@@ -369,7 +477,11 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
     }
 
     if (rawcmd == "#autobuff" || rawcmd == "#ab") {
-        ProcessCheat_Autobuff(player, args);
+        return ProcessCheat_Autobuff(player, args);
+    }
+
+    if (rawcmd == "#vote_map") {
+        return ProcessCheat_VoteMap(player, args);
     }
 
     if (rights & GMF_CMD_CHAT)
@@ -670,7 +782,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
         }
     }
 
-    if (rights & GMF_CMD_SET)
+    if (true || rights & GMF_CMD_SET)
     {
         if (rawcmd == "#nextmap")
         {

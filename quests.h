@@ -12,6 +12,7 @@ struct PlayerSettings {
     int quest_mob_count;
     std::string player_name; // This is used to reset settings on relogin.
     uint32_t autobuff_mask; // If bit N is 1, the spell N will not be cast during autobuff casts.
+    std::string map_vote; // The name of the map this player voted for.
 };
 
 // Player settings. Player ID -> settings.

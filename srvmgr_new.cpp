@@ -13,6 +13,7 @@
 #include "forbidden_items.h"
 #include "multiplayer_shop.h"
 #include "solo.h"
+#include "quests.h"
 
 void ChangeWndTitle(const char* title)
 {
@@ -57,6 +58,11 @@ void OnInitializeMap()
     PI_Reset();
 
     ClearStapleCells();
+
+    // Clear map votes.
+    for (auto& ps: player_settings) {
+        ps.second->map_vote.clear();
+    }
 }
 
 void OnPreInitializeMap()
