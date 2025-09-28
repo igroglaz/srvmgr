@@ -38,25 +38,21 @@ void Traceback(CONTEXT* ctx) {
 
     DWORD machineType = IMAGE_FILE_MACHINE_I386;
 
-    SymInitialize(hProcess, NULL, TRUE);
+    if (!SymInitialize(hProcess, NULL, TRUE)) {
+        log_format("[crash_filter] Failed to initialize symbol table\n");
+    }
+
     log_format("=== Stack Trace Start ===\n");
 
     for (int i = 0; i < 64; ++i) {
-        if (!StackWalk64(
-                machineType,
-                hProcess,
-                hThread,
-                &frame,
-                ctx,
-                NULL,
-                SymFunctionTableAccess64,
-                SymGetModuleBase64,
-                NULL))
+        if (!StackWalk64(machineType, hProcess, hThread, &frame, ctx, NULL, SymFunctionTableAccess64, SymGetModuleBase64, NULL)) {
             break;
+        }
 
         DWORD64 addr = frame.AddrPC.Offset;
-        if (addr == 0)
+        if (i && addr == 0) {
             break;
+        }
 
         BYTE symbolBuffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME] = {};
         SYMBOL_INFO* symbol = (SYMBOL_INFO*)symbolBuffer;
