@@ -300,3 +300,5 @@ JMP prevent_suicide_point_effect 0053766c
 JMP prevent_suicide_area_effect 00538473
 
 JMP notify_about_map_rotation 0048aa87
+
+JMP circle_experience 005307a3
