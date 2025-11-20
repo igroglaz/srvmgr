@@ -202,3 +202,4 @@ prevent_suicide_drain_life              @339
 prevent_suicide_point_effect            @340
 prevent_suicide_area_effect             @341
 notify_about_map_rotation               @342
+circle_experience                       @343

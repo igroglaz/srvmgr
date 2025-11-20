@@ -90,6 +90,10 @@ int IncreaseDamage(A2Unit* attacker, A2Unit* target, int damage) {
     return new_damage;
 }
 
+double ExperienceMultiplier(const A2Human* caster) {
+    return 1.0 + 0.5 * Circle(&caster->unit);
+}
+
 }
 
 int __cdecl ChangeDamageRegular(A2Unit* attacker, A2Unit* target, int damage) {
@@ -167,6 +171,48 @@ void __declspec(naked) circle_damage_magic() {
 
         // Restore original instruction.
         mov ebx, 0x00536ee0
+        jmp ebx
+    }
+}
+
+void __fastcall CircleExperience(int32_t sphere, A2Human* human) {
+    // Sphere is set for magic attacks. Physical attacks calculate it from unit fields.
+    if (IsWarrior(&human->unit)) {
+        sphere = human->unit.hit_values.physical_damage_type;
+    }
+
+    if (sphere == human->main_sphere || sphere == 5 || sphere == 0 || circle::Circle(&human->unit) == 0) {
+        // Don't change.
+        return;
+    }
+
+    double experience;
+    __asm {
+        fstp experience  // Pop ST(0)
+    }
+
+    auto multiplier = circle::ExperienceMultiplier(human);
+    experience *= multiplier;
+
+    __asm {
+        fld experience  // Load 'experience' back into ST(0)
+    }
+}
+
+// Address: 005307a3
+void __declspec(naked) circle_experience() {
+    __asm {
+        mov ecx, DWORD PTR [ebp+0x10] // Magic sphere.
+
+        push edx
+        call CircleExperience
+        pop edx
+
+        // Original logic.
+        movsx eax, WORD PTR [edx+0x88] // Mind.
+
+        // Restore original instruction.
+        mov ebx, 0x005307aa
         jmp ebx
     }
 }
