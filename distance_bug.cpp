@@ -1,8 +1,12 @@
 #include "a2types.h"
 
 void __stdcall distance_bug_fix_internal(A2Unit *unit){
-    if(unit->state == 13){
-        unit->state = 12;
+    // State 13 here is "cast point spell from the book onto an enemy that is too far".
+    if (unit->state == 13) {
+        // Offensive spells are not allowed, defensive ones are ok.
+        if (!unit->eye2 || !unit->eye2->spell || !unit->eye2->spell->is_defensive) {
+            unit->state = 12; // State 12 is "stop".
+        }
     }
 }
 

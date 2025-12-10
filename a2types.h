@@ -219,15 +219,49 @@ struct A2Player {
     const char* account_name;
 };
 
+struct A2Spell;
 struct A2UnitEye2 {
-    uint8_t gap0[8];
+    uint16_t position1;
+    uint16_t position2;
+    uint32_t gap4;
     uint8_t cast_action;
     uint8_t gap9;
     uint16_t command_to;
-    uint8_t gapB[56];
+    A2Unit* unit;
+    A2Unit* unit2;
+    uint8_t max_range;
+    uint8_t counter;
+    uint16_t tick16;
+    A2Unit* unit3;
+    uint8_t gap1c[4];
+    A2Unit* unit4;
+    uint16_t x;
+    uint16_t y;
+    A2Unit* unit5;
+    uint8_t gap2c[4];
+    A2Spell* spell;
+    uint8_t gap34[4];
+    uint32_t gap38;
+    uint16_t gap3c;
+    uint8_t gap3e[2];
+    uint32_t withdraw;
     uint32_t wimpy;
-    uint8_t gap48[41];
+    uint8_t gap48[4];
+    uint8_t gap4c;
+    uint8_t gap4d[3];
+    uint32_t gap50;
+    uint32_t gap54;
+    uint16_t position3;
+    uint8_t counter2;
+    uint8_t gap5b;
+    uint32_t gap5c;
+    uint32_t gap60;
+    uint32_t gap64;
+    uint32_t gap68;
+    uint32_t gap6c;
+    uint8_t range;
     uint8_t see_invisible;
+    // ...
 };
 
 struct A2UnitEye {
@@ -332,7 +366,7 @@ struct A2Unit {
     int8_t unit_attrs;
     int8_t gap5[3];
     int32_t state;
-    int32_t unit_state;
+    int32_t some_state;
     void *pcobject58;
     void *pcobject5C;
     int8_t byte60;
