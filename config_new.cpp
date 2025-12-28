@@ -2,6 +2,7 @@
 #include "lib\utils.hpp"
 #include "srvmgrdef.h"
 #include "cheat_codes_new.h"
+#include "server_state.h"
 
 #include <algorithm>
 #include <fstream>
@@ -167,6 +168,9 @@ namespace Config
     bool server_rotate_maps = true;
     bool shuffle_maps = true;
 
+    // Server will restart right after changing the map. Enabling together with `shuffle_maps` doesn't make much sense.
+    bool server_restart_on_map_change = false;
+
     // If these settings are set to true, it will forbid a player from taking several quests for the same monster, group or monster type.
     bool AllowOnlyOneQuest_KillNMonsters = false;
     bool AllowOnlyOneQuest_KillTheMonster = false;
@@ -191,6 +195,8 @@ float ReadFloatParameter(std::string value, float MinValue, float MaxValue)
 
 int ReadConfig(const char* filename)
 {
+    Printf("Reading config from '%s'. Command line: %s\n", GetCommandLineA());
+
     if(!Config::Includes.size()) // root config
     {
         // set defaults
@@ -345,6 +351,11 @@ int ReadConfig(const char* filename)
                         return lnid;
                     }
                     Config::shuffle_maps = StrToBool(value);
+                } else if (parameter == "server_restart_on_map_change") {
+                    if (!CheckBool(value)) {
+                        return lnid;
+                    }
+                    Config::server_restart_on_map_change = StrToBool(value);
                 }
                 else if(parameter == "description")
                 {
@@ -717,7 +728,9 @@ int ReadConfig(const char* filename)
             {
                 std::string m_filename = parameter;
                 uint32_t m_time = 2147483647;
-                if(value.length()) m_time = (uint32_t)(StrToFloat(value) * 60.0);
+                if (value.length()) {
+                    m_time = static_cast<uint32_t>(StrToFloat(value) * 60.0);
+                }
                 maps.emplace_back(std::move(m_filename), m_time);
             }
             else
@@ -738,10 +751,18 @@ int ReadConfig(const char* filename)
 
     f_cfg.close();
 
+    server_state.Load();
+
     if (Config::shuffle_maps) {
         auto device = std::random_device{};
         std::mt19937 generator(device());
         std::shuffle(maps.begin(), maps.end(), generator);
+    }
+
+    if (Config::server_restart_on_map_change) {
+        Printf("Setting map index to %d from server state", server_state.map_index);
+        int* a2_map_index = reinterpret_cast<int*>(0x006d1634);
+        *a2_map_index = server_state.map_index;
     }
 
     for (auto& map_and_time: maps) {

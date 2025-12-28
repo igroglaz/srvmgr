@@ -367,8 +367,8 @@ struct A2Unit {
     int8_t gap5[3];
     int32_t state;
     int32_t some_state;
-    void *pcobject58;
-    void *pcobject5C;
+    int32_t some_state2;
+    A2Unit *cast_target;
     int8_t byte60;
     int8_t byte61;
     int8_t gap6[2];
