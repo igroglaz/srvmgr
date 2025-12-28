@@ -1,35 +1,77 @@
+#include "a2types.h"
 #include "config_new.h"
-#include <stdlib.h>
 #include "lib\utils.hpp"
+#include "server_state.h"
 #include "this_call.h"
 
-void stop_server()
-{
+#include <cstdlib>
+#include <windows.h>
+
+void stop_server() {
     exit(0);
 }
 
-void __stdcall reset_map_counter()
-{
-    if (Config::server_rotate_maps)
-    {
-        Printf("Rolling maps");
-        int *server_map_index = (int *)(void *)0x006D1634;
-        *server_map_index = 0;
+void RestartProcess() {
+    // Get full path and command line of the current executable.
+    WCHAR path[MAX_PATH];
+    GetModuleFileNameW(NULL, path, MAX_PATH);
+
+    LPWSTR args = GetCommandLineW();
+
+    STARTUPINFOW si = { sizeof(si) };
+    PROCESS_INFORMATION pi = { 0 };
+
+    Printf("Restarting server on map change...");
+
+    // Start a new process.
+    auto created = CreateProcessW(
+        path,       // Path to .exe
+        args,       // Full command line with arguments
+        NULL, NULL, // Process/thread security
+        FALSE,      // Do not inherit handles
+        0,          // Creation flags
+        NULL, NULL, // Environment + current directory
+        &si, &pi    // Startup info / process info
+    );
+
+    if (created) {
+        Printf("Restarting server: new instance created successfully, cleaning up current process");
+
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+
+        ExitProcess(0);
+    } else {
+        Printf("Restarting server: failed to create new process, error %d. Retaining the current process", GetLastError());
     }
-    else
-    {
+}
+
+void MapRotation() {
+    const auto* map_times = (A2Array<int32_t>*)0x006d1618;
+    const int map_index = *(int *)0x006d1634;
+
+    Printf("Rolling maps, new index: %d out of %d", map_index, map_times->size);
+
+    server_state.map_index = map_index;
+    server_state.Save();
+
+    if (Config::server_restart_on_map_change) {
+        RestartProcess();
+        return;
+    }
+
+    if (!Config::server_rotate_maps && map_index == 0) {
         Printf("Stopping server after the last map");
         stop_server();
     }
 }
 
-int __declspec(naked) imp_reset_map_counter()
-{ 
-    __asm
-    {
-        mov        edx, reset_map_counter
-        call    edx
+// Address: 0048aba4
+int __declspec(naked) map_rotation() { 
+    __asm {
+        call MapRotation
         ret
+        // Original instruction is unused.
     }
 }
 

@@ -154,7 +154,7 @@ imp_inn_quest_roll_interval					@206
 imp_distance_bug_fix						@208
 imp_increase_potions_in_shops   			@209
 imp_inn_item_upgrade_failed   				@210
-imp_reset_map_counter   					@211
+map_rotation                                @211
 imp_limit_magic_resist_wrapper   			@212
 remove_existing_n_monters_quests_wrapper	@213
 remove_existing_monster_quests_wrapper		@214

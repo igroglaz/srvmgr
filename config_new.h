@@ -86,6 +86,7 @@ namespace Config
     extern int16_t max_pvp_dmg;
     extern float shop_potions_factor;
     extern bool server_rotate_maps;
+    extern bool server_restart_on_map_change;
 
     extern bool AllowOnlyOneQuest_KillNMonsters;
     extern bool AllowOnlyOneQuest_KillTheMonster;

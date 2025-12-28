@@ -782,7 +782,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
         }
     }
 
-    if (true || rights & GMF_CMD_SET)
+    if (rights & GMF_CMD_SET)
     {
         if (rawcmd == "#nextmap")
         {
