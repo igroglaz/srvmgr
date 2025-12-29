@@ -195,7 +195,7 @@ float ReadFloatParameter(std::string value, float MinValue, float MaxValue)
 
 int ReadConfig(const char* filename)
 {
-    Printf("Reading config from '%s'. Command line: %s\n", GetCommandLineA());
+    Printf("Reading config from '%s'. Command line: %s\n", filename, GetCommandLineA());
 
     if(!Config::Includes.size()) // root config
     {
