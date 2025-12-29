@@ -166,10 +166,10 @@ namespace Config
     int16_t max_pvp_dmg = 100;
     float shop_potions_factor = 1;
     bool server_rotate_maps = true;
-    bool shuffle_maps = true;
+    bool shuffle_maps = false;
 
     // Server will restart right after changing the map. Enabling together with `shuffle_maps` doesn't make much sense.
-    bool server_restart_on_map_change = false;
+    bool server_restart_on_map_change = true;
 
     // If these settings are set to true, it will forbid a player from taking several quests for the same monster, group or monster type.
     bool AllowOnlyOneQuest_KillNMonsters = false;
