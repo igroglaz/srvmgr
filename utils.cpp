@@ -32,6 +32,17 @@ void __stdcall log_format(char *s, ...){///TESTED100%, STDCALL
     }
 }
 
+void LogString(std::string s) {
+    SYSTEMTIME tm;
+    GetLocalTime(&tm);
+    to_encoding(s);
+    FILE *fp = fopen(Config::LogFile.c_str(), "a");
+    if (fp) {
+        fprintf(fp, "[%d.%.2d.%.4d %d:%.2d:%.2d.%.3d] %s\n", tm.wDay, tm.wMonth, tm.wYear, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds, s.c_str());
+        fclose(fp);
+    }
+}
+
 void __stdcall log_format2(char *s, ...){///TESTED100%, STDCALL
     char line[BUF_MAX];
     va_list va;
