@@ -1,5 +1,6 @@
 #include "config_new.h"
 #include "lib\utils.hpp"
+#include "log.h"
 #include "srvmgrdef.h"
 #include "cheat_codes_new.h"
 #include "server_state.h"
@@ -7,7 +8,9 @@
 #include <algorithm>
 #include <fstream>
 #include <random>
+#include <string>
 #include <vector>
+#include <unordered_map>
 
 unsigned long MAX_SKILL = 110;              // Vanilla (V): 100; we use SOFTCORE values by default
 unsigned long MAX_EXP_ON_SKILL = 35742360;  // V: 13779612;
@@ -166,7 +169,7 @@ namespace Config
     int16_t max_pvp_dmg = 100;
     float shop_potions_factor = 1;
     bool server_rotate_maps = true;
-    bool shuffle_maps = false;
+    bool shuffle_maps = true;
 
     // Server will restart right after changing the map. Enabling together with `shuffle_maps` doesn't make much sense.
     bool server_restart_on_map_change = true;
@@ -195,8 +198,6 @@ float ReadFloatParameter(std::string value, float MinValue, float MaxValue)
 
 int ReadConfig(const char* filename)
 {
-    Printf("Reading config from '%s'. Command line: %s\n", filename, GetCommandLineA());
-
     if(!Config::Includes.size()) // root config
     {
         // set defaults
@@ -752,17 +753,41 @@ int ReadConfig(const char* filename)
     f_cfg.close();
 
     server_state.Load();
+    
+    int* a2_map_index = reinterpret_cast<int*>(0x006d1634);
 
-    if (Config::shuffle_maps) {
+    if (Config::server_restart_on_map_change) {
+        Log() << "Setting map index to " << server_state.map_index << " from server state";
+        *a2_map_index = server_state.map_index;
+    }
+
+    if (Config::shuffle_maps && *a2_map_index == 0) {
+        Log() << "Randomizing map order";
         auto device = std::random_device{};
         std::mt19937 generator(device());
         std::shuffle(maps.begin(), maps.end(), generator);
-    }
+    } else if (!server_state.map_order.empty()) {
+        Log() << "Restoring map order from server state with " << server_state.map_order.size() << " maps";
 
-    if (Config::server_restart_on_map_change) {
-        Printf("Setting map index to %d from server state", server_state.map_index);
-        int* a2_map_index = reinterpret_cast<int*>(0x006d1634);
-        *a2_map_index = server_state.map_index;
+        std::unordered_map<std::string, std::size_t> order;
+        order.reserve(server_state.map_order.size());
+        for (std::size_t i = 0; i < server_state.map_order.size(); ++i) {
+            order[server_state.map_order[i]] = i + 1;
+        }
+
+        std::sort(maps.begin(), maps.end(),
+            [&](const auto& a, const auto& b) {
+                auto order_a = order[a.first];
+                auto order_b = order[b.first];
+                if (!order_a) {
+                    Log() << "Map " << a.first << " not found in saved map order";
+                }
+                if (!order_b) {
+                    Log() << "Map " << b.first << " not found in saved map order";
+                }
+                return (order_a && order_b) ? order_a < order_b : order_a > 0;
+            }
+        );
     }
 
     for (auto& map_and_time: maps) {
