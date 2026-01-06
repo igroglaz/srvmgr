@@ -179,6 +179,11 @@ namespace Config
     bool AllowOnlyOneQuest_KillTheMonster = false;
     bool AllowOnlyOneQuest_KillTheGroup = false;
 	bool AllowQuestFilters = false;
+
+    // Extra flags OR-ed to each player's flags when checking cheats permissions. Useful for local debugging.
+    // Example: set to 0x3F000080 (GMF_CMD_SET) to allow everyone to use map control commands (#nextmap, #speed and so on).
+    // Since this is a bitmask, accepts only hex values in config.
+    uint32_t CheatsAdditionalRights = 0;
 }
 
 int32_t ReadIntegerParameter(std::string value, int32_t MinValue, int32_t MaxValue)
@@ -616,7 +621,14 @@ int ReadConfig(const char* filename)
 				{
                     if(!CheckBool(value)) return lnid;
                     Config::AllowQuestFilters = StrToBool(value);
-				}
+				} else if (parameter == "cheats_additional_rights") {
+                    int int_value;
+                    try {
+                        Config::CheatsAdditionalRights = std::stoi(value, nullptr, 16);
+                    } catch (const std::exception& e) {
+                        Log() << "ReadConfig: ignored invalid hex value for cheats_additional_rights: " << value << " (" << e.what() << ")";
+                    }
+                }
                 else if(parameter == "servercaps")
                 {
                     value = Trim(ToLower(value));
@@ -757,8 +769,12 @@ int ReadConfig(const char* filename)
     int* a2_map_index = reinterpret_cast<int*>(0x006d1634);
 
     if (Config::server_restart_on_map_change) {
-        Log() << "Setting map index to " << server_state.map_index << " from server state";
-        *a2_map_index = server_state.map_index;
+        if (server_state.map_index < static_cast<int>(maps.size())) {
+            Log() << "Setting map index to " << server_state.map_index << " from server state";
+            *a2_map_index = server_state.map_index;
+        } else {
+            Log() << "Saved map index " << server_state.map_index << " is out of range, ignoring";
+        }
     }
 
     if (Config::shuffle_maps && *a2_map_index == 0) {

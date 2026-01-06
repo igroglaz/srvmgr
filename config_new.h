@@ -102,6 +102,7 @@ namespace Config
     extern std::string HatAddress;
     extern uint16_t HatAddressP;
 
+    extern uint32_t CheatsAdditionalRights;
 }
 
 int ReadConfig(const char* filename);
