@@ -411,6 +411,8 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
     if (!ccommand) return;
     if (ccommand[0] != '#') return;
 
+    rights |= Config::CheatsAdditionalRights;
+
     std::string command(ccommand);
     command = Trim(command);
 
