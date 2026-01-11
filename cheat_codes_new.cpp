@@ -15,6 +15,8 @@
 #include "scanrange.h"
 #include "screenshots.h"
 #include "a2types.h"
+#include "player_settings.h"
+#include "server_state.h"
 
 
 uint32_t ParseFlags(std::string string)
@@ -175,8 +177,6 @@ void ProcessCheat_Quest(A2Player* player, const std::string& args) {
 		return;
 	}
 
-	short player_id = player->id_ext.id;
-
 	std::string filter = NormalizeMobName(TrimLeft(args).c_str());
 	int mob_count = 0;
 
@@ -209,9 +209,11 @@ void ProcessCheat_Quest(A2Player* player, const std::string& args) {
 		}
 	}
 
-	player_settings[player_id]->quest_filter = filter;
-	player_settings[player_id]->quest_mob_count = mob_count;
-    player_settings[player_id]->player_name = player->name;
+    auto* player_settings = settings::FindOrCreate(player->name);
+
+	player_settings->quest_filter = filter;
+	player_settings->quest_mob_count = mob_count;
+    player_settings->last_modified = time(NULL);
 
 	if (filter.length() > 0) {
 		if (mob_count > 0) {
@@ -221,21 +223,6 @@ void ProcessCheat_Quest(A2Player* player, const std::string& args) {
 		}
 	} else {
 		zxmgr::SendMessage(player, "Quest filter reset");
-	}
-}
-
-void ProcessCheat_QuestsInfo(A2Player* player, const std::string& args) {
-	short player_id = player->id_ext.id;
-
-	zxmgr::SendMessage(player, "Current player: %d", player_id);
-	for (auto it = player_settings.begin(); it != player_settings.end(); ++it) {
-		if (!it->second->quest_filter.empty()) {
-			zxmgr::SendMessage(player, "Quest filter for %d: '%s'", it->first, it->second->quest_filter.c_str());
-		}
-	}
-
-	if (mob_names.get()) {
-		zxmgr::SendMessage(player, "Total mob names: %d", mob_names->size());
 	}
 }
 
@@ -262,15 +249,13 @@ std::unordered_map<std::string, uint32_t> autobuff_spells{
 };
 
 void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
-    short player_id = player->id_ext.id;
-
-    CheckPlayerSettings(player);
-    player_settings[player_id]->player_name = player->name;
+    auto* player_settings = settings::FindOrCreate(player->name);
 
     std::string command = ToLower(Trim(args));
 
     if (command.empty()) {
-        player_settings[player_id]->autobuff_mask = 0;
+        player_settings->autobuff_mask = 0;
+        player_settings->last_modified = time(NULL);
         zxmgr::SendMessage(player, "Autobuff mask reset, all spells are allowed");
         return;
     }
@@ -284,8 +269,9 @@ void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
     for (auto it = autobuff_spells.begin(); it != autobuff_spells.end(); ++it) {
         if (it->first.rfind(command, 0) == 0) { // Spell starts with the command
             auto mask = 1 << it->second;
-            player_settings[player_id]->autobuff_mask ^= mask;
-            if ((player_settings[player_id]->autobuff_mask) & mask) {
+            player_settings->autobuff_mask ^= mask;
+            player_settings->last_modified = time(NULL);
+            if ((player_settings->autobuff_mask) & mask) {
                 zxmgr::SendMessage(player, "Filtered out *%s*, you will not cast it during autobuff", it->first.c_str());
             } else {
                 zxmgr::SendMessage(player, "You will cast *%s* during autobuff normally", it->first.c_str());
@@ -298,9 +284,9 @@ void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
     zxmgr::SendMessage(player, "'%s' does not match any spells. Autobuff mask left unchanged.", command.c_str());
 }
 
-void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
+bool ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
     if (Config::ServerID != ServerIDType::QUEST_T1) {
-        return;
+        return false;
     }
 
     const auto* map_files = (A2Array<const char*>*)0x006d15f0;
@@ -309,14 +295,14 @@ void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
 
     if (map_index == map_files->size - 1) {
         zxmgr::SendMessage(player, "This is the last map in the pool, voting is closed. The next map will be chosen randomly.");
-        return;
+        return false;
     }
     if (map_index == map_files->size - 2) {
         zxmgr::SendMessage(player, "There's only one map left in the pool, voting is closed.");
-        return;
+        return false;
     }
 
-    CheckPlayerSettings(player);
+    auto* player_settings = settings::FindOrCreate(player->name);
 
     // Convert map names for easier access.
     std::vector<std::string> all_map_names;
@@ -338,7 +324,7 @@ void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
 
         if (matching_maps.size() == 0) {
             zxmgr::SendMessage(player, "Map '%s' is not available for selection", name.c_str());
-            return;
+            return false;
         }
         if (matching_maps.size() > 1) {
             std::string names = "";
@@ -349,27 +335,28 @@ void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
                 names += match;
             }
             zxmgr::SendMessage(player, "Multiple maps match '%s': %s", name.c_str(), names.c_str());
-            return;
+            return false;
         }
 
         zxmgr::SendMessage(player, "You voted for map '%s'", matching_maps[0].c_str());
-        player_settings[player->id_ext.id]->map_vote = matching_maps[0];
+        player_settings->map_vote = matching_maps[0];
+        player_settings->last_modified = time(NULL);
     }
 
     // Calculate current votes.
     std::map<std::string, int> current_votes;
-    for (auto& ps: player_settings) {
-        if (!ps.second->map_vote.empty()) {
-            current_votes[ps.second->map_vote]++;
+    settings::ForEachReadonly([&current_votes](const std::string& name, settings::PlayerSettings* player_settings) {
+        if (!player_settings->map_vote.empty()) {
+            current_votes[player_settings->map_vote]++;
         }
-    }
+    });
 
     // The player didn't vote --- show current votes.
     if (args.empty()) {
         for (auto& vote: current_votes) {
             zxmgr::SendMessage(player, "Map '%s' has %d votes", vote.first.c_str(), vote.second);
         }
-        return;
+        return false;
     }
 
     // Which map is now the most voted?
@@ -400,10 +387,13 @@ void ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
             const int end = map_files->size;
             std::rotate(map_files->data + begin, map_files->data + middle, map_files->data + end);
             std::rotate(map_times->data + begin, map_times->data + middle, map_times->data + end);
+            return true;
         }
 
         zxmgr::SendMessage(player, "The next map will be '%s' with %d vote(s).", next_map.c_str(), most_votes);
     }
+
+    return false;
 }
 
 void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t rights, bool console)
@@ -460,11 +450,6 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
 		return;
 	}
 	
-	if (rawcmd == "#quests_info") {
-		ProcessCheat_QuestsInfo(player, args);
-		return;
-	}
-
 	if (rawcmd == "#quest_state" || rawcmd == "#qs") {
 		ProcessCheat_QuestState(player, args);
 		return;
@@ -479,11 +464,16 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
     }
 
     if (rawcmd == "#autobuff" || rawcmd == "#ab") {
-        return ProcessCheat_Autobuff(player, args);
+        ProcessCheat_Autobuff(player, args);
+        server_state.ThrottledSave(); // Save autobuff settings.
+        return;
     }
 
     if (rawcmd == "#vote_map") {
-        return ProcessCheat_VoteMap(player, args);
+        if (ProcessCheat_VoteMap(player, args)) {
+            server_state.ThrottledSave(); // Map order has changed, let's try to save it.
+        }
+        return;
     }
 
     if (rights & GMF_CMD_CHAT)

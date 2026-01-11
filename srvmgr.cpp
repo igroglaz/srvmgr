@@ -1700,11 +1700,6 @@ void _declspec(naked) enter_inn (void) {
         push    offset enter_inn1
         call    Printf
 
-        // When player enters the inn, we check if the quest filter needs to be reset.
-        mov eax, [ebp-0x0A8] // Unit.
-        push [eax + 0x14] // Player.
-        call CheckPlayerSettings
-
 e_i_sk:
         mov    ecx, [ebp-0x0A8]
         push    ecx
@@ -2790,9 +2785,6 @@ BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ul_reason_for_call, LPVOID lpRese
             log_format("Error: couldn't initialize ItemEx plugin.\n");
             return FALSE;
         }*/
-
-		// Initialize stuff for quest filtering.
-		InitializePlayerSettings();
 
         LoadThresholds();
 
