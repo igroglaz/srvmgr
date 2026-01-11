@@ -1,21 +1,15 @@
 #include <cstdint>
+#include <shared_mutex>
 
-#include "config_new.h"
-#include "quests.h"
 #include "a2types.h"
+#include "config_new.h"
+#include "player_settings.h"
+#include "quests.h"
 
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names;
 std::unique_ptr<std::unordered_map<int, std::string>> mob_names_raw;
 std::unordered_map<int, std::string> mob_names_by_server_id;
 std::unordered_map<int, std::string> mob_names_by_server_id_normed;
-std::unordered_map<short, std::unique_ptr<PlayerSettings>> player_settings;
-
-void InitializePlayerSettings() {
-	// The game supports up to 16 players, with IDs starting at 16. Let's be safe and allocate some more.
-	for (short i = 0; i < 64; ++i) {
-		player_settings.emplace(std::make_pair(i, new PlayerSettings()));
-	}
-}
 
 std::string NormalizeMobName(const char* name) {
 	std::string result = name;
@@ -199,11 +193,14 @@ void __stdcall filter_out_existing_n_monsters_quests(A2Player* player, int32_t q
 	if (Config::AllowQuestFilters) {
 		InitializeMobNames();
 
-		// Note: `mob_names` keys use the same format as the `quest_monster_type`.
-		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if ((*mob_names)[quest_monster_type].find(name_filter) == std::string::npos) {
-			return;
-		}
+        auto* player_settings = settings::Find(player->name);
+        if (player_settings) {
+            // Note: `mob_names` keys use the same format as the `quest_monster_type`.
+            const std::string& name_filter = player_settings->quest_filter;
+            if ((*mob_names)[quest_monster_type].find(name_filter) == std::string::npos) {
+                return;
+            }
+        }
 	}
 
     *matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
@@ -218,10 +215,13 @@ void __stdcall filter_out_existing_monster_quests(A2Player* player, A2Unit* ques
 	if (Config::AllowQuestFilters) {
 		InitializeMobNames();
 
-		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if (mob_names_by_server_id_normed[quest_monster_selected->server_id].find(name_filter) == std::string::npos) {
-			return;
-		}
+        auto* player_settings = settings::Find(player->name);
+        if (player_settings) {
+            const std::string& name_filter = player_settings->quest_filter;
+            if (mob_names_by_server_id_normed[quest_monster_selected->server_id].find(name_filter) == std::string::npos) {
+                return;
+            }
+        }
 	}
 	
 	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
@@ -236,12 +236,14 @@ bool __stdcall filter_out_existing_group_quests(A2Player* player, A2Group* group
 	if (Config::AllowQuestFilters) {
 		InitializeMobNames();
 
-		const std::string& name_filter = player_settings[player->id_ext.id]->quest_filter;
-		if (mob_names_by_server_id_normed[unit->server_id].find(name_filter) == std::string::npos) {
-			return true; // Retry with the next unit in group.
-		}
+        auto* player_settings = settings::Find(player->name);
+        if (player_settings) {
+            const std::string& name_filter = player_settings->quest_filter;
+            if (mob_names_by_server_id_normed[unit->server_id].find(name_filter) == std::string::npos) {
+                return true; // Retry with the next unit in group.
+            }
+        }
 	}
-	
 	*matching_monsters_counter_ptr = *matching_monsters_counter_ptr + 1;
     return false;
 }
@@ -327,9 +329,10 @@ int rand_interval(int min, int max) {
 unsigned int __fastcall KillNCount(A2Player* player, unsigned int mob_count) {
 	Printf("KillNCount: player=0x%x, mob_count=%d", player, mob_count);
 
-	const int desired_count = player_settings[player->id_ext.id]->quest_mob_count;
+    auto* player_settings = settings::Find(player->name);
+    const int desired_count = player_settings ? player_settings->quest_mob_count : 0;
 
-	int min_mobs = 0;
+    int min_mobs = 0;
 	int max_mobs = 0;
 
 	// This block is copy-pasted from the original A2 logic.
@@ -377,22 +380,6 @@ void __declspec(naked) quest_change_kill_n_count() {
 		mov eax, 0x00562a03
 		jmp eax
 	}
-}
-
-void __stdcall CheckPlayerSettings(A2Player* player) {
-    const int id = player->id_ext.id;
-    const std::string name = player->name;
-
-    auto& settings = player_settings[id];
-    if (!settings || settings->player_name.empty()) {
-        // Settings are not set.
-        return;
-    }
-
-    if (settings->player_name != name) {
-        Printf("CheckPlayerSettings: clearing for player %d: name '%s' != '%s'", id, settings->player_name.c_str(), name.c_str());
-		settings.reset(new PlayerSettings());
-    }
 }
 
 // Address: 005666c1

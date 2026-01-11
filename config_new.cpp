@@ -622,7 +622,6 @@ int ReadConfig(const char* filename)
                     if(!CheckBool(value)) return lnid;
                     Config::AllowQuestFilters = StrToBool(value);
 				} else if (parameter == "cheats_additional_rights") {
-                    int int_value;
                     try {
                         Config::CheatsAdditionalRights = std::stoi(value, nullptr, 16);
                     } catch (const std::exception& e) {

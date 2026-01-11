@@ -37,6 +37,7 @@ add_library(srvmgr SHARED srvmgr.def
     partial_drop.cpp
     pktmgr.cpp
     player_info.cpp
+    player_settings.cpp
     protolayer_hat.cpp
     pvm2.cpp
     reborn_readiness.cpp

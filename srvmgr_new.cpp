@@ -13,6 +13,7 @@
 #include "forbidden_items.h"
 #include "multiplayer_shop.h"
 #include "solo.h"
+#include "player_settings.h"
 #include "quests.h"
 
 void ChangeWndTitle(const char* title)
@@ -60,9 +61,9 @@ void OnInitializeMap()
     ClearStapleCells();
 
     // Clear map votes.
-    for (auto& ps: player_settings) {
-        ps.second->map_vote.clear();
-    }
+    settings::ForEachMutable([](const std::string& name, settings::PlayerSettings* player_settings) {
+        player_settings->map_vote.clear();
+    });
 }
 
 void OnPreInitializeMap()

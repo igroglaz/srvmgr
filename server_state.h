@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 struct ServerState {
     int map_index;
@@ -10,6 +11,7 @@ struct ServerState {
     ServerState();
 
     bool Save();
+    bool ThrottledSave(); // Saves at most once per minute.
     bool Load();
 };
 
