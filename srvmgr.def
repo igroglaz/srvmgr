@@ -31,9 +31,6 @@ left_shop		@28
 left_inn		@29
 change_dip		@30
 area_cast		@31
-public_chat_2		@32
-private_chat_2		@33
-private_chat_3		@34
 ;exc_handler		@35
 adm_invis		@36
 adm_dip			@37
