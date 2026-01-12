@@ -1,22 +1,26 @@
 #include "cheat_codes_new.h"
-#include "srvmgrdef.h"
-#include "lib\utils.hpp"
-#include "pvm2.h"
-#include "config_new.h"
-#include "protolayer_hat.h"
-#include "srvmgr.h"
+
+#include <cmath>
 #include <fstream>
-#include "zxmgr.h"
-#include "player_info.h"
+
+#include "a2objects.h"
+#include "a2types.h"
+#include "config_new.h"
+#include "lib\utils.hpp"
+#include "log.h"
 #include "pktmgr.h"
-#include "reborn_readiness.hpp"
-#include <math.h>
+#include "player_info.h"
+#include "player_settings.h"
+#include "protolayer_hat.h"
+#include "pvm2.h"
 #include "quests.h"
+#include "reborn_readiness.hpp"
 #include "scanrange.h"
 #include "screenshots.h"
-#include "a2types.h"
-#include "player_settings.h"
 #include "server_state.h"
+#include "srvmgrdef.h"
+#include "srvmgr.h"
+#include "zxmgr.h"
 
 
 uint32_t ParseFlags(std::string string)
@@ -284,6 +288,76 @@ void ProcessCheat_Autobuff(A2Player* player, const std::string& args) {
     zxmgr::SendMessage(player, "'%s' does not match any spells. Autobuff mask left unchanged.", command.c_str());
 }
 
+std::string DescribeDiplomacy(int diplomacy) {
+    std::string description;
+
+    if (diplomacy & 1) {
+        description += "war";
+    }
+    if (diplomacy & 2) {
+        description += (description.empty() ? "" : "+");
+        description += "ally";
+    }
+    if (diplomacy & 4) {
+        description += (description.empty() ? "" : "+");
+        description += "silent";
+    }
+    if (diplomacy & 16) {
+        description += (description.empty() ? "" : "+");
+        description += "vision";
+    }
+
+    if (description.empty()) {
+        description = "nothing";
+    }
+
+    return description;        
+}
+
+void ProcessCheat_Diplomacy(A2Player* player, const std::string& args) {
+    auto* player_settings = settings::FindOrCreate(player->name);
+
+    std::string command = ToLower(Trim(args));
+
+    if (command.empty()) {
+        zxmgr::SendMessage(player, "Your default diplomacy is: %s", DescribeDiplomacy(player_settings->default_diplomacy).c_str());
+        return;
+    }
+
+    int new_diplomacy = 0;
+
+    if (CheckInt(command)) {
+        new_diplomacy = StrToInt(command) & 0x17;
+    } else {
+        auto parts = Explode(command, "+");
+        for (auto& part: parts) {
+            auto mode = Trim(part);
+            if (mode == "war") {
+                new_diplomacy |= 1;
+            } else if (mode == "ally") {
+                new_diplomacy |= 2;
+            } else if (mode == "silent") {
+                new_diplomacy |= 4;
+            } else if (mode == "vision") {
+                new_diplomacy |= 16;
+            } else if (mode == "nothing") {
+                // Pass.
+            } else {
+                zxmgr::SendMessage(player, "Unknown diplomacy mode '%s'. Supported values: nothing, war, ally, silent, vision. Example: 'ally+vision'.", mode.c_str());
+                return;
+            }
+        }
+    }
+
+    if (new_diplomacy & 2) {
+        new_diplomacy &= ~1; // Can't be ally and at war.
+    }
+
+    player_settings->default_diplomacy = new_diplomacy;
+    player_settings->last_modified = time(NULL);
+    zxmgr::SendMessage(player, "Default diplomacy set to: %s", DescribeDiplomacy(player_settings->default_diplomacy).c_str());
+}
+
 bool ProcessCheat_VoteMap(A2Player* player, const std::string& args) {
     if (Config::ServerID != ServerIDType::QUEST_T1) {
         return false;
@@ -473,6 +547,17 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
         if (ProcessCheat_VoteMap(player, args)) {
             server_state.ThrottledSave(); // Map order has changed, let's try to save it.
         }
+        return;
+    }
+
+    if (rawcmd == "#diplomacy") {
+        ProcessCheat_Diplomacy(player, args);
+        server_state.ThrottledSave(); // Save diplomacy settings.
+        return;
+    }
+    if (rawcmd == "#fren") { // "fren" is an easter-egg alias for "#diplomacy ally+vision"
+        ProcessCheat_Diplomacy(player, "ally+vision");
+        server_state.ThrottledSave(); // Save diplomacy settings.
         return;
     }
 

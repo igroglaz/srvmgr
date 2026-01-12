@@ -37,7 +37,7 @@ private_chat_3		@34
 ;exc_handler		@35
 adm_invis		@36
 adm_dip			@37
-adm_dip_2		@38
+new_player_diplomacy        @38
 msgbox_am		@39
 loading_map_bug		@43
 chat_crash_fix		@44

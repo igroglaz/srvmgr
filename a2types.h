@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 const void* const A2_CLASS_HUMAN = (void*)0x0060F0C8;
@@ -495,6 +496,12 @@ struct A2GameDataRes {
     char whatever[0x8c];
     A2Array<A2MonsterInfo> monsters;
 };
+
+struct A2World {
+    uint8_t _gap0[0xA8C4];
+    uint8_t diplomacy[0x46][0x46];
+};
+static_assert(offsetof(A2World, diplomacy) == 0xA8C4, "A2World diplomacy offset must be 0xA8C4");
 
 
 bool IsWarrior(const A2Unit* unit);

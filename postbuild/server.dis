@@ -71,7 +71,7 @@ JMP private_chat_3 5073B6 /// disable sending private message to players not on 
 //JMP ;exc_handler 6081F0 /// exception handler
 JMP adm_invis 51C901 /// admin invis
 JMP adm_dip 4FFD77 /// admin diplomacy: monsters_alliance
-JMP adm_dip_2 4FFEA6 /// admin diplomacy: players_alliance
+JMP new_player_diplomacy 4FFEA6 /// players alliance for GMs and default diplomacy
 JMP loading_map_bug 4F1D4A /// loading map bug
 JMP chat_crash_fix 50716D /// chat crash fix
 JMP packet_recvd 504ABC /// invalid packet crash fix

@@ -1,4 +1,5 @@
 #include "a2types.h"
+#include "a2objects.h"
 #include "syslib.h"
 #include "zxmgr.h"
 #include "srvmgr.h"
@@ -1233,20 +1234,18 @@ ret_0:
         }
     }
 
-    uint8_t GetDiplomacy(A2Player* player1, A2Player* player2)
-    {
-        return *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * player1->id_ext.id + 0xA8C4 + player2->id_ext.id);
+    uint8_t GetDiplomacy(A2Player* player1, A2Player* player2) {
+        return a2::World()->diplomacy[player1->id_ext.id][player2->id_ext.id];
     }
 
-    void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t diplomacy)
-    {
-        if (player1->unitType && (diplomacy & 0x10)) // vision won't work for AI players
+    void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t diplomacy) {
+        if (player1->unitType && (diplomacy & 0x10)) { // vision won't work for AI players
             diplomacy &= ~0x10;
+        }
 
-        *(uint8_t*)(*(uint32_t*)(0x006A8B8C) + 0x46 * player1->id_ext.id + 0xA8C4 + player2->id_ext.id) = diplomacy;
+        a2::World()->diplomacy[player1->id_ext.id][player2->id_ext.id] = diplomacy;
 
-        if (!player1->unitType && !player2->unitType && (diplomacy & 0x10))
-        {
+        if (!player1->unitType && !player2->unitType && (diplomacy & 0x10)) {
             // i don't know how's this related
             player2->diplomacy_32 |= player1->diplomacy_30; // update player2 to player1
             player1->diplomacy_32 |= player2->diplomacy_30; // update player1 to player2

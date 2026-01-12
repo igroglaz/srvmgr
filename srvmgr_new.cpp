@@ -11,6 +11,7 @@
 #include "scanrange.h"
 #include "unit_info.h"
 #include "forbidden_items.h"
+#include "log.h"
 #include "multiplayer_shop.h"
 #include "solo.h"
 #include "player_settings.h"

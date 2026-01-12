@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <string>
 
@@ -9,14 +10,21 @@ namespace settings {
 struct PlayerSettings {
     // Quest filter string. If non-empty, the player will only get quests for matching mobs. Example: `skeleton.4`.
     std::string quest_filter;
+
     // Quest mob count. If > 0, the player will only get quests for this many mobs (if allowed by the inn).
-    int quest_mob_count;
+    int quest_mob_count = 0;
+
     // If bit N is 1, the spell N will not be cast during autobuff casts. Persisted to server state.
-    uint32_t autobuff_mask; 
+    uint32_t autobuff_mask = 0; 
+
     // The name of the map this player voted for.
     std::string map_vote;
+
+    // The default diplomacy level for a player. Bit mask of: 1 (enemy), 2 (ally), 4 (silent), 16 (vision).
+    int default_diplomacy = 0;
+
     // Timestamp of the last modification of these settings.
-    time_t last_modified;
+    time_t last_modified = 0;
 };
 
 PlayerSettings* Find(const char* player_name);

@@ -36,10 +36,10 @@ void LogString(std::string s) {
     SYSTEMTIME tm;
     GetLocalTime(&tm);
     to_encoding(s);
-    FILE *fp = fopen(Config::LogFile.c_str(), "a");
-    if (fp) {
-        fprintf(fp, "[%d.%.2d.%.4d %d:%.2d:%.2d.%.3d] %s\n", tm.wDay, tm.wMonth, tm.wYear, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds, s.c_str());
-        fclose(fp);
+    if (Config::ServerStarted) {
+        print_log(&s[0]);
+    } else {
+        log_format("%s\n", s.c_str());
     }
 }
 
