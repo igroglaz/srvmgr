@@ -15,10 +15,13 @@
 #include <ctime>
 
 #include "a2types.h"
-#include "player_info.h"
+#include "a2objects.h"
 #include "lib\utils.hpp"
 #include "lib\packet.hpp"
 #include "lib\socket.hpp"
+#include "log.h"
+#include "player_info.h"
+#include "player_settings.h"
 #include "srvmgr_new.h"
 #include "thresholds.h"
 #include "quests.h"
@@ -1375,111 +1378,88 @@ void _declspec(naked) loading_map_bug()
     }
 }
 
+bool __fastcall GMDiplomacyAI(A2Player* player, int ai_id) {
+    if ((player->flags & GMF_AI_ALLY) == GMF_AI_ALLY) {
+        a2::World()->diplomacy[player->id_ext.id][ai_id] = 2;
+        a2::World()->diplomacy[ai_id][player->id_ext.id] = 2;
+        return true;
+    }
+
+    return false;
+}
+
+// Address: 004FFD77
 void _declspec(naked) adm_dip(void) {
-    __asm {//004FFD77
-        mov    edx, [ebp+0x08] // player
-        mov    eax, [edx+14h]
-        shr    eax, 18h
-        cmp    al, 3Fh
-        jnz    a_d_c ///не админ, продолжаем
-        mov    eax, [edx+14h]
-        test    eax, 0x4000 /// monsters_alliance
-        jz    a_d_c
-        
-        mov    edx, [ebp+0x08] // player
-        movsx    edx, word ptr [edx + 4]
-        imul    edx, 46h
-        add    edx, dword ptr [ebp-0x58]
-        add    edx, 0xA8C4
-        mov    ecx, 0x6A8B8C
-        add    edx, dword ptr [ecx]
-        mov    byte ptr [edx], 0x2
+    __asm {
+        mov  ecx, dword ptr [ebp+8]    // Joining player
+        mov  edx, dword ptr [ebp-0x58] // Target AI player ID (cycles from 2 to 16)
 
-        mov    edx, dword ptr [ebp-0x58]
-        imul    edx, 46h
-        mov    eax, [ebp+0x08] // player
-        movsx    eax, word ptr [eax + 4]
-        add    edx, eax
-        add    edx, 0xA8C4
-        mov    ecx, 0x6A8B8C
-        add    edx, dword ptr [ecx]
-        mov    byte ptr [edx], 0x2
+        call GMDiplomacyAI
 
-        mov    edx, 0x4FFD68
-        jmp    edx
+        test al, al
+        jz   original
 
-a_d_c:
-        mov    edx, [ebp-0x058]
-        imul    edx, 46h
-        mov    eax, 0x004FFD7D
-        jmp    eax
+        mov  edx, 0x004FFD68
+        jmp  edx
+
+    original:
+        mov  edx, dword ptr [ebp-0x58]
+        imul edx, 0x46
+        mov  eax, 0x004FFD7D
+        jmp  eax
     }
 }
 
-void _declspec(naked) adm_dip_2(void) {
-    __asm {//004FFEA6
-            mov edx, dword ptr [ebp+0x08] // player
-          mov ecx, dword ptr [ebp-0x54]
-        //  movsx edx, word ptr [edx + 4]
-        //  movsx ecx, word ptr [ecx + 4]
-          cmp ecx, edx
-          jz a_d_2_n_a_2 /// себе - вид
-    /*__asm {//004FFEA6
-        mov    edx, [ebp+0x08] // player
-        cmp    edx, dword ptr [ebp-54]
-        jz    a_d_2_n_a_2 /// себе - вид*/
-        mov    eax, [edx+14h]
-        shr    eax, 18h
-        cmp    al, 3Fh
-        jnz    a_d_2_n_a /// не админ
-        mov    eax, [edx+14h]
-        test    eax, 0x10000 /// players_alliance
-        jz    a_d_2_n_a
-        jmp    adm_dip_2_set_dip
+inline bool GMPlayersAlly(A2Player* player) {
+    return (player->flags & GMF_PLAYERS_ALLY) == GMF_PLAYERS_ALLY;
+}
 
-a_d_2_n_a:    
-        mov    edx, dword ptr [ebp-0x54]
-        mov    eax, [edx+14h]
-        shr    eax, 18h
-        cmp    al, 3Fh
-        jnz    a_d_2_n_a_2 /// не админ
-        mov    eax, [edx+14h]
-        test    eax, 0x10000 /// players_alliance
-        jz    a_d_2_n_a_2
+bool __fastcall NewPlayerDiplomacy(A2Player* player, A2Player* other) {
+    if (player == other) {
+        return false;
+    }
 
-adm_dip_2_set_dip:
+    bool changed = false;
+    const auto* player_settings = settings::Find(player->name);
+    if (player_settings && player_settings->default_diplomacy) {
+        zxmgr::SetDiplomacy(player, other, player_settings->default_diplomacy);
+        changed = true;
+    }
 
-        mov    edx, [ebp+0x08] // player
-        movsx    edx, word ptr [edx + 4]
-        imul    edx, 46h
-        mov    eax, dword ptr [ebp-0x54]
-        movsx    eax, word ptr [eax + 4]
-        add    edx, eax
-        add    edx, 0xA8C4
-        mov    ecx, 0x6A8B8C
-        add    edx, dword ptr [ecx]
-        mov    byte ptr [edx], 0x2
+    const auto* other_settings = settings::Find(other->name);
+    if (other_settings && other_settings->default_diplomacy) {
+        zxmgr::SetDiplomacy(other, player, other_settings->default_diplomacy);
+        changed = true;
+    }
 
-        mov    edx, dword ptr [ebp-0x54]
-        movsx    edx, word ptr [edx + 4]
-        imul    edx, 46h
-        mov    eax, [ebp+0x08] // player
-        movsx    eax, word ptr [eax + 4]
-        add    edx, eax
-        add    edx, 0xA8C4
-        mov    ecx, 0x6A8B8C
-        add    edx, dword ptr [ecx]
-        mov    byte ptr [edx], 0x2
+    if (GMPlayersAlly(player) || GMPlayersAlly(other)) {
+        zxmgr::SetDiplomacy(player, other, 2);
+        zxmgr::SetDiplomacy(other, player, 2);
+        return true;
+    }
 
-        mov    edx, 0x4FFF09
-        jmp    edx
+    return changed;
+}
 
-a_d_2_n_a_2:    
+// Address: 004FFEA6
+void __declspec(naked) new_player_diplomacy() {
+    __asm {
+        mov  ecx, [ebp+8]     // Joining player
+        mov  edx, [ebp-0x54]  // Target (cycles through all non-AI players)
 
-        mov    edx, [ebp+0x08]
-        movsx    eax, word ptr [edx+4]
-        mov    edx, 0x4FFEAD
-        jmp    edx
+        call NewPlayerDiplomacy
+
+        test al, al
+        jz   original
+
+        mov  edx, 0x4FFF09
+        jmp  edx
+
+    original:
+        mov  edx, [ebp+8]
+        movsx eax, word ptr [edx+4]
+        mov  edx, 0x4FFEAD
+        jmp  edx
     }
 }
 

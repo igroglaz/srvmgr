@@ -31,10 +31,13 @@ bool ServerState::Save() {
     }
     f << '\n';
 
-    // Save player settings. We store only autobuff masks for now.
+    // Save player settings. We store only autobuff masks and default diplomacy for now.
     settings::ForEachReadonly([&f](const std::string& player_name, settings::PlayerSettings* ps) {
         if (ps->autobuff_mask != 0) {
             f << "player_settings_autobuff_mask " << player_name << ' ' << ps->last_modified << ' ' << ps->autobuff_mask << '\n';
+        }
+        if (ps->default_diplomacy != 0) {
+            f << "player_settings_default_diplomacy " << player_name << ' ' << ps->last_modified << ' ' << ps->default_diplomacy << '\n';
         }
     });
 
@@ -116,6 +119,25 @@ bool ServerState::Load() {
 
             auto* ps = settings::FindOrCreate(player_name.c_str());
             ps->autobuff_mask = mask;
+            ps->last_modified = last_modified;
+        } else if (section == "player_settings_default_diplomacy") {
+            std::string player_name;
+            time_t last_modified;
+            uint32_t mask;
+            f >> player_name >> last_modified >> mask;
+
+            if (!f) {
+                Printf("[server_state] load: failed to read player_settings_default_diplomacy from '%s': %s", server_state_filename, std::strerror(errno));
+                return false;
+            }
+
+            // Skip timestamps older than 1 week.
+            if (time(NULL) - last_modified > 7 * 24 * 3600) {
+                continue;
+            }
+
+            auto* ps = settings::FindOrCreate(player_name.c_str());
+            ps->default_diplomacy = mask;
             ps->last_modified = last_modified;
         } else {
             Printf("[server_state] load: unknown section '%s' in '%s'", section.c_str(), server_state_filename);
