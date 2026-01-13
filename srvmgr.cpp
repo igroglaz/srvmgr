@@ -1414,6 +1414,12 @@ inline bool GMPlayersAlly(A2Player* player) {
     return (player->flags & GMF_PLAYERS_ALLY) == GMF_PLAYERS_ALLY;
 }
 
+void InvalidateUnits(A2Player* player, A2Player* invalidate_for) {
+    for (auto* unit = player->unit_list->list.first_node; unit; unit = unit->next) {
+        zxmgr::UpdateUnit(unit->value, invalidate_for, -1, 0xFFB, 0, 0); // I guess -1 is "refresh all fields".
+    }
+}
+
 bool __fastcall NewPlayerDiplomacy(A2Player* player, A2Player* other) {
     if (player == other) {
         return false;
@@ -1423,12 +1429,14 @@ bool __fastcall NewPlayerDiplomacy(A2Player* player, A2Player* other) {
     const auto* player_settings = settings::Find(player->name);
     if (player_settings && player_settings->default_diplomacy) {
         zxmgr::SetDiplomacy(player, other, player_settings->default_diplomacy);
+        InvalidateUnits(player, other);
         changed = true;
     }
 
     const auto* other_settings = settings::Find(other->name);
     if (other_settings && other_settings->default_diplomacy) {
         zxmgr::SetDiplomacy(other, player, other_settings->default_diplomacy);
+        InvalidateUnits(other, player);
         changed = true;
     }
 
