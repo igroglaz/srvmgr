@@ -143,7 +143,7 @@ void CopyInventoryToMap(A2Unit *unit, A2InventoryList *inventory, int money, int
 
 bool isPlayerUnit(A2Unit* unit)
 {
-    return unit->player->unitType == 0;
+    return unit->player->is_ai == 0;
 }
 
 void DeleteInventory(A2InventoryList* bag) {

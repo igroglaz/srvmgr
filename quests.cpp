@@ -391,7 +391,7 @@ void __declspec(naked) skip_experience_reward() {
 }
 
 uint32_t __fastcall InnScrollsReward(A2Player* player, uint32_t reward) {
-    if (IsWarrior(player->current_unit)) {
+    if (IsWarrior(player->main_unit)) {
         // Note: max reward is 16383000, so this doesn't overflow.
         return static_cast<uint32_t>(reward * 1.5);
     }

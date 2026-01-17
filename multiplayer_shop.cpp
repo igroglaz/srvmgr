@@ -136,7 +136,7 @@ byte* _stdcall CheckReplacementBuilding(byte* shop, A2Position* coords)
     for (auto it = plrs.begin(); it != plrs.end(); ++it)
     {
         A2Player* plr = *it;
-        A2Unit* chr = plr->current_unit;
+        A2Unit* chr = plr->main_unit;
         if (!chr) continue;
         if (chr->position == coords)
         {

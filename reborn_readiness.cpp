@@ -53,7 +53,7 @@ std::string WithSpaces(int value) {
 void CheckRebornReadiness(ServerIDType server_id, const PlayerInfo& player_info, const A2Player* p, bool hell);
 
 void RebornReadinessInfo(ServerIDType server_id, const A2Player* player, bool hell) {
-    A2Unit* unit = player->current_unit;
+    A2Unit* unit = player->main_unit;
 
     if (unit == nullptr) {
         return zxmgr::SendMessage(player, "no current unit");

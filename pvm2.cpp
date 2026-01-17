@@ -306,11 +306,11 @@ uint32_t _stdcall VerifyDamage2(A2Unit* p1, A2Unit* p2)
     A2Player* player1 = p1->player;
     A2Player* player2 = p2->player;
     if(!player1 || !player2) return 0;
-    uint32_t flags1 = player1->unitType;
-    uint32_t flags2 = player2->unitType;
+    uint32_t flags1 = player1->is_ai;
+    uint32_t flags2 = player2->is_ai;
     if(flags1 || flags2) return 0;
-    A2Unit* main1 = player1->current_unit;
-    A2Unit* main2 = player2->current_unit;
+    A2Unit* main1 = player1->main_unit;
+    A2Unit* main2 = player2->main_unit;
     if(main1 != p1) return 0;
     if(main2 != p2) return 0;
 

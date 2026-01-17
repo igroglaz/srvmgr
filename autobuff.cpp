@@ -6,7 +6,7 @@
 auto a2PickSpell = (void* (__stdcall *)(void* unit, int spell_number, int unused))(0x005a79d6);
 
 bool CanCast(A2Unit* unit, int spell_number) {
-    if (unit->player->unitType) {
+    if (unit->player->is_ai) {
         return true;
     }
     auto player_settings = settings::Find(unit->player->name);

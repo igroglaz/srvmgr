@@ -108,10 +108,10 @@ void OnServerTic()
     {
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
-        if (Players[i].Class->unitType) continue;
-        if (!Players[i].Class->current_unit) continue;
+        if (Players[i].Class->is_ai) continue;
+        if (!Players[i].Class->main_unit) continue;
 
-        A2Unit* unit = Players[i].Class->current_unit;
+        A2Unit* unit = Players[i].Class->main_unit;
 
         // milliseconds from system start - Players[i].LastReturn...
         if (Players[i].ShouldReturn && GetTickCount()-Players[i].LastReturn > 5000) // every 5 seconds
@@ -239,27 +239,27 @@ void _stdcall ExtDiplomacy(A2Player* player, uint32_t setd)
             if ((rights2 & GMF_ANY) != GMF_ANY)
                 rights2 = 0;
             else has_rights2 = true;
-            if (player2->unitType)
+            if (player2->is_ai)
                 rights2 = 0;
 
             rights &= 0xFFFFFF;
             rights2 &= 0xFFFFFF;
 
             // ai
-            if ((rights & GMF_AI_ALLY) && player2->unitType)
+            if ((rights & GMF_AI_ALLY) && player2->is_ai)
             {
                 zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
                 zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
             // not ai
-            if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !player2->unitType)
+            if (((rights & GMF_PLAYERS_ALLY)||(rights2 & GMF_PLAYERS_ALLY)) && !player2->is_ai)
             {
                 zxmgr::SetDiplomacy(player, player2, 0x02); // from this to others
                 zxmgr::SetDiplomacy(player2, player, 0x02); // from others to this
             }
 
-            if ((rights & GMF_PLAYERS_VISION) && !player2->unitType) // not ai, vision
+            if ((rights & GMF_PLAYERS_VISION) && !player2->is_ai) // not ai, vision
             {
                 // from others to this
                 zxmgr::SetDiplomacy(player2, player, 0x10|zxmgr::GetDiplomacy(player2, player)); 
