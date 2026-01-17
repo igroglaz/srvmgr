@@ -1246,9 +1246,11 @@ ret_0:
         a2::World()->diplomacy[player1->id_ext.id][player2->id_ext.id] = diplomacy;
 
         if (!player1->unitType && !player2->unitType && (diplomacy & 0x10)) {
-            // i don't know how's this related
-            player2->diplomacy_32 |= player1->diplomacy_30; // update player2 to player1
-            player1->diplomacy_32 |= player2->diplomacy_30; // update player1 to player2
+            // Each player has a `vision_sharing_id` with a single unique bit set. 16 bits --- up to 16 players supported.
+            // Having playerA's bit set in playerB's vision sharing mask is necessary for playerA to track vision of playerB
+            // (or vice versa, don't know which direction it works).
+            player2->vision_sharing_mask |= player1->vision_sharing_id; // update player2 to player1
+            player1->vision_sharing_mask |= player2->vision_sharing_id; // update player1 to player2
         }
     }
 
