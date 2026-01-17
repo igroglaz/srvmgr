@@ -65,7 +65,7 @@ int Bonus(int circle, ServerIDType server_id) {
 // Increase damage to units that are going through circles.
 int IncreaseDamage(A2Unit* attacker, A2Unit* target, int damage) {
     // Not a player's unit --- no changes.
-    if (!target || !target->player || target->player->unitType != 0) {
+    if (!target || !target->player || target->player->is_ai != 0) {
         return damage;
     }
 
@@ -75,7 +75,7 @@ int IncreaseDamage(A2Unit* attacker, A2Unit* target, int damage) {
     }
 
     // PvP is untouched.
-    if (attacker->player->unitType == 0) {
+    if (attacker->player->is_ai == 0) {
         return damage;
     }
 

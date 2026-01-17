@@ -298,7 +298,7 @@ void ReturnFailProc(A2Unit* unit)
     if(!unit) return;
     A2Player* player = unit->player;
     if(!player) return;
-    if(unit != player->current_unit) return; // only for main character
+    if(unit != player->main_unit) return; // only for main character
     Player* pi = PI_Get(player);
     if(!pi) return;
 
@@ -326,7 +326,7 @@ uint32_t _stdcall OnCast(A2Unit* cptr)
 {
     if(!cptr) return 0;
     A2Player* pptr = cptr->player;
-    if(!pptr || pptr->unitType) return 0;
+    if(!pptr || pptr->is_ai) return 0;
     uint32_t rights = pptr->flags;
     if((rights & 0x3F000000) != 0x3F000000) return 0;
     A2UnitEye2* ac_data = cptr->eye2;
@@ -651,7 +651,7 @@ void _stdcall imp_FixMoney(unsigned long money, unsigned long flags)
     pthis->money = cur_money;
     if(leftover > 0x7FFFFFFF) leftover = 0x7FFFFFFF;
     
-    A2Unit* unit = pthis->current_unit;
+    A2Unit* unit = pthis->main_unit;
     if(unit && leftover)
     {
         uint32_t p_x = unit->position->x;
@@ -1268,7 +1268,7 @@ void _stdcall SetDiplomacyEx(A2Player* player1)
         A2Player* player = *it;
         if(!player) break;
 
-        if(!player->unitType)
+        if(!player->is_ai)
             continue;
 
         const char* name = player->name;
@@ -1289,7 +1289,7 @@ void _stdcall SetDiplomacyEx(A2Player* player1)
         if(player2 == player1)
             continue;
 
-        if(player2->unitType)
+        if(player2->is_ai)
         {
             if(rights & GMF_AI_ALLY) // расставляем всем мобам алю (если стоит флаг)
             {
@@ -1507,7 +1507,7 @@ void __declspec(naked) imp_UpdateOnReturn()
 
 void _stdcall CheckPlayerNoClip(A2Player* player)
 {
-    A2Unit* unit = player->current_unit;
+    A2Unit* unit = player->main_unit;
     if ((player->flags & GMF_NOCLIP) == GMF_NOCLIP)
     {
         zxmgr::MakeUnitNoClip(unit);

@@ -658,10 +658,10 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             command = TrimLeft(command);
             A2Player* target = zxmgr::FindByNickname(command.c_str());
 
-            if (target && target->current_unit)
+            if (target && target->main_unit)
             {
-                uint32_t p_x = target->current_unit->position->x;
-                uint32_t p_y = target->current_unit->position->y;
+                uint32_t p_x = target->main_unit->position->x;
+                uint32_t p_y = target->main_unit->position->y;
 
                 if (!player || console)
                     Printf("%s (%u:%u)", target->name, p_x, p_y);
@@ -677,7 +677,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             A2Player* target = zxmgr::FindByNickname(command.c_str());
 
             if (!target) goto ex;
-            if (!target->current_unit) goto ex;
+            if (!target->main_unit) goto ex;
 
             const char* p_charname = target->name;
             const char* p_logname = target->account_name;
@@ -695,7 +695,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             else
                 p_state = "disconnected";
 
-            A2Unit* unit = target->current_unit;
+            A2Unit* unit = target->main_unit;
 
             uint16_t p_body      = unit->body;
             uint16_t p_reaction  = unit->reaction;
@@ -724,7 +724,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             Printf("#scan command entered.\n");
             if (!player) goto ex;
             Printf("#scan performed. player found.\n");
-            A2Unit* unit = player->current_unit;
+            A2Unit* unit = player->main_unit;
             if (!unit) goto ex;
             Printf("check for unit OK.. getting dump\n");         
 
@@ -745,7 +745,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             if (target)
             {
                 uint32_t tri = 0;
-                if (!target->unitType)
+                if (!target->is_ai)
                     tri = target->flags;
 
                 if (CHECK_FLAG(tri, GMF_ANY))
@@ -768,7 +768,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             if (target)
             {
                 uint32_t tri = 0;
-                if (!target->unitType)
+                if (!target->is_ai)
                     tri = target->flags;
 
                 if (CHECK_FLAG(tri, GMF_ANY))
@@ -779,7 +779,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 }
 
                 zxmgr::Kill(target, player);
-                A2Unit* unit = target->current_unit;
+                A2Unit* unit = target->main_unit;
 
                 if (unit && target != player)
                     DropEverything(unit, true);
@@ -824,7 +824,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 goto ex;
             }
 
-            if (player && player->current_unit)
+            if (player && player->main_unit)
             {
                 command.erase(0, 7);
                 command = Trim(command);
@@ -1010,7 +1010,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
             if (CheckInt(command) && command.length())
                 what = StrToInt(command);
 
-            A2Unit* unit = player->current_unit;
+            A2Unit* unit = player->main_unit;
             if (!unit) goto ex;
 
             uint8_t p_x = unit->position->x;
@@ -1071,7 +1071,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
         else if(rawcmd == "#inn")
         {
             if (!player) goto ex;
-            A2Unit* unit = player->current_unit;
+            A2Unit* unit = player->main_unit;
             if (!unit) goto ex;
             A2InventoryItem* item = unit->weapon;
             if (!item) goto ex;
@@ -1137,7 +1137,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 goto ex;
             }
 
-            if (!player->current_unit) goto ex;
+            if (!player->main_unit) goto ex;
 
             command.erase(0, 7);
             command = Trim(command);
@@ -1193,7 +1193,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
                 }
             }
 
-            zxmgr::UpdateUnit(player->current_unit, player, 0xFFFFFFFF, 0xFFB, 0, 0);
+            zxmgr::UpdateUnit(player->main_unit, player, 0xFFFFFFFF, 0xFFB, 0, 0);
             goto ex;
         }
     }
@@ -1259,7 +1259,7 @@ void RunCommand(byte* _this, A2Player* player, const char* ccommand, uint32_t ri
 
             command = ToLower(TrimLeft(command));
 
-            A2Unit* unit = target->current_unit;
+            A2Unit* unit = target->main_unit;
             
             if (command == "god")
             {
@@ -1422,8 +1422,8 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
     
     // Damage modificators in PvP
     if (attacker_player && victim_player &&
-        !attacker_player->unitType &&
-        !victim_player->unitType &&
+        !attacker_player->is_ai &&
+        !victim_player->is_ai &&
         attacker_player != victim_player) // Ensure it's not self-inflicted damage
     {
         if (attacker->unit_attrs & 4) { // if mage or witch
@@ -1457,8 +1457,8 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
 
     // PvM
     if (Config::ServerFlags & SVF_PVM) {
-        if((attacker_player && !attacker_player->unitType &&
-           (victim_player && !victim_player->unitType)))
+        if((attacker_player && !attacker_player->is_ai &&
+           (victim_player && !victim_player->is_ai)))
                 retval = 0;
     }
 
@@ -1473,14 +1473,14 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
         retval = damage;
         rights1 = attacker_player->flags & 0xFFFFFF;
 
-        if (attacker_player->unitType)
+        if (attacker_player->is_ai)
             rights1 = 0;
     }
 
     if (victim_player && CHECK_FLAG(victim_player->flags, GMF_ANY)) {
         rights2 = victim_player->flags & 0xFFFFFF;
 
-        if (victim_player->unitType)
+        if (victim_player->is_ai)
             rights1 = 0;
     }
 
@@ -1498,7 +1498,7 @@ int32_t OnDamage(A2Unit* attacker, A2Unit* victim, int16_t damage) {
     if (((rights2 & GMF_GODMODE) ||
          (rights2 & GMF_GODMODE_ADMIN)) &&
          (attacker_player == victim_player) &&
-         (victim == victim_player->current_unit)) {
+         (victim == victim_player->main_unit)) {
             retval = 0;
     }
 

@@ -51,8 +51,8 @@ void SR_UpdateUnit(A2Unit* unit)
     {
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
-        if (Players[i].Class->unitType) continue;
-        if (!Players[i].Class->current_unit) continue;
+        if (Players[i].Class->is_ai) continue;
+        if (!Players[i].Class->main_unit) continue;
 
         if (Players[i].Class == unit_player || (zxmgr::GetDiplomacy(unit_player, Players[i].Class) & 0x10))
         {
@@ -96,7 +96,7 @@ void SR_Step()
     for (auto it = units.begin(); it != units.end(); ++it)
     {
         A2Unit* unit = (*it);
-        if (unit && unit != unit->player->current_unit)
+        if (unit && unit != unit->player->main_unit)
             SR_UpdateUnit(unit);
     }
 
@@ -105,8 +105,8 @@ void SR_Step()
         if (!Players[i].Exists) continue;
         if (!Players[i].Class) continue;
 
-        if (Players[i].Class->current_unit)
-            SR_UpdateUnit(Players[i].Class->current_unit);
+        if (Players[i].Class->main_unit)
+            SR_UpdateUnit(Players[i].Class->main_unit);
     }
 }
 

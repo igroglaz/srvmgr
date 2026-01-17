@@ -82,7 +82,7 @@ bool NetCmd_UpdateInfo()
             for (auto it = players.begin(); it != players.end(); ++it)
             {
                 A2Player* player = (*it);
-                if (!player->unitType) // NOT AI
+                if (!player->is_ai) // NOT AI
                     tmp_players.push_back(player);
             }
 
@@ -93,7 +93,7 @@ bool NetCmd_UpdateInfo()
 
                 const char* player_nickname = player->name;
                 const char* player_login = "artificial";
-                if (!player->unitType)
+                if (!player->is_ai)
                     player_login = player->account_name;
                 uint32_t player_id1 = player->player_id1;
                 uint32_t player_id2 = player->flags;
@@ -104,7 +104,7 @@ bool NetCmd_UpdateInfo()
                 byte* vd = zxmgr::GetNetworkStruct(player);
                 bool player_connected = (vd);
                 pack.WriteUInt8(player_connected);
-                if (player->unitType || !player_connected) // AI or disconnected
+                if (player->is_ai || !player_connected) // AI or disconnected
                 {
                     pack.WriteString("");
                 }

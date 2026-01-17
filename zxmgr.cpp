@@ -152,7 +152,7 @@ namespace zxmgr
         for (auto it = players.begin(); it != players.end(); ++it)
         {
             A2Player* player = (*it);
-            if (player && player != pptr && !player->unitType)
+            if (player && player != pptr && !player->is_ai)
                 Kick(player, true);
         }
     }
@@ -163,7 +163,7 @@ namespace zxmgr
         for (auto it = players.begin(); it != players.end(); ++it)
         {
             A2Player* player = (*it);
-            if (player && player != pptr && !player->unitType)
+            if (player && player != pptr && !player->is_ai)
                 Kick(player, false);
         }
     }
@@ -177,7 +177,7 @@ namespace zxmgr
             if (!player) continue;
             const char* pl_name = player->name;
             std::string pl_nickname = pl_name;
-            if (player->unitType)
+            if (player->is_ai)
             {
                 // convert to cp-866
                 for (size_t i = 0; i < pl_nickname.length(); i++)
@@ -208,7 +208,7 @@ namespace zxmgr
         {
             A2Player* player = (*it);
             if (!player) continue;
-            if (player->unitType) continue; // AI check
+            if (player->is_ai) continue; // AI check
             const char* pl_login = player->account_name;
             if (!strcmp(pl_login, login)) {
                 return player;
@@ -226,7 +226,7 @@ namespace zxmgr
             A2Unit* unit = (*it);
             if (!unit) continue;
             if (unit->player != pptr) continue;
-            if (caster && unit == caster->current_unit) continue;
+            if (caster && unit == caster->main_unit) continue;
 
             unit->last_hit_by = NULL; // damage_by
             unit->hp = -50;
@@ -241,9 +241,9 @@ namespace zxmgr
         {
             A2Unit* unit = (*it);
             if (!unit) continue;
-            if (pptr && unit == pptr->current_unit) continue;
+            if (pptr && unit == pptr->main_unit) continue;
             if (ai_only && unit->player &&
-                !unit->player->unitType) continue;
+                !unit->player->is_ai) continue;
 
             unit->last_hit_by = NULL; // damage_by
             unit->hp = -50;
@@ -366,7 +366,7 @@ namespace zxmgr
         {
             A2Unit* unit = (*it);
             if (!unit) continue;
-            if (unit == unit->player->current_unit) continue;
+            if (unit == unit->player->main_unit) continue;
 
             unit->player = to;
             UpdateUnit(unit, 0, 0xFFFFFFFF, 0xFFB, 0, 0);
@@ -1239,13 +1239,13 @@ ret_0:
     }
 
     void SetDiplomacy(A2Player* player1, A2Player* player2, uint8_t diplomacy) {
-        if (player1->unitType && (diplomacy & 0x10)) { // vision won't work for AI players
+        if (player1->is_ai && (diplomacy & 0x10)) { // vision won't work for AI players
             diplomacy &= ~0x10;
         }
 
         a2::World()->diplomacy[player1->id_ext.id][player2->id_ext.id] = diplomacy;
 
-        if (!player1->unitType && !player2->unitType && (diplomacy & 0x10)) {
+        if (!player1->is_ai && !player2->is_ai && (diplomacy & 0x10)) {
             // Each player has a `vision_sharing_id` with a single unique bit set. 16 bits --- up to 16 players supported.
             // Having playerA's bit set in playerB's vision sharing mask is necessary for playerA to track vision of playerB
             // (or vice versa, don't know which direction it works).

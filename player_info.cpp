@@ -75,7 +75,7 @@ void PI_Delete(A2Player* player)
             Players[i].GodSetter = NULL;
         }
 
-        A2Unit* unit = Players[i].Class->current_unit;
+        A2Unit* unit = Players[i].Class->main_unit;
         if(unit && Players[i].SetSpells != 0 && Players[i].SpellSetter == player &&
             (i != p_id-1))
         {
@@ -94,7 +94,7 @@ void PI_Delete(A2Player* player)
         zxmgr::GiveItemTo(item, player);
     }*/
 
-    A2Unit* unit = player->current_unit;
+    A2Unit* unit = player->main_unit;
     bool update = false;
 
     /*if(Players[p_id-1].SavedItems.size())

@@ -441,12 +441,12 @@ void __declspec(naked) drop_gold() {
 
     Printf("[solo] drop_gold: player=0x%x (%s)", player, player ? player->name : "?");
 
-    if (player && player->current_unit) {
-        if (IsGigaPlayer(player->current_unit)) {
-            Printf("[giga-drop] dropping gold for player %s is not allowed", player->current_unit->name);
+    if (player && player->main_unit) {
+        if (IsGigaPlayer(player->main_unit)) {
+            Printf("[giga-drop] dropping gold for player %s is not allowed", player->main_unit->name);
 
             // Refresh player's inventory so that client knows that nothing was dropped.
-            RefreshPlayerInventory(player->current_unit);
+            RefreshPlayerInventory(player->main_unit);
 
             __asm {
                 // Prevent changes, immediately return from the function.
@@ -456,7 +456,7 @@ void __declspec(naked) drop_gold() {
                 }
             }
         } else {
-            PoisonStapleCell(player->current_unit->position);
+            PoisonStapleCell(player->main_unit->position);
         }
     }
 

@@ -198,11 +198,11 @@ struct A2Player {
     int8_t gap2[8];
     A2ListWrapper<A2Unit>* unit_list;
     A2LinkedList<A2Group>* groups;
-    int32_t unitType;
+    int32_t is_ai; // 1 for AI players, 0 for human players.
     int16_t vision_sharing_id;
     int16_t vision_sharing_mask;
     int8_t gap4[4];
-    A2Unit* current_unit; // 0x38
+    A2Unit* main_unit; // Main unit of the player. Unset for AI players. TODO: retype to `A2Human*`.
     uint32_t money;
     int8_t gap5[2];
     int8_t byte42;
@@ -219,6 +219,7 @@ struct A2Player {
     char gapA62[20];
     const char* account_name;
 };
+static_assert(offsetof(A2Player, main_unit) == 0x38, "A2Player::main_unit must have offset 0x38");
 
 struct A2Spell;
 struct A2UnitEye2 {
