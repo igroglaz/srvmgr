@@ -15,4 +15,4 @@ void ClearStapleCells();
 
 bool IsSoloPlayer(const A2Unit* unit);
 bool IsGigaPlayer(const A2Unit* unit);
-bool IsPureSoloPlayer(const A2Unit* unit);
+bool IsIronPlayer(const A2Unit* unit);

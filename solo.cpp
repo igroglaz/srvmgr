@@ -14,7 +14,7 @@ std::unordered_map<uint16_t, int8_t> staple_cells;
 std::unordered_map<int8_t, std::string> staple_char_names;
 
 // Characters with `@` as the first letter of the name are in the solo mode.
-bool IsPureSoloPlayer(const A2Unit* unit) {
+bool IsIronPlayer(const A2Unit* unit) {
     return unit->name[0] == '@';
 }
 
@@ -25,7 +25,7 @@ bool IsGigaPlayer(const A2Unit* unit) {
 
 // All solo characters.
 bool IsSoloPlayer(const A2Unit* unit) {
-    return IsPureSoloPlayer(unit) || IsGigaPlayer(unit);
+    return IsIronPlayer(unit) || IsGigaPlayer(unit);
 }
 
 A2Server* a2server_instance = nullptr;

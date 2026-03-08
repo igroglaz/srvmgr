@@ -217,7 +217,7 @@ const Node* Thresholds::Descend(const Node* at, const A2Unit* main_unit) const {
             }
         }
 
-        if (IsPureSoloPlayer(main_unit)) {
+        if (IsIronPlayer(main_unit)) {
             auto ptr = at->children.find("ironman");
             if (ptr != at->children.end()) {
                 return this->Descend(ptr->second.get(), main_unit);
