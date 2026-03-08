@@ -18,6 +18,10 @@ bool IsIronPlayer(const A2Unit* unit) {
     return unit->name[0] == '@';
 }
 
+bool IsPurePlayer(const A2Unit* unit) {
+    return unit->name[0] == '!';
+}
+
 // Giga-players --- solo players which get reverted to checkpoint if they die.
 bool IsGigaPlayer(const A2Unit* unit) {
     return unit->name[0] == '_';
@@ -25,7 +29,7 @@ bool IsGigaPlayer(const A2Unit* unit) {
 
 // All solo characters.
 bool IsSoloPlayer(const A2Unit* unit) {
-    return IsIronPlayer(unit) || IsGigaPlayer(unit);
+    return IsIronPlayer(unit) || IsGigaPlayer(unit) || IsPurePlayer(unit);
 }
 
 A2Server* a2server_instance = nullptr;
