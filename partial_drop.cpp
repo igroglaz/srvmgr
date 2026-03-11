@@ -129,6 +129,10 @@ void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList* item_list_ds
     for (int i = -2; i < 13; ++i ) {
         A2InventoryItem* item = (i == -2 ? unit->weapon : i == -1 ? unit->shield : human->dress[i]);
 
+        if (i == -2 && IsPurePlayer(unit)) {
+            continue; // Pure players keep their weapon on death
+        }
+
         if (item && getDropNum(1, probability) > 0) {
             a2insert(item_list_dst, unit->clazz->UnitUnequip(unit, item));
         }
