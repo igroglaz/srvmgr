@@ -172,7 +172,7 @@ void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* un
             PoisonStapleCell(unit->position);
         }
 
-        if (IsGigaPlayer(unit)) {
+        if (IsGigaPlayer(unit) || IsPurePlayer(unit)) {
             DeleteInventory(bag);
         } else {
             CopyInventoryToMap(unit, bag, money, main_unit);

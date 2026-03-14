@@ -396,7 +396,7 @@ int __fastcall ChooseDropItem(uint8_t* packet, A2Unit* unit) {
     uint8_t from = packet[0xc], to = packet[0xd];
     
     if (to == 3 && (from == 1 || from == 2)) {
-        if (IsGigaPlayer(unit)) {
+        if (IsGigaPlayer(unit) || IsPurePlayer(unit)) {
             Printf("[giga-drop] %d->%d for player %s is not allowed", from, to, unit->name);
 
             // Refresh player's inventory so that client knows that nothing was dropped.
@@ -446,7 +446,7 @@ void __declspec(naked) drop_gold() {
     Printf("[solo] drop_gold: player=0x%x (%s)", player, player ? player->name : "?");
 
     if (player && player->main_unit) {
-        if (IsGigaPlayer(player->main_unit)) {
+        if (IsGigaPlayer(player->main_unit) || IsPurePlayer(player->main_unit)) {
             Printf("[giga-drop] dropping gold for player %s is not allowed", player->main_unit->name);
 
             // Refresh player's inventory so that client knows that nothing was dropped.
