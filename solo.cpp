@@ -329,16 +329,18 @@ void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
         killed_unit && killed_unit->last_hit_by && killed_unit->last_hit_by->player ? killed_unit->last_hit_by->player->id_ext.id : -1
     );
 
-    if (!killed_unit || !killed_unit->last_hit_by || !killed_unit->last_hit_by->player || killed_unit->last_hit_by->player->id_ext.id < 16) {
+    if (!killed_unit) {
         return;
     }
 
-    int8_t killer_player_id = static_cast<int8_t>(killed_unit->last_hit_by->player->id_ext.id);
+    int8_t staple_with = -1;
+    if (killed_unit->last_hit_by && killed_unit->last_hit_by->player && killed_unit->last_hit_by->player->id_ext.id >= 16) {
+        staple_with = static_cast<int8_t>(killed_unit->last_hit_by->player->id_ext.id);
+    }
+
     auto position = killed_unit->position->yx;
 
     bool sack_exists_here = FindSack(position) != nullptr;
-
-    int8_t staple_with = killer_player_id;
 
     // If there's no sack, staple the cell with the killer player. Even if the cell was previously stapled with other players.
     if (sack_exists_here) {
@@ -346,7 +348,7 @@ void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
         auto staple_it = staple_cells.find(position);
         if (staple_it != staple_cells.end()) {
             // Is it stapled by another player? Yes --- poison it.
-            if (staple_it->second != killer_player_id) {
+            if (staple_it->second != staple_with) {
                 staple_with = -1;
             }
         }
