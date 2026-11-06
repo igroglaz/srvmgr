@@ -84,7 +84,7 @@ bool GigaAllowedToPickup(A2InventoryItem* item, ServerIDType server_id) {
 // Refresh the inventory cached at the client.
 // Taken from around address 00503663.
 void RefreshPlayerInventory(A2Unit* unit) {
-    Printf("[solo] RefreshPlayerInventory: unit=0x%x (%s), player=0x%x (id=%d)", unit, unit ? unit->name : "?", unit ? unit->player : nullptr, unit && unit->player ? unit->player->id_ext.id : -1);
+    //Printf("[solo] RefreshPlayerInventory: unit=0x%x (%s), player=0x%x (id=%d)", unit, unit ? unit->name : "?", unit ? unit->player : nullptr, unit && unit->player ? unit->player->id_ext.id : -1);
 
     // Only ECX is used by the function, but __fastcall passes EDX too.
     typedef void (__fastcall *A2RefreshInventory)(int address, int unused, A2Unit* unit, A2Player* player, int arg4, int arg5, int arg6, int arg7);
@@ -96,7 +96,7 @@ void RefreshPlayerInventory(A2Unit* unit) {
 // If the player's name has changed, it means that the player has logged out and another one logged in.
 // The player ID is reused, but we should clear all staples for the logged-out player.
 void CheckStaplesForReloggedCharacter(A2Unit* unit) {
-    Printf("[solo] CheckStaplesForReloggedCharacter: unit=0x%x (%s, player_id=%d)", unit, unit ? unit->name : "?", unit && unit->player ? unit->player->id_ext.id : -1);
+    //Printf("[solo] CheckStaplesForReloggedCharacter: unit=0x%x (%s, player_id=%d)", unit, unit ? unit->name : "?", unit && unit->player ? unit->player->id_ext.id : -1);
 
     if (!unit || !unit->player) {
         return;
@@ -105,7 +105,7 @@ void CheckStaplesForReloggedCharacter(A2Unit* unit) {
     const int8_t player_id = static_cast<int8_t>(unit->player->id_ext.id);
     auto stapled_name_it = staple_char_names.find(player_id);
     if (stapled_name_it == staple_char_names.end()) {
-        Printf("[solo] CheckStaplesForReloggedCharacter: saved character name %d -> %s", player_id, unit->name);
+        //Printf("[solo] CheckStaplesForReloggedCharacter: saved character name %d -> %s", player_id, unit->name);
         staple_char_names[player_id] = unit->name;
         return;
     }
@@ -123,7 +123,7 @@ void CheckStaplesForReloggedCharacter(A2Unit* unit) {
             }
         }
 
-        Printf("[solo] CheckStaplesForReloggedCharacter: player %d relogged, removed %d staples", player_id, removed);
+        //Printf("[solo] CheckStaplesForReloggedCharacter: player %d relogged, removed %d staples", player_id, removed);
     }
 }
 
@@ -185,7 +185,7 @@ bool GigaPickup(A2Unit* unit) {
 //
 // If the chosen sack is stapled with player ID, allow the player to pick it up.
 void __cdecl SoloPickup(A2Unit* unit, int y, int x) {
-    Printf("[solo] SoloPickup: unit=0x%x (%s), y=%d, x=%d", unit, unit ? unit->name : "?", y, x);
+    //Printf("[solo] SoloPickup: unit=0x%x (%s), y=%d, x=%d", unit, unit ? unit->name : "?", y, x);
 
     if (!IsSoloPlayer(unit)) {
         // Original logic for regular chars.
@@ -203,12 +203,12 @@ void __cdecl SoloPickup(A2Unit* unit, int y, int x) {
     CheckStaplesForReloggedCharacter(unit);
     
     auto staple_it = staple_cells.find(yx);
-    Printf("[solo_pickup]: staple at %d: %d", yx, (staple_it != staple_cells.end() ? staple_it->second : -1));
+    //Printf("[solo_pickup]: staple at %d: %d", yx, (staple_it != staple_cells.end() ? staple_it->second : -1));
     if (staple_it != staple_cells.end() && staple_it->second == unit->player->id_ext.id) {
         // If the player is currently staying on the sack, let them pick it up. Otherwise let them only go to the sack.
         // This is to prevent races with other players poisoning the cell.
         if (unit->position->yx == yx) {
-            Printf("[solo] SoloPickup: unit=0x%x (%s) picks up bag at %d", unit, unit->name, yx);
+            //Printf("[solo] SoloPickup: unit=0x%x (%s) picks up bag at %d", unit, unit->name, yx);
 
             if (!GigaPickup(unit)) {
                 return;
@@ -216,7 +216,7 @@ void __cdecl SoloPickup(A2Unit* unit, int y, int x) {
 
             unit->state = 2;
         } else {
-            Printf("[solo] SoloPickup: unit=0x%x (%s) moves to %d", unit, unit->name, yx);
+            //Printf("[solo] SoloPickup: unit=0x%x (%s) moves to %d", unit, unit->name, yx);
             unit->state = 1;
         }
     }
@@ -242,7 +242,7 @@ void __fastcall SoloPickupAll(A2Unit* unit) {
         Printf("[solo_pickup_all] null unit");
     }
 
-    Printf("[solo] SoloPickupAll: unit=0x%x (%s)", unit, unit->name);
+    //Printf("[solo] SoloPickupAll: unit=0x%x (%s)", unit, unit->name);
 
     if (!IsSoloPlayer(unit)) {
         // Original logic for regular chars.
@@ -255,7 +255,7 @@ void __fastcall SoloPickupAll(A2Unit* unit) {
     // If the player stands on top of a stapled cell, let them pick up only that bag.
     auto staple_it = staple_cells.find(unit->position->yx);
     if (staple_it != staple_cells.end() && staple_it->second == unit->player->id_ext.id) {
-        Printf("[solo_pickup_all] player %s picks up the bag at %d", unit->name, unit->position->yx);
+        //Printf("[solo_pickup_all] player %s picks up the bag at %d", unit->name, unit->position->yx);
 
         if (!GigaPickup(unit)) {
             return;
@@ -282,13 +282,13 @@ void __declspec(naked) solo_pick_all_sacks() {
 }
 
 void __fastcall PoisonStapleCell(A2Position* pos) {
-    Printf("[staple]: PoisonStapleCell: 0x%x -> %d", pos, pos ? pos->yx : 0);
+    //Printf("[staple]: PoisonStapleCell: 0x%x -> %d", pos, pos ? pos->yx : 0);
     staple_cells[pos->yx] = -1;
-    Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
+    //Printf("[staple]: poisoned cell %d, there are %d staple cells now", pos->yx, staple_cells.size());
 }
 
 A2Node<A2Bag>* FindSack(uint16_t pos_yx) {
-    Printf("[solo] FindSack at %d", pos_yx);
+    //Printf("[solo] FindSack at %d", pos_yx);
 
     A2Server* server = a2server_instance;
 
@@ -305,24 +305,24 @@ A2Node<A2Bag>* FindSack(uint16_t pos_yx) {
 
     auto* sacks = server_struct->sacks;
     if (sacks == nullptr || !sacks->size) {
-        Printf("[solo] FindSack: sacks=0x%x, size=%d", sacks, sacks ? sacks->size : -1);
+        //Printf("[solo] FindSack: sacks=0x%x, size=%d", sacks, sacks ? sacks->size : -1);
         return nullptr;
     }
 
-    auto sack_ptr = sacks->first_node;
     for (auto sack_ptr = sacks->first_node; sack_ptr != nullptr; sack_ptr = sack_ptr->next) {
         if (sack_ptr->value->position->yx == pos_yx) {
-            Printf("[solo] FindSack: found sack=0x%x, size=%d", sack_ptr->value, sack_ptr->value->items ? sack_ptr->value->items->size : -1);
+            //Printf("[solo] FindSack: found sack=0x%x, size=%d", sack_ptr->value, sack_ptr->value->items ? sack_ptr->value->items->size : -1);
             return sack_ptr;
         }
     }
         
-    Printf("[solo] FindSack: found no sack at %d", pos_yx);
+    //Printf("[solo] FindSack: found no sack at %d", pos_yx);
 
     return nullptr;
 }
 
 void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
+    /*
     Printf(
         "[solo] StapleCellOnMobKill: unit=0x%x (name=%s, id=%d), killed_by=0x%x (name=%s, id=%d)",
         killed_unit,
@@ -332,6 +332,7 @@ void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
         killed_unit && killed_unit->last_hit_by && killed_unit->last_hit_by->player ? killed_unit->last_hit_by->player->name : "?",
         killed_unit && killed_unit->last_hit_by && killed_unit->last_hit_by->player ? killed_unit->last_hit_by->player->id_ext.id : -1
     );
+    */
 
     if (!killed_unit) {
         return;
@@ -362,7 +363,7 @@ void __fastcall StapleCellOnMobKill(A2Unit* killed_unit) {
 
     staple_cells[position] = staple_with;
 
-    Printf("[staple]: stapled cell %d with %d, there are %d staple cells now", position, staple_with, staple_cells.size());
+    //Printf("[staple]: stapled cell %d with %d, there are %d staple cells now", position, staple_with, staple_cells.size());
 }
 
 // Address: 00505e9c
@@ -381,7 +382,7 @@ void __declspec(naked) drop_item_under() {
 
 // Address: 00505ebe
 void __declspec(naked) drop_item_to_another() {
-    Printf("[solo] drop_item_to_another");
+    //Printf("[solo] drop_item_to_another");
 
     // ECX holds the address to the drop cell.
     __asm {
@@ -445,7 +446,7 @@ void __declspec(naked) drop_gold() {
         mov player, eax    // Player is in EAX
     }
 
-    Printf("[solo] drop_gold: player=0x%x (%s)", player, player ? player->name : "?");
+    //Printf("[solo] drop_gold: player=0x%x (%s)", player, player ? player->name : "?");
 
     if (player && player->main_unit) {
         if (IsGigaPlayer(player->main_unit) || IsPurePlayer(player->main_unit)) {

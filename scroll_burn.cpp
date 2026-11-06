@@ -11,7 +11,7 @@ void a2insert(A2InventoryList* list, int pos, A2InventoryItem* item);
 void RefreshPlayerInventory(A2Unit* unit);
 
 int __fastcall CheckItemWhenCasting(A2InventoryItem* item, A2Unit* unit, int position) {
-    Printf("[scroll_burn] CheckItemWhenCasting: item=0x%x (id=%d), unit=0x%x (%s), position=%d", item, item ? item->id : 0, unit, unit ? unit->name : "?", position);
+    //Printf("[scroll_burn] CheckItemWhenCasting: item=0x%x (id=%d), unit=0x%x (%s), position=%d", item, item ? item->id : 0, unit, unit ? unit->name : "?", position);
 
     if (!item || !unit) { // Impossible, but let's check anyway.
         return 1;

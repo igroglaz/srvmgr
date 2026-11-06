@@ -156,7 +156,7 @@ void DeleteInventory(A2InventoryList* bag) {
 }
 
 void __fastcall drop_partially(A2Unit* unit, int unused_edx, A2InventoryList* unused, int money, int main_unit) {
-    Printf("drop_partially: unit=0x%x, money=%d, main_unit=%d", unit, money, main_unit);
+    //Printf("drop_partially: unit=0x%x, money=%d, main_unit=%d", unit, money, main_unit);
 
     if (!unit) {
         return;
