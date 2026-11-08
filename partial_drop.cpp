@@ -126,12 +126,16 @@ void __stdcall drop_rnd_weared_items(A2Unit* unit, A2InventoryList* item_list_ds
 
     const A2Human* human = reinterpret_cast<A2Human*>(unit);
 
-    for (int i = -2; i < 13; ++i ) {
-        A2InventoryItem* item = (i == -2 ? unit->weapon : i == -1 ? unit->shield : human->dress[i]);
-
-        if (i == -2 && IsPurePlayer(unit)) {
-            continue; // Pure players keep their weapon on death
+    if (!IsPurePlayer(unit)) { // Pure-players do not drop their weapon on death
+        A2InventoryItem* item = unit->weapon;
+        if (item && getDropNum(1, probability) > 0) {
+            a2insert(item_list_dst, unit->clazz->UnitUnequip(unit, item));
         }
+    }
+
+    // Do not touch this loop. It's cursed. Can start crashing on any change. You've been warned.
+    for (int i = -1; i < 13; ++i ) {
+        A2InventoryItem* item = (i == -1 ? unit->shield : human->dress[i]);
 
         if (item && getDropNum(1, probability) > 0) {
             a2insert(item_list_dst, unit->clazz->UnitUnequip(unit, item));
